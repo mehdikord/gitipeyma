@@ -17,7 +17,7 @@ export const AboutStorySection: React.FC = () => {
           <div className="lg:col-span-5 relative">
             <div className="relative z-10 rounded-2xl overflow-hidden border border-[#12B8B0]/30 shadow-2xl">
               <img
-                src="https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1200&q=80"
+                src="/images/about/istanbul-galata.webp"
                 alt="نمای استانبول و تنگه بسفر - هاب بین‌المللی گیتی پیما"
                 className="w-full h-[400px] object-cover"
                 loading="lazy"

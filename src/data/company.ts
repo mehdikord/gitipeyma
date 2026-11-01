@@ -74,7 +74,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     role: 'مدیر ارشد عملیات و ناوگان بین‌المللی',
     specialty: 'مدیریت ترانزیت جاده‌ای و هماهنگی خط تهران - استانبول',
     department: 'لجستیک و حمل‌ونقل',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80',
+    image: '/images/team/team-1.webp',
   },
   {
     id: 'team-2',
@@ -82,7 +82,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     role: 'سرپرست دپارتمان امور کنسولی و ثبت شرکت',
     specialty: 'حقوق تجارت بین‌الملل و ثبت شرکت در ترکیه و اروپا',
     department: 'حقوقی و ثبت شرکت',
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80',
+    image: '/images/team/team-2.webp',
   },
   {
     id: 'team-3',
@@ -90,7 +90,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     role: 'کارشناس ارشد ترخیص کالا و کارگو',
     specialty: 'تشریفات گمرکات رسمی ایران و ترکیه (CMR و کارنه تیر)',
     department: 'کارگو و تجارت',
-    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80',
+    image: '/images/team/team-3.webp',
   },
   {
     id: 'team-4',
@@ -98,6 +98,6 @@ export const TEAM_MEMBERS: TeamMember[] = [
     role: 'مدیر ارتباطات مشتریان و پذیرش اقامتی',
     specialty: 'پذیرش دانشگاهی، اقامت و تشریفات ازدواج بین‌المللی',
     department: 'روابط بین‌الملل و امور متقاضیان',
-    image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=600&q=80',
+    image: '/images/team/team-4.webp',
   },
 ];

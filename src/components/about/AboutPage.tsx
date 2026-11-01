@@ -47,7 +47,7 @@ export const AboutPage: React.FC = () => {
           <div className="lg:col-span-6 relative">
             <div className="rounded-3xl overflow-hidden border border-[#12B8B0]/30 shadow-2xl">
               <img
-                src="https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1200&q=80"
+                src="/images/about/dubai-skyline.webp"
                 alt="تجارت و ترانزیت بین‌المللی گیتی پیما"
                 className="w-full h-[380px] object-cover"
                 loading="lazy"

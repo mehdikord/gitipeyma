@@ -216,7 +216,7 @@ const DesktopMap: React.FC = () => {
         <div className="relative flex-1 min-h-0 overflow-hidden bg-[#07191F]">
           {SERVICES_DATA.map((service) => (
             <div key={service.slug} data-active={service.slug === activeSlug} className="svc-photo absolute inset-0">
-              <ServiceImage src={service.image} alt="" category={service.category} slug={service.slug} imageWidth={1000} />
+              <ServiceImage src={service.image} alt="" category={service.category} slug={service.slug} />
             </div>
           ))}
           <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-[#0C252B] via-[#0C252B]/30 to-[#07191F]/10" />
@@ -297,7 +297,7 @@ const MobileMap: React.FC = () => {
                         {visited.includes(slug) && (
                           <div className="px-3 pb-4">
                             <div className="svc-photo relative aspect-[16/9] rounded-lg overflow-hidden bg-[#07191F]" data-active="true">
-                              <ServiceImage src={service.image} alt="" category={service.category} slug={slug} imageWidth={800} />
+                              <ServiceImage src={service.image} alt="" category={service.category} slug={slug} />
                             </div>
                             <p className="mt-3 text-sm leading-[1.9] text-[#B7C8CD]">{service.summary}</p>
                             <ul className="mt-3 space-y-1.5">

@@ -271,7 +271,7 @@ export const ServiceDetailView: React.FC<ServiceDetailViewProps> = ({ slug }) =>
               <li key={related.slug}>
                 <Link href={`/services/${related.slug}`} className={`group flex md:block items-center gap-4 rounded-xl ${FOCUS}`}>
                   <span className="relative block w-24 h-20 md:w-full md:h-auto md:aspect-[16/9] shrink-0 rounded-lg overflow-hidden bg-[#0C252B]">
-                    <ServiceImage src={related.image} alt="" category={related.category} slug={related.slug} imageWidth={600} className="service-hero-photo" />
+                    <ServiceImage src={related.image} alt="" category={related.category} slug={related.slug} className="service-hero-photo" />
                   </span>
                   <span className="block md:mt-3">
                     <span className="block font-extrabold text-[15px] sm:text-base text-white group-hover:text-[#E2C98C] transition-colors">{related.shortTitle}</span>

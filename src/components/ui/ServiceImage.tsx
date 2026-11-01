@@ -22,7 +22,6 @@ interface ServiceImageProps {
   slug: string;
   className?: string;
   isHero?: boolean;
-  imageWidth?: number;
 }
 
 export const ServiceImage: React.FC<ServiceImageProps> = ({
@@ -32,7 +31,6 @@ export const ServiceImage: React.FC<ServiceImageProps> = ({
   slug,
   className = '',
   isHero = false,
-  imageWidth = 1200,
 }) => {
   const [hasError, setHasError] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -49,16 +47,6 @@ export const ServiceImage: React.FC<ServiceImageProps> = ({
       }
     }
   }, []);
-
-  // Reliable, high-availability curated Unsplash imagery with direct keywords
-  const getOptimizedSrc = (url: string) => {
-    // If it's already an unsplash URL, ensure standard webp formatting
-    if (url.includes('unsplash.com')) {
-      const cleanUrl = url.split('?')[0];
-      return `${cleanUrl}?auto=format&fit=crop&w=${imageWidth}&q=${imageWidth < 1200 ? 72 : 80}`;
-    }
-    return url;
-  };
 
   // Render a bespoke luxury illustrated vector artwork matching the service theme
   const renderFallbackIllustration = () => {
@@ -170,7 +158,7 @@ export const ServiceImage: React.FC<ServiceImageProps> = ({
           )}
           <img
             ref={imgRef}
-            src={getOptimizedSrc(src)}
+            src={src}
             alt={alt}
             onError={() => setHasError(true)}
             onLoad={() => setIsLoaded(true)}
