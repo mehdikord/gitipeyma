@@ -1,0 +1,232 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --primary: #12B8B0;
+    --primary-dark: #087F7B;
+    --gold: #C6A15B;
+    --gold-light: #E2C98C;
+    --background-dark: #07191F;
+    --background-dark-secondary: #0C252B;
+    --background-light: #F7F7F3;
+    --surface: #FFFFFF;
+    --text-primary: #14282D;
+    --text-secondary: #718085;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #07191F;
+}
+::-webkit-scrollbar-thumb {
+  background: #0C252B;
+  border-radius: 4px;
+  border: 1px solid rgba(18, 184, 176, 0.2);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #12B8B0;
+}
+
+/* Luxury glass & lighting styles */
+.glass-panel {
+  background: rgba(12, 37, 43, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(18, 184, 176, 0.2);
+}
+
+.glass-panel-gold {
+  background: rgba(198, 161, 91, 0.08);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(198, 161, 91, 0.25);
+}
+
+.gold-gradient-text {
+  background: linear-gradient(135deg, #FFF5E0 0%, #E2C98C 45%, #C6A15B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.turquoise-gradient-text {
+  background: linear-gradient(135deg, #A8FFF8 0%, #12B8B0 50%, #087F7B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* High-end Animations for Hero and Interactive UI */
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50% { opacity: 0.65; transform: scale(1.05); }
+}
+
+.glow-ambient {
+  animation: pulseGlow 8s ease-in-out infinite;
+}
+
+@keyframes floatSmooth {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-7px); }
+}
+
+@keyframes floatSmoothDelayed {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(7px); }
+}
+
+.animate-float {
+  animation: floatSmooth 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: floatSmoothDelayed 7s ease-in-out infinite;
+}
+
+@keyframes dashFlow {
+  0% { stroke-dashoffset: 200; }
+  100% { stroke-dashoffset: 0; }
+}
+
+.animate-dash-flow {
+  animation: dashFlow 8s linear infinite;
+}
+
+@keyframes shimmerOverlay {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+.shimmer-light {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer-light::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(226, 201, 140, 0.12), transparent);
+  transform: translateX(-100%);
+  animation: shimmerOverlay 4s infinite;
+}
+
+/* Hero route map. The stage keeps one fixed geometry; only its framing changes. */
+.hero-map-band {
+  height: clamp(270px, 78vw, 560px);
+  overflow: hidden;
+}
+
+.hero-stage {
+  --stage-w: min(140vw, 1000px);
+  position: absolute;
+  width: var(--stage-w);
+  aspect-ratio: 8 / 5;
+  left: calc(50% - var(--stage-w) * 0.503);
+  top: calc(50% - var(--stage-w) * 0.625 * 0.54);
+}
+
+.hero-map-image {
+  animation: heroFadeIn 0.9s ease-out both;
+}
+
+@media (min-width: 1024px) {
+  .hero-map-band {
+    height: auto;
+  }
+
+  .hero-stage {
+    --stage-w: max(100vw, 1120px);
+    /* Keep Europe on screen, and Tehran's label just clear of the service strip. */
+    left: max(calc(50% - var(--stage-w) * 0.635), calc(60px - var(--stage-w) * 0.216));
+    top: calc(100% - 185px - var(--stage-w) * 0.625 * 0.751);
+  }
+}
+
+.hero-map-label {
+  position: absolute;
+  z-index: 3;
+  white-space: nowrap;
+  text-align: center;
+  line-height: 1.5;
+  pointer-events: none;
+  text-shadow: 0 0 6px #07191F, 0 0 2px #07191F, 0 1px 10px #07191F;
+  transition: opacity 0.4s ease;
+  animation: heroFadeIn 0.5s ease-out both;
+  animation-delay: var(--label-delay, 0s);
+  translate: -50% 12px;
+}
+
+.hero-map-label[data-place='above'] {
+  translate: -50% calc(-100% - 12px);
+}
+
+.hero-map-label[data-dimmed='true'] {
+  opacity: 0.45;
+}
+
+@media (max-width: 1023px) {
+  .hero-map-label[data-compact-hidden='true'] {
+    display: none;
+  }
+}
+
+/* The second line wipes in reading direction as the route crosses the border (BORDER_AT in RouteCanvas). */
+.hero-line-second {
+  animation: heroWipeRtl 0.9s cubic-bezier(0.22, 1, 0.36, 1) 1s both;
+}
+
+.hero-service-timer {
+  transform-origin: right;
+}
+
+.hero-service-timer[data-running='true'] {
+  animation: heroServiceTimer var(--service-ms) linear both;
+}
+
+@keyframes heroFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes heroWipeRtl {
+  from { clip-path: inset(-10% 0 -10% 100%); opacity: 0.2; }
+  to { clip-path: inset(-10% 0 -10% 0); opacity: 1; }
+}
+
+@keyframes heroServiceTimer {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-map-image,
+  .hero-map-label,
+  .hero-line-second,
+  .hero-service-timer[data-running='true'] {
+    animation: none;
+  }
+}
+
+/* Marquee continuous scroll for testimonials ticker */
+@keyframes marqueeScrollRTL {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(50%); }
+}
+
+.animate-marquee-rtl {
+  display: flex;
+  width: max-content;
+  animation: marqueeScrollRTL 45s linear infinite;
+}
+
+.animate-marquee-rtl:hover {
+  animation-play-state: paused;
+}
+

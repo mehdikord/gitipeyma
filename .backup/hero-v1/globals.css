@@ -1,0 +1,135 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --primary: #12B8B0;
+    --primary-dark: #087F7B;
+    --gold: #C6A15B;
+    --gold-light: #E2C98C;
+    --background-dark: #07191F;
+    --background-dark-secondary: #0C252B;
+    --background-light: #F7F7F3;
+    --surface: #FFFFFF;
+    --text-primary: #14282D;
+    --text-secondary: #718085;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #07191F;
+}
+::-webkit-scrollbar-thumb {
+  background: #0C252B;
+  border-radius: 4px;
+  border: 1px solid rgba(18, 184, 176, 0.2);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #12B8B0;
+}
+
+/* Luxury glass & lighting styles */
+.glass-panel {
+  background: rgba(12, 37, 43, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(18, 184, 176, 0.2);
+}
+
+.glass-panel-gold {
+  background: rgba(198, 161, 91, 0.08);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(198, 161, 91, 0.25);
+}
+
+.gold-gradient-text {
+  background: linear-gradient(135deg, #FFF5E0 0%, #E2C98C 45%, #C6A15B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.turquoise-gradient-text {
+  background: linear-gradient(135deg, #A8FFF8 0%, #12B8B0 50%, #087F7B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* High-end Animations for Hero and Interactive UI */
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50% { opacity: 0.65; transform: scale(1.05); }
+}
+
+.glow-ambient {
+  animation: pulseGlow 8s ease-in-out infinite;
+}
+
+@keyframes floatSmooth {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-7px); }
+}
+
+@keyframes floatSmoothDelayed {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(7px); }
+}
+
+.animate-float {
+  animation: floatSmooth 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: floatSmoothDelayed 7s ease-in-out infinite;
+}
+
+@keyframes dashFlow {
+  0% { stroke-dashoffset: 200; }
+  100% { stroke-dashoffset: 0; }
+}
+
+.animate-dash-flow {
+  animation: dashFlow 8s linear infinite;
+}
+
+@keyframes shimmerOverlay {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+.shimmer-light {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer-light::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(226, 201, 140, 0.12), transparent);
+  transform: translateX(-100%);
+  animation: shimmerOverlay 4s infinite;
+}
+
+/* Marquee continuous scroll for testimonials ticker */
+@keyframes marqueeScrollRTL {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(50%); }
+}
+
+.animate-marquee-rtl {
+  display: flex;
+  width: max-content;
+  animation: marqueeScrollRTL 45s linear infinite;
+}
+
+.animate-marquee-rtl:hover {
+  animation-play-state: paused;
+}
+

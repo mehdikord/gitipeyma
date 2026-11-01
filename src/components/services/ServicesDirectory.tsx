@@ -1,0 +1,187 @@
+'use client';
+
+import React, { useState } from 'react';
+import { SERVICES_DATA } from '../../data/services';
+import { ServiceCategory, ServiceItem } from '../../types';
+import { ServiceImage } from '../ui/ServiceImage';
+import { Search, Filter, ArrowLeft, ArrowUpRight, CheckCircle2, Sparkles } from 'lucide-react';
+import { useNavigate } from '../../hooks/useNavigate';
+
+export const ServicesDirectory: React.FC = () => {
+  const onNavigate = useNavigate();
+  const [selectedCategory, setSelectedCategory] = useState<ServiceCategory>('all');
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const categories: { key: ServiceCategory; label: string }[] = [
+    { key: 'all', label: 'همه خدمات (۱۱)' },
+    { key: 'transport', label: 'حمل‌ونقل و اتوبوس VIP' },
+    { key: 'cargo', label: 'پست و کارگو تجاری' },
+    { key: 'business', label: 'تجارت و ثبت شرکت' },
+    { key: 'immigration', label: 'اقامت، ویزا و تحصیلی' },
+    { key: 'legal', label: 'امور حقوقی و ترجمه' },
+    { key: 'financial', label: 'حواله ارزی و سوئیفت' },
+    { key: 'events', label: 'تشریفات و ازدواج' },
+  ];
+
+  const filteredServices = SERVICES_DATA.filter((service) => {
+    const matchesCategory = selectedCategory === 'all' || service.category === selectedCategory;
+    const query = searchQuery.trim().toLowerCase();
+    const matchesSearch =
+      !query ||
+      service.title.toLowerCase().includes(query) ||
+      service.summary.toLowerCase().includes(query) ||
+      service.description.toLowerCase().includes(query);
+    return matchesCategory && matchesSearch;
+  });
+
+  return (
+    <div className="min-h-screen bg-[#07191F] text-[#F7F7F3] pt-8 pb-24">
+      {/* Services Directory Hero */}
+      <div className="relative py-16 bg-gradient-to-b from-[#051115] to-[#07191F] border-b border-white/5 overflow-hidden">
+        <div className="absolute top-0 right-1/3 w-96 h-96 bg-[#12B8B0]/10 rounded-full blur-[140px] pointer-events-none"></div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#12B8B0]/15 border border-[#12B8B0]/30 text-[#12B8B0] text-xs font-bold">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>فهرست جامع خدمات نمایندگی گیتی پیما</span>
+          </div>
+
+          <h1 className="text-3xl sm:text-5xl font-black text-[#F7F7F3] tracking-tight">
+            خدمات یکپارچه بین‌المللی
+          </h1>
+
+          <p className="text-sm sm:text-base text-[#A2B6BC] max-w-2xl mx-auto leading-relaxed">
+            از سفر VIP جاده‌ای تهران به استانبول و کارگو گمرکی تا خدمات ارزی، حقوقی، اقامتی و تشریفات فرامرزی در ترکیه و اروپا.
+          </p>
+
+          {/* Search bar */}
+          <div className="pt-4 max-w-md mx-auto">
+            <div className="relative">
+              <Search className="w-4 h-4 text-[#718085] absolute right-3.5 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="جستجو در عناوین و موضوعات خدمات..."
+                className="w-full pr-10 pl-4 py-3 rounded-full bg-[#0C252B] border border-[#12B8B0]/30 text-white text-xs sm:text-sm focus:outline-none focus:border-[#E2C98C] placeholder-[#718085]"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-[#718085] hover:text-white"
+                >
+                  پاک کردن
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Category Filter Tabs */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        <div className="flex items-center gap-2 overflow-x-auto pb-4 scrollbar-none">
+          {categories.map((cat) => (
+            <button
+              key={cat.key}
+              onClick={() => setSelectedCategory(cat.key)}
+              className={`px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all ${
+                selectedCategory === cat.key
+                  ? 'bg-[#12B8B0] text-[#07191F] shadow-lg shadow-[#12B8B0]/20'
+                  : 'bg-[#0C252B] text-[#A2B6BC] hover:text-white hover:bg-[#14282D] border border-white/5'
+              }`}
+            >
+              {cat.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Results Counter */}
+        <div className="py-4 text-xs text-[#718085] flex items-center justify-between">
+          <span>نمایش {filteredServices.length} خدمت فعال</span>
+          {searchQuery && <span>نتایج فیلتر شده بر اساس: «{searchQuery}»</span>}
+        </div>
+
+        {/* Services Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-4">
+          {filteredServices.map((service, idx) => (
+            <div
+              key={service.id}
+              onClick={() => onNavigate(`/services/${service.slug}`)}
+              className="group cursor-pointer rounded-2xl overflow-hidden bg-[#0C252B] border border-[#12B8B0]/20 hover:border-[#C6A15B]/50 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between"
+            >
+              {/* Image with Robust Fallback */}
+              <div className="relative h-56 overflow-hidden">
+                <ServiceImage
+                  src={service.image}
+                  alt={service.title}
+                  category={service.category}
+                  slug={service.slug}
+                  className="w-full h-full transform group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0C252B] via-transparent to-black/40"></div>
+
+                {service.badge && (
+                  <div className="absolute top-3 right-3">
+                    <span className="px-3 py-1 rounded-full bg-[#12B8B0] text-[#07191F] text-[11px] font-black shadow-md">
+                      {service.badge}
+                    </span>
+                  </div>
+                )}
+
+                <div className="absolute bottom-3 right-3">
+                  <span className="text-[11px] font-medium text-white/90 bg-black/60 px-2.5 py-0.5 rounded backdrop-blur-sm">
+                    {service.categoryLabel}
+                  </span>
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className="p-6 flex-1 flex flex-col justify-between">
+                <div>
+                  <h3 className="text-lg font-bold text-[#F7F7F3] group-hover:text-[#E2C98C] transition-colors mb-2 leading-snug">
+                    {service.title}
+                  </h3>
+                  <p className="text-xs text-[#A2B6BC] leading-relaxed line-clamp-2 mb-4">
+                    {service.summary}
+                  </p>
+
+                  <div className="space-y-1.5 mb-6">
+                    {service.features.slice(0, 2).map((feat, fIdx) => (
+                      <div key={fIdx} className="flex items-start gap-2 text-xs text-[#718085]">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-[#12B8B0] shrink-0 mt-0.5" />
+                        <span className="line-clamp-1">{feat}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t border-white/10 flex items-center justify-between text-xs font-bold text-[#12B8B0]">
+                  <span>مشاهده جزئیات کامل و مدارک</span>
+                  <div className="w-7 h-7 rounded-full bg-[#12B8B0]/10 flex items-center justify-center group-hover:bg-[#12B8B0] group-hover:text-[#07191F] transition-colors">
+                    <ArrowUpRight className="w-4 h-4" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {filteredServices.length === 0 && (
+          <div className="text-center py-16 bg-[#0C252B] rounded-2xl border border-white/5 my-8 space-y-3">
+            <p className="text-base text-[#A2B6BC]">هیچ خدمتی منطبق بر جستجوی شما یافت نشد.</p>
+            <button
+              onClick={() => {
+                setSelectedCategory('all');
+                setSearchQuery('');
+              }}
+              className="px-4 py-2 rounded-full bg-[#12B8B0] text-[#07191F] text-xs font-bold"
+            >
+              مشاهده تمامی خدمات
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
