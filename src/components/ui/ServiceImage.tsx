@@ -16,7 +16,8 @@ import {
 } from 'lucide-react';
 
 interface ServiceImageProps {
-  src: string;
+  // A service without a photo shows the illustrated fallback.
+  src: string | null;
   alt: string;
   category: string;
   slug: string;
@@ -32,7 +33,7 @@ export const ServiceImage: React.FC<ServiceImageProps> = ({
   className = '',
   isHero = false,
 }) => {
-  const [hasError, setHasError] = useState(false);
+  const [hasError, setHasError] = useState(!src);
   const [isLoaded, setIsLoaded] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
 
@@ -158,7 +159,7 @@ export const ServiceImage: React.FC<ServiceImageProps> = ({
           )}
           <img
             ref={imgRef}
-            src={src}
+            src={src ?? undefined}
             alt={alt}
             onError={() => setHasError(true)}
             onLoad={() => setIsLoaded(true)}

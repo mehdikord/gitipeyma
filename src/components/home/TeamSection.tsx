@@ -1,8 +1,10 @@
 import React from 'react';
-import { TEAM_MEMBERS } from '../../data/company';
-import { Users, Shield, Briefcase } from 'lucide-react';
+import { Users } from 'lucide-react';
+import type { TeamMember } from '../../types';
 
-export const TeamSection: React.FC = () => {
+export const TeamSection: React.FC<{ members: TeamMember[] }> = ({ members }) => {
+  if (members.length === 0) return null;
+
   return (
     <section className="py-24 bg-[#07191F] text-[#F7F7F3] border-b border-white/5 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -22,25 +24,33 @@ export const TeamSection: React.FC = () => {
 
         {/* Team Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {TEAM_MEMBERS.map((member) => (
+          {members.map((member) => (
             <div
               key={member.id}
               className="group rounded-2xl overflow-hidden bg-[#0C252B] border border-[#12B8B0]/20 hover:border-[#C6A15B]/50 transition-all duration-300 hover:-translate-y-1.5 shadow-xl flex flex-col justify-between"
             >
               {/* Photo */}
               <div className="relative h-64 overflow-hidden">
-                <img
-                  src={member.image}
-                  alt={member.name}
-                  className="w-full h-full object-cover object-top filter grayscale contrast-110 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500"
-                  loading="lazy"
-                />
+                {member.image ? (
+                  <img
+                    src={member.image}
+                    alt={member.name}
+                    className="w-full h-full object-cover object-top filter grayscale contrast-110 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500"
+                    loading="lazy"
+                  />
+                ) : (
+                  <div aria-hidden="true" className="w-full h-full flex items-center justify-center bg-[#07191F] text-5xl font-black text-[#12B8B0]/40">
+                    {member.name.trim().charAt(0)}
+                  </div>
+                )}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0C252B] via-transparent to-transparent"></div>
-                <div className="absolute top-3 right-3">
-                  <span className="text-[10px] font-semibold text-[#12B8B0] bg-[#07191F]/80 px-2 py-0.5 rounded backdrop-blur-sm border border-[#12B8B0]/30">
-                    {member.department}
-                  </span>
-                </div>
+                {member.department && (
+                  <div className="absolute top-3 right-3">
+                    <span className="text-[10px] font-semibold text-[#12B8B0] bg-[#07191F]/80 px-2 py-0.5 rounded backdrop-blur-sm border border-[#12B8B0]/30">
+                      {member.department}
+                    </span>
+                  </div>
+                )}
               </div>
 
               {/* Info */}

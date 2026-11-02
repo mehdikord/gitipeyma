@@ -2,46 +2,22 @@
 
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import {
-  ArrowLeft,
-  Boxes,
-  Building2,
-  Bus,
-  CheckCircle2,
-  ChevronDown,
-  CircleDollarSign,
-  FileSignature,
-  GraduationCap,
-  HeartHandshake,
-  Languages,
-  Package,
-  PartyPopper,
-  Plane,
-} from 'lucide-react';
-import { SERVICES_DATA } from '../../data/services';
-import { LINES, Tone } from '../../data/serviceGroups';
-import { ServiceItem } from '../../types';
+import { ArrowLeft, CheckCircle2, ChevronDown } from 'lucide-react';
+import { ServiceGroupItem, ServiceItem, Tone } from '../../types';
+import { serviceIcon } from '../../modules/services/icons';
 import { ServiceImage } from '../ui/ServiceImage';
 import { useRevealOnce } from '../../hooks/useRevealOnce';
 
-const ICONS: Record<string, React.ElementType> = {
-  'bus-vip-tehran-istanbul': Bus,
-  'cargo-express-postal': Package,
-  'cargo-customs-clearance': Boxes,
-  'company-registration': Building2,
-  'currency-exchange-swift': CircleDollarSign,
-  'legal-power-of-attorney': FileSignature,
-  'official-translation': Languages,
-  'international-visa': Plane,
-  'education-residence-permit': GraduationCap,
-  'international-marriage': HeartHandshake,
-  'turkey-weddings': PartyPopper,
+// The lines of the map, and the services on them.
+type MapProps = { services: ServiceItem[]; lines: ServiceGroupItem[] };
+
+const useMapData = ({ services, lines }: MapProps) => {
+  const LINES = lines;
+  const serviceBySlug = (slug: string) => services.find((service) => service.slug === slug) as ServiceItem;
+  // Row index across all lines, used to stagger the first draw of the map.
+  const ORDER = LINES.flatMap((line) => line.slugs);
+  return { LINES, ORDER, serviceBySlug };
 };
-
-const serviceBySlug = (slug: string) => SERVICES_DATA.find((service) => service.slug === slug) as ServiceItem;
-
-// Row index across all lines, used to stagger the first draw of the map.
-const ORDER = LINES.flatMap((line) => line.slugs);
 
 // Distance from a row's top to its station; the rail segments in globals.css use the same value.
 const STATION_Y = 30;
@@ -96,7 +72,7 @@ const ServicePanel: React.FC<{ service: ServiceItem }> = ({ service }) => (
       {/* The real steps of this service, drawn as a short line of its own */}
       <ol className="mt-5 grid grid-cols-4 gap-3" aria-label="مراحل انجام خدمت">
         {service.steps.slice(0, 4).map((step, index) => (
-          <li key={step.stepNumber} className="relative pt-4 text-[11.5px] leading-[1.6] text-[#A2B6BC]">
+          <li key={`${index}-${step.title}`} className="relative pt-4 text-[11.5px] leading-[1.6] text-[#A2B6BC]">
             {index < 3 && <span aria-hidden="true" className="absolute top-[4px] right-0 -left-3 h-px bg-[#C6A15B]/45" />}
             <span aria-hidden="true" className="absolute top-0 right-0 w-[9px] h-[9px] rounded-full bg-[#C6A15B]" />
             {step.title}
@@ -123,7 +99,8 @@ const ServicePanel: React.FC<{ service: ServiceItem }> = ({ service }) => (
   </div>
 );
 
-const DesktopMap: React.FC = () => {
+const DesktopMap: React.FC<MapProps> = (props) => {
+  const { LINES, ORDER, serviceBySlug } = useMapData(props);
   const [activeSlug, setActiveSlug] = useState(ORDER[0]);
   const listRef = useRef<HTMLDivElement>(null);
   const rowRefs = useRef<Record<string, HTMLLIElement | null>>({});
@@ -157,12 +134,12 @@ const DesktopMap: React.FC = () => {
     <div className="hidden lg:grid grid-cols-12 items-start">
       <div ref={listRef} className="col-span-5 relative" onMouseLeave={() => clearTimeout(hoverTimer.current)}>
         {LINES.map((line) => (
-          <div key={line.title}>
+          <div key={line.id}>
             <LineHeading title={line.title} tone={line.tone} count={line.slugs.length} order={ORDER.indexOf(line.slugs[0])} />
             <ul>
               {line.slugs.map((slug, index) => {
                 const service = serviceBySlug(slug);
-                const Icon = ICONS[slug];
+                const Icon = serviceIcon(service.icon);
                 const isActive = slug === activeSlug;
                 const order = ORDER.indexOf(slug);
                 return (
@@ -214,7 +191,7 @@ const DesktopMap: React.FC = () => {
         className="col-span-7 sticky top-24 flex flex-col h-[calc(100svh-7rem)] min-h-[560px] max-h-[780px] rounded-2xl rounded-tr-none overflow-hidden bg-[#0C252B]"
       >
         <div className="relative flex-1 min-h-0 overflow-hidden bg-[#07191F]">
-          {SERVICES_DATA.map((service) => (
+          {props.services.map((service) => (
             <div key={service.slug} data-active={service.slug === activeSlug} className="svc-photo absolute inset-0">
               <ServiceImage src={service.image} alt="" category={service.category} slug={service.slug} />
             </div>
@@ -229,7 +206,8 @@ const DesktopMap: React.FC = () => {
 
 // ---- Small screens: the same line, with each stop opening where it stands -----
 
-const MobileMap: React.FC = () => {
+const MobileMap: React.FC<MapProps> = (props) => {
+  const { LINES, ORDER, serviceBySlug } = useMapData(props);
   const [openSlug, setOpenSlug] = useState<string | null>(ORDER[0]);
   // Photos load only once a stop has been opened, and stay for a smooth close.
   const [visited, setVisited] = useState<string[]>([ORDER[0]]);
@@ -256,12 +234,12 @@ const MobileMap: React.FC = () => {
   return (
     <div className="lg:hidden">
       {LINES.map((line) => (
-        <div key={line.title}>
+        <div key={line.id}>
           <LineHeading title={line.title} tone={line.tone} count={line.slugs.length} order={ORDER.indexOf(line.slugs[0])} />
           <ul>
             {line.slugs.map((slug, index) => {
               const service = serviceBySlug(slug);
-              const Icon = ICONS[slug];
+              const Icon = serviceIcon(service.icon);
               const isOpen = openSlug === slug;
               const order = ORDER.indexOf(slug);
               const panelId = `service-stop-${slug}`;
@@ -338,7 +316,7 @@ const MobileMap: React.FC = () => {
 
 // ---- Section -----------------------------------------------------------------
 
-export const ServicesHighlight: React.FC = () => {
+export const ServicesHighlight: React.FC<MapProps> = ({ services, lines }) => {
   const sectionRef = useRef<HTMLElement>(null);
   const reveal = useRevealOnce(sectionRef);
 
@@ -354,8 +332,12 @@ export const ServicesHighlight: React.FC = () => {
           </p>
         </header>
 
-        <DesktopMap />
-        <MobileMap />
+        {lines.length > 0 && (
+          <>
+            <DesktopMap services={services} lines={lines} />
+            <MobileMap services={services} lines={lines} />
+          </>
+        )}
 
         <div className="mt-10 lg:mt-14 pt-7 border-t border-white/15 flex flex-col lg:flex-row lg:items-center justify-between gap-5 text-right">
           <div>

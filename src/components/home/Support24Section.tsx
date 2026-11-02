@@ -1,14 +1,11 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, FileText, MessageCircle, Moon, PhoneCall, Sun } from 'lucide-react';
-import { COMPANY_CONFIG } from '../../data/company';
 import { useRevealOnce } from '../../hooks/useRevealOnce';
 import { Office, clockText, hourText, localParts, officeStatus, telHref } from '../../utils/contact';
-
-const WHATSAPP_NUMBER = '905367008090';
-const whatsappLink = (message: string) => `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+import { useSite } from '../site/SiteProvider';
 
 const FOCUS = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E2C98C]';
 
@@ -22,46 +19,47 @@ type Answer = {
   secondary: { href: string; label: string; kind: 'call' | 'chat' | 'form' };
 };
 
-const HOTLINE = COMPANY_CONFIG.offices[0].phones[1];
-const CALL_CENTER = COMPANY_CONFIG.emergencySupportPhone;
-
-const ANSWERS: Answer[] = [
-  {
-    id: 'on-route',
-    need: 'در مسیر هستم و کمک فوری می‌خواهم',
-    advice: 'در پایانه، مرز یا بین راه، با شماره همراه پشتیبانی مستقیم صحبت کنید. این خط شبانه‌روز پاسخگوست.',
-    primary: { href: telHref(HOTLINE), label: 'تماس با پشتیبانی ۲۴ ساعته', note: HOTLINE, kind: 'call' },
-    secondary: { href: whatsappLink('سلام، در مسیر هستم و به کمک فوری نیاز دارم.'), label: 'پیام در واتس‌اپ', kind: 'chat' },
-  },
-  {
-    id: 'ticket',
-    need: 'سؤال درباره بلیت و حرکت اتوبوس دارم',
-    advice: 'مرکز تماس پایانه آکسارای وضعیت اتوبوس، بلیت و ترانزیت را همان لحظه پیگیری می‌کند.',
-    primary: { href: telHref(CALL_CENTER), label: 'تماس با مرکز استانبول', note: CALL_CENTER, kind: 'call' },
-    secondary: { href: whatsappLink('سلام، درباره بلیت و حرکت اتوبوس تهران–استانبول سؤال دارم.'), label: 'پیام در واتس‌اپ', kind: 'chat' },
-  },
-  {
-    id: 'cargo',
-    need: 'بار یا بارنامه‌ام را پیگیری می‌کنم',
-    advice: 'شماره بارنامه CMR را در واتس‌اپ بفرستید تا وضعیت ترخیص در گمرکات ایران و ترکیه را به شما اعلام کنیم.',
-    primary: { href: whatsappLink('سلام، وضعیت این بارنامه را پیگیری می‌کنم. شماره بارنامه: '), label: 'ارسال شماره بارنامه', kind: 'chat' },
-    secondary: { href: telHref(CALL_CENTER), label: 'تماس با مرکز استانبول', kind: 'call' },
-  },
-  {
-    id: 'documents',
-    need: 'می‌خواهم مدارکم را بفرستم',
-    advice: 'پاسپورت، مدارک هویتی و فاکتورها را در واتس‌اپ بفرستید تا کارشناسان بررسی کنند. پیام صوتی و متنی ۲۴ ساعته پذیرفته می‌شود.',
-    primary: { href: whatsappLink('سلام، می‌خواهم مدارکم را برای بررسی بفرستم. موضوع پرونده: '), label: 'ارسال مدارک در واتس‌اپ', kind: 'chat' },
-    secondary: { href: '/consultation', label: 'ثبت درخواست مشاوره', kind: 'form' },
-  },
-  {
-    id: 'consult',
-    need: 'برای پرونده تجاری یا حقوقی مشاوره می‌خواهم',
-    advice: 'فرم کوتاه را پر کنید و زمان دلخواه‌تان را بگویید. کارشناس حقوقی یا بازرگانی در همان روز تماس می‌گیرد.',
-    primary: { href: '/consultation', label: 'ثبت درخواست مشاوره', kind: 'form' },
-    secondary: { href: telHref(CALL_CENTER), label: 'تماس با مرکز استانبول', kind: 'call' },
-  },
-];
+// The numbers and the WhatsApp line come from the site settings.
+const buildAnswers = (HOTLINE: string, CALL_CENTER: string, whatsappNumber: string): Answer[] => {
+  const whatsappLink = (message: string) => `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+  return [
+    {
+      id: 'on-route',
+      need: 'در مسیر هستم و کمک فوری می‌خواهم',
+      advice: 'در پایانه، مرز یا بین راه، با شماره همراه پشتیبانی مستقیم صحبت کنید. این خط شبانه‌روز پاسخگوست.',
+      primary: { href: telHref(HOTLINE), label: 'تماس با پشتیبانی ۲۴ ساعته', note: HOTLINE, kind: 'call' },
+      secondary: { href: whatsappLink('سلام، در مسیر هستم و به کمک فوری نیاز دارم.'), label: 'پیام در واتس‌اپ', kind: 'chat' },
+    },
+    {
+      id: 'ticket',
+      need: 'سؤال درباره بلیت و حرکت اتوبوس دارم',
+      advice: 'مرکز تماس پایانه آکسارای وضعیت اتوبوس، بلیت و ترانزیت را همان لحظه پیگیری می‌کند.',
+      primary: { href: telHref(CALL_CENTER), label: 'تماس با مرکز استانبول', note: CALL_CENTER, kind: 'call' },
+      secondary: { href: whatsappLink('سلام، درباره بلیت و حرکت اتوبوس تهران–استانبول سؤال دارم.'), label: 'پیام در واتس‌اپ', kind: 'chat' },
+    },
+    {
+      id: 'cargo',
+      need: 'بار یا بارنامه‌ام را پیگیری می‌کنم',
+      advice: 'شماره بارنامه CMR را در واتس‌اپ بفرستید تا وضعیت ترخیص در گمرکات ایران و ترکیه را به شما اعلام کنیم.',
+      primary: { href: whatsappLink('سلام، وضعیت این بارنامه را پیگیری می‌کنم. شماره بارنامه: '), label: 'ارسال شماره بارنامه', kind: 'chat' },
+      secondary: { href: telHref(CALL_CENTER), label: 'تماس با مرکز استانبول', kind: 'call' },
+    },
+    {
+      id: 'documents',
+      need: 'می‌خواهم مدارکم را بفرستم',
+      advice: 'پاسپورت، مدارک هویتی و فاکتورها را در واتس‌اپ بفرستید تا کارشناسان بررسی کنند. پیام صوتی و متنی ۲۴ ساعته پذیرفته می‌شود.',
+      primary: { href: whatsappLink('سلام، می‌خواهم مدارکم را برای بررسی بفرستم. موضوع پرونده: '), label: 'ارسال مدارک در واتس‌اپ', kind: 'chat' },
+      secondary: { href: '/consultation', label: 'ثبت درخواست مشاوره', kind: 'form' },
+    },
+    {
+      id: 'consult',
+      need: 'برای پرونده تجاری یا حقوقی مشاوره می‌خواهم',
+      advice: 'فرم کوتاه را پر کنید و زمان دلخواه‌تان را بگویید. کارشناس حقوقی یا بازرگانی در همان روز تماس می‌گیرد.',
+      primary: { href: '/consultation', label: 'ثبت درخواست مشاوره', kind: 'form' },
+      secondary: { href: telHref(CALL_CENTER), label: 'تماس با مرکز استانبول', kind: 'call' },
+    },
+  ];
+};
 
 const KIND_ICON = { call: PhoneCall, chat: MessageCircle, form: FileText };
 
@@ -89,6 +87,11 @@ const ActionLink: React.FC<{ href: string; kind: Answer['primary']['kind']; clas
 };
 
 const NeedPicker: React.FC = () => {
+  const { settings } = useSite();
+  const ANSWERS = useMemo(
+    () => buildAnswers(settings.support_hotline, settings.support_phone, settings.whatsapp_number),
+    [settings.support_hotline, settings.support_phone, settings.whatsapp_number],
+  );
   const [selectedId, setSelectedId] = useState(ANSWERS[0].id);
   const selected = ANSWERS.find((answer) => answer.id === selectedId) as Answer;
 
@@ -162,14 +165,16 @@ const NeedPicker: React.FC = () => {
 
 // ---- The 24-hour dial: when each office is open, and the line that never closes -
 
-const OFFICE_ROWS: { office: Office; name: string; color: string; radius: number }[] = [
-  { office: COMPANY_CONFIG.offices[0], name: 'دفتر استانبول', color: '#12B8B0', radius: 146 },
-  { office: COMPANY_CONFIG.offices[1], name: 'دفتر تهران', color: '#7CF3EC', radius: 128 },
-  { office: COMPANY_CONFIG.offices[2], name: 'دفتر تبریز', color: '#7FA2AA', radius: 110 },
+// The dial has room for three office rings, drawn from the outside in.
+const RINGS = [
+  { color: '#12B8B0', radius: 146 },
+  { color: '#7CF3EC', radius: 128 },
+  { color: '#7FA2AA', radius: 110 },
 ];
 
+type OfficeRow = { office: Office; name: string; color: string; radius: number };
+
 const DIAL_ZONE = 'Asia/Tehran';
-const ISTANBUL_ZONE = 'Europe/Istanbul';
 const CENTER = 200;
 const RING_RADIUS = 168;
 
@@ -189,8 +194,12 @@ const arcPath = (fromMinutes: number, toMinutes: number, radius: number) => {
   return `M${from.x} ${from.y}A${radius} ${radius} 0 ${large} 1 ${to.x} ${to.y}`;
 };
 
-// Office hours are local; the dial runs on Tehran time, half an hour ahead of Istanbul.
-const onDial = (office: Office, hour: number) => hour * 60 + (office.schedule.timeZone === ISTANBUL_ZONE ? 30 : 0);
+// Office hours are local; the dial runs on Tehran time, so each office is shifted by how far its clock is behind Tehran's.
+const zoneShift = (timeZone: string) => {
+  const reference = new Date(Date.UTC(2026, 0, 15, 12));
+  return (localParts(reference, DIAL_ZONE).minutes - localParts(reference, timeZone).minutes + 1440) % 1440;
+};
+const onDial = (office: Office, hour: number) => (hour * 60 + zoneShift(office.schedule.timeZone)) % 1440;
 
 const HOUR_LABELS = [
   { hour: 12, text: '۱۲' },
@@ -200,6 +209,11 @@ const HOUR_LABELS = [
 ];
 
 const CoverageDial: React.FC = () => {
+  const { settings, offices } = useSite();
+  const HOTLINE = settings.support_hotline;
+  // The second clock shows the head office's time, when it differs from Tehran's.
+  const headOffice = offices[0];
+  const OFFICE_ROWS: OfficeRow[] = offices.slice(0, RINGS.length).map((office, index) => ({ office, name: `دفتر ${office.name}`, ...RINGS[index] }));
   // Only known in the browser: the page is prerendered, so the first render has no clock.
   const [now, setNow] = useState<Date | null>(null);
 
@@ -289,7 +303,7 @@ const CoverageDial: React.FC = () => {
           <span className="block font-black text-[1.9rem] sm:text-[2.4rem] leading-tight text-white min-h-[1.25em]">
             {now ? clockText(now, DIAL_ZONE) : ''}
           </span>
-          <span className="text-[11px] sm:text-xs text-[#A2B6BC] min-h-[1.5em]">{now ? `استانبول ${clockText(now, ISTANBUL_ZONE)}` : ''}</span>
+          <span className="text-[11px] sm:text-xs text-[#A2B6BC] min-h-[1.5em]">{now && headOffice && headOffice.schedule.timeZone !== DIAL_ZONE ? `${headOffice.name} ${clockText(now, headOffice.schedule.timeZone)}` : ''}</span>
         </div>
       </div>
 

@@ -1,8 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { normalizeDigits, validateFullName, validatePhoneNumber, validateMessage } from './validation';
-import { calculateCurrencyConversion } from './currency';
-import { buildRequestMessage, requestWhatsAppUrl } from './serviceRequest';
+import { calculateCurrencyConversion, rateTable } from './currency';
+import { serviceRequestSubmitSchema } from '../modules/serviceRequests/schema';
+import { consultationSubmitSchema } from '../modules/consultations/schema';
+import { adminPhone, fieldErrors } from '../lib/validation';
 import { Office, officeStatus, telHref } from './contact';
 
 test('normalizeDigits converts Persian and Arabic digits to ASCII digits', () => {
@@ -43,7 +45,8 @@ test('validateMessage respects isRequired flag', () => {
 
 test('calculateCurrencyConversion calculates accurate transfer estimates', () => {
   // Convert 26,000,000 Tomans to TRY (rate 2600)
-  const result = calculateCurrencyConversion(26000000, 'TOMAN', 'TRY');
+  const rates = rateTable([{ code: 'TRY', nameFa: 'لیر ترکیه', symbol: '₺', rateToToman: 2600, flag: '' }]);
+  const result = calculateCurrencyConversion(26000000, 'TOMAN', 'TRY', rates);
   assert.notEqual(result, null);
   if (result) {
     assert.equal(result.estimatedAmount, 10000);
@@ -53,33 +56,37 @@ test('calculateCurrencyConversion calculates accurate transfer estimates', () =>
   }
 
   // Invalid currency returns null
-  assert.equal(calculateCurrencyConversion(100, 'ABC', 'XYZ'), null);
+  assert.equal(calculateCurrencyConversion(100, 'ABC', 'XYZ', rates), null);
+
+  // The fee comes from the admin panel
+  assert.equal(calculateCurrencyConversion(26000000, 'TOMAN', 'TRY', rates, 2)?.finalReceiveAmount, 9800);
 });
 
-test('service requests carry everything the expert needs, and skip what was left empty', () => {
-  const request = {
-    serviceTitle: 'ارسال بار',
-    answers: [{ label: 'مسیر ارسال', value: 'ایران به ترکیه' }],
-    fullName: ' علی احمدی ',
-    phone: '09123456789',
-    details: '   ',
-  };
-  assert.equal(
-    buildRequestMessage(request),
-    'سلام، درخواست «ارسال بار» را دارم.\nمسیر ارسال: ایران به ترکیه\nنام: علی احمدی\nشماره تماس: 09123456789',
-  );
-  assert.ok(buildRequestMessage({ ...request, details: 'وزن ۵ کیلو' }).endsWith('توضیحات: وزن ۵ کیلو'));
+test('a service request is the same three fields for every service, stored with Latin digits', () => {
+  const parsed = serviceRequestSubmitSchema.safeParse({ serviceId: '3', name: ' علی احمدی ', phone: '۰۹۱۲ ۳۴۵ ۶۷۸۹', description: '   ' });
+  assert.equal(parsed.success, true);
+  if (parsed.success) {
+    assert.deepEqual(parsed.data, { serviceId: 3, name: 'علی احمدی', phone: '09123456789', description: null });
+  }
 
-  const url = new URL(requestWhatsAppUrl(request));
-  assert.equal(url.hostname, 'wa.me');
-  assert.equal(url.searchParams.get('text'), buildRequestMessage(request));
+  const invalid = serviceRequestSubmitSchema.safeParse({ serviceId: 0, name: 'ع', phone: '123', description: '' });
+  assert.equal(invalid.success, false);
+  if (!invalid.success) {
+    assert.deepEqual(Object.keys(fieldErrors(invalid.error)).sort(), ['name', 'phone', 'serviceId']);
+  }
 });
 
-test('consultation and contact messages can open with their own line', () => {
-  const message = buildRequestMessage({ intro: 'سلام، درخواست مشاوره دارم.', answers: [{ label: 'موضوع', value: 'ثبت شرکت' }], fullName: 'علی', phone: '0912', details: '' });
-  assert.equal(message, 'سلام، درخواست مشاوره دارم.\nموضوع: ثبت شرکت\nنام: علی\nشماره تماس: 0912');
-  // The expert has to be able to tap the number, however it was typed
-  assert.ok(buildRequestMessage({ intro: 'سلام', answers: [], fullName: 'علی', phone: ' ۰۹۱۲ ', details: '' }).endsWith('شماره تماس: 0912'));
+test('a consultation without a service is general guidance, and needs a known call time', () => {
+  const general = consultationSubmitSchema.safeParse({ serviceId: '', callTime: 'asap', name: 'سارا رضایی', phone: '+905321234567' });
+  assert.equal(general.success, true);
+  if (general.success) assert.equal(general.data.serviceId, null);
+
+  assert.equal(consultationSubmitSchema.safeParse({ serviceId: null, callTime: 'midnight', name: 'سارا رضایی', phone: '+905321234567' }).success, false);
+});
+
+test('admin logins are Iranian mobile numbers, whatever digits they were typed in', () => {
+  assert.equal(adminPhone.parse('۰۹۱۲۰۰۰۰۰۰۰'), '09120000000');
+  assert.equal(adminPhone.safeParse('9120000000').success, false);
 });
 
 test('telHref dials Latin digits from any written form', () => {

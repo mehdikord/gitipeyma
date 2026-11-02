@@ -1,17 +1,15 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
-import { MessageCircle, ShieldCheck } from 'lucide-react';
+import React, { useRef, useState, useTransition } from 'react';
+import { AlertCircle, Send, ShieldCheck } from 'lucide-react';
 import { validateFullName, validatePhoneNumber } from '../../utils/validation';
-import { REQUEST_QUESTIONS, RequestRoute, routeText } from '../../data/serviceRequestOptions';
-import { requestWhatsAppUrl } from '../../utils/serviceRequest';
-import { RequestSent } from '../ui/RequestSent';
+import { submitServiceRequest } from '../../modules/site/actions';
+import { RequestReceived } from '../ui/RequestReceived';
 import { TextField } from '../ui/TextField';
 
 interface ServiceRequestFormProps {
-  serviceTitle: string;
+  serviceId: number;
   serviceShortTitle: string;
-  serviceSlug: string;
 }
 
 const FOCUS = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E2C98C]';
@@ -33,13 +31,12 @@ const WaybillRow: React.FC<{ label: string; value: string; placeholder?: string;
 
 const Waybill: React.FC<{
   title: string;
-  route: RequestRoute | null;
-  rows: { label: string; value: string }[];
   fullName: string;
   phone: string;
+  details: string;
   remaining: number;
   ready: boolean;
-}> = ({ title, route, rows, fullName, phone, remaining, ready }) => (
+}> = ({ title, fullName, phone, details, remaining, ready }) => (
   <div aria-hidden="true" className="relative rounded-2xl overflow-hidden bg-[#E2C98C] text-[#07191F]">
     <div className="px-5 sm:px-6 pt-5 pb-5">
       <div className="flex items-center justify-between gap-3 text-xs font-bold text-[#07191F]/75">
@@ -48,23 +45,10 @@ const Waybill: React.FC<{
       </div>
       <p className="mt-3 text-xl sm:text-[1.4rem] font-black leading-snug">{title}</p>
 
-      {route && (
-        <div className="mt-4 flex items-center gap-3 font-black text-lg">
-          <span>{route.from}</span>
-          <span className="relative flex-1 h-0.5 bg-[#07191F]/70">
-            <span className="absolute -top-[3px] right-0 w-2 h-2 rounded-full bg-[#07191F]" />
-            <span className="absolute -top-[3px] left-0 w-2 h-2 rounded-full border-2 border-[#07191F] bg-[#E2C98C]" />
-          </span>
-          <span>{route.to}</span>
-        </div>
-      )}
-
       <div className="mt-4">
-        {rows.map((row) => (
-          <WaybillRow key={row.label} label={row.label} value={row.value} placeholder="اختیاری" />
-        ))}
         <WaybillRow label="نام متقاضی" value={fullName.trim()} placeholder="هنوز وارد نشده" />
         <WaybillRow label="شماره تماس" value={phone.trim()} placeholder="هنوز وارد نشده" ltr />
+        <WaybillRow label="توضیحات" value={details.trim() ? 'نوشته شده' : ''} placeholder="اختیاری" />
       </div>
     </div>
 
@@ -93,14 +77,15 @@ const Waybill: React.FC<{
   </div>
 );
 
-export const ServiceRequestForm: React.FC<ServiceRequestFormProps> = ({ serviceTitle, serviceShortTitle, serviceSlug }) => {
-  const questions = REQUEST_QUESTIONS[serviceSlug] ?? [];
-  const [answers, setAnswers] = useState<Record<string, string>>({});
+export const ServiceRequestForm: React.FC<ServiceRequestFormProps> = ({ serviceId, serviceShortTitle }) => {
   const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('');
   const [details, setDetails] = useState('');
   const [touched, setTouched] = useState({ fullName: false, phone: false });
-  const [sentUrl, setSentUrl] = useState<string | null>(null);
+  const [serverErrors, setServerErrors] = useState<Record<string, string>>({});
+  const [formError, setFormError] = useState<string | null>(null);
+  const [reference, setReference] = useState<number | null>(null);
+  const [isSubmitting, startSubmit] = useTransition();
 
   const nameRef = useRef<HTMLInputElement>(null);
   const phoneRef = useRef<HTMLInputElement>(null);
@@ -110,75 +95,40 @@ export const ServiceRequestForm: React.FC<ServiceRequestFormProps> = ({ serviceT
   const ready = nameCheck.isValid && phoneCheck.isValid;
   const filled = Number(nameCheck.isValid) + Number(phoneCheck.isValid);
 
-  const routeQuestion = questions.find((question) => question.kind === 'route');
-  const selectedRoute =
-    routeQuestion?.kind === 'route' ? routeQuestion.routes.find((route) => routeText(route) === answers[routeQuestion.id]) ?? null : null;
-
-  const answerRows = questions
-    .filter((question) => question.kind !== 'route')
-    .map((question) => ({ label: question.label, value: answers[question.id] ?? '' }));
-
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     setTouched({ fullName: true, phone: true });
     if (!nameCheck.isValid) return nameRef.current?.focus();
     if (!phoneCheck.isValid) return phoneRef.current?.focus();
 
-    const url = requestWhatsAppUrl({
-      serviceTitle,
-      answers: questions.filter((question) => answers[question.id]).map((question) => ({ label: question.label, value: answers[question.id] })),
-      fullName,
-      phone,
-      details,
+    startSubmit(async () => {
+      const result = await submitServiceRequest({ serviceId, name: fullName, phone, description: details });
+      if (result.ok) {
+        setReference(result.data!.reference);
+        setServerErrors({});
+        setFormError(null);
+      } else {
+        setServerErrors(result.errors ?? {});
+        setFormError(result.message ?? null);
+      }
     });
-    window.open(url, '_blank', 'noopener');
-    setSentUrl(url);
+  };
+
+  const reset = () => {
+    setReference(null);
+    setFullName('');
+    setPhone('');
+    setDetails('');
+    setTouched({ fullName: false, phone: false });
   };
 
   return (
     <form onSubmit={handleSubmit} noValidate className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-start text-right">
       <div className="lg:col-span-7">
-        {sentUrl ? (
-          <RequestSent url={sentUrl} onEdit={() => setSentUrl(null)} />
+        {reference ? (
+          <RequestReceived reference={reference} onReset={reset} />
         ) : (
           <div className="space-y-7">
-            {questions.map((question) => {
-              const options =
-                question.kind === 'route'
-                  ? question.routes.map((route) => ({ value: routeText(route), text: `${route.from} ← ${route.to}` }))
-                  : question.choices.map((choice) => ({ value: choice, text: choice }));
-              return (
-                <fieldset key={question.id}>
-                  <legend className="mb-2.5 text-sm font-bold text-[#F7F7F3]">
-                    {question.label} <span className="font-normal text-[#A2B6BC]">(اختیاری)</span>
-                  </legend>
-                  <div className="flex flex-wrap gap-2">
-                    {options.map((option) => {
-                      const isSelected = answers[question.id] === option.value;
-                      return (
-                        <label
-                          key={option.value}
-                          className={`inline-flex items-center min-h-11 px-4 py-2 rounded-lg border text-sm font-bold cursor-pointer transition-colors has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-[#E2C98C] ${
-                            isSelected ? 'bg-[#E2C98C] border-[#E2C98C] text-[#07191F]' : 'bg-[#0C252B] border-white/15 text-[#D5E0E3] hover:border-white/40'
-                          }`}
-                        >
-                          <input
-                            type="radio"
-                            name={`${serviceSlug}-${question.id}`}
-                            value={option.value}
-                            checked={isSelected}
-                            onChange={() => setAnswers((current) => ({ ...current, [question.id]: option.value }))}
-                            className="sr-only"
-                          />
-                          {option.text}
-                        </label>
-                      );
-                    })}
-                  </div>
-                </fieldset>
-              );
-            })}
-
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <TextField
                 id="service-fullname"
@@ -188,7 +138,7 @@ export const ServiceRequestForm: React.FC<ServiceRequestFormProps> = ({ serviceT
                 autoComplete="name"
                 placeholder="مثال: علی احمدی"
                 valid={nameCheck.isValid}
-                error={touched.fullName ? nameCheck.error : undefined}
+                error={touched.fullName ? nameCheck.error ?? serverErrors.name : undefined}
                 onChange={setFullName}
                 onBlur={() => setTouched((current) => ({ ...current, fullName: fullName !== '' || current.fullName }))}
               />
@@ -203,7 +153,7 @@ export const ServiceRequestForm: React.FC<ServiceRequestFormProps> = ({ serviceT
                 placeholder="۰۹۱۲۳۴۵۶۷۸۹"
                 ltr
                 valid={phoneCheck.isValid}
-                error={touched.phone ? phoneCheck.error : undefined}
+                error={touched.phone ? phoneCheck.error ?? serverErrors.phone : undefined}
                 onChange={setPhone}
                 onBlur={() => setTouched((current) => ({ ...current, phone: phone !== '' || current.phone }))}
               />
@@ -215,28 +165,37 @@ export const ServiceRequestForm: React.FC<ServiceRequestFormProps> = ({ serviceT
               </label>
               <textarea
                 id="service-details"
-                rows={3}
+                rows={5}
+                maxLength={2000}
                 value={details}
                 onChange={(event) => setDetails(event.target.value)}
-                placeholder="هر چیزی که به کارشناس کمک می‌کند؛ مثل تاریخ، وزن بار یا شرایط خاص پرونده."
+                placeholder="هر چیزی که به کارشناس کمک می‌کند؛ مثل تاریخ، مسیر، وزن بار یا شرایط خاص پرونده."
                 className="w-full px-4 py-3.5 rounded-lg bg-[#0C252B] border border-white/15 hover:border-white/30 text-base leading-relaxed text-white placeholder:text-[#7F979E] outline-none transition-colors resize-none focus:border-[#E2C98C] focus:ring-1 focus:ring-[#E2C98C]"
               />
+              {serverErrors.description && <p className="mt-2 text-[13px] text-[#F58B8B]">{serverErrors.description}</p>}
             </div>
           </div>
         )}
       </div>
 
       <div className="lg:col-span-5 lg:sticky lg:top-36">
-        <Waybill title={serviceShortTitle} route={selectedRoute} rows={answerRows} fullName={fullName} phone={phone} remaining={2 - filled} ready={ready} />
+        <Waybill title={serviceShortTitle} fullName={fullName} phone={phone} details={details} remaining={2 - filled} ready={ready} />
 
-        {!sentUrl && (
+        {!reference && (
           <>
+            {formError && (
+              <p role="alert" className="mt-4 flex items-start gap-2 text-sm leading-relaxed text-[#F58B8B]">
+                <AlertCircle aria-hidden="true" className="w-4 h-4 mt-0.5 shrink-0" />
+                <span>{formError}</span>
+              </p>
+            )}
             <button
               type="submit"
-              className={`mt-4 w-full inline-flex items-center justify-center gap-2.5 min-h-14 px-6 rounded-lg bg-[#12B8B0] hover:bg-[#3ED0C8] text-[#07191F] font-black text-base transition-colors ${FOCUS}`}
+              disabled={isSubmitting}
+              className={`mt-4 w-full inline-flex items-center justify-center gap-2.5 min-h-14 px-6 rounded-lg bg-[#12B8B0] hover:bg-[#3ED0C8] disabled:opacity-70 disabled:cursor-wait text-[#07191F] font-black text-base transition-colors ${FOCUS}`}
             >
-              <MessageCircle className="w-5 h-5" />
-              <span>ارسال درخواست در واتس‌اپ</span>
+              <Send className="w-5 h-5" />
+              <span>{isSubmitting ? 'در حال ثبت درخواست...' : 'ثبت درخواست'}</span>
             </button>
             <p className="mt-3 flex items-start gap-2 text-[13px] leading-relaxed text-[#A2B6BC]">
               <ShieldCheck aria-hidden="true" className="w-4 h-4 mt-0.5 shrink-0 text-[#12B8B0]" />

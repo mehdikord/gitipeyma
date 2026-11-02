@@ -9,3 +9,9 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Prisma client, rebuilt by `npm install` / `npm run db:generate`
+src/generated/
+
+# Files uploaded from the admin panel
+storage/

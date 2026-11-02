@@ -1,14 +1,16 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { SUPPORTED_CURRENCIES, calculateCurrencyConversion, ConversionResult } from '../../utils/currency';
+import { CurrencyRate, calculateCurrencyConversion, ConversionResult, rateTable } from '../../utils/currency';
 import { ArrowLeftRight, Calculator, CheckCircle2, Info } from 'lucide-react';
 import { normalizeDigits } from '../../utils/validation';
 
-export const CurrencyCalculator: React.FC = () => {
+export const CurrencyCalculator: React.FC<{ rates: CurrencyRate[]; feePercent: number }> = ({ rates, feePercent }) => {
+  const SUPPORTED_CURRENCIES = rateTable(rates);
+  const feeText = `${feePercent.toLocaleString('fa-IR')}٪`;
   const [amountStr, setAmountStr] = useState<string>('50000000');
   const [fromCurrency, setFromCurrency] = useState<string>('TOMAN');
-  const [toCurrency, setToCurrency] = useState<string>('TRY');
+  const [toCurrency, setToCurrency] = useState<string>(rates[0]?.code ?? 'TOMAN');
   // Numbers use a fixed locale until hydration, then the visitor's browser locale
   const [locale, setLocale] = useState<string | undefined>('en-US');
 
@@ -17,7 +19,7 @@ export const CurrencyCalculator: React.FC = () => {
   }, []);
 
   const rawNum = parseFloat(normalizeDigits(amountStr).replace(/,/g, '')) || 0;
-  const result: ConversionResult | null = calculateCurrencyConversion(rawNum, fromCurrency, toCurrency);
+  const result: ConversionResult | null = calculateCurrencyConversion(rawNum, fromCurrency, toCurrency, SUPPORTED_CURRENCIES, feePercent);
 
   const handleSwap = () => {
     setFromCurrency(toCurrency);
@@ -99,7 +101,7 @@ export const CurrencyCalculator: React.FC = () => {
         <div className="mt-6 p-4 rounded-xl bg-[#07191F] border border-[#C6A15B]/30 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div>
             <span className="text-xs text-[#A2B6BC] block mb-1">
-              مبلغ برآوردی دریافتی در مقصد (پس از کسر کارمزد استاندارد ۱٪):
+              مبلغ برآوردی دریافتی در مقصد (پس از کسر کارمزد استاندارد {feeText}):
             </span>
             <div className="text-2xl font-black text-[#E2C98C]">
               {result.finalReceiveAmount.toLocaleString(locale)}{' '}
@@ -113,7 +115,7 @@ export const CurrencyCalculator: React.FC = () => {
           </div>
 
           <div className="text-right sm:text-left text-xs text-[#A2B6BC]">
-            <div>کارمزد ترانزیت مالی: ۱٪</div>
+            <div>کارمزد ترانزیت مالی: {feeText}</div>
             <div className="text-[#12B8B0] font-semibold mt-0.5">تحویل نقدی در استانبول یا واریز فوری</div>
           </div>
         </div>

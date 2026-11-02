@@ -2,9 +2,9 @@
 
 import React, { useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { Instagram, Linkedin, Mail, MessageCircle, PhoneCall, Send } from 'lucide-react';
-import { COMPANY_CONFIG } from '../../data/company';
-import { SERVICES_DATA } from '../../data/services';
+import { Mail, PhoneCall } from 'lucide-react';
+import { socialIcon } from '../../modules/socialLinks/icons';
+import { useSite } from '../site/SiteProvider';
 import { CITIES, LonLat, ROAD_PATH, STAGE, project } from '../home/hero/geo';
 import { telHref } from '../../utils/contact';
 
@@ -18,10 +18,6 @@ const PAGES = [
   { href: '/contact', label: 'ارتباط با ما' },
   { href: '/consultation', label: 'درخواست مشاوره' },
 ];
-
-const SOCIAL_ICONS: Record<string, React.ElementType> = { MessageCircle, Send, Instagram, Linkedin };
-
-const officeName = (city: string) => city.split(' (')[0];
 
 // ---- The sky behind the footer: the brand map, drifting, with the corridor lit ----
 
@@ -61,7 +57,8 @@ export const Footer: React.FC = () => {
     }
   }, []);
 
-  const [istanbul, tehran, tabriz] = COMPANY_CONFIG.offices;
+  const { settings, offices, socials, serviceLinks } = useSite();
+  const headOffice = offices[0];
 
   return (
     <footer className="relative overflow-hidden bg-[#051115] text-[#B7C8CD] border-t border-[#12B8B0]/20">
@@ -84,13 +81,13 @@ export const Footer: React.FC = () => {
             <p className="mt-5 max-w-sm text-[15px] leading-[1.95] text-[#B7C8CD]">
               همراه شما در مسیر خدمات فرامرزی؛ سفر VIP، کارگو، امور ارزی، حقوقی، ثبت شرکت و اقامت میان ایران، ترکیه و اروپا.
             </p>
-            <p className="mt-4 text-sm font-bold text-[#E2C98C]">{COMPANY_CONFIG.brandTaglineFa}</p>
+            <p className="mt-4 text-sm font-bold text-[#E2C98C]">{settings.brand_tagline_fa}</p>
 
             <ul className="mt-6 flex items-center gap-2">
-              {COMPANY_CONFIG.socials.map((social) => {
-                const Icon = SOCIAL_ICONS[social.iconName] ?? MessageCircle;
+              {socials.map((social) => {
+                const Icon = socialIcon(social.iconName);
                 return (
-                  <li key={social.platform}>
+                  <li key={social.id}>
                     <a
                       href={social.url}
                       target="_blank"
@@ -122,7 +119,7 @@ export const Footer: React.FC = () => {
           <nav aria-label="خدمات" className="col-span-1 lg:col-span-3">
             <h3 className="mb-3 text-sm font-extrabold text-[#F7F7F3]">خدمات</h3>
             <ul className="space-y-1.5">
-              {SERVICES_DATA.slice(0, 6).map((service) => (
+              {serviceLinks.slice(0, 6).map((service) => (
                 <li key={service.slug}>
                   <Link href={`/services/${service.slug}`} className={LINK}>
                     {service.shortTitle}
@@ -131,7 +128,7 @@ export const Footer: React.FC = () => {
               ))}
               <li>
                 <Link href="/services" className={`inline-block py-1 text-[15px] font-bold text-[#E2C98C] hover:text-white transition-colors rounded ${FOCUS}`}>
-                  همه ۱۱ خدمت
+                  همه {serviceLinks.length.toLocaleString('fa-IR')} خدمت
                 </Link>
               </li>
             </ul>
@@ -140,29 +137,33 @@ export const Footer: React.FC = () => {
           {/* Where to reach us: the line that never closes first, then each office */}
           <div className="col-span-2 lg:col-span-3">
             <h3 className="mb-3 text-sm font-extrabold text-[#F7F7F3]">تماس با ما</h3>
-            <a href={telHref(COMPANY_CONFIG.emergencySupportPhone)} className={`group block py-1 rounded ${FOCUS}`}>
+            <a href={telHref(settings.support_phone)} className={`group block py-1 rounded ${FOCUS}`}>
               <span className="flex items-center gap-2 text-sm text-[#E2C98C]">
                 <PhoneCall className="w-4 h-4" />
                 <span>پشتیبانی شبانه‌روزی</span>
               </span>
               <span dir="ltr" className="block mt-0.5 text-lg font-extrabold text-[#F7F7F3] group-hover:text-white text-right">
-                {COMPANY_CONFIG.emergencySupportPhone}
+                {settings.support_phone}
               </span>
             </a>
             <ul className="mt-4 grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-3">
-              {[istanbul, tehran, tabriz].map((office) => (
-                <li key={office.city}>
-                  <span className="block text-sm font-bold text-[#F7F7F3]">{officeName(office.city)}</span>
-                  <a dir="ltr" href={telHref(office.phones[0])} className={`inline-block mt-0.5 text-[15px] text-[#B7C8CD] hover:text-white transition-colors rounded ${FOCUS}`}>
-                    {office.phones[0]}
-                  </a>
+              {offices.map((office) => (
+                <li key={office.id}>
+                  <span className="block text-sm font-bold text-[#F7F7F3]">{office.name}</span>
+                  {office.phones[0] && (
+                    <a dir="ltr" href={telHref(office.phones[0])} className={`inline-block mt-0.5 text-[15px] text-[#B7C8CD] hover:text-white transition-colors rounded ${FOCUS}`}>
+                      {office.phones[0]}
+                    </a>
+                  )}
                 </li>
               ))}
             </ul>
-            <a href={`mailto:${istanbul.email}`} className={`mt-4 inline-flex items-center gap-2 py-1 text-[15px] text-[#B7C8CD] hover:text-white transition-colors rounded ${FOCUS}`}>
-              <Mail className="w-4 h-4 text-[#12B8B0]" />
-              <span dir="ltr">{istanbul.email}</span>
-            </a>
+            {headOffice?.email && (
+              <a href={`mailto:${headOffice.email}`} className={`mt-4 inline-flex items-center gap-2 py-1 text-[15px] text-[#B7C8CD] hover:text-white transition-colors rounded ${FOCUS}`}>
+                <Mail className="w-4 h-4 text-[#12B8B0]" />
+                <span dir="ltr">{headOffice.email}</span>
+              </a>
+            )}
           </div>
         </div>
 

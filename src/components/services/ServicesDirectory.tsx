@@ -1,29 +1,22 @@
 'use client';
 
 import React, { useState } from 'react';
-import { SERVICES_DATA } from '../../data/services';
-import { ServiceCategory, ServiceItem } from '../../types';
+import { ServiceCategoryItem, ServiceItem } from '../../types';
 import { ServiceImage } from '../ui/ServiceImage';
 import { Search, Filter, ArrowLeft, ArrowUpRight, CheckCircle2, Sparkles } from 'lucide-react';
 import { useNavigate } from '../../hooks/useNavigate';
 
-export const ServicesDirectory: React.FC = () => {
+export const ServicesDirectory: React.FC<{ services: ServiceItem[]; categories: ServiceCategoryItem[] }> = ({ services, categories: serviceCategories }) => {
   const onNavigate = useNavigate();
-  const [selectedCategory, setSelectedCategory] = useState<ServiceCategory>('all');
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
-  const categories: { key: ServiceCategory; label: string }[] = [
-    { key: 'all', label: 'همه خدمات (۱۱)' },
-    { key: 'transport', label: 'حمل‌ونقل و اتوبوس VIP' },
-    { key: 'cargo', label: 'پست و کارگو تجاری' },
-    { key: 'business', label: 'تجارت و ثبت شرکت' },
-    { key: 'immigration', label: 'اقامت، ویزا و تحصیلی' },
-    { key: 'legal', label: 'امور حقوقی و ترجمه' },
-    { key: 'financial', label: 'حواله ارزی و سوئیفت' },
-    { key: 'events', label: 'تشریفات و ازدواج' },
+  const categories: { key: string; label: string }[] = [
+    { key: 'all', label: `همه خدمات (${services.length.toLocaleString('fa-IR')})` },
+    ...serviceCategories.map((category) => ({ key: category.slug, label: category.title })),
   ];
 
-  const filteredServices = SERVICES_DATA.filter((service) => {
+  const filteredServices = services.filter((service) => {
     const matchesCategory = selectedCategory === 'all' || service.category === selectedCategory;
     const query = searchQuery.trim().toLowerCase();
     const matchesSearch =

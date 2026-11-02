@@ -3,21 +3,23 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Calendar, CheckCircle2, ChevronDown, ChevronLeft, Coffee, PhoneCall, Tv, Wifi } from 'lucide-react';
-import { SERVICES_DATA } from '../../data/services';
-import { COMPANY_CONFIG } from '../../data/company';
+import type { CurrencyRate, ServiceItem } from '../../types';
 import { useRevealOnce } from '../../hooks/useRevealOnce';
+import { telHref } from '../../utils/contact';
+import { useSite } from '../site/SiteProvider';
 import { ServiceImage } from '../ui/ServiceImage';
 import { ServiceRequestForm } from './ServiceRequestForm';
 import { CurrencyCalculator } from './CurrencyCalculator';
 
 interface ServiceDetailViewProps {
-  slug: string;
+  service: ServiceItem;
+  relatedServices: ServiceItem[];
+  // Only the currency service shows the calculator, with these rates.
+  currencies?: { rates: CurrencyRate[]; feePercent: number };
 }
 
 const FOCUS = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E2C98C]';
 const SECTION_TITLE = 'text-2xl sm:text-3xl font-black text-[#F7F7F3] leading-snug';
-const SUPPORT_PHONE = COMPANY_CONFIG.emergencySupportPhone;
-const SUPPORT_TEL = `tel:${SUPPORT_PHONE.replace(/[\s()-]/g, '')}`;
 
 const SECTIONS = [
   { id: 'about', label: 'معرفی' },
@@ -27,20 +29,14 @@ const SECTIONS = [
   { id: 'request', label: 'ثبت درخواست' },
 ];
 
-export const ServiceDetailView: React.FC<ServiceDetailViewProps> = ({ slug }) => {
-  const service = SERVICES_DATA.find((s) => s.slug === slug) || SERVICES_DATA[0];
+export const ServiceDetailView: React.FC<ServiceDetailViewProps> = ({ service, relatedServices, currencies }) => {
+  const SUPPORT_TEL = telHref(useSite().settings.support_phone);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
   const [activeSection, setActiveSection] = useState(SECTIONS[0].id);
   const [requestReached, setRequestReached] = useState(false);
 
   const stepsRef = useRef<HTMLElement>(null);
   const stepsReveal = useRevealOnce(stepsRef);
-
-  // Related means the same kind of work first, then the rest of the catalog
-  const relatedServices = [
-    ...SERVICES_DATA.filter((s) => s.slug !== service.slug && s.category === service.category),
-    ...SERVICES_DATA.filter((s) => s.slug !== service.slug && s.category !== service.category),
-  ].slice(0, 3);
 
   const sections = SECTIONS.filter((section) => section.id !== 'faq' || service.faqs.length > 0);
 
@@ -64,7 +60,7 @@ export const ServiceDetailView: React.FC<ServiceDetailViewProps> = ({ slug }) =>
       spy.disconnect();
       requestWatcher.disconnect();
     };
-  }, [slug]);
+  }, [service.slug]);
 
   return (
     <main className="bg-[#07191F] text-[#F7F7F3]">
@@ -149,9 +145,9 @@ export const ServiceDetailView: React.FC<ServiceDetailViewProps> = ({ slug }) =>
               ))}
             </div>
 
-            {service.slug === 'currency-exchange-swift' && (
+            {currencies && currencies.rates.length > 0 && (
               <div className="mt-10">
-                <CurrencyCalculator />
+                <CurrencyCalculator rates={currencies.rates} feePercent={currencies.feePercent} />
               </div>
             )}
 
@@ -204,7 +200,7 @@ export const ServiceDetailView: React.FC<ServiceDetailViewProps> = ({ slug }) =>
           <h2 className={SECTION_TITLE}>مراحل انجام کار</h2>
           <ol className="mt-8 grid grid-cols-1 lg:grid-cols-4 gap-x-8">
             {service.steps.map((step, index) => (
-              <li key={step.stepNumber} className="svc-row relative pr-14 lg:pr-0 lg:pt-16 pb-8 lg:pb-0" style={{ '--i': index * 2 } as React.CSSProperties}>
+              <li key={`${index}-${step.title}`} className="svc-row relative pr-14 lg:pr-0 lg:pt-16 pb-8 lg:pb-0" style={{ '--i': index * 2 } as React.CSSProperties}>
                 {index < service.steps.length - 1 && (
                   <span
                     aria-hidden="true"
@@ -258,10 +254,10 @@ export const ServiceDetailView: React.FC<ServiceDetailViewProps> = ({ slug }) =>
           <div className="max-w-2xl mb-8">
             <h2 className={SECTION_TITLE}>ثبت درخواست</h2>
             <p className="mt-3 text-[15px] sm:text-base leading-[1.95] text-[#A2B6BC]">
-              چند سؤال کوتاه را جواب دهید. درخواست شما کامل به واتس‌اپ کارشناس گیتی پیما می‌رسد و نیازی به توضیح دوباره ندارید.
+              نام و شماره تماس خود را بگذارید و اگر خواستید، شرایط‌تان را کوتاه بنویسید. کارشناس گیتی پیما درخواست را بررسی می‌کند و با شما تماس می‌گیرد.
             </p>
           </div>
-          <ServiceRequestForm key={service.slug} serviceTitle={service.title} serviceShortTitle={service.shortTitle} serviceSlug={service.slug} />
+          <ServiceRequestForm key={service.slug} serviceId={service.id} serviceShortTitle={service.shortTitle} />
         </section>
 
         <section className="pt-16 sm:pt-24 pb-16 sm:pb-24">

@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { Compass, ShieldCheck, Award, Users, Globe2, Building2, CheckCircle2, ArrowLeft } from 'lucide-react';
-import { COMPANY_CONFIG } from '../../data/company';
 import { useNavigate } from '../../hooks/useNavigate';
 
 export const AboutPage: React.FC = () => {

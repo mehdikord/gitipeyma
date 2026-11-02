@@ -1,7 +1,5 @@
 import type { Metadata } from 'next';
 import React from 'react';
-import { Header } from '../components/layout/Header';
-import { Footer } from '../components/layout/Footer';
 import './globals.css';
 
 const title = 'گیتی پیما | GITI International';
@@ -27,18 +25,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           rel="stylesheet"
         />
       </head>
-      <body className="bg-[#07191F] text-[#F7F7F3] font-['Vazirmatn',sans-serif] antialiased selection:bg-[#12B8B0]/30 selection:text-[#E2C98C]">
-        <div className="min-h-screen flex flex-col bg-[#07191F] text-[#F7F7F3] selection:bg-[#12B8B0]/30 selection:text-[#E2C98C]">
-          {/* Global Header */}
-          <Header />
-
-          {/* Main View Router Content */}
-          <div className="flex-1">{children}</div>
-
-          {/* Global Footer */}
-          <Footer />
-        </div>
-      </body>
+      {/* The public site and the admin panel each draw their own frame: (site)/layout.tsx and admins/ */}
+      <body className="bg-[#07191F] text-[#F7F7F3] font-['Vazirmatn',sans-serif] antialiased">{children}</body>
     </html>
   );
 }

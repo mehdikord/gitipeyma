@@ -2,9 +2,9 @@
  * Helpers for showing and dialing the company's offices.
  */
 
-import { ContactConfig } from '../types';
+import type { Office } from '../types';
 
-export type Office = ContactConfig['offices'][number];
+export type { Office };
 
 // Numbers in the data are for reading and may use Persian digits; dialing needs Latin ones.
 export const telHref = (phone: string) =>

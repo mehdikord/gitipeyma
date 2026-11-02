@@ -1,0 +1,371 @@
+// GITI database schema.
+//
+// Conventions (Laravel style), followed by every model so new phases stay consistent:
+// - Tables are snake_case plurals, columns snake_case (models and fields stay camelCase in code).
+// - Primary keys and foreign keys are BIGINT UNSIGNED; foreign keys are named <table>_<column>_foreign.
+// - Every table has created_at and updated_at.
+// - Ordered lists have a sort_order column; things that can be hidden from the site have is_active.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+// ---- Admin panel ------------------------------------------------------------------
+
+model Admin {
+  id          BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  name        String    @db.VarChar(255)
+  phone       String    @db.VarChar(20)
+  password    String    @db.VarChar(255)
+  lastLoginAt DateTime? @map("last_login_at") @db.Timestamp(0)
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt   DateTime  @updatedAt @map("updated_at") @db.Timestamp(0)
+
+  @@unique([phone], map: "admins_phone_unique")
+  @@map("admins")
+}
+
+// Free-form site settings (company name, support phones, WhatsApp number, ...).
+// The keys the site understands are listed in src/modules/settings/definitions.ts.
+model Setting {
+  id        BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  key       String   @db.VarChar(100)
+  value     String?  @db.Text
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
+
+  @@unique([key], map: "settings_key_unique")
+  @@map("settings")
+}
+
+// ---- Services ---------------------------------------------------------------------
+
+// The kind of work (transport, cargo, legal, ...); drives the filters on /services and the testimonial tabs.
+model ServiceCategory {
+  id           BigInt        @id @default(autoincrement()) @db.UnsignedBigInt
+  slug         String        @db.VarChar(100)
+  title        String        @db.VarChar(255)
+  sortOrder    Int           @default(0) @map("sort_order") @db.UnsignedInt
+  createdAt    DateTime      @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt    DateTime      @updatedAt @map("updated_at") @db.Timestamp(0)
+  services     Service[]
+  testimonials Testimonial[]
+
+  @@unique([slug], map: "service_categories_slug_unique")
+  @@map("service_categories")
+}
+
+enum ServiceGroupTone {
+  teal
+  gold
+}
+
+// What the visitor came to do ("for travel and cargo", ...); the lines of the home page service map.
+model ServiceGroup {
+  id        BigInt           @id @default(autoincrement()) @db.UnsignedBigInt
+  title     String           @db.VarChar(255)
+  tone      ServiceGroupTone @default(teal)
+  sortOrder Int              @default(0) @map("sort_order") @db.UnsignedInt
+  createdAt DateTime         @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt DateTime         @updatedAt @map("updated_at") @db.Timestamp(0)
+  services  Service[]
+
+  @@map("service_groups")
+}
+
+model Service {
+  id                    BigInt                @id @default(autoincrement()) @db.UnsignedBigInt
+  serviceCategoryId     BigInt                @map("service_category_id") @db.UnsignedBigInt
+  serviceGroupId        BigInt?               @map("service_group_id") @db.UnsignedBigInt
+  slug                  String                @db.VarChar(191)
+  title                 String                @db.VarChar(255)
+  shortTitle            String                @map("short_title") @db.VarChar(255)
+  // Overrides the category title where this service is labelled.
+  categoryLabel         String?               @map("category_label") @db.VarChar(255)
+  eyebrow               String?               @db.VarChar(255)
+  summary               String                @db.Text
+  description           String                @db.Text
+  // Long-form paragraphs, separated by blank lines.
+  content               String?               @db.Text
+  image                 String?               @db.VarChar(500)
+  icon                  String?               @db.VarChar(50)
+  badge                 String?               @db.VarChar(255)
+  isHighlighted         Boolean               @default(false) @map("is_highlighted")
+  isActive              Boolean               @default(true) @map("is_active")
+  sortOrder             Int                   @default(0) @map("sort_order") @db.UnsignedInt
+  createdAt             DateTime              @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt             DateTime              @updatedAt @map("updated_at") @db.Timestamp(0)
+  category              ServiceCategory       @relation(fields: [serviceCategoryId], references: [id], onDelete: Restrict, map: "services_service_category_id_foreign")
+  group                 ServiceGroup?         @relation(fields: [serviceGroupId], references: [id], onDelete: SetNull, map: "services_service_group_id_foreign")
+  features              ServiceFeature[]
+  steps                 ServiceStep[]
+  faqs                  ServiceFaq[]
+  requests              ServiceRequest[]
+  consultationRequests  ConsultationRequest[]
+
+  @@unique([slug], map: "services_slug_unique")
+  @@index([serviceCategoryId], map: "services_service_category_id_foreign")
+  @@index([serviceGroupId], map: "services_service_group_id_foreign")
+  @@map("services")
+}
+
+model ServiceFeature {
+  id        BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  serviceId BigInt   @map("service_id") @db.UnsignedBigInt
+  title     String   @db.VarChar(500)
+  sortOrder Int      @default(0) @map("sort_order") @db.UnsignedInt
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
+  service   Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade, map: "service_features_service_id_foreign")
+
+  @@index([serviceId], map: "service_features_service_id_foreign")
+  @@map("service_features")
+}
+
+model ServiceStep {
+  id          BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  serviceId   BigInt   @map("service_id") @db.UnsignedBigInt
+  title       String   @db.VarChar(255)
+  description String   @db.Text
+  sortOrder   Int      @default(0) @map("sort_order") @db.UnsignedInt
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
+  service     Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade, map: "service_steps_service_id_foreign")
+
+  @@index([serviceId], map: "service_steps_service_id_foreign")
+  @@map("service_steps")
+}
+
+model ServiceFaq {
+  id        BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  serviceId BigInt   @map("service_id") @db.UnsignedBigInt
+  question  String   @db.VarChar(500)
+  answer    String   @db.Text
+  sortOrder Int      @default(0) @map("sort_order") @db.UnsignedInt
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
+  service   Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade, map: "service_faqs_service_id_foreign")
+
+  @@index([serviceId], map: "service_faqs_service_id_foreign")
+  @@map("service_faqs")
+}
+
+// ---- What visitors send -------------------------------------------------------------
+
+enum RequestStatus {
+  pending
+  in_progress
+  completed
+  cancelled
+}
+
+// One shape for every service: who, how to reach them, and what they need.
+// A service with requests cannot be deleted (deactivate it instead), so no request loses its service.
+model ServiceRequest {
+  id          BigInt        @id @default(autoincrement()) @db.UnsignedBigInt
+  serviceId   BigInt        @map("service_id") @db.UnsignedBigInt
+  name        String        @db.VarChar(255)
+  phone       String        @db.VarChar(30)
+  description String?       @db.Text
+  status      RequestStatus @default(pending)
+  adminNote   String?       @map("admin_note") @db.Text
+  createdAt   DateTime      @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt   DateTime      @updatedAt @map("updated_at") @db.Timestamp(0)
+  service     Service       @relation(fields: [serviceId], references: [id], onDelete: Restrict, map: "service_requests_service_id_foreign")
+
+  @@index([serviceId], map: "service_requests_service_id_foreign")
+  @@index([status], map: "service_requests_status_index")
+  @@map("service_requests")
+}
+
+// From /consultation. No service means the visitor asked for general guidance.
+model ConsultationRequest {
+  id          BigInt        @id @default(autoincrement()) @db.UnsignedBigInt
+  serviceId   BigInt?       @map("service_id") @db.UnsignedBigInt
+  // One of the keys in src/modules/consultations/callTimes.ts.
+  callTime    String        @map("call_time") @db.VarChar(32)
+  name        String        @db.VarChar(255)
+  phone       String        @db.VarChar(30)
+  description String?       @db.Text
+  status      RequestStatus @default(pending)
+  adminNote   String?       @map("admin_note") @db.Text
+  createdAt   DateTime      @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt   DateTime      @updatedAt @map("updated_at") @db.Timestamp(0)
+  service     Service?      @relation(fields: [serviceId], references: [id], onDelete: SetNull, map: "consultation_requests_service_id_foreign")
+
+  @@index([serviceId], map: "consultation_requests_service_id_foreign")
+  @@index([status], map: "consultation_requests_status_index")
+  @@map("consultation_requests")
+}
+
+// From the message form on /contact.
+model ContactMessage {
+  id        BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  topic     String?   @db.VarChar(255)
+  name      String    @db.VarChar(255)
+  phone     String    @db.VarChar(30)
+  message   String    @db.Text
+  readAt    DateTime? @map("read_at") @db.Timestamp(0)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamp(0)
+
+  @@index([readAt], map: "contact_messages_read_at_index")
+  @@map("contact_messages")
+}
+
+// ---- Home page content --------------------------------------------------------------
+
+enum TestimonialSource {
+  admin
+  visitor
+}
+
+// Written by the team, or sent by a visitor from the home page and published once approved.
+model Testimonial {
+  id                BigInt                 @id @default(autoincrement()) @db.UnsignedBigInt
+  serviceCategoryId BigInt?                @map("service_category_id") @db.UnsignedBigInt
+  clientName        String                 @map("client_name") @db.VarChar(255)
+  serviceTitle      String                 @map("service_title") @db.VarChar(255)
+  context           String?                @db.VarChar(500)
+  comment           String                 @db.Text
+  year              String?                @db.VarChar(10)
+  rating            Int                    @default(5) @db.UnsignedTinyInt
+  categoryLabel     String?                @map("category_label") @db.VarChar(255)
+  verifiedCode      String?                @map("verified_code") @db.VarChar(255)
+  outcomeHeadline   String?                @map("outcome_headline") @db.VarChar(500)
+  originDestination String?                @map("origin_destination") @db.VarChar(255)
+  trackingCode      String?                @map("tracking_code") @db.VarChar(100)
+  source            TestimonialSource      @default(admin)
+  isPublished       Boolean                @default(false) @map("is_published")
+  sortOrder         Int                    @default(0) @map("sort_order") @db.UnsignedInt
+  createdAt         DateTime               @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt         DateTime               @updatedAt @map("updated_at") @db.Timestamp(0)
+  category          ServiceCategory?       @relation(fields: [serviceCategoryId], references: [id], onDelete: SetNull, map: "testimonials_service_category_id_foreign")
+  milestones        TestimonialMilestone[]
+
+  @@index([serviceCategoryId], map: "testimonials_service_category_id_foreign")
+  @@index([isPublished], map: "testimonials_is_published_index")
+  @@map("testimonials")
+}
+
+model TestimonialMilestone {
+  id            BigInt      @id @default(autoincrement()) @db.UnsignedBigInt
+  testimonialId BigInt      @map("testimonial_id") @db.UnsignedBigInt
+  title         String      @db.VarChar(255)
+  description   String?     @db.VarChar(500)
+  sortOrder     Int         @default(0) @map("sort_order") @db.UnsignedInt
+  createdAt     DateTime    @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt     DateTime    @updatedAt @map("updated_at") @db.Timestamp(0)
+  testimonial   Testimonial @relation(fields: [testimonialId], references: [id], onDelete: Cascade, map: "testimonial_milestones_testimonial_id_foreign")
+
+  @@index([testimonialId], map: "testimonial_milestones_testimonial_id_foreign")
+  @@map("testimonial_milestones")
+}
+
+// The headline numbers above the testimonials.
+model Metric {
+  id        BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  value     String   @db.VarChar(50)
+  label     String   @db.VarChar(255)
+  subtext   String?  @db.VarChar(255)
+  trend     String?  @db.VarChar(255)
+  isActive  Boolean  @default(true) @map("is_active")
+  sortOrder Int      @default(0) @map("sort_order") @db.UnsignedInt
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
+
+  @@map("metrics")
+}
+
+// The short quotes that scroll under the testimonials.
+model TrustQuote {
+  id        BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  text      String   @db.VarChar(500)
+  isActive  Boolean  @default(true) @map("is_active")
+  sortOrder Int      @default(0) @map("sort_order") @db.UnsignedInt
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
+
+  @@map("trust_quotes")
+}
+
+model TeamMember {
+  id         BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  name       String   @db.VarChar(255)
+  role       String   @db.VarChar(255)
+  specialty  String?  @db.VarChar(500)
+  department String?  @db.VarChar(255)
+  image      String?  @db.VarChar(500)
+  isActive   Boolean  @default(true) @map("is_active")
+  sortOrder  Int      @default(0) @map("sort_order") @db.UnsignedInt
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
+
+  @@map("team_members")
+}
+
+// ---- Company ------------------------------------------------------------------------
+
+// The first active office (by sort_order) is the head office.
+model Office {
+  id             BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  name           String   @db.VarChar(100)
+  role           String   @db.VarChar(255)
+  country        String   @db.VarChar(100)
+  address        String   @db.Text
+  // ["+90 (212) 588 40 40", ...]; the first is the main line.
+  phones         Json
+  email          String?  @db.VarChar(255)
+  workingHours   String   @map("working_hours") @db.VarChar(255)
+  // The same hours in a form the live open/closed status can compute with.
+  timeZone       String   @map("time_zone") @db.VarChar(64)
+  openHour       Int      @map("open_hour") @db.UnsignedTinyInt
+  closeHour      Int      @map("close_hour") @db.UnsignedTinyInt
+  // Weekdays the office is closed, 0 = Sunday ... 6 = Saturday.
+  closedWeekdays Json     @map("closed_weekdays")
+  latitude       Float
+  longitude      Float
+  isActive       Boolean  @default(true) @map("is_active")
+  sortOrder      Int      @default(0) @map("sort_order") @db.UnsignedInt
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
+
+  @@map("offices")
+}
+
+model SocialLink {
+  id        BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  platform  String   @db.VarChar(50)
+  label     String   @db.VarChar(255)
+  url       String   @db.VarChar(500)
+  // One of the icons in src/modules/socialLinks/icons.ts.
+  icon      String   @db.VarChar(50)
+  isActive  Boolean  @default(true) @map("is_active")
+  sortOrder Int      @default(0) @map("sort_order") @db.UnsignedInt
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
+
+  @@map("social_links")
+}
+
+// Rates for the transfer calculator on the currency service page.
+model Currency {
+  id          BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  code        String   @db.VarChar(10)
+  name        String   @db.VarChar(100)
+  symbol      String   @db.VarChar(10)
+  flag        String?  @db.VarChar(16)
+  rateToToman Decimal  @map("rate_to_toman") @db.Decimal(18, 2)
+  isActive    Boolean  @default(true) @map("is_active")
+  sortOrder   Int      @default(0) @map("sort_order") @db.UnsignedInt
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
+
+  @@unique([code], map: "currencies_code_unique")
+  @@map("currencies")
+}

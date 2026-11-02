@@ -1,0 +1,67 @@
+/* The admin panel is light; the public site's dark page and scrollbars stop at its edge. */
+html:has([data-admin]) body {
+  background: #f4f6f7;
+  color: #14282d;
+}
+
+[data-admin] ::-webkit-scrollbar-track {
+  background: transparent;
+}
+[data-admin] ::-webkit-scrollbar-thumb {
+  background: #cbd5d8;
+  border: none;
+}
+[data-admin] ::-webkit-scrollbar-thumb:hover {
+  background: #94a3a8;
+}
+[data-admin] aside ::-webkit-scrollbar-thumb {
+  background: #12343c;
+}
+
+html:has(dialog[open]) {
+  overflow: hidden;
+}
+
+.admin-dialog::backdrop {
+  background: rgb(7 25 31 / 0.55);
+}
+
+.admin-dialog[open] {
+  animation: admin-dialog-in 160ms ease-out;
+}
+
+@keyframes admin-dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}
+
+.admin-toast {
+  animation: admin-toast-in 200ms ease-out;
+}
+
+@keyframes admin-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.admin-drawer {
+  animation: admin-drawer-in 200ms ease-out;
+}
+
+@keyframes admin-drawer-in {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-dialog[open],
+  .admin-toast,
+  .admin-drawer {
+    animation: none;
+  }
+}

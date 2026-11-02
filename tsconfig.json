@@ -16,7 +16,7 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "incremental": true,
-    "strict": false,
+    "strict": true,
     "plugins": [
       {
         "name": "next"

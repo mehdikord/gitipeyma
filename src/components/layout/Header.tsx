@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { PhoneCall, Menu, X, ArrowUpRight, ShieldCheck, ChevronDown, Compass } from 'lucide-react';
-import { COMPANY_CONFIG } from '../../data/company';
+import { useSite } from '../site/SiteProvider';
 import { usePathname, useRouter } from 'next/navigation';
 import { useNavigate } from '../../hooks/useNavigate';
 
@@ -10,6 +10,7 @@ export const Header: React.FC = () => {
   const currentPath = usePathname();
   const router = useRouter();
   const onNavigate = useNavigate();
+  const supportPhone = useSite().settings.support_phone;
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -52,12 +53,12 @@ export const Header: React.FC = () => {
 
           <div className="flex items-center gap-4 text-[11px]">
             <a
-              href={`tel:${COMPANY_CONFIG.emergencySupportPhone.replace(/[\s()-]/g, '')}`}
+              href={`tel:${supportPhone.replace(/[\s()-]/g, '')}`}
               className="flex items-center gap-1.5 text-[#12B8B0] hover:text-[#74FFF7] transition-colors"
               dir="ltr"
             >
               <PhoneCall className="w-3.5 h-3.5" />
-              <span className="font-mono">{COMPANY_CONFIG.emergencySupportPhone}</span>
+              <span className="font-mono">{supportPhone}</span>
             </a>
             <span className="hidden sm:inline bg-[#12B8B0]/20 text-[#12B8B0] px-2 py-0.5 rounded font-mono">
               24/7 SUPPORT

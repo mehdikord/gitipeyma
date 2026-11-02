@@ -1,36 +1,29 @@
 'use client';
 
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState, useTransition } from 'react';
 import Link from 'next/link';
 import { AlertCircle, Clock, Mail, MapPin, MessageCircle, Navigation, PhoneCall, Send, ShieldCheck } from 'lucide-react';
-import { COMPANY_CONFIG } from '../../data/company';
 import { CITIES, LonLat, STAGE, project, roadPathTo } from '../home/hero/geo';
 import { Office, hourText, officeStatus, telHref } from '../../utils/contact';
-import { buildRequestMessage, REQUEST_WHATSAPP_NUMBER } from '../../utils/serviceRequest';
 import { validateFullName, validateMessage, validatePhoneNumber } from '../../utils/validation';
-import { RequestSent } from '../ui/RequestSent';
+import { CONTACT_TOPICS } from '../../modules/contactMessages/topics';
+import { submitContactMessage } from '../../modules/site/actions';
+import { RequestReceived } from '../ui/RequestReceived';
 import { TextField } from '../ui/TextField';
+import { useSite } from '../site/SiteProvider';
 
 const FOCUS = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E2C98C]';
 
-const WHATSAPP_URL = `https://wa.me/${REQUEST_WHATSAPP_NUMBER}`;
-const TELEGRAM_URL = COMPANY_CONFIG.socials.find((social) => social.platform === 'Telegram')?.url ?? '';
-const SUPPORT_PHONE = COMPANY_CONFIG.emergencySupportPhone;
+type OfficeStop = { office: Office; at: LonLat; name: string; role: string };
 
-const OFFICES: { office: Office; at: LonLat; name: string; role: string }[] = [
-  { office: COMPANY_CONFIG.offices[0], at: CITIES.istanbul, name: 'استانبول', role: 'دفتر مرکزی ترکیه' },
-  { office: COMPANY_CONFIG.offices[1], at: CITIES.tehran, name: 'تهران', role: 'دفتر ترانزیت و کارگو' },
-  { office: COMPANY_CONFIG.offices[2], at: CITIES.tabriz, name: 'تبریز', role: 'هماهنگی مرزی و گمرک' },
-];
-
-const TOPICS = ['سرویس اتوبوس تهران - استانبول', 'نرخ و پیگیری بار و کارگو', 'ثبت شرکت و حساب بانکی', 'خدمات ارزی و سوئیفت', 'امور حقوقی و وکالتنامه', 'سایر موارد و پیشنهادات'];
+const TOPICS = CONTACT_TOPICS;
 
 const ROUTE_TO_ISTANBUL = roadPathTo(CITIES.istanbul);
 const ZOOM = 1.35;
 
 // ---- The map: a camera that flies to the chosen office ------------------------
 
-const OfficeMap: React.FC<{ active: number; onSelect: (index: number) => void }> = ({ active, onSelect }) => {
+const OfficeMap: React.FC<{ offices: OfficeStop[]; active: number; onSelect: (index: number) => void }> = ({ offices: OFFICES, active, onSelect }) => {
   const bandRef = useRef<HTMLDivElement>(null);
   const [camera, setCamera] = useState<{ width: number; x: number; y: number } | null>(null);
 
@@ -54,7 +47,7 @@ const OfficeMap: React.FC<{ active: number; onSelect: (index: number) => void }>
     const observer = new ResizeObserver(aim);
     observer.observe(band);
     return () => observer.disconnect();
-  }, [active]);
+  }, [active, OFFICES]);
 
   return (
     <div ref={bandRef} aria-hidden="true" className="contact-map-band relative order-2 lg:order-none lg:absolute lg:inset-0 lg:-z-10 overflow-hidden">
@@ -104,7 +97,10 @@ const MessageForm: React.FC = () => {
   const [phone, setPhone] = useState('');
   const [message, setMessage] = useState('');
   const [touched, setTouched] = useState({ fullName: false, phone: false, message: false });
-  const [sentUrl, setSentUrl] = useState<string | null>(null);
+  const [serverErrors, setServerErrors] = useState<Record<string, string>>({});
+  const [formError, setFormError] = useState<string | null>(null);
+  const [reference, setReference] = useState<number | null>(null);
+  const [isSubmitting, startSubmit] = useTransition();
 
   const nameRef = useRef<HTMLInputElement>(null);
   const phoneRef = useRef<HTMLInputElement>(null);
@@ -113,7 +109,7 @@ const MessageForm: React.FC = () => {
   const nameCheck = validateFullName(fullName);
   const phoneCheck = validatePhoneNumber(phone);
   const messageCheck = validateMessage(message, true);
-  const messageError = touched.message ? messageCheck.error : undefined;
+  const messageError = touched.message ? messageCheck.error ?? serverErrors.message : undefined;
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -122,19 +118,37 @@ const MessageForm: React.FC = () => {
     if (!phoneCheck.isValid) return phoneRef.current?.focus();
     if (!messageCheck.isValid) return messageRef.current?.focus();
 
-    const text = buildRequestMessage({
-      intro: 'سلام، پیامی برای گیتی پیما دارم.',
-      answers: topic ? [{ label: 'موضوع', value: topic }] : [],
-      fullName,
-      phone,
-      details: message,
+    startSubmit(async () => {
+      const result = await submitContactMessage({ topic, name: fullName, phone, message });
+      if (result.ok) {
+        setReference(result.data!.reference);
+        setServerErrors({});
+        setFormError(null);
+      } else {
+        setServerErrors(result.errors ?? {});
+        setFormError(result.message ?? null);
+      }
     });
-    const url = `${WHATSAPP_URL}?text=${encodeURIComponent(text)}`;
-    window.open(url, '_blank', 'noopener');
-    setSentUrl(url);
   };
 
-  if (sentUrl) return <RequestSent url={sentUrl} onEdit={() => setSentUrl(null)} />;
+  const reset = () => {
+    setReference(null);
+    setTopic('');
+    setMessage('');
+    setTouched({ fullName: false, phone: false, message: false });
+  };
+
+  if (reference) {
+    return (
+      <RequestReceived
+        reference={reference}
+        title="پیام شما ثبت شد"
+        text="پیام شما به دست کارشناسان گیتی پیما رسید و به‌زودی با شماره‌ای که وارد کردید پاسخ می‌دهیم."
+        onReset={reset}
+        resetLabel="ارسال پیام دیگر"
+      />
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-6 text-right">
@@ -169,7 +183,7 @@ const MessageForm: React.FC = () => {
           autoComplete="name"
           placeholder="مثال: سهراب مرادی"
           valid={nameCheck.isValid}
-          error={touched.fullName ? nameCheck.error : undefined}
+          error={touched.fullName ? nameCheck.error ?? serverErrors.name : undefined}
           onChange={setFullName}
           onBlur={() => setTouched((current) => ({ ...current, fullName: fullName !== '' || current.fullName }))}
         />
@@ -184,7 +198,7 @@ const MessageForm: React.FC = () => {
           placeholder="۰۹۱۲۳۴۵۶۷۸۹"
           ltr
           valid={phoneCheck.isValid}
-          error={touched.phone ? phoneCheck.error : undefined}
+          error={touched.phone ? phoneCheck.error ?? serverErrors.phone : undefined}
           onChange={setPhone}
           onBlur={() => setTouched((current) => ({ ...current, phone: phone !== '' || current.phone }))}
         />
@@ -198,6 +212,7 @@ const MessageForm: React.FC = () => {
           ref={messageRef}
           id="contact-message"
           rows={4}
+          maxLength={3000}
           required
           value={message}
           aria-invalid={Boolean(messageError)}
@@ -217,13 +232,21 @@ const MessageForm: React.FC = () => {
         )}
       </div>
 
+      {formError && (
+        <p role="alert" className="flex items-start gap-2 text-sm leading-relaxed text-[#F58B8B]">
+          <AlertCircle aria-hidden="true" className="w-4 h-4 mt-0.5 shrink-0" />
+          <span>{formError}</span>
+        </p>
+      )}
+
       <div className="flex flex-col sm:flex-row sm:items-center gap-4">
         <button
           type="submit"
-          className={`shrink-0 inline-flex items-center justify-center gap-2.5 min-h-14 px-8 rounded-lg bg-[#12B8B0] hover:bg-[#3ED0C8] text-[#07191F] font-black text-base transition-colors ${FOCUS}`}
+          disabled={isSubmitting}
+          className={`shrink-0 inline-flex items-center justify-center gap-2.5 min-h-14 px-8 rounded-lg bg-[#12B8B0] hover:bg-[#3ED0C8] disabled:opacity-70 disabled:cursor-wait text-[#07191F] font-black text-base transition-colors ${FOCUS}`}
         >
-          <MessageCircle className="w-5 h-5" />
-          <span>ارسال پیام در واتس‌اپ</span>
+          <Send className="w-5 h-5" />
+          <span>{isSubmitting ? 'در حال ارسال...' : 'ارسال پیام'}</span>
         </button>
         <p className="flex items-start gap-2 text-[13px] leading-relaxed text-[#A2B6BC]">
           <ShieldCheck aria-hidden="true" className="w-4 h-4 mt-0.5 shrink-0 text-[#12B8B0]" />
@@ -237,6 +260,11 @@ const MessageForm: React.FC = () => {
 // ---- Page ----------------------------------------------------------------------
 
 export const ContactPage: React.FC = () => {
+  const { settings, offices, socials } = useSite();
+  const SUPPORT_PHONE = settings.support_phone;
+  const WHATSAPP_URL = `https://wa.me/${settings.whatsapp_number}`;
+  const TELEGRAM_URL = socials.find((social) => social.platform.toLowerCase() === 'telegram')?.url;
+  const OFFICES = useMemo<OfficeStop[]>(() => offices.map((office) => ({ office, at: office.at, name: office.name, role: office.role })), [offices]);
   const [activeIndex, setActiveIndex] = useState(0);
   // Only known in the browser: the page is prerendered, so the first render has no clock.
   const [now, setNow] = useState<Date | null>(null);
@@ -247,13 +275,13 @@ export const ContactPage: React.FC = () => {
     return () => clearInterval(timer);
   }, []);
 
-  const { office, name, role } = OFFICES[activeIndex];
-  const status = now ? officeStatus(office, now) : null;
+  const current = OFFICES[activeIndex];
+  const status = current && now ? officeStatus(current.office, now) : null;
 
   return (
     <main className="bg-[#07191F] text-[#F7F7F3]">
       <section className="relative isolate overflow-hidden flex flex-col lg:min-h-[max(640px,calc(100svh-7rem))]">
-        <OfficeMap active={activeIndex} onSelect={setActiveIndex} />
+        {OFFICES.length > 0 && <OfficeMap offices={OFFICES} active={activeIndex} onSelect={setActiveIndex} />}
 
         <div className="order-1 lg:order-none relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14 lg:pt-16 pb-6 lg:flex-1">
           <div className="max-w-[36rem] text-right">
@@ -282,27 +310,29 @@ export const ContactPage: React.FC = () => {
                 <MessageCircle className="w-[18px] h-[18px]" />
                 <span>واتس‌اپ</span>
               </a>
-              <a
-                href={TELEGRAM_URL}
-                target="_blank"
-                rel="noreferrer"
-                className={`inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-3 rounded-lg text-[#F7F7F3] border border-white/25 hover:border-[#12B8B0] font-bold text-sm sm:text-[15px] transition-colors ${FOCUS}`}
-              >
-                <Send className="w-[18px] h-[18px]" />
-                <span>کانال تلگرام</span>
-              </a>
+              {TELEGRAM_URL && (
+                <a
+                  href={TELEGRAM_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={`inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-3 rounded-lg text-[#F7F7F3] border border-white/25 hover:border-[#12B8B0] font-bold text-sm sm:text-[15px] transition-colors ${FOCUS}`}
+                >
+                  <Send className="w-[18px] h-[18px]" />
+                  <span>کانال تلگرام</span>
+                </a>
+              )}
             </div>
           </div>
         </div>
 
         {/* Choosing an office flies the map there and opens its details below */}
         <div className="order-3 lg:order-none relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <ul className="grid grid-cols-3 border-t border-white/15">
+          <ul className="grid border-t border-white/15" style={{ gridTemplateColumns: `repeat(${Math.max(OFFICES.length, 1)}, minmax(0, 1fr))` }}>
             {OFFICES.map((item, index) => {
               const isActive = index === activeIndex;
               const itemStatus = now ? officeStatus(item.office, now) : null;
               return (
-                <li key={item.name} className="relative border-l last:border-l-0 border-white/10">
+                <li key={item.office.id} className="relative border-l last:border-l-0 border-white/10">
                   {isActive && <span aria-hidden="true" className="absolute -top-px inset-x-0 h-0.5 bg-[#E2C98C]" />}
                   <button
                     type="button"
@@ -328,19 +358,20 @@ export const ContactPage: React.FC = () => {
       </section>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <section id="contact-office-details" aria-live="polite" aria-label={`جزئیات دفتر ${name}`} className="bg-[#0C252B] rounded-b-2xl">
-          <div key={name} className="sup-answer grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 px-4 sm:px-6 py-6 sm:py-7">
+        {current && (
+        <section id="contact-office-details" aria-live="polite" aria-label={`جزئیات دفتر ${current.name}`} className="bg-[#0C252B] rounded-b-2xl">
+          <div key={current.name} className="sup-answer grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 px-4 sm:px-6 py-6 sm:py-7">
             <div>
               <h2 className="flex items-center gap-2 text-sm font-extrabold text-[#E2C98C]">
                 <MapPin aria-hidden="true" className="w-4 h-4" />
                 <span>
-                  نشانی دفتر {name}
-                  <span className="sr-only">، {role}</span>
+                  نشانی دفتر {current.name}
+                  <span className="sr-only">، {current.role}</span>
                 </span>
               </h2>
-              <p className="mt-2.5 text-[15px] leading-[1.95] text-[#E4ECEE]">{office.addressFa}</p>
+              <p className="mt-2.5 text-[15px] leading-[1.95] text-[#E4ECEE]">{current.office.addressFa}</p>
               <a
-                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(office.addressFa)}`}
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(current.office.addressFa)}`}
                 target="_blank"
                 rel="noreferrer"
                 className={`mt-1 inline-flex items-center gap-2 py-3 text-sm font-bold text-[#3ED0C8] hover:text-white transition-colors rounded ${FOCUS}`}
@@ -355,7 +386,7 @@ export const ContactPage: React.FC = () => {
                 <Clock aria-hidden="true" className="w-4 h-4" />
                 <span>ساعت کاری</span>
               </h2>
-              <p className="mt-2.5 text-[15px] leading-[1.95] text-[#E4ECEE]">{office.workingHours}</p>
+              <p className="mt-2.5 text-[15px] leading-[1.95] text-[#E4ECEE]">{current.office.workingHours}</p>
               {status && <p className={`mt-1 text-sm font-bold ${status.isOpen ? 'text-[#3ED0C8]' : 'text-[#A2B6BC]'}`}>{status.text}</p>}
             </div>
 
@@ -365,7 +396,7 @@ export const ContactPage: React.FC = () => {
                 <span>تلفن و ایمیل</span>
               </h2>
               <ul className="mt-1.5">
-                {office.phones.map((phone) => (
+                {current.office.phones.map((phone) => (
                   <li key={phone}>
                     <a dir="ltr" href={telHref(phone)} className={`inline-block py-3 text-base font-bold text-white hover:text-[#E2C98C] transition-colors rounded ${FOCUS}`}>
                       {phone}
@@ -373,18 +404,21 @@ export const ContactPage: React.FC = () => {
                   </li>
                 ))}
               </ul>
-              <a href={`mailto:${office.email}`} className={`inline-flex items-center gap-2 py-3 text-[15px] text-[#C9D7DB] hover:text-white transition-colors rounded ${FOCUS}`}>
+{current.office.email && (
+              <a href={`mailto:${current.office.email}`} className={`inline-flex items-center gap-2 py-3 text-[15px] text-[#C9D7DB] hover:text-white transition-colors rounded ${FOCUS}`}>
                 <Mail aria-hidden="true" className="w-4 h-4 text-[#12B8B0]" />
-                <span dir="ltr">{office.email}</span>
+                <span dir="ltr">{current.office.email}</span>
               </a>
+              )}
             </div>
           </div>
         </section>
+        )}
 
         <section className="py-14 sm:py-20 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14">
           <div className="lg:col-span-4 text-right">
             <h2 className="text-2xl sm:text-3xl font-black leading-snug text-[#F7F7F3]">پیام یا پرسش دارید؟</h2>
-            <p className="mt-3 text-[15px] sm:text-base leading-[1.95] text-[#A2B6BC]">پیام شما کامل به واتس‌اپ کارشناس گیتی پیما می‌رسد و پاسخ را همان‌جا می‌گیرید.</p>
+            <p className="mt-3 text-[15px] sm:text-base leading-[1.95] text-[#A2B6BC]">پیام شما مستقیم به کارشناسان گیتی پیما می‌رسد و با شماره‌ای که وارد می‌کنید پاسخ می‌گیرید.</p>
             <p className="mt-4 text-[15px] leading-[1.95] text-[#A2B6BC]">
               برای بررسی یک پرونده،{' '}
               <Link href="/consultation" className={`font-bold text-[#E2C98C] hover:text-white underline underline-offset-4 transition-colors rounded ${FOCUS}`}>

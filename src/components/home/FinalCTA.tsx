@@ -3,12 +3,11 @@
 import React, { useRef } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, MessageCircle, PhoneCall } from 'lucide-react';
-import { COMPANY_CONFIG } from '../../data/company';
 import { useRevealOnce } from '../../hooks/useRevealOnce';
+import { telHref } from '../../utils/contact';
+import { useSite } from '../site/SiteProvider';
 
-const WHATSAPP_URL = `https://wa.me/905367008090?text=${encodeURIComponent('سلام، می‌خواهم درباره خدمات گیتی پیما راهنمایی بگیرم.')}`;
-const SUPPORT_PHONE = COMPANY_CONFIG.emergencySupportPhone;
-const SUPPORT_TEL = `tel:${SUPPORT_PHONE.replace(/[\s()-]/g, '')}`;
+const WHATSAPP_TEXT = encodeURIComponent('سلام، می‌خواهم درباره خدمات گیتی پیما راهنمایی بگیرم.');
 const FOCUS = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E2C98C]';
 
 // The route starts right under the buttons, where the visitor is, and leaves for the horizon.
@@ -19,6 +18,10 @@ const END = { x: 40, y: 420 };
 const ROUTE = `M${START.x} ${START.y} C600 760, 520 745, 380 735 S120 650, ${END.x} ${END.y}`;
 
 export const FinalCTA: React.FC = () => {
+  const { settings } = useSite();
+  const WHATSAPP_URL = `https://wa.me/${settings.whatsapp_number}?text=${WHATSAPP_TEXT}`;
+  const SUPPORT_PHONE = settings.support_phone;
+  const SUPPORT_TEL = telHref(SUPPORT_PHONE);
   const sectionRef = useRef<HTMLElement>(null);
   const reveal = useRevealOnce(sectionRef);
 

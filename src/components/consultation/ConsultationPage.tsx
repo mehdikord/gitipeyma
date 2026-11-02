@@ -1,28 +1,25 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
-import { ArrowLeft, ArrowRight, Check, CloudSun, HelpCircle, MessageCircle, PhoneCall, ShieldCheck, Sun, Zap } from 'lucide-react';
-import { COMPANY_CONFIG } from '../../data/company';
-import { LINES } from '../../data/serviceGroups';
-import { SERVICES_DATA } from '../../data/services';
+import React, { useEffect, useRef, useState, useTransition } from 'react';
+import { AlertCircle, ArrowLeft, ArrowRight, Check, CloudSun, HelpCircle, PhoneCall, Send, ShieldCheck, Sun, Zap } from 'lucide-react';
+import type { ServiceGroupItem } from '../../types';
 import { CITIES, LonLat, ROAD_PATH, STAGE, project, roadFraction } from '../home/hero/geo';
 import { telHref } from '../../utils/contact';
-import { REQUEST_WHATSAPP_NUMBER, buildRequestMessage } from '../../utils/serviceRequest';
 import { validateFullName, validatePhoneNumber } from '../../utils/validation';
-import { RequestSent } from '../ui/RequestSent';
+import { CALL_TIMES, CallTimeKey, callTimeText } from '../../modules/consultations/callTimes';
+import { submitConsultationRequest } from '../../modules/site/actions';
+import { RequestReceived } from '../ui/RequestReceived';
 import { TextField } from '../ui/TextField';
+import { useSite } from '../site/SiteProvider';
 
 const FOCUS = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E2C98C]';
-const SUPPORT_PHONE = COMPANY_CONFIG.emergencySupportPhone;
-
 const GENERAL_TOPIC = 'مشاوره عمومی';
 const STEP_NAMES = ['موضوع', 'زمان تماس', 'اطلاعات تماس'];
 
-const TIMES = [
-  { value: 'صبح تا ظهر (۰۹:۰۰ تا ۱۴:۰۰)', title: 'صبح تا ظهر', hours: '۰۹:۰۰ تا ۱۴:۰۰', icon: Sun },
-  { value: 'عصر (۱۴:۰۰ تا ۱۹:۰۰)', title: 'عصر', hours: '۱۴:۰۰ تا ۱۹:۰۰', icon: CloudSun },
-  { value: 'فوری و در اولین فرصت', title: 'فوری', hours: 'در اولین فرصت', icon: Zap },
-];
+const TIME_ICONS: Record<CallTimeKey, React.ElementType> = { morning: Sun, afternoon: CloudSun, asap: Zap };
+const TIMES = CALL_TIMES.map((time) => ({ ...time, value: time.key, icon: TIME_ICONS[time.key] }));
+
+type TopicService = { id: number; slug: string; shortTitle: string };
 
 // Each finished step carries the route one stop further: three steps, Tehran to Europe.
 const STOPS: { at: LonLat; name: string; above?: boolean }[] = [
@@ -75,15 +72,21 @@ const ProgressMap: React.FC<{ reached: number; bandRef: React.RefObject<HTMLDivE
 
 // ---- Page ----------------------------------------------------------------------
 
-export const ConsultationPage: React.FC = () => {
+export const ConsultationPage: React.FC<{ services: TopicService[]; groups: ServiceGroupItem[] }> = ({ services, groups }) => {
+  const SUPPORT_PHONE = useSite().settings.support_phone;
   const [step, setStep] = useState(0);
+  // The topic as shown, and the service it is about (null for general guidance).
   const [topic, setTopic] = useState('');
-  const [time, setTime] = useState('');
+  const [topicServiceId, setTopicServiceId] = useState<number | null>(null);
+  const [time, setTime] = useState<CallTimeKey | ''>('');
   const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('');
   const [notes, setNotes] = useState('');
   const [touched, setTouched] = useState({ fullName: false, phone: false });
-  const [sentUrl, setSentUrl] = useState<string | null>(null);
+  const [serverErrors, setServerErrors] = useState<Record<string, string>>({});
+  const [formError, setFormError] = useState<string | null>(null);
+  const [reference, setReference] = useState<number | null>(null);
+  const [isSubmitting, startSubmit] = useTransition();
 
   const bandRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -97,12 +100,13 @@ export const ConsultationPage: React.FC = () => {
   // Arriving from a service's "consult about this" link means the first step is already done
   useEffect(() => {
     const slug = new URLSearchParams(window.location.search).get('service');
-    const service = SERVICES_DATA.find((s) => s.slug === slug);
+    const service = services.find((s) => s.slug === slug);
     if (service) {
       setTopic(service.shortTitle);
+      setTopicServiceId(service.id);
       setStep(1);
     }
-  }, []);
+  }, [services]);
 
   const goTo = (next: number) => {
     hasMoved.current = true;
@@ -122,8 +126,8 @@ export const ConsultationPage: React.FC = () => {
   }, [step]);
 
   useEffect(() => {
-    if (sentUrl) showProgress();
-  }, [sentUrl]);
+    if (reference) showProgress();
+  }, [reference]);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -131,39 +135,50 @@ export const ConsultationPage: React.FC = () => {
     if (!nameCheck.isValid) return nameRef.current?.focus();
     if (!phoneCheck.isValid) return phoneRef.current?.focus();
 
-    const text = buildRequestMessage({
-      intro: 'سلام، درخواست مشاوره دارم.',
-      answers: [
-        { label: 'موضوع', value: topic },
-        { label: 'زمان تماس', value: time },
-      ].filter((answer) => answer.value),
-      fullName,
-      phone,
-      details: notes,
+    if (!time) return goTo(1);
+
+    startSubmit(async () => {
+      const result = await submitConsultationRequest({ serviceId: topicServiceId, callTime: time, name: fullName, phone, description: notes });
+      if (result.ok) {
+        setReference(result.data!.reference);
+        setServerErrors({});
+        setFormError(null);
+      } else {
+        setServerErrors(result.errors ?? {});
+        setFormError(result.message ?? null);
+      }
     });
-    const url = `https://wa.me/${REQUEST_WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
-    window.open(url, '_blank', 'noopener');
-    setSentUrl(url);
+  };
+
+  const startOver = () => {
+    setReference(null);
+    setTopic('');
+    setTopicServiceId(null);
+    setTime('');
+    setNotes('');
+    hasMoved.current = true;
+    setStep(0);
   };
 
   const canReach = (index: number) => index === 0 || (index === 1 && Boolean(topic)) || (index === 2 && Boolean(topic && time));
 
-  const topicButton = (value: string, label: string) => {
-    const isSelected = topic === value;
+  const topicButton = (service: TopicService) => {
+    const isSelected = topicServiceId === service.id;
     return (
       <button
-        key={value}
+        key={service.id}
         type="button"
         aria-pressed={isSelected}
         onClick={() => {
-          setTopic(value);
+          setTopic(service.shortTitle);
+          setTopicServiceId(service.id);
           goTo(1);
         }}
         className={`inline-flex items-center gap-2 min-h-11 px-4 py-2 rounded-lg border text-sm font-bold text-right transition-colors ${FOCUS} ${
           isSelected ? 'bg-[#E2C98C] border-[#E2C98C] text-[#07191F]' : 'bg-[#0C252B] border-white/15 text-[#D5E0E3] hover:border-[#E2C98C]/70 hover:text-white'
         }`}
       >
-        {label}
+        {service.shortTitle}
       </button>
     );
   };
@@ -171,18 +186,24 @@ export const ConsultationPage: React.FC = () => {
   return (
     <main className="bg-[#07191F] text-[#F7F7F3]">
       <section className="relative isolate overflow-hidden lg:min-h-[calc(100svh-7rem)]">
-        <ProgressMap reached={sentUrl ? 3 : step} bandRef={bandRef} />
+        <ProgressMap reached={reference ? 3 : step} bandRef={bandRef} />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-14 lg:py-14 grid grid-cols-1 lg:grid-cols-12">
           <div className="lg:col-span-7 text-right">
-            <h1 className={`${step > 0 || sentUrl ? 'sr-only lg:not-sr-only' : ''} mt-2 lg:mt-0 text-[1.9rem] sm:text-[2.6rem] xl:text-5xl font-black leading-[1.3] text-[#F7F7F3] [text-wrap:balance]`}>برای دریافت مشاوره، اولین قدم را بردارید.</h1>
-            <p className={`${step > 0 || sentUrl ? 'hidden lg:block' : ''} mt-4 max-w-2xl text-[15px] sm:text-lg leading-[1.95] text-[#C9D7DB]`}>
+            <h1 className={`${step > 0 || reference ? 'sr-only lg:not-sr-only' : ''} mt-2 lg:mt-0 text-[1.9rem] sm:text-[2.6rem] xl:text-5xl font-black leading-[1.3] text-[#F7F7F3] [text-wrap:balance]`}>برای دریافت مشاوره، اولین قدم را بردارید.</h1>
+            <p className={`${step > 0 || reference ? 'hidden lg:block' : ''} mt-4 max-w-2xl text-[15px] sm:text-lg leading-[1.95] text-[#C9D7DB]`}>
               اطلاعات تماس خود را وارد کنید تا کارشناسان گیتی پیما برای راهنمایی و بررسی درخواست شما با شما در ارتباط باشند.
             </p>
 
-            {sentUrl ? (
+            {reference ? (
               <div className="mt-8">
-                <RequestSent url={sentUrl} onEdit={() => setSentUrl(null)} />
+                <RequestReceived
+                  reference={reference}
+                  title="درخواست مشاوره ثبت شد"
+                  text={`کارشناس گیتی پیما در بازه «${callTimeText(time)}» با شما تماس می‌گیرد.`}
+                  onReset={startOver}
+                  resetLabel="درخواست مشاوره دیگر"
+                />
               </div>
             ) : (
               <>
@@ -229,6 +250,7 @@ export const ConsultationPage: React.FC = () => {
                         aria-pressed={topic === GENERAL_TOPIC}
                         onClick={() => {
                           setTopic(GENERAL_TOPIC);
+                          setTopicServiceId(null);
                           goTo(1);
                         }}
                         className={`group mt-4 w-full flex items-center gap-3 min-h-14 px-4 py-3 rounded-lg border text-right transition-colors ${FOCUS} ${
@@ -240,13 +262,13 @@ export const ConsultationPage: React.FC = () => {
                         <ArrowLeft aria-hidden="true" className="w-4 h-4 mr-auto shrink-0 transition-transform group-hover:-translate-x-1" />
                       </button>
                       <div className="mt-5 space-y-4">
-                        {LINES.map((line) => (
-                          <div key={line.title}>
+                        {groups.map((line) => (
+                          <div key={line.id}>
                             <h3 className={`mb-2 text-[13px] font-bold ${line.tone === 'teal' ? 'text-[#3ED0C8]' : 'text-[#E2C98C]'}`}>{line.title}</h3>
                             <div className="flex flex-wrap gap-2">
                               {line.slugs.map((slug) => {
-                                const service = SERVICES_DATA.find((s) => s.slug === slug);
-                                return service ? topicButton(service.shortTitle, service.shortTitle) : null;
+                                const service = services.find((s) => s.slug === slug);
+                                return service ? topicButton(service) : null;
                               })}
                             </div>
                           </div>
@@ -306,7 +328,7 @@ export const ConsultationPage: React.FC = () => {
                         با چه نام و شماره‌ای تماس بگیریم؟
                       </h2>
                       <p className="mt-2 text-sm leading-relaxed text-[#A2B6BC]">
-                        موضوع: <span className="font-bold text-[#E2C98C]">{topic}</span>، زمان تماس: <span className="font-bold text-[#E2C98C]">{time}</span>
+                        موضوع: <span className="font-bold text-[#E2C98C]">{topic}</span>، زمان تماس: <span className="font-bold text-[#E2C98C]">{time && callTimeText(time)}</span>
                       </p>
 
                       <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -318,7 +340,7 @@ export const ConsultationPage: React.FC = () => {
                           autoComplete="name"
                           placeholder="مثال: محمد امینی"
                           valid={nameCheck.isValid}
-                          error={touched.fullName ? nameCheck.error : undefined}
+                          error={touched.fullName ? nameCheck.error ?? serverErrors.name : undefined}
                           onChange={setFullName}
                           onBlur={() => setTouched((current) => ({ ...current, fullName: fullName !== '' || current.fullName }))}
                         />
@@ -333,7 +355,7 @@ export const ConsultationPage: React.FC = () => {
                           placeholder="۰۹۱۲۳۴۵۶۷۸۹"
                           ltr
                           valid={phoneCheck.isValid}
-                          error={touched.phone ? phoneCheck.error : undefined}
+                          error={touched.phone ? phoneCheck.error ?? serverErrors.phone : undefined}
                           onChange={setPhone}
                           onBlur={() => setTouched((current) => ({ ...current, phone: phone !== '' || current.phone }))}
                         />
@@ -353,13 +375,21 @@ export const ConsultationPage: React.FC = () => {
                         />
                       </div>
 
+                      {formError && (
+                        <p role="alert" className="mt-5 flex items-start gap-2 text-sm leading-relaxed text-[#F58B8B]">
+                          <AlertCircle aria-hidden="true" className="w-4 h-4 mt-0.5 shrink-0" />
+                          <span>{serverErrors.description ?? formError}</span>
+                        </p>
+                      )}
+
                       <div className="mt-5 flex flex-col sm:flex-row sm:items-center gap-3">
                         <button
                           type="submit"
-                          className={`inline-flex items-center justify-center gap-2.5 min-h-14 px-8 rounded-lg bg-[#12B8B0] hover:bg-[#3ED0C8] text-[#07191F] font-black text-base transition-colors ${FOCUS}`}
+                          disabled={isSubmitting}
+                          className={`inline-flex items-center justify-center gap-2.5 min-h-14 px-8 rounded-lg bg-[#12B8B0] hover:bg-[#3ED0C8] disabled:opacity-70 disabled:cursor-wait text-[#07191F] font-black text-base transition-colors ${FOCUS}`}
                         >
-                          <MessageCircle className="w-5 h-5" />
-                          <span>ارسال درخواست در واتس‌اپ</span>
+                          <Send className="w-5 h-5" />
+                          <span>{isSubmitting ? 'در حال ثبت...' : 'ثبت درخواست مشاوره'}</span>
                         </button>
                         <button
                           type="button"

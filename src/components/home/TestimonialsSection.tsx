@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useTransition } from 'react';
 import {
   Quote,
   ChevronRight,
@@ -25,16 +25,23 @@ import {
   Coins,
   Globe2,
 } from 'lucide-react';
-import {
-  TESTIMONIALS_DATA,
-  TESTIMONIALS_METRICS,
-  MARQUEE_TRUST_QUOTES,
-} from '../../data/testimonials';
-import { TestimonialItem } from '../../types';
+import { MetricItem, TestimonialItem } from '../../types';
+import { submitTestimonial } from '../../modules/site/actions';
 
-type CategoryFilter = 'all' | 'transport' | 'cargo' | 'business' | 'legal' | 'immigration' | 'financial';
+// 'all', or a service category slug
+type CategoryFilter = string;
 
-export const TestimonialsSection: React.FC = () => {
+interface TestimonialsSectionProps {
+  testimonials: TestimonialItem[];
+  metrics: MetricItem[];
+  quotes: string[];
+  // What a visitor can pick as the service they used, in the review form.
+  services: { id: number; shortTitle: string }[];
+}
+
+const EMPTY_REVIEW = { name: '', serviceId: '', trackingCode: '', rating: 5, comment: '' };
+
+export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testimonials, metrics: TESTIMONIALS_METRICS, quotes: MARQUEE_TRUST_QUOTES, services }) => {
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>('all');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -42,18 +49,14 @@ export const TestimonialsSection: React.FC = () => {
   const [showMilestones, setShowMilestones] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [submissionSuccess, setSubmissionSuccess] = useState(false);
+  const [isSubmitting, startSubmit] = useTransition();
+  const [reviewError, setReviewError] = useState<string | null>(null);
 
   // New review form state
-  const [formData, setFormData] = useState({
-    name: '',
-    service: 'سرویس VIP اتوبوس تهران - استانبول',
-    trackingCode: '',
-    rating: 5,
-    comment: '',
-  });
+  const [formData, setFormData] = useState(EMPTY_REVIEW);
 
-  // Local testimonials state to allow newly submitted reviews to be displayed immediately
-  const [testimonialsList, setTestimonialsList] = useState<TestimonialItem[]>(TESTIMONIALS_DATA);
+  // A new review is saved for approval, so only published ones are listed
+  const testimonialsList = testimonials;
 
   // Filtered testimonials
   const filteredTestimonials = testimonialsList.filter((item) => {
@@ -67,7 +70,7 @@ export const TestimonialsSection: React.FC = () => {
     setProgress(0);
   }, [activeCategory]);
 
-  const current = filteredTestimonials[currentIndex] || filteredTestimonials[0] || TESTIMONIALS_DATA[0];
+  const current = filteredTestimonials[currentIndex] || filteredTestimonials[0] || testimonials[0];
 
   // Auto-play timer with progress bar
   const duration = 7500; // 7.5 seconds
@@ -108,41 +111,26 @@ export const TestimonialsSection: React.FC = () => {
     e.preventDefault();
     if (!formData.name.trim() || !formData.comment.trim()) return;
 
-    const newReview: TestimonialItem = {
-      id: `user-review-${Date.now()}`,
-      clientName: formData.name.trim(),
-      serviceUsed: formData.service,
-      routeOrContext: formData.trackingCode ? `کد پرونده: ${formData.trackingCode}` : 'ثبت‌شده در باشگاه مشتریان گیتی پیما',
-      comment: formData.comment.trim(),
-      year: '۱۴۰۳',
-      avatarSeed: 'user-new',
-      rating: formData.rating,
-      category: (activeCategory === 'all' ? 'transport' : activeCategory) as any,
-      categoryLabel: 'تأییدشده مشتری',
-      verifiedCode: formData.trackingCode ? `شماره رهگیری: ${formData.trackingCode}` : 'پرونده رسمی تاییدشده',
-      outcomeHeadline: 'رضایت‌مندی کامل از پیگیری سریع و حرفه‌ای کارشناسان گیتی پیما',
-      originDestination: 'ایران ⇄ ترکیه',
-      satisfactionScore: `${formData.rating}.۰ / ۵.۰`,
-      milestones: [
-        { title: 'ثبت تجربه در پورتال مشتریان', desc: 'تایید اصالت مدارک و ثبت بازخورد' },
-        { title: 'بررسی واحد کنترل کیفیت گیتی پیما', desc: 'انطباق با استانداردهای رسمی ترانزیت و بازرگانی' },
-      ],
-    };
-
-    setTestimonialsList((prev) => [newReview, ...prev]);
-    setSubmissionSuccess(true);
-    setTimeout(() => {
-      setIsModalOpen(false);
-      setSubmissionSuccess(false);
-      setFormData({
-        name: '',
-        service: 'سرویس VIP اتوبوس تهران - استانبول',
-        trackingCode: '',
-        rating: 5,
-        comment: '',
+    startSubmit(async () => {
+      const result = await submitTestimonial({
+        name: formData.name,
+        serviceId: formData.serviceId,
+        trackingCode: formData.trackingCode,
+        rating: formData.rating,
+        comment: formData.comment,
       });
-      setCurrentIndex(0);
-    }, 2000);
+      if (!result.ok) {
+        setReviewError(Object.values(result.errors ?? {})[0] ?? result.message);
+        return;
+      }
+      setReviewError(null);
+      setSubmissionSuccess(true);
+      setTimeout(() => {
+        setIsModalOpen(false);
+        setSubmissionSuccess(false);
+        setFormData(EMPTY_REVIEW);
+      }, 2500);
+    });
   };
 
   // Helper icon for category
@@ -237,26 +225,28 @@ export const TestimonialsSection: React.FC = () => {
               { id: 'business', label: 'ثبت شرکت و بانک', count: testimonialsList.filter((x) => x.category === 'business').length },
               { id: 'legal', label: 'عقد بین‌المللی و حقوقی', count: testimonialsList.filter((x) => x.category === 'legal').length },
               { id: 'financial', label: 'حوالجات سوئیفت', count: testimonialsList.filter((x) => x.category === 'financial').length },
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveCategory(tab.id as CategoryFilter)}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 ${
-                  activeCategory === tab.id
-                    ? 'bg-[#12B8B0] text-[#07191F] shadow-lg shadow-[#12B8B0]/25 scale-105'
-                    : 'bg-[#0C252B] text-[#A2B6BC] hover:text-white border border-white/5 hover:border-white/20'
-                }`}
-              >
-                <span>{tab.label}</span>
-                <span
-                  className={`text-[10px] px-1.5 py-0.2 rounded-full ${
-                    activeCategory === tab.id ? 'bg-[#07191F]/30 text-[#07191F]' : 'bg-white/10 text-white/70'
+            ]
+              .filter((tab) => tab.id === 'all' || tab.count > 0)
+              .map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveCategory(tab.id as CategoryFilter)}
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 ${
+                    activeCategory === tab.id
+                      ? 'bg-[#12B8B0] text-[#07191F] shadow-lg shadow-[#12B8B0]/25 scale-105'
+                      : 'bg-[#0C252B] text-[#A2B6BC] hover:text-white border border-white/5 hover:border-white/20'
                   }`}
                 >
-                  {tab.count}
-                </span>
-              </button>
-            ))}
+                  <span>{tab.label}</span>
+                  <span
+                    className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                      activeCategory === tab.id ? 'bg-[#07191F]/30 text-[#07191F]' : 'bg-white/10 text-white/70'
+                    }`}
+                  >
+                    {tab.count}
+                  </span>
+                </button>
+              ))}
           </div>
 
           {/* Submit Review Modal Trigger */}
@@ -542,7 +532,7 @@ export const TestimonialsSection: React.FC = () => {
                   با سپاس، نظر شما با موفقیت ثبت شد!
                 </h4>
                 <p className="text-xs text-[#A2B6BC]">
-                  تجربه شما بلافاصله به فهرست بازخوردهای نمایش داده‌شده اضافه گردید.
+                  تجربه شما پس از بررسی کارشناسان گیتی پیما در این بخش نمایش داده می‌شود.
                 </p>
               </div>
             ) : (
@@ -567,16 +557,16 @@ export const TestimonialsSection: React.FC = () => {
                       نوع خدمت دریافتی *
                     </label>
                     <select
-                      value={formData.service}
-                      onChange={(e) => setFormData({ ...formData, service: e.target.value })}
+                      value={formData.serviceId}
+                      onChange={(e) => setFormData({ ...formData, serviceId: e.target.value })}
                       className="w-full px-3 py-2.5 rounded-xl bg-[#07191F] border border-white/10 text-white text-xs focus:outline-none focus:border-[#12B8B0]"
                     >
-                      <option value="سرویس VIP اتوبوس تهران - استانبول">سرویس VIP اتوبوس تهران - استانبول</option>
-                      <option value="کارگو تجاری و ترخیص رسمی کالا">کارگو تجاری و ترخیص رسمی کالا</option>
-                      <option value="ثبت شرکت در ترکیه و دفتر مجازی">ثبت شرکت در ترکیه و دفتر مجازی</option>
-                      <option value="ثبت رسمی ازدواج بین‌المللی">ثبت رسمی ازدواج بین‌المللی</option>
-                      <option value="حوالجات ارزی و سوئیفت بین‌المللی">حوالجات ارزی و سوئیفت بین‌المللی</option>
-                      <option value="اقامت و پذیرش تحصیلی ترکیه">اقامت و پذیرش تحصیلی ترکیه</option>
+                      <option value="">سایر خدمات</option>
+                      {services.map((service) => (
+                        <option key={service.id} value={service.id}>
+                          {service.shortTitle}
+                        </option>
+                      ))}
                     </select>
                   </div>
 
@@ -635,6 +625,12 @@ export const TestimonialsSection: React.FC = () => {
                   ></textarea>
                 </div>
 
+                {reviewError && (
+                  <p role="alert" className="text-xs leading-relaxed text-[#F58B8B]">
+                    {reviewError}
+                  </p>
+                )}
+
                 <div className="pt-2 flex items-center justify-end gap-3">
                   <button
                     type="button"
@@ -645,10 +641,11 @@ export const TestimonialsSection: React.FC = () => {
                   </button>
                   <button
                     type="submit"
-                    className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#12B8B0] to-[#087F7B] hover:brightness-110 text-[#07191F] text-xs font-black transition-all flex items-center gap-2 shadow-lg shadow-[#12B8B0]/20"
+                    disabled={isSubmitting}
+                    className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#12B8B0] to-[#087F7B] hover:brightness-110 disabled:opacity-70 disabled:cursor-wait text-[#07191F] text-xs font-black transition-all flex items-center gap-2 shadow-lg shadow-[#12B8B0]/20"
                   >
                     <Send className="w-4 h-4" />
-                    <span>ثبت و انتشار بازخورد</span>
+                    <span>{isSubmitting ? 'در حال ثبت...' : 'ثبت بازخورد'}</span>
                   </button>
                 </div>
               </form>
