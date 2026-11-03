@@ -1,37 +1,18 @@
 import React from 'react';
-import { Globe, Layers, UserCheck, Clock, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import { Globe, Layers, UserCheck, Clock } from 'lucide-react';
+import { getI18n } from '../../i18n/server';
 
-export const TrustSection: React.FC = () => {
-  const trustPillars = [
-    {
-      icon: Globe,
-      title: 'فعالیت تخصصی بین‌المللی',
-      desc: 'تمرکز ویژه بر تعاملات تجاری، حمل‌ونقل و مبادلات فرامرزی میان ایران، ترکیه و اتحادیه اروپا با استانداردهای قانونی.',
-      accent: 'border-[#12B8B0]/30 hover:border-[#12B8B0]',
-      iconColor: 'text-[#12B8B0]',
-    },
-    {
-      icon: Layers,
-      title: 'تنوع خدمات در یک مجموعه',
-      desc: 'یکپارچه‌سازی خدمات اتوبوس VIP، کارگو، امور حقوقی، ثبت شرکت، صرافی و اقامت بدون نیاز به مراجعه به مراجع متعدد.',
-      accent: 'border-[#C6A15B]/30 hover:border-[#C6A15B]',
-      iconColor: 'text-[#C6A15B]',
-    },
-    {
-      icon: UserCheck,
-      title: 'همراهی در تمامی مراحل',
-      desc: 'راهنمایی گام‌به‌گام و پیگیری مستقیم پرونده‌های متقاضیان از لحظه ثبت تقاضا تا حصول نتیجه قطعی.',
-      accent: 'border-[#12B8B0]/30 hover:border-[#12B8B0]',
-      iconColor: 'text-[#12B8B0]',
-    },
-    {
-      icon: Clock,
-      title: 'پشتیبانی و پاسخگویی ۲۴ ساعته',
-      desc: 'مرکز تماس و پشتیبانی مستقر در استانبول و تهران، آماده راهنمایی مسافران و بازرگانان در تمامی ساعات شبانه‌روز.',
-      accent: 'border-[#E2C98C]/30 hover:border-[#E2C98C]',
-      iconColor: 'text-[#E2C98C]',
-    },
-  ];
+// The look of each pillar; the words are in the stories dictionary, in the same order.
+const PILLARS = [
+  { icon: Globe, accent: 'border-[#12B8B0]/30 hover:border-[#12B8B0]', iconColor: 'text-[#12B8B0]' },
+  { icon: Layers, accent: 'border-[#C6A15B]/30 hover:border-[#C6A15B]', iconColor: 'text-[#C6A15B]' },
+  { icon: UserCheck, accent: 'border-[#12B8B0]/30 hover:border-[#12B8B0]', iconColor: 'text-[#12B8B0]' },
+  { icon: Clock, accent: 'border-[#E2C98C]/30 hover:border-[#E2C98C]', iconColor: 'text-[#E2C98C]' },
+];
+
+export async function TrustSection() {
+  const { t } = await getI18n();
+  const trustPillars = PILLARS.map((pillar, index) => ({ ...pillar, ...t.stories.trust[index] }));
 
   return (
     <section className="py-14 bg-[#07191F] border-b border-white/5 relative">
@@ -56,4 +37,4 @@ export const TrustSection: React.FC = () => {
       </div>
     </section>
   );
-};
+}

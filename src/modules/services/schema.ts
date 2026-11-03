@@ -1,26 +1,32 @@
 import { z } from 'zod';
-import { flag, id, imagePath, optionalId, optionalText, requiredText, slug, sortOrder } from '../../lib/validation';
+import { flag, id, imagePath, optionalId, optionalText, slug, sortOrder, translatedText } from '../../lib/validation';
 
 export const serviceSchema = z.object({
-  title: requiredText('عنوان کامل'),
-  shortTitle: requiredText('عنوان کوتاه'),
+  title: translatedText('عنوان کامل', 255, { required: true }),
+  shortTitle: translatedText('عنوان کوتاه', 255, { required: true }),
   slug: slug(),
   serviceCategoryId: id('دسته‌بندی'),
   serviceGroupId: optionalId,
-  categoryLabel: optionalText('برچسب دسته'),
-  eyebrow: optionalText('متن بالای عنوان'),
-  badge: optionalText('نشان'),
+  categoryLabel: translatedText('برچسب دسته'),
+  eyebrow: translatedText('متن بالای عنوان'),
+  badge: translatedText('نشان'),
   icon: optionalText('آیکن', 50),
   image: imagePath(),
-  summary: requiredText('خلاصه', 2000),
-  description: requiredText('معرفی', 5000),
-  content: optionalText('متن تکمیلی', 20000),
+  summary: translatedText('خلاصه', 2000, { required: true }),
+  description: translatedText('معرفی', 5000, { required: true }),
+  content: translatedText('متن تکمیلی', 20000),
   isActive: flag,
   isHighlighted: flag,
   sortOrder,
-  features: z.array(z.object({ title: requiredText('متن ویژگی', 500) })).max(30, { error: 'حداکثر ۳۰ ویژگی.' }).default([]),
-  steps: z.array(z.object({ title: requiredText('عنوان مرحله'), description: requiredText('توضیح مرحله', 2000) })).max(12, { error: 'حداکثر ۱۲ مرحله.' }).default([]),
-  faqs: z.array(z.object({ question: requiredText('پرسش', 500), answer: requiredText('پاسخ', 3000) })).max(30, { error: 'حداکثر ۳۰ پرسش.' }).default([]),
+  features: z.array(z.object({ title: translatedText('متن ویژگی', 500, { required: true }) })).max(30, { error: 'حداکثر ۳۰ ویژگی.' }).default([]),
+  steps: z
+    .array(z.object({ title: translatedText('عنوان مرحله', 255, { required: true }), description: translatedText('توضیح مرحله', 2000, { required: true }) }))
+    .max(12, { error: 'حداکثر ۱۲ مرحله.' })
+    .default([]),
+  faqs: z
+    .array(z.object({ question: translatedText('پرسش', 500, { required: true }), answer: translatedText('پاسخ', 3000, { required: true }) }))
+    .max(30, { error: 'حداکثر ۳۰ پرسش.' })
+    .default([]),
 });
 
 export type ServiceInput = z.input<typeof serviceSchema>;

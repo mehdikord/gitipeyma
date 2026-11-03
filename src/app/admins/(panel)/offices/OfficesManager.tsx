@@ -9,15 +9,17 @@ import { ActiveBadge } from '../../../../components/admin/ui/Badge';
 import { CheckboxGroup, FormGrid, NumberInput, SectionTitle, Select, Switch, TextArea, TextInput } from '../../../../components/admin/ui/fields';
 import { ListField } from '../../../../components/admin/ui/ListField';
 import { str } from '../../../../components/admin/ui/useForm';
+import { TranslatedInput, TransTextArea, TransTextInput } from '../../../../components/admin/ui/translations';
+import { emptyTranslated, fa, toInputs } from '../../../../i18n/translated';
 
 type Values = {
-  name: string;
-  role: string;
-  country: string;
-  address: string;
+  name: TranslatedInput;
+  role: TranslatedInput;
+  country: TranslatedInput;
+  address: TranslatedInput;
   phones: { value: string }[];
   email: string;
-  workingHours: string;
+  workingHours: TranslatedInput;
   timeZone: string;
   openHour: string;
   closeHour: string;
@@ -43,24 +45,24 @@ export const OfficesManager: React.FC<{ rows: OfficeRow[] }> = ({ rows }) => (
         header: 'دفتر',
         cell: (row) => (
           <>
-            <span className="block font-bold">{row.name}</span>
-            <span className="block text-xs text-[#5F7177]">{row.role}</span>
+            <span className="block font-bold">{fa(row.name)}</span>
+            <span className="block text-xs text-[#5F7177]">{fa(row.role)}</span>
           </>
         ),
       },
-      { key: 'country', header: 'کشور', hideOnMobile: true, cell: (row) => row.country },
+      { key: 'country', header: 'کشور', hideOnMobile: true, cell: (row) => fa(row.country) },
       { key: 'phone', header: 'تلفن', cell: (row) => <span dir="ltr">{row.phones[0] ?? '—'}</span> },
       { key: 'hours', header: 'ساعت کاری', hideOnMobile: true, cell: (row) => <span dir="ltr">{`${row.openHour}:00 – ${row.closeHour}:00`}</span> },
       { key: 'state', header: 'وضعیت', cell: (row) => <ActiveBadge active={row.isActive} /> },
     ]}
     emptyValues={() => ({
-      name: '',
-      role: '',
-      country: '',
-      address: '',
+      name: emptyTranslated(),
+      role: emptyTranslated(),
+      country: emptyTranslated(),
+      address: emptyTranslated(),
       phones: [{ value: '' }],
       email: '',
-      workingHours: '',
+      workingHours: emptyTranslated(),
       timeZone: 'Europe/Istanbul',
       openHour: '8',
       closeHour: '20',
@@ -71,13 +73,13 @@ export const OfficesManager: React.FC<{ rows: OfficeRow[] }> = ({ rows }) => (
       sortOrder: String(rows.length + 1),
     })}
     toValues={(row) => ({
-      name: row.name,
-      role: row.role,
-      country: row.country,
-      address: row.address,
+      name: toInputs(row.name),
+      role: toInputs(row.role),
+      country: toInputs(row.country),
+      address: toInputs(row.address),
       phones: row.phones.map((value) => ({ value })),
       email: str(row.email),
-      workingHours: row.workingHours,
+      workingHours: toInputs(row.workingHours),
       timeZone: row.timeZone,
       openHour: String(row.openHour),
       closeHour: String(row.closeHour),
@@ -89,16 +91,16 @@ export const OfficesManager: React.FC<{ rows: OfficeRow[] }> = ({ rows }) => (
     })}
     save={(id, values) => saveOffice(id, { ...values, phones: values.phones.map((phone) => phone.value) })}
     remove={deleteOffice}
-    deleteMessage={(row) => `دفتر «${row.name}» حذف شود؟`}
+    deleteMessage={(row) => `دفتر «${fa(row.name)}» حذف شود؟`}
     renderForm={({ values, set, errors }) => (
       <div className="space-y-5">
         <FormGrid>
-          <TextInput label="نام کوتاه" required hint="مثل «استانبول»" value={values.name} onChange={(v) => set('name', v)} error={errors.name} />
-          <TextInput label="نقش دفتر" required hint="مثل «دفتر مرکزی ترکیه»" value={values.role} onChange={(v) => set('role', v)} error={errors.role} />
-          <TextInput label="کشور" required value={values.country} onChange={(v) => set('country', v)} error={errors.country} />
+          <TransTextInput label="نام کوتاه" required name="name" hint="مثل «استانبول»" value={values.name} onChange={(v) => set('name', v)} errors={errors} />
+          <TransTextInput label="نقش دفتر" required name="role" hint="مثل «دفتر مرکزی ترکیه»" value={values.role} onChange={(v) => set('role', v)} errors={errors} />
+          <TransTextInput label="کشور" required name="country" value={values.country} onChange={(v) => set('country', v)} errors={errors} />
           <TextInput label="ایمیل" ltr type="email" value={values.email} onChange={(v) => set('email', v)} error={errors.email} />
         </FormGrid>
-        <TextArea label="نشانی" required rows={2} value={values.address} onChange={(v) => set('address', v)} error={errors.address} />
+        <TransTextArea label="نشانی" required name="address" rows={2} value={values.address} onChange={(v) => set('address', v)} errors={errors} />
 
         <ListField
           label="شماره‌های تلفن"
@@ -116,7 +118,7 @@ export const OfficesManager: React.FC<{ rows: OfficeRow[] }> = ({ rows }) => (
         <div>
           <SectionTitle>ساعت کاری</SectionTitle>
           <div className="space-y-4">
-            <TextInput label="متن ساعت کاری" required hint="همان‌طور که در سایت نوشته می‌شود." value={values.workingHours} onChange={(v) => set('workingHours', v)} error={errors.workingHours} />
+            <TransTextInput label="متن ساعت کاری" required name="workingHours" hint="همان‌طور که در سایت نوشته می‌شود." value={values.workingHours} onChange={(v) => set('workingHours', v)} errors={errors} />
             <FormGrid cols={3}>
               <Select label="منطقه زمانی" value={values.timeZone} onChange={(v) => set('timeZone', v)} options={TIME_ZONES} error={errors.timeZone} />
               <NumberInput label="ساعت شروع" min={0} max={24} value={values.openHour} onChange={(v) => set('openHour', v)} error={errors.openHour} />

@@ -15,27 +15,29 @@ import { ImageField } from '../../../../components/admin/ui/ImageField';
 import { ListField } from '../../../../components/admin/ui/ListField';
 import { useToast } from '../../../../components/admin/ui/Toast';
 import { FormApi, str } from '../../../../components/admin/ui/useForm';
+import { TranslatedInput, TransTextArea, TransTextInput } from '../../../../components/admin/ui/translations';
+import { emptyTranslated, fa, toInputs } from '../../../../i18n/translated';
 
 type Values = {
-  title: string;
-  shortTitle: string;
+  title: TranslatedInput;
+  shortTitle: TranslatedInput;
   slug: string;
   serviceCategoryId: string;
   serviceGroupId: string;
-  categoryLabel: string;
-  eyebrow: string;
-  badge: string;
+  categoryLabel: TranslatedInput;
+  eyebrow: TranslatedInput;
+  badge: TranslatedInput;
   icon: string;
   image: string;
-  summary: string;
-  description: string;
-  content: string;
+  summary: TranslatedInput;
+  description: TranslatedInput;
+  content: TranslatedInput;
   isActive: boolean;
   isHighlighted: boolean;
   sortOrder: string;
-  features: { title: string }[];
-  steps: { title: string; description: string }[];
-  faqs: { question: string; answer: string }[];
+  features: { title: TranslatedInput }[];
+  steps: { title: TranslatedInput; description: TranslatedInput }[];
+  faqs: { question: TranslatedInput; answer: TranslatedInput }[];
 };
 
 const TABS = [
@@ -79,9 +81,9 @@ const ServiceForm: React.FC<{ form: FormApi<Values>; categories: Option[]; group
       {tab === 'main' && (
         <div className="space-y-4">
           <FormGrid>
-            <TextInput label="عنوان کامل" required value={values.title} onChange={(v) => set('title', v)} error={errors.title} />
-            <TextInput label="عنوان کوتاه" required hint="در منوها، فوتر و فرم‌ها." value={values.shortTitle} onChange={(v) => set('shortTitle', v)} error={errors.shortTitle} />
-            <TextInput label="نامک (آدرس صفحه)" required ltr hint={`/services/${values.slug || '...'}`} value={values.slug} onChange={(v) => set('slug', v)} error={errors.slug} />
+            <TransTextInput label="عنوان کامل" required name="title" value={values.title} onChange={(v) => set('title', v)} errors={errors} />
+            <TransTextInput label="عنوان کوتاه" required name="shortTitle" hint="در منوها، فوتر و فرم‌ها." value={values.shortTitle} onChange={(v) => set('shortTitle', v)} errors={errors} />
+            <TextInput label="نامک (آدرس صفحه)" required ltr hint={`/fa/services/${values.slug || '...'} — برای همه زبان‌ها یکی است.`} value={values.slug} onChange={(v) => set('slug', v)} error={errors.slug} />
             <Select label="دسته‌بندی" required placeholder="انتخاب کنید" value={values.serviceCategoryId} onChange={(v) => set('serviceCategoryId', v)} options={categories} error={errors.serviceCategoryId} />
             <Select
               label="گروه در صفحه اصلی"
@@ -91,9 +93,9 @@ const ServiceForm: React.FC<{ form: FormApi<Values>; categories: Option[]; group
               options={groups}
               error={errors.serviceGroupId}
             />
-            <TextInput label="برچسب دسته (اختیاری)" hint="خالی بماند، عنوان دسته نمایش داده می‌شود." value={values.categoryLabel} onChange={(v) => set('categoryLabel', v)} error={errors.categoryLabel} />
-            <TextInput label="نشان" hint="مثل «سرویس ویژه روزانه»" value={values.badge} onChange={(v) => set('badge', v)} error={errors.badge} />
-            <TextInput label="متن بالای عنوان" value={values.eyebrow} onChange={(v) => set('eyebrow', v)} error={errors.eyebrow} />
+            <TransTextInput label="برچسب دسته (اختیاری)" name="categoryLabel" hint="خالی بماند، عنوان دسته نمایش داده می‌شود." value={values.categoryLabel} onChange={(v) => set('categoryLabel', v)} errors={errors} />
+            <TransTextInput label="نشان" name="badge" hint="مثل «سرویس ویژه روزانه»" value={values.badge} onChange={(v) => set('badge', v)} errors={errors} />
+            <TransTextInput label="متن بالای عنوان" name="eyebrow" value={values.eyebrow} onChange={(v) => set('eyebrow', v)} errors={errors} />
             <Select label="آیکن" placeholder="پیش‌فرض" value={values.icon} onChange={(v) => set('icon', v)} options={ICON_OPTIONS} error={errors.icon} />
             <NumberInput label="ترتیب نمایش" min={0} hint="عدد کمتر، جلوتر." value={values.sortOrder} onChange={(v) => set('sortOrder', v)} error={errors.sortOrder} />
           </FormGrid>
@@ -107,9 +109,9 @@ const ServiceForm: React.FC<{ form: FormApi<Values>; categories: Option[]; group
 
       {tab === 'content' && (
         <div className="space-y-4">
-          <TextArea label="خلاصه" required rows={3} hint="زیر عنوان صفحه خدمت و در فهرست خدمات." value={values.summary} onChange={(v) => set('summary', v)} error={errors.summary} />
-          <TextArea label="معرفی" required rows={4} value={values.description} onChange={(v) => set('description', v)} error={errors.description} />
-          <TextArea label="متن تکمیلی" rows={8} hint="هر پاراگراف را با یک خط خالی از بعدی جدا کنید." value={values.content} onChange={(v) => set('content', v)} error={errors.content} />
+          <TransTextArea label="خلاصه" required name="summary" rows={3} hint="زیر عنوان صفحه خدمت و در فهرست خدمات." value={values.summary} onChange={(v) => set('summary', v)} errors={errors} />
+          <TransTextArea label="معرفی" required name="description" rows={4} value={values.description} onChange={(v) => set('description', v)} errors={errors} />
+          <TransTextArea label="متن تکمیلی" name="content" rows={8} hint="هر پاراگراف را با یک خط خالی از بعدی جدا کنید." value={values.content} onChange={(v) => set('content', v)} errors={errors} />
         </div>
       )}
 
@@ -119,10 +121,10 @@ const ServiceForm: React.FC<{ form: FormApi<Values>; categories: Option[]; group
           addLabel="افزودن مزیت"
           items={values.features}
           onChange={(items) => set('features', items)}
-          newItem={() => ({ title: '' })}
+          newItem={() => ({ title: emptyTranslated() })}
           error={errors.features}
           renderItem={(item, update, index) => (
-            <TextInput label="متن مزیت" value={item.title} onChange={(title) => update({ title })} error={errorsAt('features', index).title} />
+            <TransTextInput label="متن مزیت" name="title" value={item.title} onChange={(title) => update({ title })} errors={errorsAt('features', index)} />
           )}
         />
       )}
@@ -133,12 +135,12 @@ const ServiceForm: React.FC<{ form: FormApi<Values>; categories: Option[]; group
           addLabel="افزودن مرحله"
           items={values.steps}
           onChange={(items) => set('steps', items)}
-          newItem={() => ({ title: '', description: '' })}
+          newItem={() => ({ title: emptyTranslated(), description: emptyTranslated() })}
           error={errors.steps}
           renderItem={(item, update, index) => (
             <div className="space-y-3">
-              <TextInput label="عنوان مرحله" value={item.title} onChange={(title) => update({ title })} error={errorsAt('steps', index).title} />
-              <TextArea label="توضیح" rows={2} value={item.description} onChange={(description) => update({ description })} error={errorsAt('steps', index).description} />
+              <TransTextInput label="عنوان مرحله" name="title" value={item.title} onChange={(title) => update({ title })} errors={errorsAt('steps', index)} />
+              <TransTextArea label="توضیح" name="description" rows={2} value={item.description} onChange={(description) => update({ description })} errors={errorsAt('steps', index)} />
             </div>
           )}
         />
@@ -150,12 +152,12 @@ const ServiceForm: React.FC<{ form: FormApi<Values>; categories: Option[]; group
           addLabel="افزودن پرسش"
           items={values.faqs}
           onChange={(items) => set('faqs', items)}
-          newItem={() => ({ question: '', answer: '' })}
+          newItem={() => ({ question: emptyTranslated(), answer: emptyTranslated() })}
           error={errors.faqs}
           renderItem={(item, update, index) => (
             <div className="space-y-3">
-              <TextInput label="پرسش" value={item.question} onChange={(question) => update({ question })} error={errorsAt('faqs', index).question} />
-              <TextArea label="پاسخ" rows={3} value={item.answer} onChange={(answer) => update({ answer })} error={errorsAt('faqs', index).answer} />
+              <TransTextInput label="پرسش" name="question" value={item.question} onChange={(question) => update({ question })} errors={errorsAt('faqs', index)} />
+              <TransTextArea label="پاسخ" name="answer" rows={3} value={item.answer} onChange={(answer) => update({ answer })} errors={errorsAt('faqs', index)} />
             </div>
           )}
         />
@@ -201,7 +203,7 @@ export const ServicesManager: React.FC<{ services: ServiceAdminRow[]; categories
                   <Icon className="h-4 w-4" />
                 </span>
                 <span className="min-w-0">
-                  <span className="block font-bold">{row.shortTitle}</span>
+                  <span className="block font-bold">{fa(row.shortTitle)}</span>
                   <span dir="ltr" className="block text-right text-xs text-[#5F7177]">
                     /{row.slug}
                   </span>
@@ -228,7 +230,7 @@ export const ServicesManager: React.FC<{ services: ServiceAdminRow[]; categories
       rowActions={(row) => (
         <>
           <a
-            href={`/services/${row.slug}`}
+            href={`/fa/services/${row.slug}`}
             target="_blank"
             rel="noreferrer"
             title="مشاهده در سایت"
@@ -244,19 +246,19 @@ export const ServicesManager: React.FC<{ services: ServiceAdminRow[]; categories
         </>
       )}
       emptyValues={() => ({
-        title: '',
-        shortTitle: '',
+        title: emptyTranslated(),
+        shortTitle: emptyTranslated(),
         slug: '',
         serviceCategoryId: categories[0]?.value ?? '',
         serviceGroupId: '',
-        categoryLabel: '',
-        eyebrow: '',
-        badge: '',
+        categoryLabel: emptyTranslated(),
+        eyebrow: emptyTranslated(),
+        badge: emptyTranslated(),
         icon: '',
         image: '',
-        summary: '',
-        description: '',
-        content: '',
+        summary: emptyTranslated(),
+        description: emptyTranslated(),
+        content: emptyTranslated(),
         isActive: true,
         isHighlighted: false,
         sortOrder: String(services.length + 1),
@@ -265,32 +267,32 @@ export const ServicesManager: React.FC<{ services: ServiceAdminRow[]; categories
         faqs: [],
       })}
       toValues={(row) => ({
-        title: row.title,
-        shortTitle: row.shortTitle,
+        title: toInputs(row.title),
+        shortTitle: toInputs(row.shortTitle),
         slug: row.slug,
         serviceCategoryId: String(row.serviceCategoryId),
         serviceGroupId: str(row.serviceGroupId),
-        categoryLabel: str(row.categoryLabel),
-        eyebrow: str(row.eyebrow),
-        badge: str(row.badge),
+        categoryLabel: toInputs(row.categoryLabel),
+        eyebrow: toInputs(row.eyebrow),
+        badge: toInputs(row.badge),
         icon: str(row.icon),
         image: str(row.image),
-        summary: row.summary,
-        description: row.description,
-        content: str(row.content),
+        summary: toInputs(row.summary),
+        description: toInputs(row.description),
+        content: toInputs(row.content),
         isActive: row.isActive,
         isHighlighted: row.isHighlighted,
         sortOrder: String(row.sortOrder),
-        features: row.features,
-        steps: row.steps,
-        faqs: row.faqs,
+        features: row.features.map((feature) => ({ title: toInputs(feature.title) })),
+        steps: row.steps.map((step) => ({ title: toInputs(step.title), description: toInputs(step.description) })),
+        faqs: row.faqs.map((faq) => ({ question: toInputs(faq.question), answer: toInputs(faq.answer) })),
       })}
       save={saveService}
       remove={deleteService}
       deleteMessage={(row) =>
         row.requestCount > 0
-          ? `«${row.shortTitle}» ${row.requestCount.toLocaleString('fa-IR')} درخواست ثبت‌شده دارد و حذف نمی‌شود. برای پنهان کردن آن از سایت، غیرفعالش کنید.`
-          : `خدمت «${row.shortTitle}» با همه مزایا، مراحل و پرسش‌هایش حذف شود؟`
+          ? `«${fa(row.shortTitle)}» ${row.requestCount.toLocaleString('fa-IR')} درخواست ثبت‌شده دارد و حذف نمی‌شود. برای پنهان کردن آن از سایت، غیرفعالش کنید.`
+          : `خدمت «${fa(row.shortTitle)}» با همه مزایا، مراحل و پرسش‌هایش حذف شود؟`
       }
       renderForm={(form) => <ServiceForm form={form} categories={categories} groups={groups} />}
     />

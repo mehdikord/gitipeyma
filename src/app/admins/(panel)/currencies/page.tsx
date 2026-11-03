@@ -7,5 +7,5 @@ export const metadata: Metadata = { title: 'نرخ ارز' };
 
 export default async function CurrenciesPage() {
   const [rows, settings] = await Promise.all([listCurrencies(), getSettingsForAdmin()]);
-  return <CurrenciesManager rows={rows} feePercent={settings.currency_fee_percent} />;
+  return <CurrenciesManager rows={rows} feePercent={String(settings.currency_fee_percent)} />;
 }

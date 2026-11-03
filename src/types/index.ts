@@ -1,5 +1,6 @@
 // The shapes the public site renders. They are built from the database in src/modules/site/queries.ts
 // and are plain, serializable objects, so they pass from server pages into client components as-is.
+// Text in them is already in the page's language.
 
 import type { Settings } from '../modules/settings/definitions';
 
@@ -76,11 +77,11 @@ export interface TeamMember {
 
 export interface Office {
   id: number;
-  // Short name ("استانبول") and what the office does ("دفتر مرکزی ترکیه").
+  // Short name ("Istanbul") and what the office does ("Turkey head office").
   name: string;
   role: string;
   country: string;
-  addressFa: string;
+  address: string;
   phones: string[];
   email: string | null;
   workingHours: string;
@@ -100,7 +101,7 @@ export interface SocialLink {
 
 export interface CurrencyRate {
   code: string;
-  nameFa: string;
+  name: string;
   symbol: string;
   rateToToman: number;
   flag: string;

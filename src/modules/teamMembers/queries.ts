@@ -1,11 +1,21 @@
 import 'server-only';
 import { db } from '../../lib/db';
 import { requireAdmin } from '../../lib/auth/currentAdmin';
+import { asTranslated, Translated } from '../../i18n/translated';
 
-export type TeamMemberRow = { id: number; name: string; role: string; specialty: string | null; department: string | null; image: string | null; isActive: boolean; sortOrder: number };
+export type TeamMemberRow = { id: number; name: Translated; role: Translated; specialty: Translated; department: Translated; image: string | null; isActive: boolean; sortOrder: number };
 
 export async function listTeamMembers(): Promise<TeamMemberRow[]> {
   await requireAdmin();
   const rows = await db.teamMember.findMany({ orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }] });
-  return rows.map(({ id, createdAt, updatedAt, ...row }) => ({ id: Number(id), ...row }));
+  return rows.map((row) => ({
+    id: Number(row.id),
+    name: asTranslated(row.name),
+    role: asTranslated(row.role),
+    specialty: asTranslated(row.specialty),
+    department: asTranslated(row.department),
+    image: row.image,
+    isActive: row.isActive,
+    sortOrder: row.sortOrder,
+  }));
 }

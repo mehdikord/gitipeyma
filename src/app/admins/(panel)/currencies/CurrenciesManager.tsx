@@ -9,8 +9,10 @@ import { CrudManager } from '../../../../components/admin/CrudManager';
 import { ActiveBadge } from '../../../../components/admin/ui/Badge';
 import { FormGrid, NumberInput, Switch, TextInput } from '../../../../components/admin/ui/fields';
 import { str } from '../../../../components/admin/ui/useForm';
+import { TranslatedInput, TransTextInput } from '../../../../components/admin/ui/translations';
+import { emptyTranslated, fa, toInputs } from '../../../../i18n/translated';
 
-type Values = { code: string; name: string; symbol: string; flag: string; rateToToman: string; isActive: boolean; sortOrder: string };
+type Values = { code: string; name: TranslatedInput; symbol: string; flag: string; rateToToman: string; isActive: boolean; sortOrder: string };
 
 export const CurrenciesManager: React.FC<{ rows: CurrencyRow[]; feePercent: string }> = ({ rows, feePercent }) => (
   <CrudManager<CurrencyRow, Values>
@@ -34,7 +36,7 @@ export const CurrenciesManager: React.FC<{ rows: CurrencyRow[]; feePercent: stri
           <span className="flex items-center gap-2.5">
             <span className="text-lg">{row.flag}</span>
             <span>
-              <span className="block font-bold">{row.name}</span>
+              <span className="block font-bold">{fa(row.name)}</span>
               <span dir="ltr" className="block text-right text-xs text-[#5F7177]">
                 {row.code} · {row.symbol}
               </span>
@@ -46,10 +48,10 @@ export const CurrenciesManager: React.FC<{ rows: CurrencyRow[]; feePercent: stri
       { key: 'updated', header: 'آخرین به‌روزرسانی', hideOnMobile: true, className: 'whitespace-nowrap text-xs text-[#5F7177]', cell: (row) => formatDateTime(row.updatedAt) },
       { key: 'state', header: 'وضعیت', cell: (row) => <ActiveBadge active={row.isActive} /> },
     ]}
-    emptyValues={() => ({ code: '', name: '', symbol: '', flag: '', rateToToman: '', isActive: true, sortOrder: String(rows.length + 1) })}
+    emptyValues={() => ({ code: '', name: emptyTranslated(), symbol: '', flag: '', rateToToman: '', isActive: true, sortOrder: String(rows.length + 1) })}
     toValues={(row) => ({
       code: row.code,
-      name: row.name,
+      name: toInputs(row.name),
       symbol: row.symbol,
       flag: str(row.flag),
       rateToToman: String(row.rateToToman),
@@ -58,11 +60,11 @@ export const CurrenciesManager: React.FC<{ rows: CurrencyRow[]; feePercent: stri
     })}
     save={saveCurrency}
     remove={deleteCurrency}
-    deleteMessage={(row) => `ارز «${row.name}» از محاسبه‌گر حذف شود؟`}
+    deleteMessage={(row) => `ارز «${fa(row.name)}» از محاسبه‌گر حذف شود؟`}
     renderForm={({ values, set, errors }) => (
       <div className="space-y-4">
         <FormGrid>
-          <TextInput label="نام ارز" required value={values.name} onChange={(v) => set('name', v)} error={errors.name} />
+          <TransTextInput label="نام ارز" required name="name" value={values.name} onChange={(v) => set('name', v)} errors={errors} />
           <TextInput label="کد ارز" required ltr hint="سه حرف، مثل USD" value={values.code} onChange={(v) => set('code', v)} error={errors.code} />
           <TextInput label="نماد" required ltr value={values.symbol} onChange={(v) => set('symbol', v)} error={errors.symbol} />
           <TextInput label="پرچم (ایموجی)" value={values.flag} onChange={(v) => set('flag', v)} error={errors.flag} />

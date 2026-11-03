@@ -12,6 +12,7 @@ import { PageHeader } from './ui/PageHeader';
 import { Pagination } from './ui/Pagination';
 import { useToast } from './ui/Toast';
 import { FormApi, useForm } from './ui/useForm';
+import { hasTranslations, LanguageTabs, TranslationProvider, TranslationStatus } from './ui/translations';
 
 type Row = { id: number };
 
@@ -40,6 +41,8 @@ export type CrudManagerProps<R extends Row, V extends Record<string, unknown>> =
 /**
  * A list with create, edit and delete, where the form opens in a modal over the list.
  * Each section of the panel describes its columns and form fields and hands them to this.
+ * When the form has translatable fields ({ fa, en, tr }), the modal gets the language switcher and
+ * the list a column showing which languages each item is written in.
  */
 export function CrudManager<R extends Row, V extends Record<string, unknown>>(props: CrudManagerProps<R, V>) {
   const { title, description, noun, rows, columns, emptyValues, toValues, save, remove, renderForm, deleteMessage, canDelete, rowActions, highlight, toolbar, pagination, modalSize = 'md', emptyText } = props;
@@ -48,6 +51,10 @@ export function CrudManager<R extends Row, V extends Record<string, unknown>>(pr
   const toast = useToast();
   // null: closed; { row: null }: creating; { row }: editing that row
   const [open, setOpen] = useState<{ row: R | null } | null>(null);
+  const translatable = hasTranslations(emptyValues());
+  const allColumns: Column<R>[] = translatable
+    ? [...columns, { key: '_translations', header: 'ترجمه', hideOnMobile: true, cell: (row) => <TranslationStatus values={toValues(row)} /> }]
+    : columns;
 
   const openCreate = () => {
     form.reset(emptyValues());
@@ -93,7 +100,7 @@ export function CrudManager<R extends Row, V extends Record<string, unknown>>(pr
 
       <DataTable
         rows={rows}
-        columns={columns}
+        columns={allColumns}
         rowKey={(row) => row.id}
         onRowClick={openEdit}
         highlight={highlight}
@@ -109,26 +116,30 @@ export function CrudManager<R extends Row, V extends Record<string, unknown>>(pr
 
       {pagination && <Pagination {...pagination} />}
 
-      <Modal
-        open={open !== null}
-        onClose={() => !form.pending && setOpen(null)}
-        title={open?.row ? `ویرایش ${noun}` : `افزودن ${noun}`}
-        size={modalSize}
-        onSubmit={handleSubmit}
-        footer={
-          <>
-            <Button variant="secondary" onClick={() => setOpen(null)} disabled={form.pending}>
-              انصراف
-            </Button>
-            <Button type="submit" loading={form.pending}>
-              {open?.row ? 'ذخیره تغییرات' : `افزودن ${noun}`}
-            </Button>
-          </>
-        }
-      >
-        <FormAlert message={form.formError} />
-        {open && renderForm(form, open.row)}
-      </Modal>
+      {/* Remounted on every open, so each form starts in Persian */}
+      <TranslationProvider key={open ? 'open' : 'closed'}>
+        <Modal
+          open={open !== null}
+          toolbar={translatable ? <LanguageTabs values={form.values} errors={form.errors} /> : undefined}
+          onClose={() => !form.pending && setOpen(null)}
+          title={open?.row ? `ویرایش ${noun}` : `افزودن ${noun}`}
+          size={modalSize}
+          onSubmit={handleSubmit}
+          footer={
+            <>
+              <Button variant="secondary" onClick={() => setOpen(null)} disabled={form.pending}>
+                انصراف
+              </Button>
+              <Button type="submit" loading={form.pending}>
+                {open?.row ? 'ذخیره تغییرات' : `افزودن ${noun}`}
+              </Button>
+            </>
+          }
+        >
+          <FormAlert message={form.formError} />
+          {open && renderForm(form, open.row)}
+        </Modal>
+      </TranslationProvider>
     </>
   );
 }

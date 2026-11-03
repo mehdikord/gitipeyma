@@ -1,9 +1,11 @@
 import React from 'react';
 import { Users } from 'lucide-react';
 import type { TeamMember } from '../../types';
+import { getI18n } from '../../i18n/server';
 
-export const TeamSection: React.FC<{ members: TeamMember[] }> = ({ members }) => {
+export async function TeamSection({ members }: { members: TeamMember[] }) {
   if (members.length === 0) return null;
+  const { t: { stories: { team: t } } } = await getI18n();
 
   return (
     <section className="py-24 bg-[#07191F] text-[#F7F7F3] border-b border-white/5 relative">
@@ -12,13 +14,13 @@ export const TeamSection: React.FC<{ members: TeamMember[] }> = ({ members }) =>
         <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#12B8B0]/15 border border-[#12B8B0]/30 text-[#12B8B0] text-xs font-bold">
             <Users className="w-3.5 h-3.5" />
-            <span>متخصصان میدانی گیتی پیما</span>
+            <span>{t.eyebrow}</span>
           </div>
           <h2 className="text-3xl sm:text-4xl font-black text-[#F7F7F3]">
-            کادر اجرایی و مشاوران امور بین‌الملل
+            {t.title}
           </h2>
           <p className="text-sm text-[#A2B6BC]">
-            تلفیقی از کارشناسان باسابقه ترانزیت جاده‌ای، وکلای تجاری و مشاوران اقامتی مستقر در دفاتر استانبول و تهران.
+            {t.lead}
           </p>
         </div>
 
@@ -45,7 +47,7 @@ export const TeamSection: React.FC<{ members: TeamMember[] }> = ({ members }) =>
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0C252B] via-transparent to-transparent"></div>
                 {member.department && (
-                  <div className="absolute top-3 right-3">
+                  <div className="absolute top-3 start-3">
                     <span className="text-[10px] font-semibold text-[#12B8B0] bg-[#07191F]/80 px-2 py-0.5 rounded backdrop-blur-sm border border-[#12B8B0]/30">
                       {member.department}
                     </span>
@@ -54,7 +56,7 @@ export const TeamSection: React.FC<{ members: TeamMember[] }> = ({ members }) =>
               </div>
 
               {/* Info */}
-              <div className="p-5 text-right space-y-1.5">
+              <div className="p-5 text-start space-y-1.5">
                 <h3 className="text-base font-bold text-[#F7F7F3] group-hover:text-[#E2C98C] transition-colors">
                   {member.name}
                 </h3>
@@ -69,9 +71,9 @@ export const TeamSection: React.FC<{ members: TeamMember[] }> = ({ members }) =>
 
         {/* Transparent Note */}
         <div className="mt-12 text-center text-[11px] text-[#718085] max-w-lg mx-auto">
-          * تمامی فرآیندهای اداری، حقوقی و ترانزیتی در مراجع رسمی توسط وکلای پایه یک و کارگزاران مورد تایید نهادهای قانونی نظارت و انجام می‌پذیرند.
+          {t.note}
         </div>
       </div>
     </section>
   );
-};
+}

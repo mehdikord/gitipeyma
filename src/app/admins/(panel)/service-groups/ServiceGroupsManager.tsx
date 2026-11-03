@@ -4,9 +4,11 @@ import React from 'react';
 import type { ServiceGroupRow } from '../../../../modules/serviceGroups/queries';
 import { deleteServiceGroup, saveServiceGroup } from '../../../../modules/serviceGroups/actions';
 import { CrudManager } from '../../../../components/admin/CrudManager';
-import { FormGrid, NumberInput, Select, TextInput } from '../../../../components/admin/ui/fields';
+import { FormGrid, NumberInput, Select } from '../../../../components/admin/ui/fields';
+import { TranslatedInput, TransTextInput } from '../../../../components/admin/ui/translations';
+import { emptyTranslated, fa, toInputs } from '../../../../i18n/translated';
 
-type Values = { title: string; tone: 'teal' | 'gold'; sortOrder: string };
+type Values = { title: TranslatedInput; tone: 'teal' | 'gold'; sortOrder: string };
 
 const TONES = [
   { value: 'teal', label: 'فیروزه‌ای' },
@@ -26,21 +28,21 @@ export const ServiceGroupsManager: React.FC<{ rows: ServiceGroupRow[] }> = ({ ro
         cell: (row) => (
           <span className="flex items-center gap-2.5 font-bold">
             <span aria-hidden="true" className={`h-3 w-3 rounded-full ${row.tone === 'teal' ? 'bg-[#12B8B0]' : 'bg-[#C6A15B]'}`} />
-            {row.title}
+            {fa(row.title)}
           </span>
         ),
       },
       { key: 'services', header: 'خدمات این گروه', cell: (row) => <span className="font-normal text-[#3F5257]">{row.services.join('، ') || '—'}</span> },
       { key: 'sortOrder', header: 'ترتیب', hideOnMobile: true, cell: (row) => row.sortOrder.toLocaleString('fa-IR') },
     ]}
-    emptyValues={() => ({ title: '', tone: 'teal', sortOrder: String(rows.length + 1) })}
-    toValues={(row) => ({ title: row.title, tone: row.tone, sortOrder: String(row.sortOrder) })}
+    emptyValues={() => ({ title: emptyTranslated(), tone: 'teal', sortOrder: String(rows.length + 1) })}
+    toValues={(row) => ({ title: toInputs(row.title), tone: row.tone, sortOrder: String(row.sortOrder) })}
     save={saveServiceGroup}
     remove={deleteServiceGroup}
-    deleteMessage={(row) => `گروه «${row.title}» حذف شود؟ خدمات آن حذف نمی‌شوند، فقط بدون گروه می‌مانند و در نقشه صفحه اصلی دیده نمی‌شوند.`}
+    deleteMessage={(row) => `گروه «${fa(row.title)}» حذف شود؟ خدمات آن حذف نمی‌شوند، فقط بدون گروه می‌مانند و در نقشه صفحه اصلی دیده نمی‌شوند.`}
     renderForm={({ values, set, errors }) => (
       <div className="space-y-4">
-        <TextInput label="عنوان" required hint="مثل «برای سفر و ارسال بار»" value={values.title} onChange={(v) => set('title', v)} error={errors.title} />
+        <TransTextInput label="عنوان" required name="title" hint="مثل «برای سفر و ارسال بار»" value={values.title} onChange={(v) => set('title', v)} errors={errors} />
         <FormGrid>
           <Select label="رنگ خط" value={values.tone} onChange={(v) => set('tone', v as Values['tone'])} options={TONES} error={errors.tone} />
           <NumberInput label="ترتیب نمایش" min={0} value={values.sortOrder} onChange={(v) => set('sortOrder', v)} error={errors.sortOrder} />

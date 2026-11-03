@@ -1,11 +1,11 @@
 import { z } from 'zod';
-import { flag, imagePath, optionalText, requiredText, sortOrder } from '../../lib/validation';
+import { flag, imagePath, sortOrder, translatedText } from '../../lib/validation';
 
 export const teamMemberSchema = z.object({
-  name: requiredText('نام'),
-  role: requiredText('سمت'),
-  specialty: optionalText('تخصص', 500),
-  department: optionalText('دپارتمان'),
+  name: translatedText('نام', 255, { required: true }),
+  role: translatedText('سمت', 255, { required: true }),
+  specialty: translatedText('تخصص', 500),
+  department: translatedText('دپارتمان'),
   image: imagePath('عکس'),
   isActive: flag,
   sortOrder,

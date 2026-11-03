@@ -6,74 +6,83 @@ import type { ServiceGroupItem } from '../../types';
 import { CITIES, LonLat, ROAD_PATH, STAGE, project, roadFraction } from '../home/hero/geo';
 import { telHref } from '../../utils/contact';
 import { validateFullName, validatePhoneNumber } from '../../utils/validation';
-import { CALL_TIMES, CallTimeKey, callTimeText } from '../../modules/consultations/callTimes';
+import { CALL_TIMES, CallTimeKey, callTimeLabel, callTimeText } from '../../modules/consultations/callTimes';
 import { submitConsultationRequest } from '../../modules/site/actions';
 import { RequestReceived } from '../ui/RequestReceived';
 import { TextField } from '../ui/TextField';
 import { useSite } from '../site/SiteProvider';
+import { useI18n } from '../../i18n/I18nProvider';
 
 const FOCUS = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E2C98C]';
-const GENERAL_TOPIC = 'مشاوره عمومی';
-const STEP_NAMES = ['موضوع', 'زمان تماس', 'اطلاعات تماس'];
 
 const TIME_ICONS: Record<CallTimeKey, React.ElementType> = { morning: Sun, afternoon: CloudSun, asap: Zap };
-const TIMES = CALL_TIMES.map((time) => ({ ...time, value: time.key, icon: TIME_ICONS[time.key] }));
+const TIMES = CALL_TIMES.map((time) => ({ value: time.key, icon: TIME_ICONS[time.key] }));
 
 type TopicService = { id: number; slug: string; shortTitle: string };
 
 // Each finished step carries the route one stop further: three steps, Tehran to Europe.
-const STOPS: { at: LonLat; name: string; above?: boolean }[] = [
-  { at: CITIES.tehran, name: 'تهران' },
-  { at: CITIES.bazargan, name: 'مرز بازرگان', above: true },
-  { at: CITIES.istanbul, name: 'استانبول' },
-  { at: CITIES.frankfurt, name: 'اروپا' },
+const STOPS: { at: LonLat; name: 'tehran' | 'bazargan' | 'istanbul' | 'europe'; above?: boolean }[] = [
+  { at: CITIES.tehran, name: 'tehran' },
+  { at: CITIES.bazargan, name: 'bazargan', above: true },
+  { at: CITIES.istanbul, name: 'istanbul' },
+  { at: CITIES.frankfurt, name: 'europe' },
 ];
 const STOP_FRACTIONS = STOPS.map((stop) => roadFraction(stop.at));
 
 // ---- The route that grows as the visitor moves through the form -----------------
 
-const ProgressMap: React.FC<{ reached: number; bandRef: React.RefObject<HTMLDivElement | null> }> = ({ reached, bandRef }) => (
-  <div ref={bandRef} aria-hidden="true" className="consult-band">
-    <div className="consult-stage">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src="/hero/map.svg" alt="" width={STAGE.width} height={STAGE.height} className="hero-map-image map-soft-edges absolute inset-0 w-full h-full" />
-      <svg viewBox={`0 0 ${STAGE.width} ${STAGE.height}`} className="absolute inset-0 w-full h-full">
-        <path d={ROAD_PATH} fill="none" stroke="#7FA2AA" strokeOpacity="0.4" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="2 14" />
-        <path
-          className="consult-route"
-          d={ROAD_PATH}
-          fill="none"
-          stroke="#E2C98C"
-          strokeWidth="6"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          pathLength={1}
-          style={{ strokeDashoffset: 1 - STOP_FRACTIONS[reached] }}
-        />
-      </svg>
-      {STOPS.map((stop, index) => {
-        const point = project(stop.at);
-        return (
-          <span
-            key={stop.name}
-            data-state={index === reached ? 'current' : index < reached ? 'passed' : 'ahead'}
-            data-above={stop.above}
-            className="consult-stop"
-            style={{ left: `${(point.x / STAGE.width) * 100}%`, top: `${(point.y / STAGE.height) * 100}%` }}
-          >
-            <span className="consult-stop-dot" />
-            <span className="consult-stop-name">{stop.name}</span>
-          </span>
-        );
-      })}
+const ProgressMap: React.FC<{ reached: number; bandRef: React.RefObject<HTMLDivElement | null> }> = ({ reached, bandRef }) => {
+  const names = useI18n().t.consultation.stops;
+  // On desktop the map sits beside the text: on the left in Persian, on the right in English and Turkish
+  return (
+    <div
+      ref={bandRef}
+      aria-hidden="true"
+      className="consult-band lg:ltr:left-auto! lg:ltr:right-0! lg:ltr:[-webkit-mask-image:linear-gradient(to_right,transparent,#000_12%)]! lg:ltr:[mask-image:linear-gradient(to_right,transparent,#000_12%)]!"
+    >
+      <div className="consult-stage">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/hero/map.svg" alt="" width={STAGE.width} height={STAGE.height} className="hero-map-image map-soft-edges absolute inset-0 w-full h-full" />
+        <svg viewBox={`0 0 ${STAGE.width} ${STAGE.height}`} className="absolute inset-0 w-full h-full">
+          <path d={ROAD_PATH} fill="none" stroke="#7FA2AA" strokeOpacity="0.4" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="2 14" />
+          <path
+            className="consult-route"
+            d={ROAD_PATH}
+            fill="none"
+            stroke="#E2C98C"
+            strokeWidth="6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            pathLength={1}
+            style={{ strokeDashoffset: 1 - STOP_FRACTIONS[reached] }}
+          />
+        </svg>
+        {STOPS.map((stop, index) => {
+          const point = project(stop.at);
+          return (
+            <span
+              key={stop.name}
+              data-state={index === reached ? 'current' : index < reached ? 'passed' : 'ahead'}
+              data-above={stop.above}
+              className="consult-stop"
+              style={{ left: `${(point.x / STAGE.width) * 100}%`, top: `${(point.y / STAGE.height) * 100}%` }}
+            >
+              <span className="consult-stop-dot" />
+              <span className="consult-stop-name">{names[stop.name]}</span>
+            </span>
+          );
+        })}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 // ---- Page ----------------------------------------------------------------------
 
 export const ConsultationPage: React.FC<{ services: TopicService[]; groups: ServiceGroupItem[] }> = ({ services, groups }) => {
   const SUPPORT_PHONE = useSite().settings.support_phone;
+  const { t: { consultation: t }, locale, num, fill } = useI18n();
+  const GENERAL_TOPIC = t.generalTopic;
   const [step, setStep] = useState(0);
   // The topic as shown, and the service it is about (null for general guidance).
   const [topic, setTopic] = useState('');
@@ -94,8 +103,8 @@ export const ConsultationPage: React.FC<{ services: TopicService[]; groups: Serv
   const phoneRef = useRef<HTMLInputElement>(null);
   const hasMoved = useRef(false);
 
-  const nameCheck = validateFullName(fullName);
-  const phoneCheck = validatePhoneNumber(phone);
+  const nameCheck = validateFullName(fullName, locale);
+  const phoneCheck = validatePhoneNumber(phone, locale);
 
   // Arriving from a service's "consult about this" link means the first step is already done
   useEffect(() => {
@@ -138,7 +147,7 @@ export const ConsultationPage: React.FC<{ services: TopicService[]; groups: Serv
     if (!time) return goTo(1);
 
     startSubmit(async () => {
-      const result = await submitConsultationRequest({ serviceId: topicServiceId, callTime: time, name: fullName, phone, description: notes });
+      const result = await submitConsultationRequest({ serviceId: topicServiceId, callTime: time, name: fullName, phone, description: notes }, locale);
       if (result.ok) {
         setReference(result.data!.reference);
         setServerErrors({});
@@ -174,7 +183,7 @@ export const ConsultationPage: React.FC<{ services: TopicService[]; groups: Serv
           setTopicServiceId(service.id);
           goTo(1);
         }}
-        className={`inline-flex items-center gap-2 min-h-11 px-4 py-2 rounded-lg border text-sm font-bold text-right transition-colors ${FOCUS} ${
+        className={`inline-flex items-center gap-2 min-h-11 px-4 py-2 rounded-lg border text-sm font-bold text-start transition-colors ${FOCUS} ${
           isSelected ? 'bg-[#E2C98C] border-[#E2C98C] text-[#07191F]' : 'bg-[#0C252B] border-white/15 text-[#D5E0E3] hover:border-[#E2C98C]/70 hover:text-white'
         }`}
       >
@@ -189,26 +198,26 @@ export const ConsultationPage: React.FC<{ services: TopicService[]; groups: Serv
         <ProgressMap reached={reference ? 3 : step} bandRef={bandRef} />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-14 lg:py-14 grid grid-cols-1 lg:grid-cols-12">
-          <div className="lg:col-span-7 text-right">
-            <h1 className={`${step > 0 || reference ? 'sr-only lg:not-sr-only' : ''} mt-2 lg:mt-0 text-[1.9rem] sm:text-[2.6rem] xl:text-5xl font-black leading-[1.3] text-[#F7F7F3] [text-wrap:balance]`}>برای دریافت مشاوره، اولین قدم را بردارید.</h1>
+          <div className="lg:col-span-7 text-start lg:ltr:col-start-6">
+            <h1 className={`${step > 0 || reference ? 'sr-only lg:not-sr-only' : ''} mt-2 lg:mt-0 text-[1.9rem] sm:text-[2.6rem] xl:text-5xl font-black leading-[1.3] text-[#F7F7F3] [text-wrap:balance]`}>{t.title}</h1>
             <p className={`${step > 0 || reference ? 'hidden lg:block' : ''} mt-4 max-w-2xl text-[15px] sm:text-lg leading-[1.95] text-[#C9D7DB]`}>
-              اطلاعات تماس خود را وارد کنید تا کارشناسان گیتی پیما برای راهنمایی و بررسی درخواست شما با شما در ارتباط باشند.
+              {t.intro}
             </p>
 
             {reference ? (
               <div className="mt-8">
                 <RequestReceived
                   reference={reference}
-                  title="درخواست مشاوره ثبت شد"
-                  text={`کارشناس گیتی پیما در بازه «${callTimeText(time)}» با شما تماس می‌گیرد.`}
+                  title={t.receivedTitle}
+                  text={fill(t.receivedText, { time: callTimeText(time, locale) })}
                   onReset={startOver}
-                  resetLabel="درخواست مشاوره دیگر"
+                  resetLabel={t.another}
                 />
               </div>
             ) : (
               <>
-                <ol className="mt-3 lg:mt-8 grid grid-cols-3 border-t border-white/15" aria-label="مراحل درخواست مشاوره">
-                  {STEP_NAMES.map((name, index) => {
+                <ol className="mt-3 lg:mt-8 grid grid-cols-3 border-t border-white/15" aria-label={t.stepsAria}>
+                  {t.steps.map((name, index) => {
                     const isCurrent = index === step;
                     const isDone = canReach(index + 1) || (index === 0 && Boolean(topic));
                     const reachable = canReach(index);
@@ -220,7 +229,7 @@ export const ConsultationPage: React.FC<{ services: TopicService[]; groups: Serv
                           disabled={!reachable}
                           aria-current={isCurrent ? 'step' : undefined}
                           onClick={() => goTo(index)}
-                          className={`flex items-center gap-2 w-full min-h-12 py-2.5 pl-2 text-right text-[13px] sm:text-sm font-bold transition-colors rounded-b disabled:cursor-default focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[#E2C98C] ${
+                          className={`flex items-center gap-2 w-full min-h-12 py-2.5 pe-2 text-start text-[13px] sm:text-sm font-bold transition-colors rounded-b disabled:cursor-default focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[#E2C98C] ${
                             isCurrent ? 'text-white' : reachable ? 'text-[#D5E0E3] hover:text-white' : 'text-[#7F979E]'
                           }`}
                         >
@@ -230,7 +239,7 @@ export const ConsultationPage: React.FC<{ services: TopicService[]; groups: Serv
                               isDone && !isCurrent ? 'bg-[#12B8B0] text-[#07191F]' : isCurrent ? 'bg-[#E2C98C] text-[#07191F]' : 'border border-white/25 text-[#A2B6BC]'
                             }`}
                           >
-                            {isDone && !isCurrent ? <Check className="w-3.5 h-3.5" /> : (index + 1).toLocaleString('fa-IR')}
+                            {isDone && !isCurrent ? <Check className="w-3.5 h-3.5" /> : num(index + 1)}
                           </span>
                           <span>{name}</span>
                         </button>
@@ -243,7 +252,7 @@ export const ConsultationPage: React.FC<{ services: TopicService[]; groups: Serv
                   {step === 0 && (
                     <div>
                       <h2 ref={headingRef} tabIndex={-1} className="text-xl sm:text-2xl font-black text-white outline-none">
-                        درباره چه موضوعی مشاوره می‌خواهید؟
+                        {t.topicQuestion}
                       </h2>
                       <button
                         type="button"
@@ -253,13 +262,13 @@ export const ConsultationPage: React.FC<{ services: TopicService[]; groups: Serv
                           setTopicServiceId(null);
                           goTo(1);
                         }}
-                        className={`group mt-4 w-full flex items-center gap-3 min-h-14 px-4 py-3 rounded-lg border text-right transition-colors ${FOCUS} ${
+                        className={`group mt-4 w-full flex items-center gap-3 min-h-14 px-4 py-3 rounded-lg border text-start transition-colors ${FOCUS} ${
                           topic === GENERAL_TOPIC ? 'bg-[#E2C98C] border-[#E2C98C] text-[#07191F]' : 'border-[#E2C98C]/50 text-[#E2C98C] hover:bg-[#C6A15B]/10'
                         }`}
                       >
                         <HelpCircle aria-hidden="true" className="w-5 h-5 shrink-0" />
-                        <span className="font-extrabold text-[15px]">هنوز نمی‌دانم؛ راهنمایی‌ام کنید</span>
-                        <ArrowLeft aria-hidden="true" className="w-4 h-4 mr-auto shrink-0 transition-transform group-hover:-translate-x-1" />
+                        <span className="font-extrabold text-[15px]">{t.notSure}</span>
+                        <ArrowLeft aria-hidden="true" className="w-4 h-4 ms-auto shrink-0 transition-transform ltr:rotate-180 rtl:group-hover:-translate-x-1 ltr:group-hover:translate-x-1" />
                       </button>
                       <div className="mt-5 space-y-4">
                         {groups.map((line) => (
@@ -280,15 +289,16 @@ export const ConsultationPage: React.FC<{ services: TopicService[]; groups: Serv
                   {step === 1 && (
                     <div>
                       <h2 ref={headingRef} tabIndex={-1} className="text-xl sm:text-2xl font-black text-white outline-none">
-                        چه زمانی با شما تماس بگیریم؟
+                        {t.timeQuestion}
                       </h2>
                       <p className="mt-2 text-sm text-[#A2B6BC]">
-                        موضوع: <span className="font-bold text-[#E2C98C]">{topic}</span>
+                        {t.topicLabel} <span className="font-bold text-[#E2C98C]">{topic}</span>
                       </p>
                       <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
                         {TIMES.map((option) => {
                           const Icon = option.icon;
                           const isSelected = time === option.value;
+                          const label = callTimeLabel(option.value, locale);
                           return (
                             <button
                               key={option.value}
@@ -298,14 +308,14 @@ export const ConsultationPage: React.FC<{ services: TopicService[]; groups: Serv
                                 setTime(option.value);
                                 goTo(2);
                               }}
-                              className={`flex sm:flex-col items-center sm:items-start gap-3 sm:gap-2 min-h-16 p-4 rounded-lg border text-right transition-colors ${FOCUS} ${
+                              className={`flex sm:flex-col items-center sm:items-start gap-3 sm:gap-2 min-h-16 p-4 rounded-lg border text-start transition-colors ${FOCUS} ${
                                 isSelected ? 'bg-[#E2C98C] border-[#E2C98C] text-[#07191F]' : 'bg-[#0C252B] border-white/15 text-white hover:border-[#E2C98C]/70'
                               }`}
                             >
                               <Icon aria-hidden="true" className={`w-5 h-5 shrink-0 ${isSelected ? '' : 'text-[#E2C98C]'}`} />
                               <span>
-                                <span className="block font-extrabold text-[15px]">{option.title}</span>
-                                <span className={`block mt-0.5 text-[13px] ${isSelected ? 'text-[#07191F]/75' : 'text-[#A2B6BC]'}`}>{option.hours}</span>
+                                <span className="block font-extrabold text-[15px]">{label.title}</span>
+                                <span className={`block mt-0.5 text-[13px] ${isSelected ? 'text-[#07191F]/75' : 'text-[#A2B6BC]'}`}>{label.hours}</span>
                               </span>
                             </button>
                           );
@@ -316,8 +326,8 @@ export const ConsultationPage: React.FC<{ services: TopicService[]; groups: Serv
                         onClick={() => goTo(0)}
                         className={`mt-4 inline-flex items-center gap-2 py-2 text-sm font-bold text-[#A2B6BC] hover:text-white transition-colors rounded ${FOCUS}`}
                       >
-                        <ArrowRight aria-hidden="true" className="w-4 h-4" />
-                        <span>تغییر موضوع</span>
+                        <ArrowRight aria-hidden="true" className="w-4 h-4 ltr:rotate-180" />
+                        <span>{t.changeTopic}</span>
                       </button>
                     </div>
                   )}
@@ -325,20 +335,21 @@ export const ConsultationPage: React.FC<{ services: TopicService[]; groups: Serv
                   {step === 2 && (
                     <form onSubmit={handleSubmit} noValidate>
                       <h2 ref={headingRef} tabIndex={-1} className="text-xl sm:text-2xl font-black text-white outline-none">
-                        با چه نام و شماره‌ای تماس بگیریم؟
+                        {t.contactQuestion}
                       </h2>
                       <p className="mt-2 text-sm leading-relaxed text-[#A2B6BC]">
-                        موضوع: <span className="font-bold text-[#E2C98C]">{topic}</span>، زمان تماس: <span className="font-bold text-[#E2C98C]">{time && callTimeText(time)}</span>
+                        {t.topicLabel} <span className="font-bold text-[#E2C98C]">{topic}</span>
+                        {t.separator} {t.timeLabel} <span className="font-bold text-[#E2C98C]">{time && callTimeText(time, locale)}</span>
                       </p>
 
                       <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <TextField
                           id="consult-fullname"
-                          label="نام و نام خانوادگی"
+                          label={t.name}
                           value={fullName}
                           inputRef={nameRef}
                           autoComplete="name"
-                          placeholder="مثال: محمد امینی"
+                          placeholder={t.namePlaceholder}
                           valid={nameCheck.isValid}
                           error={touched.fullName ? nameCheck.error ?? serverErrors.name : undefined}
                           onChange={setFullName}
@@ -346,13 +357,13 @@ export const ConsultationPage: React.FC<{ services: TopicService[]; groups: Serv
                         />
                         <TextField
                           id="consult-phone"
-                          label="شماره موبایل یا واتس‌اپ"
+                          label={t.phone}
                           value={phone}
                           inputRef={phoneRef}
                           type="tel"
                           inputMode="tel"
                           autoComplete="tel"
-                          placeholder="۰۹۱۲۳۴۵۶۷۸۹"
+                          placeholder={t.phonePlaceholder}
                           ltr
                           valid={phoneCheck.isValid}
                           error={touched.phone ? phoneCheck.error ?? serverErrors.phone : undefined}
@@ -363,14 +374,14 @@ export const ConsultationPage: React.FC<{ services: TopicService[]; groups: Serv
 
                       <div className="mt-5">
                         <label htmlFor="consult-notes" className="block mb-2 text-sm font-bold text-[#F7F7F3]">
-                          توضیحات <span className="font-normal text-[#A2B6BC]">(اختیاری)</span>
+                          {t.notes} <span className="font-normal text-[#A2B6BC]">{t.optional}</span>
                         </label>
                         <textarea
                           id="consult-notes"
                           rows={3}
                           value={notes}
                           onChange={(event) => setNotes(event.target.value)}
-                          placeholder="خلاصه‌ای از شرایط پرونده، حجم بار یا زمان سفر."
+                          placeholder={t.notesPlaceholder}
                           className="w-full px-4 py-3.5 rounded-lg bg-[#0C252B] border border-white/15 hover:border-white/30 text-base leading-relaxed text-white placeholder:text-[#7F979E] outline-none transition-colors resize-none focus:border-[#E2C98C] focus:ring-1 focus:ring-[#E2C98C]"
                         />
                       </div>
@@ -389,20 +400,20 @@ export const ConsultationPage: React.FC<{ services: TopicService[]; groups: Serv
                           className={`inline-flex items-center justify-center gap-2.5 min-h-14 px-8 rounded-lg bg-[#12B8B0] hover:bg-[#3ED0C8] disabled:opacity-70 disabled:cursor-wait text-[#07191F] font-black text-base transition-colors ${FOCUS}`}
                         >
                           <Send className="w-5 h-5" />
-                          <span>{isSubmitting ? 'در حال ثبت...' : 'ثبت درخواست مشاوره'}</span>
+                          <span>{isSubmitting ? t.submitting : t.submit}</span>
                         </button>
                         <button
                           type="button"
                           onClick={() => goTo(1)}
                           className={`inline-flex items-center justify-center gap-2 py-2.5 px-3 text-sm font-bold text-[#A2B6BC] hover:text-white transition-colors rounded ${FOCUS}`}
                         >
-                          <ArrowRight aria-hidden="true" className="w-4 h-4" />
-                          <span>تغییر زمان تماس</span>
+                          <ArrowRight aria-hidden="true" className="w-4 h-4 ltr:rotate-180" />
+                          <span>{t.changeTime}</span>
                         </button>
                       </div>
                       <p className="mt-3 flex items-start gap-2 text-[13px] leading-relaxed text-[#A2B6BC]">
                         <ShieldCheck aria-hidden="true" className="w-4 h-4 mt-0.5 shrink-0 text-[#12B8B0]" />
-                        <span>اطلاعات شما محرمانه می‌ماند و فقط برای تماس کارشناس استفاده می‌شود.</span>
+                        <span>{t.privacy}</span>
                       </p>
                     </form>
                   )}
@@ -416,7 +427,7 @@ export const ConsultationPage: React.FC<{ services: TopicService[]; groups: Serv
               className={`mt-8 flex flex-wrap items-center gap-x-2 gap-y-1 pt-5 border-t border-white/10 text-sm text-[#A2B6BC] hover:text-white transition-colors ${FOCUS}`}
             >
               <PhoneCall aria-hidden="true" className="w-4 h-4 text-[#12B8B0]" />
-              <span>کارتان فوری است؟ پشتیبانی شبانه‌روزی:</span>
+              <span>{t.urgent}</span>
               <span dir="ltr" className="font-bold text-[#F7F7F3] whitespace-nowrap">
                 {SUPPORT_PHONE}
               </span>

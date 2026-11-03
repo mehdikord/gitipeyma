@@ -1,10 +1,10 @@
 import type { Seeder } from '../seed';
 
-const CURRENCIES = [
-  { code: 'TRY', name: 'لیر ترکیه', symbol: '₺', rateToToman: 2600, flag: '🇹🇷' },
-  { code: 'USD', name: 'دلار آمریکا', symbol: '$', rateToToman: 92000, flag: '🇺🇸' },
-  { code: 'EUR', name: 'یورو اروپا', symbol: '€', rateToToman: 99000, flag: '🇪🇺' },
-  { code: 'AED', name: 'درهم امارات', symbol: 'د.إ', rateToToman: 25000, flag: '🇦🇪' },
+export const CURRENCIES = [
+  { code: 'TRY', name: { fa: 'لیر ترکیه', en: 'Turkish lira', tr: 'Türk lirası' }, symbol: '₺', rateToToman: 2600, flag: '🇹🇷' },
+  { code: 'USD', name: { fa: 'دلار آمریکا', en: 'US dollar', tr: 'ABD doları' }, symbol: '$', rateToToman: 92000, flag: '🇺🇸' },
+  { code: 'EUR', name: { fa: 'یورو اروپا', en: 'Euro', tr: 'Euro' }, symbol: '€', rateToToman: 99000, flag: '🇪🇺' },
+  { code: 'AED', name: { fa: 'درهم امارات', en: 'UAE dirham', tr: 'BAE dirhemi' }, symbol: 'د.إ', rateToToman: 25000, flag: '🇦🇪' },
 ];
 
 export const currencySeeder: Seeder = async (db) => {

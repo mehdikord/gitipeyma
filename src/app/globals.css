@@ -211,6 +211,31 @@
   to { clip-path: inset(-10% 0 -10% 0); opacity: 1; }
 }
 
+/* Left-to-right languages: Latin headlines run longer, and the wipe and timer follow their reading direction. */
+[dir='ltr'] .hero-title {
+  font-size: min(calc((100vw - 2rem) / 15), 2.6rem);
+  line-height: 1.22;
+}
+
+@media (min-width: 1280px) {
+  [dir='ltr'] .hero-title {
+    font-size: 3rem;
+  }
+}
+
+[dir='ltr'] .hero-line-second {
+  animation-name: heroWipeLtr;
+}
+
+[dir='ltr'] .hero-service-timer {
+  transform-origin: left;
+}
+
+@keyframes heroWipeLtr {
+  from { clip-path: inset(-10% 100% -10% 0); opacity: 0.2; }
+  to { clip-path: inset(-10% 0 -10% 0); opacity: 1; }
+}
+
 @keyframes heroServiceTimer {
   from { transform: scaleX(0); }
   to { transform: scaleX(1); }
@@ -233,6 +258,11 @@
   top: 0;
   bottom: 0;
   transform-origin: top;
+}
+
+[dir='ltr'] .svc-rail {
+  right: auto;
+  left: 11px;
 }
 
 .svc-rail[data-last='true'] {
@@ -400,6 +430,10 @@
 @media (min-width: 1024px) {
   .service-step-rail {
     transform-origin: right;
+  }
+
+  [dir='ltr'] .service-step-rail {
+    transform-origin: left;
   }
 }
 

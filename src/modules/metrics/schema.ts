@@ -1,11 +1,11 @@
 import { z } from 'zod';
-import { flag, optionalText, requiredText, sortOrder } from '../../lib/validation';
+import { flag, sortOrder, translatedText } from '../../lib/validation';
 
 export const metricSchema = z.object({
-  value: requiredText('عدد', 50),
-  label: requiredText('عنوان'),
-  subtext: optionalText('توضیح'),
-  trend: optionalText('روند'),
+  value: translatedText('عدد', 50, { required: true }),
+  label: translatedText('عنوان', 255, { required: true }),
+  subtext: translatedText('توضیح'),
+  trend: translatedText('روند'),
   isActive: flag,
   sortOrder,
 });

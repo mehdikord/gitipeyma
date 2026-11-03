@@ -4,6 +4,7 @@ import { requireAdmin } from '../../lib/auth/currentAdmin';
 import { pageArgs, paginated, param } from '../../lib/pagination';
 import { normalizeDigits } from '../../utils/validation';
 import { REQUEST_STATUS_KEYS } from './statuses';
+import { fa } from '../../i18n/translated';
 import type { Prisma, RequestStatus } from '../../generated/prisma/client';
 
 export type ServiceRequestRow = {
@@ -54,7 +55,7 @@ export async function listServiceRequests(params: Record<string, string | string
     description: row.description,
     status: row.status,
     adminNote: row.adminNote,
-    service: { id: Number(row.service.id), title: row.service.shortTitle, slug: row.service.slug },
+    service: { id: Number(row.service.id), title: fa(row.service.shortTitle), slug: row.service.slug },
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),
   });
@@ -66,5 +67,5 @@ export async function listServiceRequests(params: Record<string, string | string
 export async function serviceOptions() {
   await requireAdmin();
   const services = await db.service.findMany({ orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }], select: { id: true, shortTitle: true, isActive: true } });
-  return services.map((service) => ({ value: String(service.id), label: service.isActive ? service.shortTitle : `${service.shortTitle} (غیرفعال)` }));
+  return services.map((service) => ({ value: String(service.id), label: service.isActive ? fa(service.shortTitle) : `${fa(service.shortTitle)} (غیرفعال)` }));
 }

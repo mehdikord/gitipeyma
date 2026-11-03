@@ -6,8 +6,8 @@ import { ArrowLeft, MessageCircle, PhoneCall } from 'lucide-react';
 import { useRevealOnce } from '../../hooks/useRevealOnce';
 import { telHref } from '../../utils/contact';
 import { useSite } from '../site/SiteProvider';
+import { useI18n } from '../../i18n/I18nProvider';
 
-const WHATSAPP_TEXT = encodeURIComponent('سلام، می‌خواهم درباره خدمات گیتی پیما راهنمایی بگیرم.');
 const FOCUS = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E2C98C]';
 
 // The route starts right under the buttons, where the visitor is, and leaves for the horizon.
@@ -19,7 +19,8 @@ const ROUTE = `M${START.x} ${START.y} C600 760, 520 745, 380 735 S120 650, ${END
 
 export const FinalCTA: React.FC = () => {
   const { settings } = useSite();
-  const WHATSAPP_URL = `https://wa.me/${settings.whatsapp_number}?text=${WHATSAPP_TEXT}`;
+  const { t: { home: { cta: t } }, path } = useI18n();
+  const WHATSAPP_URL = `https://wa.me/${settings.whatsapp_number}?text=${encodeURIComponent(t.whatsappText)}`;
   const SUPPORT_PHONE = settings.support_phone;
   const SUPPORT_TEL = telHref(SUPPORT_PHONE);
   const sectionRef = useRef<HTMLElement>(null);
@@ -70,19 +71,19 @@ export const FinalCTA: React.FC = () => {
 
       <div className="relative max-w-3xl mx-auto px-4 sm:px-6 text-center">
         <h2 className="cta-fade text-[2rem] sm:text-[2.6rem] xl:text-5xl font-black leading-[1.35] text-[#F7F7F3] [text-wrap:balance]">
-          برای شروع یک مسیر تازه آماده‌اید؟
+          {t.title}
         </h2>
         <p className="cta-fade mt-4 max-w-xl mx-auto text-[15px] sm:text-lg leading-[1.95] text-[#B7C8CD]" style={{ '--cta-delay': '0.12s' } as React.CSSProperties}>
-          نیاز خود را با ما در میان بگذارید تا کارشناسان گیتی پیما شما را راهنمایی کنند.
+          {t.lead}
         </p>
 
         <div className="cta-fade mt-8 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3" style={{ '--cta-delay': '0.24s' } as React.CSSProperties}>
           <Link
-            href="/consultation"
+            href={path('/consultation')}
             className={`group inline-flex items-center justify-center gap-2 px-7 py-4 rounded-lg bg-[#E2C98C] hover:bg-[#F0DCA8] text-[#07191F] font-black text-base transition-colors ${FOCUS}`}
           >
-            <span>درخواست مشاوره</span>
-            <ArrowLeft className="w-[18px] h-[18px] transition-transform group-hover:-translate-x-1" />
+            <span>{t.consultation}</span>
+            <ArrowLeft className="w-[18px] h-[18px] transition-transform rtl:group-hover:-translate-x-1 ltr:group-hover:translate-x-1 ltr:-scale-x-100" />
           </Link>
           <a
             href={WHATSAPP_URL}
@@ -91,7 +92,7 @@ export const FinalCTA: React.FC = () => {
             className={`inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-lg bg-[#12B8B0] hover:bg-[#3ED0C8] text-[#07191F] font-black text-base transition-colors ${FOCUS}`}
           >
             <MessageCircle className="w-5 h-5" />
-            <span>ارسال پیام در واتس‌اپ</span>
+            <span>{t.whatsapp}</span>
           </a>
         </div>
 
@@ -101,7 +102,7 @@ export const FinalCTA: React.FC = () => {
           style={{ '--cta-delay': '0.36s' } as React.CSSProperties}
         >
           <PhoneCall className="w-4 h-4 text-[#12B8B0]" />
-          <span>یا تماس مستقیم، در هر ساعت شبانه‌روز:</span>
+          <span>{t.callDirect}</span>
           <span dir="ltr" className="font-bold text-[#F7F7F3] whitespace-nowrap">
             {SUPPORT_PHONE}
           </span>

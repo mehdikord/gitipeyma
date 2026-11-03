@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 import { MetricItem, TestimonialItem } from '../../types';
 import { submitTestimonial } from '../../modules/site/actions';
+import { useI18n } from '../../i18n/I18nProvider';
 
 // 'all', or a service category slug
 type CategoryFilter = string;
@@ -42,6 +43,7 @@ interface TestimonialsSectionProps {
 const EMPTY_REVIEW = { name: '', serviceId: '', trackingCode: '', rating: 5, comment: '' };
 
 export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testimonials, metrics: TESTIMONIALS_METRICS, quotes: MARQUEE_TRUST_QUOTES, services }) => {
+  const { t: { stories: { testimonials: t } }, locale, fill } = useI18n();
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>('all');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -118,7 +120,7 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
         trackingCode: formData.trackingCode,
         rating: formData.rating,
         comment: formData.comment,
-      });
+      }, locale);
       if (!result.ok) {
         setReviewError(Object.values(result.errors ?? {})[0] ?? result.message);
         return;
@@ -174,19 +176,19 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
               <span className="relative inline-flex rounded-full h-2 w-2 bg-[#12B8B0]"></span>
             </span>
             <span className="text-xs font-mono font-bold tracking-wider text-[#E2C98C]">
-              CLIENT SATISFACTION INDEX | شاخص اعتماد بین‌المللی
+              {t.eyebrow}
             </span>
           </div>
 
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#F7F7F3] tracking-tight">
-            بازتاب اعتماد و همراهی
+            {t.title}
             <span className="gold-gradient-text block mt-2 text-2xl sm:text-3xl md:text-4xl font-extrabold">
-              روایت تجربه‌های واقعی در پهنه تجارت و ترانزیت فرامرزی
+              {t.subtitle}
             </span>
           </h2>
 
           <p className="text-sm sm:text-base text-[#A2B6BC] leading-relaxed">
-            مستندات و بازخوردهای مراجعان رسمی از سه دفتر مرکزی در استانبول (آکسارای)، تهران (آزادی و بیهقی) و تبریز؛ اعتمادی که در طول سال‌ها استمرار یافته است.
+            {t.lead}
           </p>
         </div>
 
@@ -219,12 +221,12 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-8">
           <div className="flex flex-wrap items-center justify-center md:justify-start gap-2">
             {[
-              { id: 'all', label: 'همه بازخوردها', count: testimonialsList.length },
-              { id: 'transport', label: 'اتوبوس VIP استانبول', count: testimonialsList.filter((x) => x.category === 'transport').length },
-              { id: 'cargo', label: 'کارگو و گمرک', count: testimonialsList.filter((x) => x.category === 'cargo').length },
-              { id: 'business', label: 'ثبت شرکت و بانک', count: testimonialsList.filter((x) => x.category === 'business').length },
-              { id: 'legal', label: 'عقد بین‌المللی و حقوقی', count: testimonialsList.filter((x) => x.category === 'legal').length },
-              { id: 'financial', label: 'حوالجات سوئیفت', count: testimonialsList.filter((x) => x.category === 'financial').length },
+              { id: 'all', label: t.tabs.all, count: testimonialsList.length },
+              ...(['transport', 'cargo', 'business', 'legal', 'financial'] as const).map((id) => ({
+                id,
+                label: t.tabs[id],
+                count: testimonialsList.filter((x) => x.category === id).length,
+              })),
             ]
               .filter((tab) => tab.id === 'all' || tab.count > 0)
               .map((tab) => (
@@ -255,7 +257,7 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
             className="px-4 py-2 rounded-xl bg-[#C6A15B]/15 hover:bg-[#C6A15B]/25 text-[#E2C98C] border border-[#C6A15B]/40 hover:border-[#E2C98C] text-xs font-bold transition-all flex items-center gap-2 shrink-0 group shadow-md"
           >
             <PlusCircle className="w-4 h-4 text-[#E2C98C] group-hover:rotate-90 transition-transform duration-300" />
-            <span>ثبت تجربه همکاری شما</span>
+            <span>{t.addReview}</span>
           </button>
         </div>
 
@@ -274,7 +276,7 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
           </div>
 
           {/* Watermark Quote Icon */}
-          <Quote className="w-24 h-24 text-[#12B8B0]/10 absolute -top-4 -left-4 pointer-events-none rotate-180" />
+          <Quote className="w-24 h-24 text-[#12B8B0]/10 absolute -top-4 -end-4 pointer-events-none rotate-180" />
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start relative z-10">
             {/* Right Side: Primary Review Details (8 cols) */}
@@ -309,23 +311,23 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
                   ))}
                 </div>
                 <span className="text-sm font-bold text-[#E2C98C]">
-                  {current.satisfactionScore || '۵.۰ / ۵.۰'}
+                  {current.satisfactionScore || t.fullScore}
                 </span>
-                <span className="text-xs text-[#718085] border-r border-white/10 pr-3 mr-1">
-                  ثبت پرونده: سال {current.year}
+                <span className="text-xs text-[#718085] border-s border-white/10 ps-3 ms-1">
+                  {fill(t.caseYear, { year: current.year })}
                 </span>
               </div>
 
               {/* Key Outcome Headline */}
               {current.outcomeHeadline && (
-                <div className="p-3.5 rounded-xl bg-gradient-to-r from-[#12B8B0]/15 to-transparent border-r-4 border-[#12B8B0] text-sm sm:text-base font-bold text-white">
+                <div className="p-3.5 rounded-xl bg-gradient-to-r ltr:bg-gradient-to-l from-[#12B8B0]/15 to-transparent border-s-4 border-[#12B8B0] text-sm sm:text-base font-bold text-white">
                   {current.outcomeHeadline}
                 </div>
               )}
 
               {/* Comment Content */}
               <blockquote className="text-base sm:text-lg text-[#F7F7F3] leading-relaxed font-light min-h-[90px]">
-                «{current.comment}»
+                {t.quoteOpen}{current.comment}{t.quoteClose}
               </blockquote>
 
               {/* Author Info */}
@@ -351,26 +353,26 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
             </div>
 
             {/* Left Side: Service Journey Milestones & Navigation Controls (4 cols) */}
-            <div className="lg:col-span-4 space-y-5 lg:border-r lg:border-white/10 lg:pr-6">
+            <div className="lg:col-span-4 space-y-5 lg:border-s lg:border-white/10 lg:ps-6">
               {/* Journey Milestones Drawer */}
               <div className="p-4 rounded-2xl bg-[#07191F]/80 border border-white/10 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-[#E2C98C] flex items-center gap-1.5">
                     <Sparkles className="w-3.5 h-3.5 text-[#12B8B0]" />
-                    <span>مراحل اجرایی پرونده در گیتی پیما</span>
+                    <span>{t.milestones}</span>
                   </span>
                   <button
                     onClick={() => setShowMilestones(!showMilestones)}
                     className="text-[11px] text-[#12B8B0] hover:underline"
                   >
-                    {showMilestones ? 'بستن' : 'نمایش'}
+                    {showMilestones ? t.hide : t.show}
                   </button>
                 </div>
 
                 {showMilestones && current.milestones && (
                   <div className="space-y-2.5 pt-1">
                     {current.milestones.map((step, idx) => (
-                      <div key={idx} className="flex items-start gap-2.5 text-right">
+                      <div key={idx} className="flex items-start gap-2.5 text-start">
                         <div className="w-5 h-5 rounded-full bg-[#12B8B0]/20 text-[#12B8B0] text-[10px] font-black flex items-center justify-center shrink-0 mt-0.5">
                           {idx + 1}
                         </div>
@@ -390,11 +392,11 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
               <div className="p-4 rounded-2xl bg-[#07191F]/60 border border-white/10 space-y-3">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1.5 text-xs text-[#A2B6BC]">
-                    <span>پرونده</span>
+                    <span>{t.caseLabel}</span>
                     <span className="font-mono font-bold text-[#E2C98C]">
                       {currentIndex + 1}
                     </span>
-                    <span>از</span>
+                    <span>{t.of}</span>
                     <span className="font-mono text-white">
                       {filteredTestimonials.length}
                     </span>
@@ -404,7 +406,8 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
                   <button
                     onClick={() => setIsPlaying(!isPlaying)}
                     className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-[#A2B6BC] hover:text-white transition-colors"
-                    title={isPlaying ? 'توقف موقت چرخش خودکار' : 'شروع مجدد چرخش خودکار'}
+                    title={isPlaying ? t.pause : t.play}
+                    aria-label={isPlaying ? t.pause : t.play}
                   >
                     {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
                   </button>
@@ -415,19 +418,19 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
                   <button
                     onClick={handlePrev}
                     className="flex-1 py-2.5 rounded-xl bg-[#0C252B] border border-white/10 hover:border-[#12B8B0] hover:text-[#12B8B0] text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-all active:scale-95"
-                    aria-label="نظر قبلی"
+                    aria-label={t.prevAria}
                   >
-                    <ChevronRight className="w-4 h-4" />
-                    <span>تجربه قبلی</span>
+                    <ChevronRight className="w-4 h-4 ltr:-scale-x-100" />
+                    <span>{t.prev}</span>
                   </button>
 
                   <button
                     onClick={handleNext}
                     className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-[#12B8B0] to-[#087F7B] hover:brightness-110 text-[#07191F] text-xs font-black flex items-center justify-center gap-1.5 transition-all active:scale-95 shadow-md shadow-[#12B8B0]/20"
-                    aria-label="نظر بعدی"
+                    aria-label={t.nextAria}
                   >
-                    <span>تجربه بعدی</span>
-                    <ChevronLeft className="w-4 h-4" />
+                    <span>{t.next}</span>
+                    <ChevronLeft className="w-4 h-4 ltr:-scale-x-100" />
                   </button>
                 </div>
               </div>
@@ -441,7 +444,7 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
             <button
               key={item.id}
               onClick={() => selectTestimonial(idx)}
-              className={`p-3.5 rounded-2xl text-right transition-all duration-300 relative overflow-hidden ${
+              className={`p-3.5 rounded-2xl text-start transition-all duration-300 relative overflow-hidden ${
                 currentIndex === idx
                   ? 'bg-[#0C252B] border-2 border-[#12B8B0] shadow-lg shadow-[#12B8B0]/20 scale-[1.02]'
                   : 'bg-[#0C252B]/40 border border-white/5 hover:border-white/20 hover:bg-[#0C252B]/70'
@@ -453,7 +456,7 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
                 </span>
                 <span className="flex items-center gap-1 text-[11px] text-[#E2C98C] font-bold">
                   <Star className="w-3 h-3 fill-[#E2C98C] text-[#C6A15B]" />
-                  <span>۵.۰</span>
+                  <span>{t.thumbScore}</span>
                 </span>
               </div>
               <p className="text-[11px] text-[#A2B6BC] line-clamp-1">
@@ -474,37 +477,41 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
           <div className="flex items-center gap-3 mb-3">
             <span className="w-2 h-2 rounded-full bg-[#12B8B0] animate-pulse"></span>
             <span className="text-xs font-bold text-[#E2C98C]">
-              مرور لحظه‌ای گزیده دیدگاه‌های ثبت‌شده در پایانه آکسارای استانبول و شعب گمرکی
+              {t.marqueeTitle}
             </span>
           </div>
 
-          <div className="animate-marquee-rtl py-2">
+          {/* The ticker drifts against the reading direction: rightward in Persian, leftward in English and Turkish */}
+          <div className="w-max ltr:-translate-x-1/2">
+          <div className="animate-marquee-rtl ltr:[animation-direction:reverse] py-2">
             {[...MARQUEE_TRUST_QUOTES, ...MARQUEE_TRUST_QUOTES].map((quote, qIdx) => (
               <div
                 key={qIdx}
                 className="inline-flex items-center gap-3 px-5 py-2.5 mx-2 rounded-xl bg-[#0C252B]/80 border border-white/5 hover:border-[#12B8B0]/40 transition-colors text-xs text-[#F7F7F3] whitespace-nowrap shadow-sm"
               >
                 <Quote className="w-3.5 h-3.5 text-[#12B8B0] shrink-0" />
-                <span>{quote.replace(/[«»]/g, '')}</span>
+                <span>{quote.replace(/[«»“”]/g, '')}</span>
               </div>
             ))}
+          </div>
           </div>
         </div>
 
         {/* Transparent Mock Notice as Required */}
         <div className="mt-8 text-center text-[11px] text-[#718085] leading-relaxed">
-          * بازخوردهای فوق گزیده‌ای مستند از مراجعان حقیقی خطوط VIP، خدمات گمرکی و اداری گیتی پیما است. با ثبت نظر در فرم بالا، تجربه شما به این پورتال افزوده خواهد شد.
+          {t.notice}
         </div>
       </div>
 
       {/* Review Submission Interactive Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
-          <div className="bg-[#0C252B] border border-[#12B8B0]/40 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative text-right">
+          <div className="bg-[#0C252B] border border-[#12B8B0]/40 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative text-start">
             {/* Close Button */}
             <button
               onClick={() => setIsModalOpen(false)}
-              className="absolute top-5 left-5 p-2 rounded-full bg-white/5 hover:bg-white/10 text-[#A2B6BC] hover:text-white transition-colors"
+              aria-label={t.form.close}
+              className="absolute top-5 end-5 p-2 rounded-full bg-white/5 hover:bg-white/10 text-[#A2B6BC] hover:text-white transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -513,13 +520,13 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
             <div className="space-y-2 mb-6">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#12B8B0]/15 text-[#12B8B0] text-xs font-bold">
                 <MessageSquare className="w-3.5 h-3.5" />
-                <span>باشگاه مشتریان گیتی پیما</span>
+                <span>{t.form.eyebrow}</span>
               </div>
               <h3 className="text-xl sm:text-2xl font-black text-white">
-                ثبت تجربه همکاری یا سفر شما
+                {t.form.title}
               </h3>
               <p className="text-xs text-[#A2B6BC]">
-                دیدگاه شما پس از ارزیابی کیفی، در بخش بازتاب اعتماد و همراهی نمایش داده خواهد شد.
+                {t.form.lead}
               </p>
             </div>
 
@@ -529,24 +536,24 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
                   <CheckCircle2 className="w-8 h-8" />
                 </div>
                 <h4 className="text-lg font-bold text-white">
-                  با سپاس، نظر شما با موفقیت ثبت شد!
+                  {t.form.successTitle}
                 </h4>
                 <p className="text-xs text-[#A2B6BC]">
-                  تجربه شما پس از بررسی کارشناسان گیتی پیما در این بخش نمایش داده می‌شود.
+                  {t.form.successText}
                 </p>
               </div>
             ) : (
               <form onSubmit={handleSubmitReview} className="space-y-4">
                 <div>
                   <label className="block text-xs font-bold text-[#E2C98C] mb-1.5">
-                    نام و نام خانوادگی یا عنوان شرکت *
+                    {t.form.name}
                   </label>
                   <input
                     type="text"
                     required
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder="مثال: مهندس رامین خسروی (صنایع الکترونیک)"
+                    placeholder={t.form.namePlaceholder}
                     className="w-full px-4 py-2.5 rounded-xl bg-[#07191F] border border-white/10 text-white placeholder:text-[#718085] text-xs focus:outline-none focus:border-[#12B8B0]"
                   />
                 </div>
@@ -554,14 +561,14 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="block text-xs font-bold text-[#E2C98C] mb-1.5">
-                      نوع خدمت دریافتی *
+                      {t.form.service}
                     </label>
                     <select
                       value={formData.serviceId}
                       onChange={(e) => setFormData({ ...formData, serviceId: e.target.value })}
                       className="w-full px-3 py-2.5 rounded-xl bg-[#07191F] border border-white/10 text-white text-xs focus:outline-none focus:border-[#12B8B0]"
                     >
-                      <option value="">سایر خدمات</option>
+                      <option value="">{t.form.otherServices}</option>
                       {services.map((service) => (
                         <option key={service.id} value={service.id}>
                           {service.shortTitle}
@@ -572,13 +579,13 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
 
                   <div>
                     <label className="block text-xs font-bold text-[#E2C98C] mb-1.5">
-                      شماره بلیت یا بارنامه CMR (اختیاری)
+                      {t.form.tracking}
                     </label>
                     <input
                       type="text"
                       value={formData.trackingCode}
                       onChange={(e) => setFormData({ ...formData, trackingCode: e.target.value })}
-                      placeholder="مثال: CMR-9820 یا بلیت GT-110"
+                      placeholder={t.form.trackingPlaceholder}
                       className="w-full px-4 py-2.5 rounded-xl bg-[#07191F] border border-white/10 text-white placeholder:text-[#718085] text-xs focus:outline-none focus:border-[#12B8B0]"
                     />
                   </div>
@@ -586,7 +593,7 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
 
                 <div>
                   <label className="block text-xs font-bold text-[#E2C98C] mb-1.5">
-                    امتیاز شما به کیفیت خدمات
+                    {t.form.rating}
                   </label>
                   <div className="flex items-center gap-2 py-1">
                     {[1, 2, 3, 4, 5].map((starVal) => (
@@ -605,22 +612,22 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
                         />
                       </button>
                     ))}
-                    <span className="text-xs font-bold text-[#E2C98C] mr-2">
-                      ({formData.rating} از ۵ ستاره)
+                    <span className="text-xs font-bold text-[#E2C98C] ms-2">
+                      {fill(t.form.ratingValue, { rating: formData.rating })}
                     </span>
                   </div>
                 </div>
 
                 <div>
                   <label className="block text-xs font-bold text-[#E2C98C] mb-1.5">
-                    متن تجربه و میزان رضایت شما *
+                    {t.form.comment}
                   </label>
                   <textarea
                     required
                     rows={4}
                     value={formData.comment}
                     onChange={(e) => setFormData({ ...formData, comment: e.target.value })}
-                    placeholder="لطفاً جزییات تجربه سفر یا ترخیص و همکاری خود با گیتی پیما را بنویسید..."
+                    placeholder={t.form.commentPlaceholder}
                     className="w-full px-4 py-2.5 rounded-xl bg-[#07191F] border border-white/10 text-white placeholder:text-[#718085] text-xs focus:outline-none focus:border-[#12B8B0] resize-none"
                   ></textarea>
                 </div>
@@ -637,7 +644,7 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
                     onClick={() => setIsModalOpen(false)}
                     className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-[#A2B6BC] text-xs font-bold transition-colors"
                   >
-                    انصراف
+                    {t.form.cancel}
                   </button>
                   <button
                     type="submit"
@@ -645,7 +652,7 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
                     className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#12B8B0] to-[#087F7B] hover:brightness-110 disabled:opacity-70 disabled:cursor-wait text-[#07191F] text-xs font-black transition-all flex items-center gap-2 shadow-lg shadow-[#12B8B0]/20"
                   >
                     <Send className="w-4 h-4" />
-                    <span>{isSubmitting ? 'در حال ثبت...' : 'ثبت بازخورد'}</span>
+                    <span>{isSubmitting ? t.form.sending : t.form.submit}</span>
                   </button>
                 </div>
               </form>

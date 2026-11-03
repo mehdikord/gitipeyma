@@ -22,6 +22,25 @@ At `/admins`. Admins sign in with their mobile number and password. The seeded a
 
 Change this password from the profile page right after the first login.
 
+## Languages
+
+The public site is published in Persian, English and Turkish, each under its own path: `/fa`, `/en`, `/tr`. The admin panel stays in Persian.
+
+**Which language a visitor gets.** An address without a language (`/`, `/services/...`) is redirected by `src/proxy.ts`:
+
+1. the language the visitor last picked in the site's language switcher (a cookie, kept for a year);
+2. otherwise their country: Persian from Iran, Turkish from Turkey, English from anywhere else.
+
+The country comes from a CDN header when the site sits behind one (`cf-ipcountry` from Cloudflare, and the equivalents from Vercel, CloudFront or nginx's GeoIP module as `x-country-code`). Without one, the visitor's IP is looked up in `src/i18n/geo/ranges.generated.ts`, the address blocks registered to Iran and Turkey in RIPE NCC's public allocation data, so no outside service is called. Refresh that file every few months with `npx tsx scripts/build-geo-ranges.ts`. Behind nginx, pass the visitor's address on (`proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;`), or every visitor looks like the server itself and gets English.
+
+Set `SITE_URL` (e.g. `https://example.com`) in `.env` so pages announce their three language versions to search engines with absolute addresses.
+
+**Interface text** (buttons, headings, form messages) lives in `src/i18n/dictionaries/`, one file per part of the site with `fa`, `en` and `tr` side by side. The Persian object sets the shape; the build fails if English or Turkish misses a key.
+
+**Content** written in the panel (services, testimonials, offices, settings, ...) is stored once per language in a JSON column: `{"fa": "...", "en": "...", "tr": "..."}`. Every form in the panel has a language switcher at the top: write the item in Persian, switch to English or Turkish, and translate it field by field with the Persian text shown under each input. The switcher shows how much of each language is done, and each list has a column with the languages its items are written in. A language left empty falls back on the site to English, then Persian.
+
+After deploying this version, run `npm run db:migrate` (turns the content columns into translated ones, keeping the Persian text) and `npm run db:seed` (adds the English and Turkish translations of the starting content wherever the Persian text is still the original; nothing edited in the panel is overwritten).
+
 ## Database scripts
 
 | Command | What it does |
@@ -42,7 +61,7 @@ prisma/
   migrations/            one folder per migration
   seed.ts, seeders/      DatabaseSeeder and the seeders it runs
 src/
-  app/(site)/            public pages
+  app/[lang]/            public pages, one root per language (fa, en, tr)
   app/admins/            admin panel: login/, upload/, and (panel)/<section>/
   modules/<module>/      everything about one part of the domain:
     schema.ts            zod validation, shared by the form and the server
@@ -51,6 +70,7 @@ src/
   modules/site/          what the public site reads and the forms it submits
   components/admin/      the panel's UI kit: CrudManager, RequestInbox, Modal, fields, DataTable, ...
   lib/                   database client, auth, action helpers, validation, uploads
+  i18n/                  languages: config, dictionaries, translated-column helpers, country detection
 ```
 
 ### Adding a section to the panel

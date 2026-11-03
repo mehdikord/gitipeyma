@@ -1,8 +1,8 @@
 import { z } from 'zod';
-import { requiredText, sortOrder } from '../../lib/validation';
+import { sortOrder, translatedText } from '../../lib/validation';
 
 export const serviceGroupSchema = z.object({
-  title: requiredText('عنوان'),
+  title: translatedText('عنوان', 255, { required: true }),
   tone: z.enum(['teal', 'gold'], { error: 'رنگ را انتخاب کنید.' }),
   sortOrder,
 });

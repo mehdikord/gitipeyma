@@ -1,6 +1,7 @@
 /**
  * Everything the public site reads from the database, mapped into the shapes in src/types.
- * Only active content is returned. Each read opts the page into rendering per request, so
+ * Translated columns come out as plain text in the language of the page being rendered (the [lang]
+ * segment, read with currentLocale()), so components never see the JSON. Only active content is returned. Each read opts the page into rendering per request, so
  * changes made in the admin panel show on the next visit.
  */
 
@@ -8,8 +9,12 @@ import 'server-only';
 import { cache } from 'react';
 import { connection } from 'next/server';
 import { db } from '../../lib/db';
-import { DEFAULT_SETTINGS, SETTING_KEYS, Settings } from '../settings/definitions';
+import { SETTING_FIELDS, SETTING_KEYS, Settings } from '../settings/definitions';
+import { currentLocale } from '../../i18n/server';
+import { formatNumber } from '../../i18n/format';
+import { pick, pickOrNull } from '../../i18n/translated';
 import type { Prisma } from '../../generated/prisma/client';
+import type { Locale } from '../../i18n/config';
 import type {
   CurrencyRate,
   MetricItem,
@@ -29,16 +34,31 @@ const ordered = [{ sortOrder: 'asc' as const }, { id: 'asc' as const }];
 
 export const getSettings = cache(async (): Promise<Settings> => {
   await connection();
+  const locale = await currentLocale();
   const rows = await db.setting.findMany({ where: { key: { in: SETTING_KEYS } } });
-  const settings = { ...DEFAULT_SETTINGS };
-  for (const row of rows) if (row.value !== null) settings[row.key as keyof Settings] = row.value;
+  const stored = new Map(rows.map((row) => [row.key, row.value]));
+  const settings = {} as Settings;
+  for (const field of SETTING_FIELDS) {
+    const value = stored.get(field.key) ?? null;
+    if (!field.translatable) settings[field.key] = value ?? (field.default as string);
+    else settings[field.key] = pick(parseJson(value), locale) || pick(field.default, locale);
+  }
   return settings;
 });
+
+const parseJson = (value: string | null): unknown => {
+  try {
+    return value ? JSON.parse(value) : null;
+  } catch {
+    return value;
+  }
+};
 
 const toStrings = (value: Prisma.JsonValue): string[] => (Array.isArray(value) ? value.map(String) : []);
 const toNumbers = (value: Prisma.JsonValue): number[] => (Array.isArray(value) ? value.map(Number).filter(Number.isInteger) : []);
 
 export const getSiteData = cache(async (): Promise<SiteData> => {
+  const locale = await currentLocale();
   const [settings, offices, socials, services] = await Promise.all([
     getSettings(),
     db.office.findMany({ where: { isActive: true }, orderBy: ordered }),
@@ -51,19 +71,19 @@ export const getSiteData = cache(async (): Promise<SiteData> => {
     offices: offices.map(
       (office): Office => ({
         id: Number(office.id),
-        name: office.name,
-        role: office.role,
-        country: office.country,
-        addressFa: office.address,
+        name: pick(office.name, locale),
+        role: pick(office.role, locale),
+        country: pick(office.country, locale),
+        address: pick(office.address, locale),
         phones: toStrings(office.phones),
         email: office.email,
-        workingHours: office.workingHours,
+        workingHours: pick(office.workingHours, locale),
         schedule: { timeZone: office.timeZone, openHour: office.openHour, closeHour: office.closeHour, closedWeekdays: toNumbers(office.closedWeekdays) },
         at: [office.longitude, office.latitude],
       }),
     ),
-    socials: socials.map((social): SocialLink => ({ id: Number(social.id), platform: social.platform, label: social.label, url: social.url, iconName: social.icon })),
-    serviceLinks: services,
+    socials: socials.map((social): SocialLink => ({ id: Number(social.id), platform: social.platform, label: pick(social.label, locale), url: social.url, iconName: social.icon })),
+    serviceLinks: services.map((service) => ({ slug: service.slug, shortTitle: pick(service.shortTitle, locale) })),
   };
 });
 
@@ -78,66 +98,74 @@ const serviceInclude = {
 
 type ServiceRow = Prisma.ServiceGetPayload<{ include: typeof serviceInclude }>;
 
-const toService = (service: ServiceRow): ServiceItem => ({
+const toService = (service: ServiceRow, locale: Locale): ServiceItem => ({
   id: Number(service.id),
   slug: service.slug,
-  title: service.title,
-  shortTitle: service.shortTitle,
+  title: pick(service.title, locale),
+  shortTitle: pick(service.shortTitle, locale),
   category: service.category.slug,
-  categoryLabel: service.categoryLabel || service.category.title,
-  eyebrow: service.eyebrow,
-  summary: service.summary,
-  description: service.description,
-  detailedContent: (service.content ?? '')
+  categoryLabel: pick(service.categoryLabel, locale) || pick(service.category.title, locale),
+  eyebrow: pickOrNull(service.eyebrow, locale),
+  summary: pick(service.summary, locale),
+  description: pick(service.description, locale),
+  detailedContent: pick(service.content, locale)
     .split(/\n\s*\n/)
     .map((paragraph) => paragraph.trim())
     .filter(Boolean),
-  features: service.features.map((feature) => feature.title),
-  steps: service.steps.map((step) => ({ title: step.title, description: step.description })),
-  faqs: service.faqs.map((faq) => ({ question: faq.question, answer: faq.answer })),
+  features: service.features.map((feature) => pick(feature.title, locale)),
+  steps: service.steps.map((step) => ({ title: pick(step.title, locale), description: pick(step.description, locale) })),
+  faqs: service.faqs.map((faq) => ({ question: pick(faq.question, locale), answer: pick(faq.answer, locale) })),
   image: service.image,
   icon: service.icon,
-  badge: service.badge,
+  badge: pickOrNull(service.badge, locale),
   highlight: service.isHighlighted,
 });
 
 export const getServices = cache(async (): Promise<ServiceItem[]> => {
   await connection();
+  const locale = await currentLocale();
   const services = await db.service.findMany({ where: { isActive: true }, include: serviceInclude, orderBy: ordered });
-  return services.map(toService);
+  return services.map((service) => toService(service, locale));
 });
 
 export const getServiceBySlug = cache(async (slug: string): Promise<ServiceItem | null> => {
   await connection();
+  const locale = await currentLocale();
   const service = await db.service.findFirst({ where: { slug, isActive: true }, include: serviceInclude });
-  return service ? toService(service) : null;
+  return service ? toService(service, locale) : null;
 });
 
 /** Categories that have at least one active service, for the filters on /services. */
 export const getServiceCategories = cache(async (): Promise<ServiceCategoryItem[]> => {
   await connection();
+  const locale = await currentLocale();
   const categories = await db.serviceCategory.findMany({ where: { services: { some: { isActive: true } } }, orderBy: ordered });
-  return categories.map((category) => ({ id: Number(category.id), slug: category.slug, title: category.title }));
+  return categories.map((category) => ({ id: Number(category.id), slug: category.slug, title: pick(category.title, locale) }));
 });
 
 /** Groups with their active services, leaving out any group that has none. */
 export const getServiceGroups = cache(async (): Promise<ServiceGroupItem[]> => {
   await connection();
+  const locale = await currentLocale();
   const groups = await db.serviceGroup.findMany({
     orderBy: ordered,
     include: { services: { where: { isActive: true }, orderBy: ordered, select: { slug: true } } },
   });
   return groups
     .filter((group) => group.services.length > 0)
-    .map((group) => ({ id: Number(group.id), title: group.title, tone: group.tone, slugs: group.services.map((service) => service.slug) }));
+    .map((group) => ({ id: Number(group.id), title: pick(group.title, locale), tone: group.tone, slugs: group.services.map((service) => service.slug) }));
 });
 
 // ---- Home page -----------------------------------------------------------------------
 
-const ratingText = (rating: number) => `${rating.toLocaleString('fa-IR')}.۰ / ۵.۰`;
+const ratingText = (rating: number, locale: Locale) => {
+  const score = (value: number) => formatNumber(value, locale, { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  return `${score(rating)} / ${score(5)}`;
+};
 
 export const getTestimonials = cache(async (): Promise<TestimonialItem[]> => {
   await connection();
+  const locale = await currentLocale();
   const testimonials = await db.testimonial.findMany({
     where: { isPublished: true },
     orderBy: ordered,
@@ -145,43 +173,52 @@ export const getTestimonials = cache(async (): Promise<TestimonialItem[]> => {
   });
   return testimonials.map((item) => ({
     id: Number(item.id),
-    clientName: item.clientName,
-    serviceUsed: item.serviceTitle,
-    routeOrContext: item.context ?? '',
-    comment: item.comment,
-    year: item.year ?? '',
+    clientName: pick(item.clientName, locale),
+    serviceUsed: pick(item.serviceTitle, locale),
+    routeOrContext: pick(item.context, locale),
+    comment: pick(item.comment, locale),
+    year: pick(item.year, locale),
     rating: item.rating,
     category: item.category?.slug,
-    categoryLabel: item.categoryLabel ?? undefined,
-    verifiedCode: item.verifiedCode ?? undefined,
-    outcomeHeadline: item.outcomeHeadline ?? undefined,
-    originDestination: item.originDestination ?? undefined,
-    satisfactionScore: ratingText(item.rating),
-    milestones: item.milestones.map((milestone) => ({ title: milestone.title, desc: milestone.description ?? '' })),
+    categoryLabel: pickOrNull(item.categoryLabel, locale) ?? undefined,
+    verifiedCode: pickOrNull(item.verifiedCode, locale) ?? undefined,
+    outcomeHeadline: pickOrNull(item.outcomeHeadline, locale) ?? undefined,
+    originDestination: pickOrNull(item.originDestination, locale) ?? undefined,
+    satisfactionScore: ratingText(item.rating, locale),
+    milestones: item.milestones.map((milestone) => ({ title: pick(milestone.title, locale), desc: pick(milestone.description, locale) })),
   }));
 });
 
 export const getMetrics = cache(async (): Promise<MetricItem[]> => {
   await connection();
+  const locale = await currentLocale();
   const metrics = await db.metric.findMany({ where: { isActive: true }, orderBy: ordered });
-  return metrics.map((metric) => ({ id: Number(metric.id), value: metric.value, label: metric.label, subtext: metric.subtext ?? '', trend: metric.trend ?? '' }));
+  return metrics.map((metric) => ({
+    id: Number(metric.id),
+    value: pick(metric.value, locale),
+    label: pick(metric.label, locale),
+    subtext: pick(metric.subtext, locale),
+    trend: pick(metric.trend, locale),
+  }));
 });
 
 export const getTrustQuotes = cache(async (): Promise<string[]> => {
   await connection();
+  const locale = await currentLocale();
   const quotes = await db.trustQuote.findMany({ where: { isActive: true }, orderBy: ordered, select: { text: true } });
-  return quotes.map((quote) => quote.text);
+  return quotes.map((quote) => pick(quote.text, locale)).filter(Boolean);
 });
 
 export const getTeamMembers = cache(async (): Promise<TeamMember[]> => {
   await connection();
+  const locale = await currentLocale();
   const members = await db.teamMember.findMany({ where: { isActive: true }, orderBy: ordered });
   return members.map((member) => ({
     id: Number(member.id),
-    name: member.name,
-    role: member.role,
-    specialty: member.specialty ?? '',
-    department: member.department ?? '',
+    name: pick(member.name, locale),
+    role: pick(member.role, locale),
+    specialty: pick(member.specialty, locale),
+    department: pick(member.department, locale),
     image: member.image,
   }));
 });
@@ -190,10 +227,11 @@ export const getTeamMembers = cache(async (): Promise<TeamMember[]> => {
 
 export const getCurrencies = cache(async (): Promise<CurrencyRate[]> => {
   await connection();
+  const locale = await currentLocale();
   const currencies = await db.currency.findMany({ where: { isActive: true }, orderBy: ordered });
   return currencies.map((currency) => ({
     code: currency.code,
-    nameFa: currency.name,
+    name: pick(currency.name, locale),
     symbol: currency.symbol,
     rateToToman: currency.rateToToman.toNumber(),
     flag: currency.flag ?? '',

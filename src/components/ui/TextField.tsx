@@ -3,6 +3,9 @@
 import React from 'react';
 import { AlertCircle, Check } from 'lucide-react';
 
+// A field of the public forms. A ltr field (a phone number) is laid out left to right on every page;
+// the others follow the page's direction.
+
 export const TextField: React.FC<{
   id: string;
   label: string;
@@ -38,10 +41,10 @@ export const TextField: React.FC<{
         onChange={(event) => onChange(event.target.value)}
         onBlur={onBlur}
         className={`w-full h-14 rounded-lg bg-[#0C252B] border text-base text-white placeholder:text-[#7F979E] outline-none transition-colors focus:border-[#E2C98C] focus:ring-1 focus:ring-[#E2C98C] ${
-          ltr ? 'pl-4 pr-11 text-left placeholder:text-right' : 'pr-4 pl-11'
+          ltr ? 'pl-4 pr-11 text-left rtl:placeholder:text-right' : 'ps-4 pe-11'
         } ${error ? 'border-[#F58B8B]' : 'border-white/15 hover:border-white/30'}`}
       />
-      {valid && <Check aria-hidden="true" className={`absolute top-1/2 -translate-y-1/2 w-5 h-5 text-[#3ED0C8] ${ltr ? 'right-4' : 'left-4'}`} />}
+      {valid && <Check aria-hidden="true" className={`absolute top-1/2 -translate-y-1/2 w-5 h-5 text-[#3ED0C8] ${ltr ? 'right-4' : 'end-4'}`} />}
     </div>
     {error && (
       <p id={`${id}-error`} className="flex items-start gap-1.5 mt-2 text-[13px] leading-relaxed text-[#F58B8B]">

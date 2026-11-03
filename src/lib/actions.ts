@@ -45,18 +45,24 @@ function failure(error: unknown): ActionResult<never> {
   return { ok: false, message: 'خطایی رخ داد. دوباره تلاش کنید.' };
 }
 
-/** An action anyone can call (the public forms). */
+/**
+ * An action anyone can call (the public forms). `messages` are the visitor's language versions of
+ * the two general replies; a FormError carries its own, already in their language.
+ */
 export async function publicAction<S extends z.ZodType, T = null>(
   schema: S,
   input: unknown,
   handler: (data: z.output<S>) => Promise<ActionResult<T> | void>,
+  messages: { invalid: string; failed: string } = { invalid: INVALID, failed: 'خطایی رخ داد. دوباره تلاش کنید.' },
 ): Promise<ActionResult<T>> {
   const parsed = schema.safeParse(input);
-  if (!parsed.success) return { ok: false, message: INVALID, errors: fieldErrors(parsed.error) };
+  if (!parsed.success) return { ok: false, message: messages.invalid, errors: fieldErrors(parsed.error) };
   try {
     return ((await handler(parsed.data)) as ActionResult<T> | undefined) ?? { ok: true };
   } catch (error) {
-    return failure(error);
+    if (error instanceof FormError) return failure(error);
+    console.error(error);
+    return { ok: false, message: messages.failed };
   }
 }
 

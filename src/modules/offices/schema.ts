@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { flag, optionalText, requiredText, sortOrder } from '../../lib/validation';
+import { flag, optionalText, requiredText, sortOrder, translatedText } from '../../lib/validation';
 
 const hour = (label: string) =>
   z.coerce.number({ error: `${label} را وارد کنید.` }).int({ error: `${label} عدد صحیح است.` }).min(0, { error: `${label} بین ۰ تا ۲۴ است.` }).max(24, { error: `${label} بین ۰ تا ۲۴ است.` });
@@ -9,13 +9,13 @@ const coordinate = (label: string, limit: number) =>
 
 export const officeSchema = z
   .object({
-    name: requiredText('نام کوتاه', 100),
-    role: requiredText('نقش دفتر'),
-    country: requiredText('کشور', 100),
-    address: requiredText('نشانی', 1000),
+    name: translatedText('نام کوتاه', 100, { required: true }),
+    role: translatedText('نقش دفتر', 255, { required: true }),
+    country: translatedText('کشور', 100, { required: true }),
+    address: translatedText('نشانی', 1000, { required: true }),
     phones: z.array(requiredText('شماره تلفن', 30)).min(1, { error: 'دست‌کم یک شماره تلفن وارد کنید.' }).max(6),
     email: optionalText('ایمیل').pipe(z.email({ error: 'ایمیل معتبر نیست.' }).nullable()),
-    workingHours: requiredText('ساعت کاری (متن)'),
+    workingHours: translatedText('ساعت کاری (متن)', 255, { required: true }),
     timeZone: z.string().refine(
       (zone) => {
         try {

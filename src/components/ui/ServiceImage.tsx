@@ -14,6 +14,7 @@ import {
   GraduationCap,
   Users,
 } from 'lucide-react';
+import { useI18n } from '../../i18n/I18nProvider';
 
 interface ServiceImageProps {
   // A service without a photo shows the illustrated fallback.
@@ -36,6 +37,7 @@ export const ServiceImage: React.FC<ServiceImageProps> = ({
   const [hasError, setHasError] = useState(!src);
   const [isLoaded, setIsLoaded] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
+  const t = useI18n().t.forms.serviceImage;
 
   // A server-rendered image can finish loading before hydration, when onLoad/onError are not attached yet
   useEffect(() => {
@@ -59,7 +61,7 @@ export const ServiceImage: React.FC<ServiceImageProps> = ({
             <div className="w-16 h-16 rounded-2xl bg-[#12B8B0]/20 border border-[#12B8B0]/40 flex items-center justify-center text-[#12B8B0] mb-3 shadow-lg shadow-[#12B8B0]/20">
               <Bus className="w-9 h-9" />
             </div>
-            <span className="text-base font-black text-white text-center">سرویس VIP اتوبوس تهران ⇄ استانبول</span>
+            <span className="text-base font-black text-white text-center">{t.bus}</span>
             <span className="text-xs text-[#E2C98C] font-mono mt-1">GITI LUXURY EXPRESS COACH</span>
           </div>
         );
@@ -71,7 +73,7 @@ export const ServiceImage: React.FC<ServiceImageProps> = ({
             <div className="w-16 h-16 rounded-2xl bg-[#C6A15B]/20 border border-[#C6A15B]/40 flex items-center justify-center text-[#E2C98C] mb-3 shadow-lg shadow-[#C6A15B]/20">
               <Boxes className="w-9 h-9" />
             </div>
-            <span className="text-base font-black text-white text-center">کارگو تجاری و ترخیص گمرکی</span>
+            <span className="text-base font-black text-white text-center">{t.cargo}</span>
             <span className="text-xs text-[#12B8B0] font-mono mt-1">INTERNATIONAL CARGO & CMR</span>
           </div>
         );
@@ -81,7 +83,7 @@ export const ServiceImage: React.FC<ServiceImageProps> = ({
             <div className="w-16 h-16 rounded-2xl bg-[#12B8B0]/20 border border-[#12B8B0]/40 flex items-center justify-center text-[#12B8B0] mb-3">
               <Building2 className="w-9 h-9" />
             </div>
-            <span className="text-base font-black text-white text-center">ثبت شرکت بین‌المللی</span>
+            <span className="text-base font-black text-white text-center">{t.company}</span>
             <span className="text-xs text-[#E2C98C] font-mono mt-1">MERSİS & CORPORATE BANKING</span>
           </div>
         );
@@ -91,7 +93,7 @@ export const ServiceImage: React.FC<ServiceImageProps> = ({
             <div className="w-16 h-16 rounded-2xl bg-[#C6A15B]/20 border border-[#C6A15B]/40 flex items-center justify-center text-[#E2C98C] mb-3">
               <CircleDollarSign className="w-9 h-9" />
             </div>
-            <span className="text-base font-black text-white text-center">حواله ارزی و تسویه سوئیفت</span>
+            <span className="text-base font-black text-white text-center">{t.currency}</span>
             <span className="text-xs text-[#74FFF7] font-mono mt-1">FAST / EFT / SWIFT SETTLEMENT</span>
           </div>
         );
@@ -101,7 +103,7 @@ export const ServiceImage: React.FC<ServiceImageProps> = ({
             <div className="w-16 h-16 rounded-2xl bg-[#12B8B0]/20 border border-[#12B8B0]/40 flex items-center justify-center text-[#12B8B0] mb-3">
               <FileText className="w-9 h-9" />
             </div>
-            <span className="text-base font-black text-white text-center">ویزای بین‌المللی (شنگن و کانادا)</span>
+            <span className="text-base font-black text-white text-center">{t.visa}</span>
             <span className="text-xs text-[#E2C98C] font-mono mt-1">VISA CONSULTING & APPOINTMENT</span>
           </div>
         );
@@ -112,7 +114,7 @@ export const ServiceImage: React.FC<ServiceImageProps> = ({
             <div className="w-16 h-16 rounded-2xl bg-[#C6A15B]/20 border border-[#C6A15B]/40 flex items-center justify-center text-[#E2C98C] mb-3">
               <Scale className="w-9 h-9" />
             </div>
-            <span className="text-base font-black text-white text-center">خدمات حقوقی، وکالتنامه و ترجمه</span>
+            <span className="text-base font-black text-white text-center">{t.legal}</span>
             <span className="text-xs text-[#12B8B0] font-mono mt-1">NOTER & OFFICIAL APOSTILLE</span>
           </div>
         );
@@ -123,7 +125,7 @@ export const ServiceImage: React.FC<ServiceImageProps> = ({
             <div className="w-16 h-16 rounded-2xl bg-[#E2C98C]/20 border border-[#E2C98C]/40 flex items-center justify-center text-[#E2C98C] mb-3">
               <Heart className="w-9 h-9" />
             </div>
-            <span className="text-base font-black text-white text-center">تشریفات ازدواج بین‌المللی در ترکیه</span>
+            <span className="text-base font-black text-white text-center">{t.wedding}</span>
             <span className="text-xs text-[#E2C98C] font-mono mt-1">AİLE CÜZDANI & BOSPHORUS CELEBRATION</span>
           </div>
         );
@@ -134,7 +136,7 @@ export const ServiceImage: React.FC<ServiceImageProps> = ({
             <div className="w-16 h-16 rounded-2xl bg-[#12B8B0]/20 border border-[#12B8B0]/40 flex items-center justify-center text-[#12B8B0] mb-3">
               <GraduationCap className="w-9 h-9" />
             </div>
-            <span className="text-base font-black text-white text-center">پذیرش دانشگاهی و کارت اقامت</span>
+            <span className="text-base font-black text-white text-center">{t.education}</span>
             <span className="text-xs text-[#E2C98C] font-mono mt-1">IKAMET & STUDY PERMIT</span>
           </div>
         );

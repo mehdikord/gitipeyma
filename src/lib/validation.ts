@@ -5,6 +5,8 @@
 
 import { z } from 'zod';
 import { normalizeDigits, validateFullName, validatePhoneNumber } from '../utils/validation';
+import { LOCALES, LOCALE_INFO, Locale } from '../i18n/config';
+import type { Translated } from '../i18n/translated';
 
 export const requiredText = (label: string, max = 255) =>
   z
@@ -45,17 +47,43 @@ export const optionalId = z.preprocess((value) => (value === '' || value === und
 export const imagePath = (label = 'تصویر') =>
   optionalText(label, 500).refine((value) => !value || value.startsWith('/') || /^https?:\/\//.test(value), { error: `آدرس ${label} معتبر نیست.` });
 
-/** The visitor's name, with the same rules the public forms check in the browser. */
-export const personName = z.string().superRefine((value, context) => {
-  const check = validateFullName(value);
-  if (!check.isValid) context.addIssue({ code: 'custom', message: check.error! });
-}).transform((value) => value.trim());
+/** The visitor's name, with the same rules the public forms check in the browser, in their language. */
+export const personName = (locale: Locale = 'fa') =>
+  z.string().superRefine((value, context) => {
+    const check = validateFullName(value, locale);
+    if (!check.isValid) context.addIssue({ code: 'custom', message: check.error! });
+  }).transform((value) => value.trim());
 
 /** A visitor's phone number (Iranian, Turkish or international), stored with Latin digits. */
-export const visitorPhone = z.string().superRefine((value, context) => {
-  const check = validatePhoneNumber(value);
-  if (!check.isValid) context.addIssue({ code: 'custom', message: check.error! });
-}).transform((value) => validatePhoneNumber(value).normalized);
+export const visitorPhone = (locale: Locale = 'fa') =>
+  z.string().superRefine((value, context) => {
+    const check = validatePhoneNumber(value, locale);
+    if (!check.isValid) context.addIssue({ code: 'custom', message: check.error! });
+  }).transform((value) => validatePhoneNumber(value).normalized);
+
+/**
+ * Text the panel writes in every language: { fa, en, tr }, stored as a JSON column. Empty languages
+ * are dropped. A required one needs at least one language filled (the site falls back to it for the
+ * rest); its error is on the field itself ("title"), a too-long text on the language ("title.en").
+ */
+export const translatedText = (label: string, max = 255, { required = false } = {}) =>
+  z
+    .object(
+      Object.fromEntries(
+        LOCALES.map((locale) => [
+          locale,
+          z
+            .string()
+            .trim()
+            .max(max, { error: `${label} (${LOCALE_INFO[locale].adminName}) حداکثر ${max.toLocaleString('fa-IR')} کاراکتر است.` })
+            .nullish(),
+        ]),
+      ) as Record<Locale, z.ZodOptional<z.ZodNullable<z.ZodString>>>,
+      { error: `${label} را وارد کنید.` },
+    )
+    .default({})
+    .transform((texts): Translated => Object.fromEntries(Object.entries(texts).filter(([, text]) => text)) as Translated)
+    .refine((texts) => !required || Object.keys(texts).length > 0, { error: `${label} را دست‌کم به یک زبان وارد کنید.` });
 
 /** An admin's login: an Iranian mobile number written 09xxxxxxxxx. */
 export const adminPhone = z

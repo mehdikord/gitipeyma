@@ -1,16 +1,17 @@
 import type { Seeder } from '../seed';
 import { SERVICES_DATA } from './data/services';
 import { LINES } from './data/serviceGroups';
+import { LOCALES } from '../../src/i18n/config';
 
 // Category slugs with the label each one has in the /services filters.
-const CATEGORIES = [
-  { slug: 'transport', title: 'حمل‌ونقل و اتوبوس VIP' },
-  { slug: 'cargo', title: 'پست و کارگو تجاری' },
-  { slug: 'business', title: 'تجارت و ثبت شرکت' },
-  { slug: 'immigration', title: 'اقامت، ویزا و تحصیلی' },
-  { slug: 'legal', title: 'امور حقوقی و ترجمه' },
-  { slug: 'financial', title: 'حواله ارزی و سوئیفت' },
-  { slug: 'events', title: 'تشریفات و ازدواج' },
+export const CATEGORIES = [
+  { slug: 'transport', title: { fa: 'حمل‌ونقل و اتوبوس VIP', en: 'Transport and VIP coaches', tr: 'Taşımacılık ve VIP otobüs' } },
+  { slug: 'cargo', title: { fa: 'پست و کارگو تجاری', en: 'Post and commercial cargo', tr: 'Posta ve ticari kargo' } },
+  { slug: 'business', title: { fa: 'تجارت و ثبت شرکت', en: 'Trade and company registration', tr: 'Ticaret ve şirket kuruluşu' } },
+  { slug: 'immigration', title: { fa: 'اقامت، ویزا و تحصیلی', en: 'Residency, visas and study', tr: 'Oturum, vize ve eğitim' } },
+  { slug: 'legal', title: { fa: 'امور حقوقی و ترجمه', en: 'Legal affairs and translation', tr: 'Hukuki işler ve tercüme' } },
+  { slug: 'financial', title: { fa: 'حواله ارزی و سوئیفت', en: 'Currency transfers and SWIFT', tr: 'Döviz transferi ve SWIFT' } },
+  { slug: 'events', title: { fa: 'تشریفات و ازدواج', en: 'Events and weddings', tr: 'Organizasyon ve düğün' } },
 ];
 
 const ICONS: Record<string, string> = {
@@ -58,10 +59,11 @@ export const serviceSeeder: Seeder = async (db) => {
         eyebrow: service.eyebrow,
         summary: service.summary,
         description: service.description,
-        content: service.detailedContent.join('\n\n'),
+        // One text per language, paragraphs separated by blank lines
+        content: Object.fromEntries(LOCALES.map((locale) => [locale, service.detailedContent.map((paragraph) => paragraph[locale]).join('\n\n')])),
         image: service.image,
         icon: ICONS[service.slug] ?? null,
-        badge: service.badge ?? null,
+        badge: service.badge ?? {},
         isHighlighted: Boolean('highlight' in service && service.highlight),
         sortOrder: index + 1,
         features: { create: service.features.map((title, order) => ({ title, sortOrder: order + 1 })) },

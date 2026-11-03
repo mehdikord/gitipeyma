@@ -2,6 +2,7 @@ import 'server-only';
 import { db } from '../../lib/db';
 import { requireAdmin } from '../../lib/auth/currentAdmin';
 import type { NavBadges } from '../../components/admin/layout/navigation';
+import { fa } from '../../i18n/translated';
 
 /** What is waiting for the team: new requests, unread messages, reviews to approve. */
 export async function getNavBadges(): Promise<NavBadges> {
@@ -38,9 +39,9 @@ export async function getDashboard() {
   return {
     badges,
     stats: { requestsThisWeek, totalRequests, activeServices, publishedTestimonials },
-    latestRequests: latestRequests.map((r) => ({ id: Number(r.id), name: r.name, phone: r.phone, service: r.service.shortTitle, status: r.status, createdAt: r.createdAt.toISOString() })),
-    latestConsultations: latestConsultations.map((r) => ({ id: Number(r.id), name: r.name, service: r.service?.shortTitle ?? 'مشاوره عمومی', status: r.status, createdAt: r.createdAt.toISOString() })),
+    latestRequests: latestRequests.map((r) => ({ id: Number(r.id), name: r.name, phone: r.phone, service: fa(r.service.shortTitle), status: r.status, createdAt: r.createdAt.toISOString() })),
+    latestConsultations: latestConsultations.map((r) => ({ id: Number(r.id), name: r.name, service: r.service ? fa(r.service.shortTitle) : 'مشاوره عمومی', status: r.status, createdAt: r.createdAt.toISOString() })),
     latestMessages: latestMessages.map((m) => ({ id: Number(m.id), name: m.name, topic: m.topic, read: m.readAt !== null, createdAt: m.createdAt.toISOString() })),
-    topServices: topServices.map((s) => ({ id: Number(s.id), title: s.shortTitle, count: s._count.requests })),
+    topServices: topServices.map((s) => ({ id: Number(s.id), title: fa(s.shortTitle), count: s._count.requests })),
   };
 }

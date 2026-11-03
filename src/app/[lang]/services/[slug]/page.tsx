@@ -2,15 +2,16 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ServiceDetailView } from '../../../../components/services/ServiceDetailView';
 import { getCurrencies, getServiceBySlug, getServices, getSettings } from '../../../../modules/site/queries';
+import { pageMetadata } from '../../../../i18n/metadata';
 
 // The service whose page carries the transfer calculator.
 const CURRENCY_SERVICE_SLUG = 'currency-exchange-swift';
 
-type Props = { params: Promise<{ slug: string }> };
+type Props = { params: Promise<{ lang: string; slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const service = await getServiceBySlug(decodeURIComponent((await params).slug));
-  return service ? { title: `${service.title} | گیتی پیما`, description: service.summary } : {};
+  return service ? pageMetadata(`/services/${service.slug}`, service.title, service.summary) : {};
 }
 
 export default async function Page({ params }: Props) {

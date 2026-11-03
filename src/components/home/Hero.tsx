@@ -5,54 +5,41 @@ import Link from 'next/link';
 import { ArrowLeft, Boxes, Building2, CircleDollarSign, Pause, Play, Truck } from 'lucide-react';
 import { HeroLayer, RouteCanvas } from './hero/RouteCanvas';
 import { CITIES, LonLat, STAGE, project } from './hero/geo';
+import { useI18n } from '../../i18n/I18nProvider';
+
+// Points forward in the reading direction: left on the Persian site, right on the others.
+const FORWARD = 'ltr:-scale-x-100';
 
 const SERVICES: {
   layer: HeroLayer;
   href: string;
   icon: React.ElementType;
-  title: string;
-  fact: string;
-  detail: string;
 }[] = [
   {
     layer: 'bus',
     href: '/services/bus-vip-tehran-istanbul',
     icon: Truck,
-    title: 'ناوگان روزانه VIP',
-    fact: 'تهران ⇄ استانبول',
-    detail: 'حرکت همه‌روزه از پایانه آزادی و بیهقی',
   },
   {
     layer: 'cargo',
     href: '/services/cargo-customs-clearance',
     icon: Boxes,
-    title: 'کارگو و ترخیص رسمی',
-    fact: '۳ الی ۵ روز اکسپرس',
-    detail: 'بیمه‌نامه CMR و ترخیص گمرکات',
   },
   {
     layer: 'currency',
     href: '/services/currency-exchange-swift',
     icon: CircleDollarSign,
-    title: 'تسویه ارزی و سوئیفت',
-    fact: 'زیر ۳۰ دقیقه',
-    detail: 'واریز به بانک‌های ترکیه و اروپا',
   },
   {
     layer: 'offices',
     href: '/contact',
     icon: Building2,
-    title: 'دفاتر فیزیکی معتبر',
-    fact: 'استانبول، تهران، تبریز',
-    detail: 'پاسخگویی مستقیم ۲۴/۷',
   },
 ];
 
 const LABELS: {
-  id: string;
+  id: 'tehran' | 'tabriz' | 'bazargan' | 'istanbul' | 'europe';
   at: LonLat;
-  name: string;
-  note?: string;
   // Which side of the marker the label sits on, in stage terms.
   place: 'above' | 'below' | 'left' | 'right';
   delay: number;
@@ -60,11 +47,11 @@ const LABELS: {
   // Too crowded next to Bazargan on a small stage unless its layer is showing.
   compactOnlyWhenActive?: boolean;
 }[] = [
-  { id: 'tehran', at: CITIES.tehran, name: 'تهران', note: 'پایانه آزادی و گمرک غرب', place: 'below', delay: 0.1, layers: ['bus', 'cargo', 'currency', 'offices'] },
-  { id: 'tabriz', at: CITIES.tabriz, name: 'تبریز', place: 'below', delay: 0.8, layers: ['offices'], compactOnlyWhenActive: true },
-  { id: 'bazargan', at: CITIES.bazargan, name: 'مرز بازرگان', note: 'ترخیص رسمی و گیت مرزی', place: 'above', delay: 1.1, layers: ['bus', 'cargo'] },
-  { id: 'istanbul', at: CITIES.istanbul, name: 'استانبول', note: 'پایانه آکسارای و هالکالی', place: 'below', delay: 2.4, layers: ['bus', 'cargo', 'currency', 'offices'] },
-  { id: 'europe', at: CITIES.frankfurt, name: 'اروپا', note: 'کریدور شنگن', place: 'below', delay: 3.4, layers: ['cargo', 'currency'] },
+  { id: 'tehran', at: CITIES.tehran, place: 'below', delay: 0.1, layers: ['bus', 'cargo', 'currency', 'offices'] },
+  { id: 'tabriz', at: CITIES.tabriz, place: 'below', delay: 0.8, layers: ['offices'], compactOnlyWhenActive: true },
+  { id: 'bazargan', at: CITIES.bazargan, place: 'above', delay: 1.1, layers: ['bus', 'cargo'] },
+  { id: 'istanbul', at: CITIES.istanbul, place: 'below', delay: 2.4, layers: ['bus', 'cargo', 'currency', 'offices'] },
+  { id: 'europe', at: CITIES.frankfurt, place: 'below', delay: 3.4, layers: ['cargo', 'currency'] },
 ];
 
 const OPENING_MS = 5000;
@@ -76,6 +63,7 @@ const stagePosition = (at: LonLat) => {
 };
 
 export const Hero: React.FC = () => {
+  const { t: { home: { hero: t } }, path } = useI18n();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [hoverIndex, setHoverIndex] = useState<number | null>(null);
   const [paused, setPaused] = useState(false);
@@ -122,8 +110,8 @@ export const Hero: React.FC = () => {
                 className="hero-map-label"
                 style={{ ...stagePosition(label.at), '--label-delay': `${label.delay}s` } as React.CSSProperties}
               >
-                <span className="block text-[13px] lg:text-[15px] font-bold text-[#F7F7F3]">{label.name}</span>
-                {label.note && <span className="hidden xl:block text-[11px] text-[#A2B6BC]">{label.note}</span>}
+                <span className="block text-[13px] lg:text-[15px] font-bold text-[#F7F7F3]">{t.places[label.id].name}</span>
+                {t.places[label.id].note && <span className="hidden xl:block text-[11px] text-[#A2B6BC]">{t.places[label.id].note}</span>}
               </div>
             );
           })}
@@ -134,29 +122,30 @@ export const Hero: React.FC = () => {
       </div>
 
       <div className="order-1 lg:order-none relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12 lg:pt-16 pb-2 lg:pb-8 lg:flex-1">
-        <div className="max-w-[38rem] text-right">
+        {/* Sits over the empty north-east of the map in every language, clear of Europe's labels */}
+        <div className="max-w-[38rem] text-start lg:ltr:ml-auto">
           <h1 className="hero-title font-black text-[#F7F7F3] leading-[1.32]">
-            <span className="block">مرزها، پایان مسیر نیستند؛</span>
-            <span className="hero-line-second block text-[#E2C98C]">آغاز فرصت‌های تازه‌اند.</span>
+            <span className="block">{t.titleFirst}</span>
+            <span className="hero-line-second block text-[#E2C98C]">{t.titleSecond}</span>
           </h1>
 
           <p className="mt-4 lg:mt-6 max-w-[33rem] text-[15px] sm:text-lg leading-[1.95] text-[#B7C8CD]">
-            گیتی پیما، همراه مطمئن شما در مسیر خدمات بین‌المللی، تجارت، حمل‌ونقل و راهکارهای فرامرزی؛ از ایران تا ترکیه، اروپا و فراتر از آن.
+            {t.lead}
           </p>
 
           <div className="mt-6 lg:mt-8 flex flex-wrap items-center gap-3">
             <Link
-              href="/services"
+              href={path('/services')}
               className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3.5 rounded-lg bg-[#12B8B0] hover:bg-[#3ED0C8] text-[#07191F] font-extrabold text-sm sm:text-[15px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E2C98C]"
             >
-              <span>مشاهده ۱۱ خدمت فرامرزی</span>
-              <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+              <span>{t.allServices}</span>
+              <ArrowLeft className={`w-4 h-4 transition-transform rtl:group-hover:-translate-x-1 ltr:group-hover:translate-x-1 ${FORWARD}`} />
             </Link>
             <Link
-              href="/consultation"
+              href={path('/consultation')}
               className="w-full sm:w-auto inline-flex items-center justify-center px-5 sm:px-6 py-3.5 rounded-lg text-[#E2C98C] border border-[#C6A15B]/50 hover:border-[#E2C98C] hover:bg-[#C6A15B]/10 font-bold text-sm sm:text-[15px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E2C98C]"
             >
-              درخواست مشاوره ۲۴ ساعته
+              {t.consultation}
             </Link>
           </div>
         </div>
@@ -171,7 +160,7 @@ export const Hero: React.FC = () => {
               if (still) setStill(false);
               else setPaused((value) => !value);
             }}
-            aria-label={paused || still ? 'پخش انیمیشن نقشه' : 'توقف انیمیشن نقشه'}
+            aria-label={paused || still ? t.playMap : t.pauseMap}
             className="inline-flex items-center justify-center w-9 h-9 rounded-full text-[#A2B6BC] hover:text-white border border-white/15 hover:border-white/40 bg-[#07191F]/70 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E2C98C]"
           >
             {paused || still ? <Play className="w-3.5 h-3.5" /> : <Pause className="w-3.5 h-3.5" />}
@@ -183,7 +172,7 @@ export const Hero: React.FC = () => {
             const Icon = service.icon;
             const isActive = shownIndex === index;
             return (
-              <li key={service.layer} className="relative border-b lg:border-b-0 border-white/10 odd:border-l lg:border-l lg:last:border-l-0 border-l-white/10">
+              <li key={service.layer} className="relative border-b lg:border-b-0 border-white/10 odd:border-e lg:border-e lg:last:border-e-0 border-e-white/10">
                 {/* Shows how long this service stays on the map before the next one */}
                 {isActive && (
                   <span
@@ -194,19 +183,19 @@ export const Hero: React.FC = () => {
                   />
                 )}
                 <Link
-                  href={service.href}
+                  href={path(service.href)}
                   onMouseEnter={() => setHoverIndex(index)}
                   onMouseLeave={() => setHoverIndex(null)}
                   onFocus={() => setHoverIndex(index)}
                   onBlur={() => setHoverIndex(null)}
-                  className="block h-full px-3 sm:px-5 py-3.5 lg:py-4 text-right transition-colors hover:bg-white/[0.03] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[#E2C98C]"
+                  className="block h-full px-3 sm:px-5 py-3.5 lg:py-4 text-start transition-colors hover:bg-white/[0.03] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[#E2C98C]"
                 >
                   <span className={`flex items-center gap-1.5 text-xs font-bold transition-colors ${isActive ? 'text-[#E2C98C]' : 'text-[#7FA2AA]'}`}>
                     <Icon className="w-3.5 h-3.5 shrink-0" />
-                    <span>{service.title}</span>
+                    <span>{t.services[service.layer].title}</span>
                   </span>
-                  <span className="block mt-1 text-sm sm:text-base font-extrabold text-white">{service.fact}</span>
-                  <span className="hidden sm:block mt-0.5 text-xs text-[#8FA5AB]">{service.detail}</span>
+                  <span className="block mt-1 text-sm sm:text-base font-extrabold text-white">{t.services[service.layer].fact}</span>
+                  <span className="hidden sm:block mt-0.5 text-xs text-[#8FA5AB]">{t.services[service.layer].detail}</span>
                 </Link>
               </li>
             );

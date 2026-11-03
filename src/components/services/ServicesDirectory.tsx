@@ -5,25 +5,27 @@ import { ServiceCategoryItem, ServiceItem } from '../../types';
 import { ServiceImage } from '../ui/ServiceImage';
 import { Search, Filter, ArrowLeft, ArrowUpRight, CheckCircle2, Sparkles } from 'lucide-react';
 import { useNavigate } from '../../hooks/useNavigate';
+import { useI18n } from '../../i18n/I18nProvider';
 
 export const ServicesDirectory: React.FC<{ services: ServiceItem[]; categories: ServiceCategoryItem[] }> = ({ services, categories: serviceCategories }) => {
   const onNavigate = useNavigate();
+  const { t: { services: { directory: t } }, num, fill, intl } = useI18n();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
   const categories: { key: string; label: string }[] = [
-    { key: 'all', label: `همه خدمات (${services.length.toLocaleString('fa-IR')})` },
+    { key: 'all', label: fill(t.all, { count: num(services.length) }) },
     ...serviceCategories.map((category) => ({ key: category.slug, label: category.title })),
   ];
 
   const filteredServices = services.filter((service) => {
     const matchesCategory = selectedCategory === 'all' || service.category === selectedCategory;
-    const query = searchQuery.trim().toLowerCase();
+    const query = searchQuery.trim().toLocaleLowerCase(intl);
     const matchesSearch =
       !query ||
-      service.title.toLowerCase().includes(query) ||
-      service.summary.toLowerCase().includes(query) ||
-      service.description.toLowerCase().includes(query);
+      service.title.toLocaleLowerCase(intl).includes(query) ||
+      service.summary.toLocaleLowerCase(intl).includes(query) ||
+      service.description.toLocaleLowerCase(intl).includes(query);
     return matchesCategory && matchesSearch;
   });
 
@@ -31,39 +33,39 @@ export const ServicesDirectory: React.FC<{ services: ServiceItem[]; categories: 
     <div className="min-h-screen bg-[#07191F] text-[#F7F7F3] pt-8 pb-24">
       {/* Services Directory Hero */}
       <div className="relative py-16 bg-gradient-to-b from-[#051115] to-[#07191F] border-b border-white/5 overflow-hidden">
-        <div className="absolute top-0 right-1/3 w-96 h-96 bg-[#12B8B0]/10 rounded-full blur-[140px] pointer-events-none"></div>
+        <div className="absolute top-0 start-1/3 w-96 h-96 bg-[#12B8B0]/10 rounded-full blur-[140px] pointer-events-none"></div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-4">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#12B8B0]/15 border border-[#12B8B0]/30 text-[#12B8B0] text-xs font-bold">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>فهرست جامع خدمات نمایندگی گیتی پیما</span>
+            <span>{t.eyebrow}</span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-black text-[#F7F7F3] tracking-tight">
-            خدمات یکپارچه بین‌المللی
+            {t.title}
           </h1>
 
           <p className="text-sm sm:text-base text-[#A2B6BC] max-w-2xl mx-auto leading-relaxed">
-            از سفر VIP جاده‌ای تهران به استانبول و کارگو گمرکی تا خدمات ارزی، حقوقی، اقامتی و تشریفات فرامرزی در ترکیه و اروپا.
+            {t.intro}
           </p>
 
           {/* Search bar */}
           <div className="pt-4 max-w-md mx-auto">
             <div className="relative">
-              <Search className="w-4 h-4 text-[#718085] absolute right-3.5 top-1/2 -translate-y-1/2" />
+              <Search className="w-4 h-4 text-[#718085] absolute start-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="جستجو در عناوین و موضوعات خدمات..."
-                className="w-full pr-10 pl-4 py-3 rounded-full bg-[#0C252B] border border-[#12B8B0]/30 text-white text-xs sm:text-sm focus:outline-none focus:border-[#E2C98C] placeholder-[#718085]"
+                placeholder={t.searchPlaceholder}
+                className="w-full ps-10 pe-4 py-3 rounded-full bg-[#0C252B] border border-[#12B8B0]/30 text-white text-xs sm:text-sm focus:outline-none focus:border-[#E2C98C] placeholder-[#718085]"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-[#718085] hover:text-white"
+                  className="absolute end-3 top-1/2 -translate-y-1/2 text-xs text-[#718085] hover:text-white"
                 >
-                  پاک کردن
+                  {t.clear}
                 </button>
               )}
             </div>
@@ -91,8 +93,8 @@ export const ServicesDirectory: React.FC<{ services: ServiceItem[]; categories: 
 
         {/* Results Counter */}
         <div className="py-4 text-xs text-[#718085] flex items-center justify-between">
-          <span>نمایش {filteredServices.length} خدمت فعال</span>
-          {searchQuery && <span>نتایج فیلتر شده بر اساس: «{searchQuery}»</span>}
+          <span>{fill(t.showing, { count: num(filteredServices.length) })}</span>
+          {searchQuery && <span>{fill(t.filteredBy, { query: searchQuery })}</span>}
         </div>
 
         {/* Services Cards Grid */}
@@ -115,14 +117,14 @@ export const ServicesDirectory: React.FC<{ services: ServiceItem[]; categories: 
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0C252B] via-transparent to-black/40"></div>
 
                 {service.badge && (
-                  <div className="absolute top-3 right-3">
+                  <div className="absolute top-3 start-3">
                     <span className="px-3 py-1 rounded-full bg-[#12B8B0] text-[#07191F] text-[11px] font-black shadow-md">
                       {service.badge}
                     </span>
                   </div>
                 )}
 
-                <div className="absolute bottom-3 right-3">
+                <div className="absolute bottom-3 start-3">
                   <span className="text-[11px] font-medium text-white/90 bg-black/60 px-2.5 py-0.5 rounded backdrop-blur-sm">
                     {service.categoryLabel}
                   </span>
@@ -150,7 +152,7 @@ export const ServicesDirectory: React.FC<{ services: ServiceItem[]; categories: 
                 </div>
 
                 <div className="pt-4 border-t border-white/10 flex items-center justify-between text-xs font-bold text-[#12B8B0]">
-                  <span>مشاهده جزئیات کامل و مدارک</span>
+                  <span>{t.details}</span>
                   <div className="w-7 h-7 rounded-full bg-[#12B8B0]/10 flex items-center justify-center group-hover:bg-[#12B8B0] group-hover:text-[#07191F] transition-colors">
                     <ArrowUpRight className="w-4 h-4" />
                   </div>
@@ -162,7 +164,7 @@ export const ServicesDirectory: React.FC<{ services: ServiceItem[]; categories: 
 
         {filteredServices.length === 0 && (
           <div className="text-center py-16 bg-[#0C252B] rounded-2xl border border-white/5 my-8 space-y-3">
-            <p className="text-base text-[#A2B6BC]">هیچ خدمتی منطبق بر جستجوی شما یافت نشد.</p>
+            <p className="text-base text-[#A2B6BC]">{t.empty}</p>
             <button
               onClick={() => {
                 setSelectedCategory('all');
@@ -170,7 +172,7 @@ export const ServicesDirectory: React.FC<{ services: ServiceItem[]; categories: 
               }}
               className="px-4 py-2 rounded-full bg-[#12B8B0] text-[#07191F] text-xs font-bold"
             >
-              مشاهده تمامی خدمات
+              {t.showAll}
             </button>
           </div>
         )}

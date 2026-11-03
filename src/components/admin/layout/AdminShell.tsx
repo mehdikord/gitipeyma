@@ -96,7 +96,7 @@ export const AdminShell: React.FC<{ admin: { name: string; phone: string }; badg
           <Menu className="h-5 w-5" />
         </button>
 
-        <a href="/" target="_blank" rel="noreferrer" className={`inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-[13px] font-bold text-[#0B7A75] hover:bg-[#E6F4F3] ${FOCUS}`}>
+        <a href="/fa" target="_blank" rel="noreferrer" className={`inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-[13px] font-bold text-[#0B7A75] hover:bg-[#E6F4F3] ${FOCUS}`}>
           <ExternalLink className="h-4 w-4" />
           <span>مشاهده سایت</span>
         </a>

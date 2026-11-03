@@ -14,6 +14,8 @@ type ModalProps = {
   size?: keyof typeof SIZES;
   children: React.ReactNode;
   footer?: React.ReactNode;
+  // Stays under the header while the body scrolls, e.g. the language switcher of a form.
+  toolbar?: React.ReactNode;
   // Wrap the body and footer in a form, so Enter submits it.
   onSubmit?: (event: React.FormEvent) => void;
 };
@@ -22,7 +24,7 @@ type ModalProps = {
  * A native <dialog>: the browser keeps focus inside it, closes it on Escape and puts it above
  * everything else. The body scrolls; the header and footer stay put.
  */
-export const Modal: React.FC<ModalProps> = ({ open, onClose, title, description, size = 'md', children, footer, onSubmit }) => {
+export const Modal: React.FC<ModalProps> = ({ open, onClose, title, description, size = 'md', children, footer, toolbar, onSubmit }) => {
   const ref = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
@@ -63,6 +65,7 @@ export const Modal: React.FC<ModalProps> = ({ open, onClose, title, description,
               <X className="w-5 h-5" />
             </button>
           </div>
+          {toolbar}
           {onSubmit ? (
             <form onSubmit={onSubmit} noValidate className="flex min-h-0 flex-1 flex-col">
               {content}

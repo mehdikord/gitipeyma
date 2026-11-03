@@ -3,7 +3,7 @@
  *
  * The admin seeder only creates the admin when that phone number is missing, and each content seeder
  * only fills its tables while they are still empty, so running this again never overwrites what was
- * edited in the admin panel.
+ * edited in the admin panel. TranslationSeeder only fills languages that are still empty.
  */
 
 import 'dotenv/config';
@@ -16,6 +16,7 @@ import { serviceSeeder } from './seeders/serviceSeeder';
 import { testimonialSeeder } from './seeders/testimonialSeeder';
 import { companySeeder } from './seeders/companySeeder';
 import { currencySeeder } from './seeders/currencySeeder';
+import { translationSeeder } from './seeders/translationSeeder';
 
 export type Seeder = (db: PrismaClient) => Promise<void>;
 
@@ -26,6 +27,8 @@ const SEEDERS: [string, Seeder][] = [
   ['TestimonialSeeder', testimonialSeeder],
   ['CompanySeeder', companySeeder],
   ['CurrencySeeder', currencySeeder],
+  // Last: adds English and Turkish to rows still holding the starting Persian content
+  ['TranslationSeeder', translationSeeder],
 ];
 
 async function main() {

@@ -7,17 +7,19 @@ import { socialIcon } from '../../modules/socialLinks/icons';
 import { useSite } from '../site/SiteProvider';
 import { CITIES, LonLat, ROAD_PATH, STAGE, project } from '../home/hero/geo';
 import { telHref } from '../../utils/contact';
+import { useI18n } from '../../i18n/I18nProvider';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
 const FOCUS = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E2C98C]';
 const LINK = `inline-block py-1 text-[15px] text-[#B7C8CD] hover:text-white transition-colors rounded ${FOCUS}`;
 
 const PAGES = [
-  { href: '/', label: 'صفحه اصلی' },
-  { href: '/services', label: 'فهرست خدمات' },
-  { href: '/about', label: 'درباره گیتی پیما' },
-  { href: '/contact', label: 'ارتباط با ما' },
-  { href: '/consultation', label: 'درخواست مشاوره' },
-];
+  { href: '/', key: 'home' },
+  { href: '/services', key: 'services' },
+  { href: '/about', key: 'about' },
+  { href: '/contact', key: 'contact' },
+  { href: '/consultation', key: 'consultation' },
+] as const;
 
 // ---- The sky behind the footer: the brand map, drifting, with the corridor lit ----
 
@@ -58,6 +60,7 @@ export const Footer: React.FC = () => {
   }, []);
 
   const { settings, offices, socials, serviceLinks } = useSite();
+  const { t: { layout: { footer: t }, common: { brand } }, path, num, fill, locale, digits } = useI18n();
   const headOffice = offices[0];
 
   return (
@@ -68,20 +71,20 @@ export const Footer: React.FC = () => {
         <div className="grid grid-cols-2 lg:grid-cols-12 gap-x-6 sm:gap-x-8 gap-y-10 pb-12 border-b border-white/10">
           {/* Who we are */}
           <div className="col-span-2 lg:col-span-4">
-            <Link href="/" className={`inline-flex items-center gap-3 rounded ${FOCUS}`} aria-label="صفحه اصلی گیتی پیما">
+            <Link href={path('/')} className={`inline-flex items-center gap-3 rounded ${FOCUS}`} aria-label={t.homeAria}>
               <span className="w-11 h-11 rounded-xl bg-[#07191F] border border-[#E2C98C]/50 flex items-center justify-center font-['Plus_Jakarta_Sans',sans-serif] font-black text-lg text-[#E2C98C]">
                 G
               </span>
               <span>
-                <span className="block text-xl font-black text-[#F7F7F3]">گیتی پیما</span>
-                <span className="block text-xs text-[#A2B6BC]">نمایندگی رسمی و خدمات فرامرزی</span>
+                <span className="block text-xl font-black text-[#F7F7F3]">{brand}</span>
+                <span className="block text-xs text-[#A2B6BC]">{t.tagline}</span>
               </span>
             </Link>
 
             <p className="mt-5 max-w-sm text-[15px] leading-[1.95] text-[#B7C8CD]">
-              همراه شما در مسیر خدمات فرامرزی؛ سفر VIP، کارگو، امور ارزی، حقوقی، ثبت شرکت و اقامت میان ایران، ترکیه و اروپا.
+              {t.about}
             </p>
-            <p className="mt-4 text-sm font-bold text-[#E2C98C]">{settings.brand_tagline_fa}</p>
+            <p className="mt-4 text-sm font-bold text-[#E2C98C]">{settings.brand_tagline}</p>
 
             <ul className="mt-6 flex items-center gap-2">
               {socials.map((social) => {
@@ -103,32 +106,32 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          <nav aria-label="صفحات سایت" className="col-span-1 lg:col-span-2">
-            <h3 className="mb-3 text-sm font-extrabold text-[#F7F7F3]">صفحات</h3>
+          <nav aria-label={t.pagesAria} className="col-span-1 lg:col-span-2">
+            <h3 className="mb-3 text-sm font-extrabold text-[#F7F7F3]">{t.pages}</h3>
             <ul className="space-y-1.5">
               {PAGES.map((page) => (
                 <li key={page.href}>
-                  <Link href={page.href} className={LINK}>
-                    {page.label}
+                  <Link href={path(page.href)} className={LINK}>
+                    {t.nav[page.key]}
                   </Link>
                 </li>
               ))}
             </ul>
           </nav>
 
-          <nav aria-label="خدمات" className="col-span-1 lg:col-span-3">
-            <h3 className="mb-3 text-sm font-extrabold text-[#F7F7F3]">خدمات</h3>
+          <nav aria-label={t.services} className="col-span-1 lg:col-span-3">
+            <h3 className="mb-3 text-sm font-extrabold text-[#F7F7F3]">{t.services}</h3>
             <ul className="space-y-1.5">
               {serviceLinks.slice(0, 6).map((service) => (
                 <li key={service.slug}>
-                  <Link href={`/services/${service.slug}`} className={LINK}>
+                  <Link href={path(`/services/${service.slug}`)} className={LINK}>
                     {service.shortTitle}
                   </Link>
                 </li>
               ))}
               <li>
-                <Link href="/services" className={`inline-block py-1 text-[15px] font-bold text-[#E2C98C] hover:text-white transition-colors rounded ${FOCUS}`}>
-                  همه {serviceLinks.length.toLocaleString('fa-IR')} خدمت
+                <Link href={path('/services')} className={`inline-block py-1 text-[15px] font-bold text-[#E2C98C] hover:text-white transition-colors rounded ${FOCUS}`}>
+                  {fill(t.allServices, { count: num(serviceLinks.length) })}
                 </Link>
               </li>
             </ul>
@@ -136,13 +139,13 @@ export const Footer: React.FC = () => {
 
           {/* Where to reach us: the line that never closes first, then each office */}
           <div className="col-span-2 lg:col-span-3">
-            <h3 className="mb-3 text-sm font-extrabold text-[#F7F7F3]">تماس با ما</h3>
+            <h3 className="mb-3 text-sm font-extrabold text-[#F7F7F3]">{t.contact}</h3>
             <a href={telHref(settings.support_phone)} className={`group block py-1 rounded ${FOCUS}`}>
               <span className="flex items-center gap-2 text-sm text-[#E2C98C]">
                 <PhoneCall className="w-4 h-4" />
-                <span>پشتیبانی شبانه‌روزی</span>
+                <span>{t.support}</span>
               </span>
-              <span dir="ltr" className="block mt-0.5 text-lg font-extrabold text-[#F7F7F3] group-hover:text-white text-right">
+              <span dir="ltr" className="block mt-0.5 text-lg font-extrabold text-[#F7F7F3] group-hover:text-white rtl:text-right">
                 {settings.support_phone}
               </span>
             </a>
@@ -152,12 +155,16 @@ export const Footer: React.FC = () => {
                   <span className="block text-sm font-bold text-[#F7F7F3]">{office.name}</span>
                   {office.phones[0] && (
                     <a dir="ltr" href={telHref(office.phones[0])} className={`inline-block mt-0.5 text-[15px] text-[#B7C8CD] hover:text-white transition-colors rounded ${FOCUS}`}>
-                      {office.phones[0]}
+                      {locale === 'fa' ? office.phones[0] : digits(office.phones[0])}
                     </a>
                   )}
                 </li>
               ))}
             </ul>
+            <div className="mt-5 max-w-60">
+              <h4 className="mb-2 text-xs font-bold text-[#8FA5AB]">{t.language}</h4>
+              <LanguageSwitcher variant="list" />
+            </div>
             {headOffice?.email && (
               <a href={`mailto:${headOffice.email}`} className={`mt-4 inline-flex items-center gap-2 py-1 text-[15px] text-[#B7C8CD] hover:text-white transition-colors rounded ${FOCUS}`}>
                 <Mail className="w-4 h-4 text-[#12B8B0]" />
@@ -169,9 +176,9 @@ export const Footer: React.FC = () => {
 
         <div className="pt-6 flex flex-col md:flex-row md:items-center justify-between gap-3 text-[13px] leading-relaxed text-[#8FA5AB]">
           <p>
-            © <span ref={yearRef} suppressHydrationWarning>{new Date().getFullYear()}</span> نمایندگی رسمی گیتی پیما. تمامی حقوق محفوظ است.
+            © <span ref={yearRef} suppressHydrationWarning>{new Date().getFullYear()}</span> {t.rights}
           </p>
-          <p>کلیه خدمات در چارچوب ضوابط قانونی و استانداردهای ترانزیت بین‌المللی ارائه می‌شود.</p>
+          <p>{t.legal}</p>
         </div>
       </div>
     </footer>

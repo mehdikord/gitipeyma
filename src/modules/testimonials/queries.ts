@@ -3,26 +3,28 @@ import { db } from '../../lib/db';
 import { requireAdmin } from '../../lib/auth/currentAdmin';
 import { pageArgs, paginated, param } from '../../lib/pagination';
 import type { Prisma, TestimonialSource } from '../../generated/prisma/client';
+import { asTranslated, fa, Translated } from '../../i18n/translated';
+import { textSearch } from '../../lib/search';
 
 export type TestimonialRow = {
   id: number;
   serviceCategoryId: number | null;
   categoryTitle: string | null;
-  clientName: string;
-  serviceTitle: string;
-  context: string | null;
-  comment: string;
-  year: string | null;
+  clientName: Translated;
+  serviceTitle: Translated;
+  context: Translated;
+  comment: Translated;
+  year: Translated;
   rating: number;
-  categoryLabel: string | null;
-  verifiedCode: string | null;
-  outcomeHeadline: string | null;
-  originDestination: string | null;
+  categoryLabel: Translated;
+  verifiedCode: Translated;
+  outcomeHeadline: Translated;
+  originDestination: Translated;
   trackingCode: string | null;
   source: TestimonialSource;
   isPublished: boolean;
   sortOrder: number;
-  milestones: { title: string; description: string | null }[];
+  milestones: { title: Translated; description: Translated }[];
   createdAt: string;
 };
 
@@ -34,7 +36,7 @@ export async function listTestimonials(params: Record<string, string | string[] 
   const where: Prisma.TestimonialWhereInput = {
     isPublished: state === 'published' ? true : state === 'pending' ? false : undefined,
     source: state === 'pending' ? 'visitor' : undefined,
-    OR: q ? [{ clientName: { contains: q } }, { comment: { contains: q } }, { serviceTitle: { contains: q } }] : undefined,
+    OR: q ? [...textSearch('clientName', q), ...textSearch('comment', q), ...textSearch('serviceTitle', q)] : undefined,
   };
   const [rows, total] = await Promise.all([
     db.testimonial.findMany({
@@ -53,22 +55,22 @@ export async function listTestimonials(params: Record<string, string | string[] 
       (row): TestimonialRow => ({
         id: Number(row.id),
         serviceCategoryId: row.serviceCategoryId === null ? null : Number(row.serviceCategoryId),
-        categoryTitle: row.category?.title ?? null,
-        clientName: row.clientName,
-        serviceTitle: row.serviceTitle,
-        context: row.context,
-        comment: row.comment,
-        year: row.year,
+        categoryTitle: row.category ? fa(row.category.title) : null,
+        clientName: asTranslated(row.clientName),
+        serviceTitle: asTranslated(row.serviceTitle),
+        context: asTranslated(row.context),
+        comment: asTranslated(row.comment),
+        year: asTranslated(row.year),
         rating: row.rating,
-        categoryLabel: row.categoryLabel,
-        verifiedCode: row.verifiedCode,
-        outcomeHeadline: row.outcomeHeadline,
-        originDestination: row.originDestination,
+        categoryLabel: asTranslated(row.categoryLabel),
+        verifiedCode: asTranslated(row.verifiedCode),
+        outcomeHeadline: asTranslated(row.outcomeHeadline),
+        originDestination: asTranslated(row.originDestination),
         trackingCode: row.trackingCode,
         source: row.source,
         isPublished: row.isPublished,
         sortOrder: row.sortOrder,
-        milestones: row.milestones.map((milestone) => ({ title: milestone.title, description: milestone.description })),
+        milestones: row.milestones.map((milestone) => ({ title: asTranslated(milestone.title), description: asTranslated(milestone.description) })),
         createdAt: row.createdAt.toISOString(),
       }),
     ),

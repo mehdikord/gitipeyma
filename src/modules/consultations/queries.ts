@@ -3,6 +3,7 @@ import { db } from '../../lib/db';
 import { requireAdmin } from '../../lib/auth/currentAdmin';
 import { pageArgs, paginated, param } from '../../lib/pagination';
 import { personSearch, statusFilter } from '../serviceRequests/queries';
+import { fa } from '../../i18n/translated';
 import type { Prisma, RequestStatus } from '../../generated/prisma/client';
 
 export type ConsultationRow = {
@@ -45,7 +46,7 @@ export async function listConsultations(params: Record<string, string | string[]
     callTime: row.callTime,
     status: row.status,
     adminNote: row.adminNote,
-    service: row.service ? { id: Number(row.service.id), title: row.service.shortTitle } : null,
+    service: row.service ? { id: Number(row.service.id), title: fa(row.service.shortTitle) } : null,
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),
   });

@@ -5,10 +5,15 @@ import { PhoneCall, Menu, X, ArrowUpRight, ShieldCheck, ChevronDown, Compass } f
 import { useSite } from '../site/SiteProvider';
 import { usePathname, useRouter } from 'next/navigation';
 import { useNavigate } from '../../hooks/useNavigate';
+import { useI18n } from '../../i18n/I18nProvider';
+import { stripLocale } from '../../i18n/config';
+import { LanguageSwitcher } from './LanguageSwitcher';
 
 export const Header: React.FC = () => {
-  const currentPath = usePathname();
+  // Without the language, so it compares with the nav paths
+  const currentPath = stripLocale(usePathname());
   const router = useRouter();
+  const { t: { layout: { header: t }, common: { brand } }, path, locale } = useI18n();
   const onNavigate = useNavigate();
   const supportPhone = useSite().settings.support_phone;
   const [isScrolled, setIsScrolled] = useState(false);
@@ -23,16 +28,17 @@ export const Header: React.FC = () => {
   }, []);
 
   const navLinks = [
-    { label: 'صفحه اصلی', path: '/' },
-    { label: 'فهرست خدمات', path: '/services' },
-    { label: 'درباره گیتی پیما', path: '/about' },
-    { label: 'ارتباط با ما', path: '/contact' },
+    { label: t.nav.home, path: '/' },
+    { label: t.nav.services, path: '/services' },
+    { label: t.nav.about, path: '/about' },
+    { label: t.nav.contact, path: '/contact' },
   ];
 
   // Keep page switches instant, as they were with client-side routing
   useEffect(() => {
-    [...navLinks.map((link) => link.path), '/consultation'].forEach((path) => router.prefetch(path));
-  }, [router]);
+    [...navLinks.map((link) => link.path), '/consultation'].forEach((to) => router.prefetch(path(to)));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router, locale]);
 
   const handleNavClick = (path: string) => {
     onNavigate(path);
@@ -46,9 +52,9 @@ export const Header: React.FC = () => {
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <span className="inline-block w-2 h-2 rounded-full bg-[#12B8B0] animate-pulse"></span>
-            <span className="text-[#E2C98C] font-medium">تنها نمایندگی رسمی شرکت بین‌المللی گیتی پیما در ترکیه</span>
+            <span className="text-[#E2C98C] font-medium">{t.officialAgent}</span>
             <span className="hidden sm:inline text-[#718085]">|</span>
-            <span className="hidden md:inline text-[#F7F7F3]/80">سرویس‌های VIP روزانه تهران ⇄ استانبول</span>
+            <span className="hidden md:inline text-[#F7F7F3]/80">{t.dailyVip}</span>
           </div>
 
           <div className="flex items-center gap-4 text-[11px]">
@@ -61,7 +67,7 @@ export const Header: React.FC = () => {
               <span className="font-mono">{supportPhone}</span>
             </a>
             <span className="hidden sm:inline bg-[#12B8B0]/20 text-[#12B8B0] px-2 py-0.5 rounded font-mono">
-              24/7 SUPPORT
+              {t.support247}
             </span>
           </div>
         </div>
@@ -79,8 +85,8 @@ export const Header: React.FC = () => {
           {/* Logo & Brand Identity */}
           <button
             onClick={() => handleNavClick('/')}
-            className="flex items-center gap-3 text-right group focus:outline-none"
-            aria-label="صفحه اصلی گیتی پیما"
+            className="flex items-center gap-3 text-start group focus:outline-none"
+            aria-label={t.homeAria}
           >
             {/* Visual Logo Emblem */}
             <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-[#12B8B0] via-[#087F7B] to-[#052B29] p-0.5 shadow-lg shadow-[#12B8B0]/20 flex items-center justify-center transform group-hover:scale-105 transition-transform">
@@ -94,14 +100,14 @@ export const Header: React.FC = () => {
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-xl sm:text-2xl font-black text-[#F7F7F3] tracking-tight">
-                  گیتی پیما
+                  {brand}
                 </span>
                 <span className="font-['Plus_Jakarta_Sans',sans-serif] text-xs font-extrabold tracking-widest text-[#12B8B0] bg-[#12B8B0]/10 px-1.5 py-0.5 rounded border border-[#12B8B0]/30">
                   GITI
                 </span>
               </div>
               <p className="text-[10px] text-[#A2B6BC] font-medium tracking-wide">
-                نمایندگی رسمی و خدمات فرامرزی
+                {t.tagline}
               </p>
             </div>
           </button>
@@ -128,11 +134,12 @@ export const Header: React.FC = () => {
 
           {/* Actions & Primary Consultation Button */}
           <div className="hidden sm:flex items-center gap-3">
+            <LanguageSwitcher />
             <button
               onClick={() => handleNavClick('/consultation')}
               className="relative group overflow-hidden px-5 py-2.5 rounded-full bg-gradient-to-r from-[#C6A15B] via-[#E2C98C] to-[#C6A15B] text-[#07191F] font-bold text-sm shadow-lg shadow-[#C6A15B]/20 hover:shadow-[#C6A15B]/40 transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center gap-2"
             >
-              <span>درخواست مشاوره</span>
+              <span>{t.consultation}</span>
               <ArrowUpRight className="w-4 h-4 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
             </button>
           </div>
@@ -143,12 +150,12 @@ export const Header: React.FC = () => {
               onClick={() => handleNavClick('/consultation')}
               className="sm:hidden px-3 py-1.5 rounded-full bg-[#C6A15B] text-[#07191F] text-xs font-bold"
             >
-              مشاوره
+              {t.consultationShort}
             </button>
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="p-2 rounded-xl bg-[#0C252B] border border-[#12B8B0]/30 text-[#F7F7F3] hover:text-[#12B8B0] transition-colors"
-              aria-label={isMobileMenuOpen ? 'بستن منو' : 'باز کردن منو'}
+              aria-label={isMobileMenuOpen ? t.closeMenu : t.openMenu}
             >
               {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -164,7 +171,7 @@ export const Header: React.FC = () => {
                 <button
                   key={link.path}
                   onClick={() => handleNavClick(link.path)}
-                  className={`w-full text-right px-4 py-3 rounded-xl text-base font-medium transition-colors ${
+                  className={`w-full text-start px-4 py-3 rounded-xl text-base font-medium transition-colors ${
                     isActive
                       ? 'bg-[#12B8B0] text-[#07191F] font-bold'
                       : 'text-[#F7F7F3] hover:bg-[#0C252B]'
@@ -175,12 +182,13 @@ export const Header: React.FC = () => {
               );
             })}
 
-            <div className="pt-3 border-t border-white/10">
+            <div className="pt-3 border-t border-white/10 space-y-3">
+              <LanguageSwitcher variant="list" />
               <button
                 onClick={() => handleNavClick('/consultation')}
                 className="w-full py-3 rounded-xl bg-gradient-to-r from-[#C6A15B] to-[#E2C98C] text-[#07191F] font-bold text-center block shadow-lg shadow-[#C6A15B]/30"
               >
-                درخواست مشاوره اختصاصی
+                {t.consultationFull}
               </button>
             </div>
           </div>

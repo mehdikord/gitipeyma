@@ -1,15 +1,20 @@
 import { z } from 'zod';
-import { optionalText, personName, visitorPhone } from '../../lib/validation';
+import { personName, visitorPhone } from '../../lib/validation';
+import type { Locale } from '../../i18n/config';
+import { SITE_MESSAGES } from '../site/messages';
 
-export const contactMessageSubmitSchema = z.object({
-  topic: optionalText('موضوع'),
-  name: personName,
-  phone: visitorPhone,
-  message: z
-    .string({ error: 'لطفاً متن پیام خود را بنویسید.' })
-    .trim()
-    .min(10, { error: 'متن پیام باید حداقل ۱۰ کاراکتر باشد.' })
-    .max(3000, { error: 'متن پیام حداکثر ۳٬۰۰۰ کاراکتر است.' }),
-});
+export const contactMessageSubmitSchema = (locale: Locale = 'fa') => {
+  const messages = SITE_MESSAGES[locale];
+  return z.object({
+    topic: z.string().trim().max(255, { error: messages.topicLong }).nullish().transform((value) => value || null),
+    name: personName(locale),
+    phone: visitorPhone(locale),
+    message: z
+      .string({ error: messages.messageMissing })
+      .trim()
+      .min(10, { error: messages.messageShort })
+      .max(3000, { error: messages.messageLong }),
+  });
+};
 
-export type ContactMessageSubmitInput = z.input<typeof contactMessageSubmitSchema>;
+export type ContactMessageSubmitInput = z.input<ReturnType<typeof contactMessageSubmitSchema>>;

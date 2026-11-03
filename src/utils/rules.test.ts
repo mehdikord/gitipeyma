@@ -45,7 +45,7 @@ test('validateMessage respects isRequired flag', () => {
 
 test('calculateCurrencyConversion calculates accurate transfer estimates', () => {
   // Convert 26,000,000 Tomans to TRY (rate 2600)
-  const rates = rateTable([{ code: 'TRY', nameFa: 'لیر ترکیه', symbol: '₺', rateToToman: 2600, flag: '' }]);
+  const rates = rateTable([{ code: 'TRY', name: 'لیر ترکیه', symbol: '₺', rateToToman: 2600, flag: '' }]);
   const result = calculateCurrencyConversion(26000000, 'TOMAN', 'TRY', rates);
   assert.notEqual(result, null);
   if (result) {
@@ -63,13 +63,13 @@ test('calculateCurrencyConversion calculates accurate transfer estimates', () =>
 });
 
 test('a service request is the same three fields for every service, stored with Latin digits', () => {
-  const parsed = serviceRequestSubmitSchema.safeParse({ serviceId: '3', name: ' علی احمدی ', phone: '۰۹۱۲ ۳۴۵ ۶۷۸۹', description: '   ' });
+  const parsed = serviceRequestSubmitSchema().safeParse({ serviceId: '3', name: ' علی احمدی ', phone: '۰۹۱۲ ۳۴۵ ۶۷۸۹', description: '   ' });
   assert.equal(parsed.success, true);
   if (parsed.success) {
     assert.deepEqual(parsed.data, { serviceId: 3, name: 'علی احمدی', phone: '09123456789', description: null });
   }
 
-  const invalid = serviceRequestSubmitSchema.safeParse({ serviceId: 0, name: 'ع', phone: '123', description: '' });
+  const invalid = serviceRequestSubmitSchema().safeParse({ serviceId: 0, name: 'ع', phone: '123', description: '' });
   assert.equal(invalid.success, false);
   if (!invalid.success) {
     assert.deepEqual(Object.keys(fieldErrors(invalid.error)).sort(), ['name', 'phone', 'serviceId']);
@@ -77,11 +77,11 @@ test('a service request is the same three fields for every service, stored with 
 });
 
 test('a consultation without a service is general guidance, and needs a known call time', () => {
-  const general = consultationSubmitSchema.safeParse({ serviceId: '', callTime: 'asap', name: 'سارا رضایی', phone: '+905321234567' });
+  const general = consultationSubmitSchema().safeParse({ serviceId: '', callTime: 'asap', name: 'سارا رضایی', phone: '+905321234567' });
   assert.equal(general.success, true);
   if (general.success) assert.equal(general.data.serviceId, null);
 
-  assert.equal(consultationSubmitSchema.safeParse({ serviceId: null, callTime: 'midnight', name: 'سارا رضایی', phone: '+905321234567' }).success, false);
+  assert.equal(consultationSubmitSchema().safeParse({ serviceId: null, callTime: 'midnight', name: 'سارا رضایی', phone: '+905321234567' }).success, false);
 });
 
 test('admin logins are Iranian mobile numbers, whatever digits they were typed in', () => {
@@ -100,4 +100,11 @@ test('officeStatus follows each office\'s local hours and closed days', () => {
   assert.equal(officeStatus(istanbul, new Date('2026-11-02T09:00:00Z')).isOpen, false); // Monday, closed
   assert.equal(officeStatus(istanbul, new Date('2026-11-01T20:00:00Z')).text, 'در روز کاری بعدی باز می‌شود'); // Sunday night, Monday closed
   assert.equal(officeStatus(istanbul, new Date('2026-11-03T03:00:00Z')).text, 'ساعت ۰۸:۰۰ باز می‌شود'); // Tuesday 06:00
+});
+
+test('officeStatus speaks the page\'s language', () => {
+  const istanbul = { schedule: { timeZone: 'Europe/Istanbul', openHour: 8, closeHour: 22, closedWeekdays: [1] } } as Office;
+  assert.equal(officeStatus(istanbul, new Date('2026-11-04T09:00:00Z'), 'en').text, 'Open until 22:00');
+  assert.equal(officeStatus(istanbul, new Date('2026-11-03T03:00:00Z'), 'tr').text, '08:00 itibarıyla açık');
+  assert.equal(officeStatus(istanbul, new Date('2026-11-02T09:00:00Z'), 'en').text, 'Closed today; opens tomorrow at 08:00');
 });

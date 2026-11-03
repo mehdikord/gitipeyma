@@ -3,32 +3,34 @@ import { db } from '../../lib/db';
 import { requireAdmin } from '../../lib/auth/currentAdmin';
 import { param } from '../../lib/pagination';
 import type { Prisma } from '../../generated/prisma/client';
+import { asTranslated, fa, Translated } from '../../i18n/translated';
+import { textSearch } from '../../lib/search';
 
 const ordered = [{ sortOrder: 'asc' as const }, { id: 'asc' as const }];
 
 export type ServiceAdminRow = {
   id: number;
-  title: string;
-  shortTitle: string;
+  title: Translated;
+  shortTitle: Translated;
   slug: string;
   serviceCategoryId: number;
   serviceGroupId: number | null;
   categoryTitle: string;
   groupTitle: string | null;
-  categoryLabel: string | null;
-  eyebrow: string | null;
-  badge: string | null;
+  categoryLabel: Translated;
+  eyebrow: Translated;
+  badge: Translated;
   icon: string | null;
   image: string | null;
-  summary: string;
-  description: string;
-  content: string | null;
+  summary: Translated;
+  description: Translated;
+  content: Translated;
   isActive: boolean;
   isHighlighted: boolean;
   sortOrder: number;
-  features: { title: string }[];
-  steps: { title: string; description: string }[];
-  faqs: { question: string; answer: string }[];
+  features: { title: Translated }[];
+  steps: { title: Translated; description: Translated }[];
+  faqs: { question: Translated; answer: Translated }[];
   requestCount: number;
   pendingCount: number;
 };
@@ -41,7 +43,7 @@ export async function listServicesForAdmin(params: Record<string, string | strin
   const where: Prisma.ServiceWhereInput = {
     serviceCategoryId: category > 0 ? category : undefined,
     isActive: state === 'active' ? true : state === 'inactive' ? false : undefined,
-    OR: q ? [{ title: { contains: q } }, { shortTitle: { contains: q } }, { slug: { contains: q } }] : undefined,
+    OR: q ? [...textSearch('title', q), ...textSearch('shortTitle', q), { slug: { contains: q } }] : undefined,
   };
 
   const [services, pending] = await Promise.all([
@@ -63,27 +65,27 @@ export async function listServicesForAdmin(params: Record<string, string | strin
 
   return services.map((service) => ({
     id: Number(service.id),
-    title: service.title,
-    shortTitle: service.shortTitle,
+    title: asTranslated(service.title),
+    shortTitle: asTranslated(service.shortTitle),
     slug: service.slug,
     serviceCategoryId: Number(service.serviceCategoryId),
     serviceGroupId: service.serviceGroupId === null ? null : Number(service.serviceGroupId),
-    categoryTitle: service.category.title,
-    groupTitle: service.group?.title ?? null,
-    categoryLabel: service.categoryLabel,
-    eyebrow: service.eyebrow,
-    badge: service.badge,
+    categoryTitle: fa(service.category.title),
+    groupTitle: service.group ? fa(service.group.title) : null,
+    categoryLabel: asTranslated(service.categoryLabel),
+    eyebrow: asTranslated(service.eyebrow),
+    badge: asTranslated(service.badge),
     icon: service.icon,
     image: service.image,
-    summary: service.summary,
-    description: service.description,
-    content: service.content,
+    summary: asTranslated(service.summary),
+    description: asTranslated(service.description),
+    content: asTranslated(service.content),
     isActive: service.isActive,
     isHighlighted: service.isHighlighted,
     sortOrder: service.sortOrder,
-    features: service.features.map((feature) => ({ title: feature.title })),
-    steps: service.steps.map((step) => ({ title: step.title, description: step.description })),
-    faqs: service.faqs.map((faq) => ({ question: faq.question, answer: faq.answer })),
+    features: service.features.map((feature) => ({ title: asTranslated(feature.title) })),
+    steps: service.steps.map((step) => ({ title: asTranslated(step.title), description: asTranslated(step.description) })),
+    faqs: service.faqs.map((faq) => ({ question: asTranslated(faq.question), answer: asTranslated(faq.answer) })),
     requestCount: service._count.requests,
     pendingCount: pendingBy.get(Number(service.id)) ?? 0,
   }));
@@ -92,11 +94,11 @@ export async function listServicesForAdmin(params: Record<string, string | strin
 export async function categoryOptions() {
   await requireAdmin();
   const categories = await db.serviceCategory.findMany({ orderBy: ordered, select: { id: true, title: true } });
-  return categories.map((category) => ({ value: String(category.id), label: category.title }));
+  return categories.map((category) => ({ value: String(category.id), label: fa(category.title) }));
 }
 
 export async function groupOptions() {
   await requireAdmin();
   const groups = await db.serviceGroup.findMany({ orderBy: ordered, select: { id: true, title: true } });
-  return groups.map((group) => ({ value: String(group.id), label: group.title }));
+  return groups.map((group) => ({ value: String(group.id), label: fa(group.title) }));
 }
