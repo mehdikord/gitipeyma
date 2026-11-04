@@ -5,15 +5,17 @@
  * connects with the raw driver first, which names the cause (connection refused, access denied, unknown database...).
  * Run from the project folder: npx tsx scripts/check-db.ts
  */
-import 'dotenv/config';
 import { lookup } from 'node:dns/promises';
 import mariadb from 'mariadb';
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 import { PrismaClient } from '../src/generated/prisma/client';
 import { databaseConfig } from '../src/lib/databaseConfig';
+import { loadEnv } from '../src/lib/loadEnv';
+
+loadEnv();
 
 const { host, port, database, user, password } = databaseConfig();
-console.log(`Settings: ${user}@${host}:${port}/${database} (password ${password ? 'set' : 'EMPTY'})`);
+console.log(`Settings: ${user}@${host}:${port}/${database} (password ${password ? `${password.length} chars` : 'EMPTY'}${password.includes('$') ? ', contains $' : ''})`);
 
 // Node resolves "localhost" to ::1 first; MySQL usually listens only on 127.0.0.1, so the site is refused while the CLI works.
 try {

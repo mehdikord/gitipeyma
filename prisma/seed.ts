@@ -6,10 +6,10 @@
  * edited in the admin panel. TranslationSeeder only fills languages that are still empty.
  */
 
-import 'dotenv/config';
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 import { PrismaClient } from '../src/generated/prisma/client';
 import { databaseConfig } from '../src/lib/databaseConfig';
+import { loadEnv } from '../src/lib/loadEnv';
 import { adminSeeder } from './seeders/adminSeeder';
 import { settingSeeder } from './seeders/settingSeeder';
 import { serviceSeeder } from './seeders/serviceSeeder';
@@ -32,6 +32,7 @@ const SEEDERS: [string, Seeder][] = [
 ];
 
 async function main() {
+  loadEnv();
   const db = new PrismaClient({ adapter: new PrismaMariaDb({ ...databaseConfig(), allowPublicKeyRetrieval: true }) });
   try {
     for (const [name, seeder] of SEEDERS) {
