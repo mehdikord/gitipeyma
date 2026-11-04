@@ -26,7 +26,7 @@ try {
 }
 
 console.log('\n1) Raw driver connection (shows the real cause of a failure):');
-let connection: mariadb.Connection | undefined;
+let connection: Awaited<ReturnType<typeof mariadb.createConnection>> | undefined;
 try {
   connection = await mariadb.createConnection({ host, port, database, user, password, allowPublicKeyRetrieval: true, connectTimeout: 10000 });
   const [row] = await connection.query('SELECT VERSION() AS version, @@max_connections AS maxConnections, @@max_user_connections AS maxUserConnections');
