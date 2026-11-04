@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "gradient-text",
+        "value": "*",
+        "files": [
+          "src/app/globals.css"
+        ],
+        "createdAt": "2026-11-04T14:48:02.808Z",
+        "reason": "pre-existing site design: the gold/turquoise gradient headings were already in the project before this change; only light-theme variants were added"
+      }
+    ]
+  }
+}

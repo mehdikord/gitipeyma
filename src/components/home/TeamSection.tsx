@@ -8,18 +8,18 @@ export async function TeamSection({ members }: { members: TeamMember[] }) {
   const { t: { stories: { team: t } } } = await getI18n();
 
   return (
-    <section className="py-24 bg-[#07191F] text-[#F7F7F3] border-b border-white/5 relative">
+    <section className="py-24 bg-canvas text-ink border-b border-ink/5 relative">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Heading */}
         <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#12B8B0]/15 border border-[#12B8B0]/30 text-[#12B8B0] text-xs font-bold">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand/15 border border-brand/30 text-brand text-xs font-bold">
             <Users className="w-3.5 h-3.5" />
             <span>{t.eyebrow}</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-black text-[#F7F7F3]">
+          <h2 className="text-3xl sm:text-4xl font-black text-ink">
             {t.title}
           </h2>
-          <p className="text-sm text-[#A2B6BC]">
+          <p className="text-sm text-ink-muted">
             {t.lead}
           </p>
         </div>
@@ -29,7 +29,7 @@ export async function TeamSection({ members }: { members: TeamMember[] }) {
           {members.map((member) => (
             <div
               key={member.id}
-              className="group rounded-2xl overflow-hidden bg-[#0C252B] border border-[#12B8B0]/20 hover:border-[#C6A15B]/50 transition-all duration-300 hover:-translate-y-1.5 shadow-xl flex flex-col justify-between"
+              className="group rounded-2xl overflow-hidden bg-surface border border-brand/20 hover:border-gold-deep-line/50 transition-all duration-300 hover:-translate-y-1.5 shadow-xl flex flex-col justify-between"
             >
               {/* Photo */}
               <div className="relative h-64 overflow-hidden">
@@ -41,14 +41,14 @@ export async function TeamSection({ members }: { members: TeamMember[] }) {
                     loading="lazy"
                   />
                 ) : (
-                  <div aria-hidden="true" className="w-full h-full flex items-center justify-center bg-[#07191F] text-5xl font-black text-[#12B8B0]/40">
+                  <div aria-hidden="true" className="w-full h-full flex items-center justify-center bg-canvas text-5xl font-black text-brand/40">
                     {member.name.trim().charAt(0)}
                   </div>
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0C252B] via-transparent to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent"></div>
                 {member.department && (
                   <div className="absolute top-3 start-3">
-                    <span className="text-[10px] font-semibold text-[#12B8B0] bg-[#07191F]/80 px-2 py-0.5 rounded backdrop-blur-sm border border-[#12B8B0]/30">
+                    <span className="text-[10px] font-semibold text-brand bg-canvas/80 px-2 py-0.5 rounded backdrop-blur-sm border border-brand/30">
                       {member.department}
                     </span>
                   </div>
@@ -57,11 +57,11 @@ export async function TeamSection({ members }: { members: TeamMember[] }) {
 
               {/* Info */}
               <div className="p-5 text-start space-y-1.5">
-                <h3 className="text-base font-bold text-[#F7F7F3] group-hover:text-[#E2C98C] transition-colors">
+                <h3 className="text-base font-bold text-ink group-hover:text-gold transition-colors">
                   {member.name}
                 </h3>
-                <p className="text-xs font-medium text-[#12B8B0]">{member.role}</p>
-                <p className="text-[11px] text-[#718085] leading-relaxed pt-1">
+                <p className="text-xs font-medium text-brand">{member.role}</p>
+                <p className="text-[11px] text-ink-dim leading-relaxed pt-1">
                   {member.specialty}
                 </p>
               </div>
@@ -70,7 +70,7 @@ export async function TeamSection({ members }: { members: TeamMember[] }) {
         </div>
 
         {/* Transparent Note */}
-        <div className="mt-12 text-center text-[11px] text-[#718085] max-w-lg mx-auto">
+        <div className="mt-12 text-center text-[11px] text-ink-dim max-w-lg mx-auto">
           {t.note}
         </div>
       </div>

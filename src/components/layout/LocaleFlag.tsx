@@ -56,7 +56,7 @@ const FLAGS: Record<Locale, React.FC> = { fa: IranFlag, en: UkFlag, tr: TurkeyFl
 export const LocaleFlag: React.FC<{ locale: Locale; className?: string }> = ({ locale, className = '' }) => {
   const Flag = FLAGS[locale];
   return (
-    <span className={`inline-flex h-3 w-[18px] shrink-0 overflow-hidden rounded-[2px] ring-1 ring-white/20 [&>svg]:h-full [&>svg]:w-full ${className}`}>
+    <span className={`inline-flex h-3 w-[18px] shrink-0 overflow-hidden rounded-[2px] ring-1 ring-ink/20 [&>svg]:h-full [&>svg]:w-full ${className}`}>
       <Flag />
     </span>
   );

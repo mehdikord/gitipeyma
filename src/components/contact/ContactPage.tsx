@@ -13,7 +13,7 @@ import { TextField } from '../ui/TextField';
 import { useSite } from '../site/SiteProvider';
 import { useI18n } from '../../i18n/I18nProvider';
 
-const FOCUS = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E2C98C]';
+const FOCUS = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-line';
 
 type OfficeStop = { office: Office; at: LonLat; name: string; role: string };
 
@@ -83,8 +83,8 @@ const OfficeMap: React.FC<{ offices: OfficeStop[]; active: number; onSelect: (in
       )}
 
       {/* Quiet the dots behind the text and the office strip */}
-      <div className="hidden lg:block absolute inset-0 pointer-events-none rtl:bg-[radial-gradient(ellipse_62%_80%_at_100%_20%,#07191F_40%,rgba(7,25,31,0.8)_62%,transparent_100%)] ltr:bg-[radial-gradient(ellipse_62%_80%_at_0%_20%,#07191F_40%,rgba(7,25,31,0.8)_62%,transparent_100%)]" />
-      <div className="hidden lg:block absolute inset-x-0 bottom-0 h-28 pointer-events-none bg-gradient-to-b from-transparent via-[#07191F]/85 to-[#07191F]" />
+      <div className="hidden lg:block absolute inset-0 pointer-events-none rtl:bg-[radial-gradient(ellipse_62%_80%_at_100%_20%,var(--canvas)_40%,color-mix(in_srgb,var(--canvas)_80%,transparent)_62%,transparent_100%)] ltr:bg-[radial-gradient(ellipse_62%_80%_at_0%_20%,var(--canvas)_40%,color-mix(in_srgb,var(--canvas)_80%,transparent)_62%,transparent_100%)]" />
+      <div className="hidden lg:block absolute inset-x-0 bottom-0 h-28 pointer-events-none bg-gradient-to-b from-transparent via-canvas/85 to-canvas" />
     </div>
   );
 };
@@ -156,8 +156,8 @@ const MessageForm: React.FC = () => {
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-6 text-start">
       <fieldset>
-        <legend className="mb-2.5 text-sm font-bold text-[#F7F7F3]">
-          {t.topic} <span className="font-normal text-[#A2B6BC]">{t.optional}</span>
+        <legend className="mb-2.5 text-sm font-bold text-ink">
+          {t.topic} <span className="font-normal text-ink-muted">{t.optional}</span>
         </legend>
         <div className="flex flex-wrap gap-2">
           {CONTACT_TOPICS.map((option, index) => {
@@ -165,8 +165,8 @@ const MessageForm: React.FC = () => {
             return (
               <label
                 key={option}
-                className={`inline-flex items-center min-h-11 px-4 py-2 rounded-lg border text-sm font-bold cursor-pointer transition-colors has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-[#E2C98C] ${
-                  isSelected ? 'bg-[#E2C98C] border-[#E2C98C] text-[#07191F]' : 'bg-[#0C252B] border-white/15 text-[#D5E0E3] hover:border-white/40'
+                className={`inline-flex items-center min-h-11 px-4 py-2 rounded-lg border text-sm font-bold cursor-pointer transition-colors has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-gold-line ${
+                  isSelected ? 'bg-gold-fill border-gold-line text-on-accent' : 'bg-surface border-ink/15 text-ink-soft hover:border-ink/40'
                 }`}
               >
                 <input type="radio" name="contact-topic" value={option} checked={isSelected} onChange={() => setTopic(option)} className="sr-only" />
@@ -208,7 +208,7 @@ const MessageForm: React.FC = () => {
       </div>
 
       <div>
-        <label htmlFor="contact-message" className="block mb-2 text-sm font-bold text-[#F7F7F3]">
+        <label htmlFor="contact-message" className="block mb-2 text-sm font-bold text-ink">
           {t.message}
         </label>
         <textarea
@@ -223,12 +223,12 @@ const MessageForm: React.FC = () => {
           onChange={(event) => setMessage(event.target.value)}
           onBlur={() => setTouched((current) => ({ ...current, message: message !== '' || current.message }))}
           placeholder={t.messagePlaceholder}
-          className={`w-full px-4 py-3.5 rounded-lg bg-[#0C252B] border text-base leading-relaxed text-white placeholder:text-[#7F979E] outline-none transition-colors resize-none focus:border-[#E2C98C] focus:ring-1 focus:ring-[#E2C98C] ${
-            messageError ? 'border-[#F58B8B]' : 'border-white/15 hover:border-white/30'
+          className={`w-full px-4 py-3.5 rounded-lg bg-surface border text-base leading-relaxed text-ink-strong placeholder:text-ink-dim outline-none transition-colors resize-none focus:border-gold-line focus:ring-1 focus:ring-gold-line ${
+            messageError ? 'border-danger' : 'border-ink/15 hover:border-ink/30'
           }`}
         />
         {messageError && (
-          <p id="contact-message-error" className="flex items-start gap-1.5 mt-2 text-[13px] leading-relaxed text-[#F58B8B]">
+          <p id="contact-message-error" className="flex items-start gap-1.5 mt-2 text-[13px] leading-relaxed text-danger">
             <AlertCircle aria-hidden="true" className="w-4 h-4 mt-0.5 shrink-0" />
             <span>{messageError}</span>
           </p>
@@ -236,7 +236,7 @@ const MessageForm: React.FC = () => {
       </div>
 
       {formError && (
-        <p role="alert" className="flex items-start gap-2 text-sm leading-relaxed text-[#F58B8B]">
+        <p role="alert" className="flex items-start gap-2 text-sm leading-relaxed text-danger">
           <AlertCircle aria-hidden="true" className="w-4 h-4 mt-0.5 shrink-0" />
           <span>{formError}</span>
         </p>
@@ -246,13 +246,13 @@ const MessageForm: React.FC = () => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className={`shrink-0 inline-flex items-center justify-center gap-2.5 min-h-14 px-8 rounded-lg bg-[#12B8B0] hover:bg-[#3ED0C8] disabled:opacity-70 disabled:cursor-wait text-[#07191F] font-black text-base transition-colors ${FOCUS}`}
+          className={`shrink-0 inline-flex items-center justify-center gap-2.5 min-h-14 px-8 rounded-lg bg-brand-fill hover:bg-brand-bright-fill disabled:opacity-70 disabled:cursor-wait text-on-accent font-black text-base transition-colors ${FOCUS}`}
         >
           <Send className="w-5 h-5" />
           <span>{isSubmitting ? t.sending : t.send}</span>
         </button>
-        <p className="flex items-start gap-2 text-[13px] leading-relaxed text-[#A2B6BC]">
-          <ShieldCheck aria-hidden="true" className="w-4 h-4 mt-0.5 shrink-0 text-[#12B8B0]" />
+        <p className="flex items-start gap-2 text-[13px] leading-relaxed text-ink-muted">
+          <ShieldCheck aria-hidden="true" className="w-4 h-4 mt-0.5 shrink-0 text-brand" />
           <span>{t.privacy}</span>
         </p>
       </div>
@@ -283,20 +283,20 @@ export const ContactPage: React.FC = () => {
   const status = current && now ? officeStatus(current.office, now, locale) : null;
 
   return (
-    <main className="bg-[#07191F] text-[#F7F7F3]">
+    <main className="bg-canvas text-ink">
       <section className="relative isolate overflow-hidden flex flex-col lg:min-h-[max(640px,calc(100svh-7rem))]">
         {OFFICES.length > 0 && <OfficeMap offices={OFFICES} active={activeIndex} onSelect={setActiveIndex} />}
 
         <div className="order-1 lg:order-none relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-14 lg:pt-16 pb-6 lg:flex-1">
           <div className="max-w-[36rem] text-start">
-            <h1 className="text-[2rem] sm:text-[2.6rem] xl:text-5xl font-black leading-[1.3] text-[#F7F7F3] [text-wrap:balance]">{t.title}</h1>
-            <p className="mt-4 text-[15px] sm:text-lg leading-[1.95] text-[#C9D7DB]">
+            <h1 className="text-[2rem] sm:text-[2.6rem] xl:text-5xl font-black leading-[1.3] text-ink [text-wrap:balance]">{t.title}</h1>
+            <p className="mt-4 text-[15px] sm:text-lg leading-[1.95] text-ink-soft">
               {t.intro}
             </p>
 
             <a
               href={telHref(SUPPORT_PHONE)}
-              className={`mt-7 flex flex-wrap sm:inline-flex items-center justify-center gap-x-3 gap-y-1 px-6 py-3.5 rounded-lg bg-[#E2C98C] hover:bg-[#F0DCA8] text-[#07191F] font-black text-[15px] sm:text-base transition-colors ${FOCUS}`}
+              className={`mt-7 flex flex-wrap sm:inline-flex items-center justify-center gap-x-3 gap-y-1 px-6 py-3.5 rounded-lg bg-gold-fill hover:bg-[#F0DCA8] text-on-accent font-black text-[15px] sm:text-base transition-colors ${FOCUS}`}
             >
               <PhoneCall className="w-5 h-5 shrink-0" />
               <span className="whitespace-nowrap">{t.support}</span>
@@ -309,7 +309,7 @@ export const ContactPage: React.FC = () => {
                 href={WHATSAPP_URL}
                 target="_blank"
                 rel="noreferrer"
-                className={`inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-3 rounded-lg bg-[#12B8B0] hover:bg-[#3ED0C8] text-[#07191F] font-extrabold text-sm sm:text-[15px] transition-colors ${FOCUS}`}
+                className={`inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-3 rounded-lg bg-brand-fill hover:bg-brand-bright-fill text-on-accent font-extrabold text-sm sm:text-[15px] transition-colors ${FOCUS}`}
               >
                 <MessageCircle className="w-[18px] h-[18px]" />
                 <span>{t.whatsapp}</span>
@@ -319,7 +319,7 @@ export const ContactPage: React.FC = () => {
                   href={TELEGRAM_URL}
                   target="_blank"
                   rel="noreferrer"
-                  className={`inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-3 rounded-lg text-[#F7F7F3] border border-white/25 hover:border-[#12B8B0] font-bold text-sm sm:text-[15px] transition-colors ${FOCUS}`}
+                  className={`inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-3 rounded-lg text-ink border border-ink/25 hover:border-brand font-bold text-sm sm:text-[15px] transition-colors ${FOCUS}`}
                 >
                   <Send className="w-[18px] h-[18px]" />
                   <span>{t.telegram}</span>
@@ -331,26 +331,26 @@ export const ContactPage: React.FC = () => {
 
         {/* Choosing an office flies the map there and opens its details below */}
         <div className="order-3 lg:order-none relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <ul className="grid border-t border-white/15" style={{ gridTemplateColumns: `repeat(${Math.max(OFFICES.length, 1)}, minmax(0, 1fr))` }}>
+          <ul className="grid border-t border-ink/15" style={{ gridTemplateColumns: `repeat(${Math.max(OFFICES.length, 1)}, minmax(0, 1fr))` }}>
             {OFFICES.map((item, index) => {
               const isActive = index === activeIndex;
               const itemStatus = now ? officeStatus(item.office, now, locale) : null;
               return (
-                <li key={item.office.id} className="relative border-e last:border-e-0 border-white/10">
-                  {isActive && <span aria-hidden="true" className="absolute -top-px inset-x-0 h-0.5 bg-[#E2C98C]" />}
+                <li key={item.office.id} className="relative border-e last:border-e-0 border-ink/10">
+                  {isActive && <span aria-hidden="true" className="absolute -top-px inset-x-0 h-0.5 bg-gold-fill" />}
                   <button
                     type="button"
                     aria-pressed={isActive}
                     aria-controls="contact-office-details"
                     onClick={() => setActiveIndex(index)}
-                    className={`block w-full h-full min-h-[76px] px-2.5 sm:px-5 py-3 text-start transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[#E2C98C] ${
-                      isActive ? 'bg-[#0C252B]' : 'hover:bg-white/[0.03]'
+                    className={`block w-full h-full min-h-[76px] px-2.5 sm:px-5 py-3 text-start transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-gold-line ${
+                      isActive ? 'bg-surface' : 'hover:bg-ink/[0.03]'
                     }`}
                   >
-                    <span className={`block font-extrabold text-[15px] sm:text-lg ${isActive ? 'text-white' : 'text-[#D5E0E3]'}`}>{item.name}</span>
-                    <span className="hidden sm:block mt-0.5 text-xs text-[#A2B6BC]">{item.role}</span>
-                    <span className={`flex items-start gap-1.5 mt-1 text-[11.5px] sm:text-xs leading-snug ${itemStatus?.isOpen ? 'text-[#3ED0C8]' : 'text-[#8FA5AB]'}`}>
-                      <span aria-hidden="true" className={`shrink-0 mt-[5px] w-1.5 h-1.5 rounded-full ${itemStatus?.isOpen ? 'bg-[#3ED0C8]' : 'bg-[#7F979E]'}`} />
+                    <span className={`block font-extrabold text-[15px] sm:text-lg ${isActive ? 'text-ink-strong' : 'text-ink-soft'}`}>{item.name}</span>
+                    <span className="hidden sm:block mt-0.5 text-xs text-ink-muted">{item.role}</span>
+                    <span className={`flex items-start gap-1.5 mt-1 text-[11.5px] sm:text-xs leading-snug ${itemStatus?.isOpen ? 'text-brand-bright' : 'text-ink-dim'}`}>
+                      <span aria-hidden="true" className={`shrink-0 mt-[5px] w-1.5 h-1.5 rounded-full ${itemStatus?.isOpen ? 'bg-brand-bright-fill' : 'bg-ink-dim'}`} />
                       <span>{itemStatus
                           ? itemStatus.isOpen
                             ? t.openNow
@@ -367,22 +367,22 @@ export const ContactPage: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {current && (
-        <section id="contact-office-details" aria-live="polite" aria-label={fill(t.officeDetails, { name: current.name })} className="bg-[#0C252B] rounded-b-2xl">
+        <section id="contact-office-details" aria-live="polite" aria-label={fill(t.officeDetails, { name: current.name })} className="bg-surface rounded-b-2xl">
           <div key={current.name} className="sup-answer grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 px-4 sm:px-6 py-6 sm:py-7">
             <div>
-              <h2 className="flex items-center gap-2 text-sm font-extrabold text-[#E2C98C]">
+              <h2 className="flex items-center gap-2 text-sm font-extrabold text-gold">
                 <MapPin aria-hidden="true" className="w-4 h-4" />
                 <span>
                   {fill(t.address, { name: current.name })}
                   <span className="sr-only">{locale === 'fa' ? '، ' : ', '}{current.role}</span>
                 </span>
               </h2>
-              <p className="mt-2.5 text-[15px] leading-[1.95] text-[#E4ECEE]">{current.office.address}</p>
+              <p className="mt-2.5 text-[15px] leading-[1.95] text-ink-soft">{current.office.address}</p>
               <a
                 href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(current.office.address)}`}
                 target="_blank"
                 rel="noreferrer"
-                className={`mt-1 inline-flex items-center gap-2 py-3 text-sm font-bold text-[#3ED0C8] hover:text-white transition-colors rounded ${FOCUS}`}
+                className={`mt-1 inline-flex items-center gap-2 py-3 text-sm font-bold text-brand-bright hover:text-ink-strong transition-colors rounded ${FOCUS}`}
               >
                 <Navigation aria-hidden="true" className="w-4 h-4" />
                 <span>{t.directions}</span>
@@ -390,31 +390,31 @@ export const ContactPage: React.FC = () => {
             </div>
 
             <div>
-              <h2 className="flex items-center gap-2 text-sm font-extrabold text-[#E2C98C]">
+              <h2 className="flex items-center gap-2 text-sm font-extrabold text-gold">
                 <Clock aria-hidden="true" className="w-4 h-4" />
                 <span>{t.workingHours}</span>
               </h2>
-              <p className="mt-2.5 text-[15px] leading-[1.95] text-[#E4ECEE]">{current.office.workingHours}</p>
-              {status && <p className={`mt-1 text-sm font-bold ${status.isOpen ? 'text-[#3ED0C8]' : 'text-[#A2B6BC]'}`}>{status.text}</p>}
+              <p className="mt-2.5 text-[15px] leading-[1.95] text-ink-soft">{current.office.workingHours}</p>
+              {status && <p className={`mt-1 text-sm font-bold ${status.isOpen ? 'text-brand-bright' : 'text-ink-muted'}`}>{status.text}</p>}
             </div>
 
             <div>
-              <h2 className="flex items-center gap-2 text-sm font-extrabold text-[#E2C98C]">
+              <h2 className="flex items-center gap-2 text-sm font-extrabold text-gold">
                 <PhoneCall aria-hidden="true" className="w-4 h-4" />
                 <span>{t.phoneEmail}</span>
               </h2>
               <ul className="mt-1.5">
                 {current.office.phones.map((phone) => (
                   <li key={phone}>
-                    <a dir="ltr" href={telHref(phone)} className={`inline-block py-3 text-base font-bold text-white hover:text-[#E2C98C] transition-colors rounded ${FOCUS}`}>
+                    <a dir="ltr" href={telHref(phone)} className={`inline-block py-3 text-base font-bold text-ink-strong hover:text-gold transition-colors rounded ${FOCUS}`}>
                       {phone}
                     </a>
                   </li>
                 ))}
               </ul>
 {current.office.email && (
-              <a href={`mailto:${current.office.email}`} className={`inline-flex items-center gap-2 py-3 text-[15px] text-[#C9D7DB] hover:text-white transition-colors rounded ${FOCUS}`}>
-                <Mail aria-hidden="true" className="w-4 h-4 text-[#12B8B0]" />
+              <a href={`mailto:${current.office.email}`} className={`inline-flex items-center gap-2 py-3 text-[15px] text-ink-soft hover:text-ink-strong transition-colors rounded ${FOCUS}`}>
+                <Mail aria-hidden="true" className="w-4 h-4 text-brand" />
                 <span dir="ltr">{current.office.email}</span>
               </a>
               )}
@@ -425,11 +425,11 @@ export const ContactPage: React.FC = () => {
 
         <section className="py-14 sm:py-20 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14">
           <div className="lg:col-span-4 text-start">
-            <h2 className="text-2xl sm:text-3xl font-black leading-snug text-[#F7F7F3]">{t.formTitle}</h2>
-            <p className="mt-3 text-[15px] sm:text-base leading-[1.95] text-[#A2B6BC]">{t.formIntro}</p>
-            <p className="mt-4 text-[15px] leading-[1.95] text-[#A2B6BC]">
+            <h2 className="text-2xl sm:text-3xl font-black leading-snug text-ink">{t.formTitle}</h2>
+            <p className="mt-3 text-[15px] sm:text-base leading-[1.95] text-ink-muted">{t.formIntro}</p>
+            <p className="mt-4 text-[15px] leading-[1.95] text-ink-muted">
               {t.caseBefore}{' '}
-              <Link href={path('/consultation')} className={`font-bold text-[#E2C98C] hover:text-white underline underline-offset-4 transition-colors rounded ${FOCUS}`}>
+              <Link href={path('/consultation')} className={`font-bold text-gold hover:text-ink-strong underline underline-offset-4 transition-colors rounded ${FOCUS}`}>
                 {t.caseLink}
               </Link>
               {t.caseAfter}

@@ -9,7 +9,7 @@ export async function SiteShell({ children }: { children: React.ReactNode }) {
   const site = await getSiteData();
   return (
     <SiteProvider value={site}>
-      <div className="min-h-screen flex flex-col bg-[#07191F] text-[#F7F7F3] selection:bg-[#12B8B0]/30 selection:text-[#E2C98C]">
+      <div className="min-h-screen flex flex-col bg-canvas text-ink selection:bg-brand/30 selection:text-gold">
         <Header />
         <div className="flex-1">{children}</div>
         <Footer />

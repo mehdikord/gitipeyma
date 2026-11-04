@@ -31,6 +31,7 @@ export const layout = defineMessages({
       consultationFull: 'درخواست مشاوره اختصاصی',
       openMenu: 'باز کردن منو',
       closeMenu: 'بستن منو',
+      theme: { toLight: 'تغییر به حالت روشن', toDark: 'تغییر به حالت تیره' },
     },
   },
   en: {
@@ -62,6 +63,7 @@ export const layout = defineMessages({
       consultationFull: 'Book a private consultation',
       openMenu: 'Open menu',
       closeMenu: 'Close menu',
+      theme: { toLight: 'Switch to light mode', toDark: 'Switch to dark mode' },
     },
   },
   tr: {
@@ -93,6 +95,7 @@ export const layout = defineMessages({
       consultationFull: 'Özel danışmanlık talep edin',
       openMenu: 'Menüyü aç',
       closeMenu: 'Menüyü kapat',
+      theme: { toLight: 'Açık temaya geç', toDark: 'Koyu temaya geç' },
     },
   },
 });

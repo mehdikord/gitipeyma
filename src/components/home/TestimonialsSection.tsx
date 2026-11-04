@@ -139,23 +139,23 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
   const getCategoryIcon = (category?: string) => {
     switch (category) {
       case 'transport':
-        return <Truck className="w-4 h-4 text-[#12B8B0]" />;
+        return <Truck className="w-4 h-4 text-brand" />;
       case 'cargo':
-        return <Building className="w-4 h-4 text-[#C6A15B]" />;
+        return <Building className="w-4 h-4 text-gold-deep" />;
       case 'business':
-        return <FileCheck2 className="w-4 h-4 text-[#12B8B0]" />;
+        return <FileCheck2 className="w-4 h-4 text-brand" />;
       case 'financial':
-        return <Coins className="w-4 h-4 text-[#E2C98C]" />;
+        return <Coins className="w-4 h-4 text-gold" />;
       default:
-        return <Globe2 className="w-4 h-4 text-[#12B8B0]" />;
+        return <Globe2 className="w-4 h-4 text-brand" />;
     }
   };
 
   return (
-    <section className="py-24 bg-gradient-to-b from-[#07191F] via-[#092128] to-[#051318] text-[#F7F7F3] border-b border-white/10 relative overflow-hidden">
+    <section className="py-24 bg-gradient-to-b from-canvas via-canvas-deep to-canvas-deep text-ink border-b border-ink/10 relative overflow-hidden">
       {/* Dynamic Animated Ambient Orbs */}
-      <div className="absolute top-10 right-1/4 w-[500px] h-[500px] bg-[#12B8B0]/10 rounded-full blur-[160px] pointer-events-none -z-0"></div>
-      <div className="absolute bottom-10 left-1/4 w-[450px] h-[450px] bg-[#C6A15B]/10 rounded-full blur-[170px] pointer-events-none -z-0"></div>
+      <div className="absolute top-10 right-1/4 w-[500px] h-[500px] bg-brand/10 rounded-full blur-[160px] pointer-events-none -z-0"></div>
+      <div className="absolute bottom-10 left-1/4 w-[450px] h-[450px] bg-gold-deep/10 rounded-full blur-[170px] pointer-events-none -z-0"></div>
 
       {/* Decorative Network Grid SVG */}
       <div className="absolute inset-0 opacity-10 pointer-events-none">
@@ -170,24 +170,24 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-14 space-y-4">
-          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-[#0C252B] border border-[#12B8B0]/30 shadow-lg shadow-[#12B8B0]/10">
+          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-surface border border-brand/30 shadow-lg shadow-brand/10">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#12B8B0] opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#12B8B0]"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-fill opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-fill"></span>
             </span>
-            <span className="text-xs font-mono font-bold tracking-wider text-[#E2C98C]">
+            <span className="text-xs font-mono font-bold tracking-wider text-gold">
               {t.eyebrow}
             </span>
           </div>
 
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#F7F7F3] tracking-tight">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-ink tracking-tight">
             {t.title}
             <span className="gold-gradient-text block mt-2 text-2xl sm:text-3xl md:text-4xl font-extrabold">
               {t.subtitle}
             </span>
           </h2>
 
-          <p className="text-sm sm:text-base text-[#A2B6BC] leading-relaxed">
+          <p className="text-sm sm:text-base text-ink-muted leading-relaxed">
             {t.lead}
           </p>
         </div>
@@ -197,20 +197,20 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
           {TESTIMONIALS_METRICS.map((kpi) => (
             <div
               key={kpi.id}
-              className="p-5 rounded-2xl bg-[#0C252B]/80 border border-white/10 hover:border-[#12B8B0]/40 backdrop-blur-md shadow-xl transition-all hover:-translate-y-1 group"
+              className="p-5 rounded-2xl bg-surface/80 border border-ink/10 hover:border-brand/40 backdrop-blur-md shadow-xl transition-all hover:-translate-y-1 group"
             >
               <div className="flex items-center justify-between gap-2 mb-2">
-                <span className="text-2xl sm:text-3xl font-black text-white group-hover:text-[#12B8B0] transition-colors">
+                <span className="text-2xl sm:text-3xl font-black text-ink-strong group-hover:text-brand transition-colors">
                   {kpi.value}
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-[#12B8B0]/15 text-[#12B8B0] text-[10px] font-bold">
+                <span className="px-2 py-0.5 rounded-full bg-brand/15 text-brand text-[10px] font-bold">
                   {kpi.trend}
                 </span>
               </div>
-              <h3 className="text-xs sm:text-sm font-bold text-[#E2C98C] mb-1">
+              <h3 className="text-xs sm:text-sm font-bold text-gold mb-1">
                 {kpi.label}
               </h3>
-              <p className="text-[11px] text-[#718085] leading-relaxed">
+              <p className="text-[11px] text-ink-dim leading-relaxed">
                 {kpi.subtext}
               </p>
             </div>
@@ -235,14 +235,14 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
                   onClick={() => setActiveCategory(tab.id as CategoryFilter)}
                   className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 ${
                     activeCategory === tab.id
-                      ? 'bg-[#12B8B0] text-[#07191F] shadow-lg shadow-[#12B8B0]/25 scale-105'
-                      : 'bg-[#0C252B] text-[#A2B6BC] hover:text-white border border-white/5 hover:border-white/20'
+                      ? 'bg-brand-fill text-on-accent shadow-lg shadow-brand/25 scale-105'
+                      : 'bg-surface text-ink-muted hover:text-ink-strong border border-ink/5 hover:border-ink/20'
                   }`}
                 >
                   <span>{tab.label}</span>
                   <span
                     className={`text-[10px] px-1.5 py-0.2 rounded-full ${
-                      activeCategory === tab.id ? 'bg-[#07191F]/30 text-[#07191F]' : 'bg-white/10 text-white/70'
+                      activeCategory === tab.id ? 'bg-canvas/30 text-on-accent' : 'bg-ink/10 text-ink-strong/70'
                     }`}
                   >
                     {tab.count}
@@ -254,29 +254,29 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
           {/* Submit Review Modal Trigger */}
           <button
             onClick={() => setIsModalOpen(true)}
-            className="px-4 py-2 rounded-xl bg-[#C6A15B]/15 hover:bg-[#C6A15B]/25 text-[#E2C98C] border border-[#C6A15B]/40 hover:border-[#E2C98C] text-xs font-bold transition-all flex items-center gap-2 shrink-0 group shadow-md"
+            className="px-4 py-2 rounded-xl bg-gold-deep/15 hover:bg-gold-deep/25 text-gold border border-gold-deep-line/40 hover:border-gold-line text-xs font-bold transition-all flex items-center gap-2 shrink-0 group shadow-md"
           >
-            <PlusCircle className="w-4 h-4 text-[#E2C98C] group-hover:rotate-90 transition-transform duration-300" />
+            <PlusCircle className="w-4 h-4 text-gold group-hover:rotate-90 transition-transform duration-300" />
             <span>{t.addReview}</span>
           </button>
         </div>
 
         {/* Featured Main Spotlight Bento Card */}
         <div
-          className="relative rounded-3xl bg-[#0C252B]/90 border border-[#12B8B0]/30 shadow-2xl p-6 sm:p-10 lg:p-12 backdrop-blur-xl overflow-hidden transition-all duration-500"
+          className="relative rounded-3xl bg-surface/90 border border-brand/30 shadow-2xl p-6 sm:p-10 lg:p-12 backdrop-blur-xl overflow-hidden transition-all duration-500"
           onMouseEnter={() => setIsPlaying(false)}
           onMouseLeave={() => setIsPlaying(true)}
         >
           {/* Animated Auto-play Progress Line */}
-          <div className="absolute top-0 left-0 right-0 h-1 bg-white/5 overflow-hidden">
+          <div className="absolute top-0 left-0 right-0 h-1 bg-ink/5 overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-[#12B8B0] to-[#E2C98C] transition-all ease-linear"
+              className="h-full bg-gradient-to-r from-brand-fill to-gold-fill transition-all ease-linear"
               style={{ width: `${progress}%` }}
             ></div>
           </div>
 
           {/* Watermark Quote Icon */}
-          <Quote className="w-24 h-24 text-[#12B8B0]/10 absolute -top-4 -end-4 pointer-events-none rotate-180" />
+          <Quote className="w-24 h-24 text-brand/10 absolute -top-4 -end-4 pointer-events-none rotate-180" />
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start relative z-10">
             {/* Right Side: Primary Review Details (8 cols) */}
@@ -284,20 +284,20 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
               {/* Header Badges Strip */}
               <div className="flex flex-wrap items-center gap-2.5">
                 {current.verifiedCode && (
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#12B8B0]/15 border border-[#12B8B0]/30 text-[#12B8B0] text-xs font-bold">
-                    <ShieldCheck className="w-3.5 h-3.5 text-[#12B8B0]" />
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand/15 border border-brand/30 text-brand text-xs font-bold">
+                    <ShieldCheck className="w-3.5 h-3.5 text-brand" />
                     <span>{current.verifiedCode}</span>
                   </span>
                 )}
 
                 {current.originDestination && (
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[#A2B6BC] text-xs font-medium">
-                    <MapPin className="w-3.5 h-3.5 text-[#E2C98C]" />
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-ink/5 border border-ink/10 text-ink-muted text-xs font-medium">
+                    <MapPin className="w-3.5 h-3.5 text-gold" />
                     <span>{current.originDestination}</span>
                   </span>
                 )}
 
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#C6A15B]/15 border border-[#C6A15B]/30 text-[#E2C98C] text-xs font-bold">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gold-deep/15 border border-gold-deep-line/30 text-gold text-xs font-bold">
                   {getCategoryIcon(current.category)}
                   <span>{current.categoryLabel || current.serviceUsed}</span>
                 </span>
@@ -307,45 +307,45 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-1">
                   {[...Array(current.rating)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 fill-[#E2C98C] text-[#C6A15B]" />
+                    <Star key={i} className="w-5 h-5 fill-gold text-gold-deep" />
                   ))}
                 </div>
-                <span className="text-sm font-bold text-[#E2C98C]">
+                <span className="text-sm font-bold text-gold">
                   {current.satisfactionScore || t.fullScore}
                 </span>
-                <span className="text-xs text-[#718085] border-s border-white/10 ps-3 ms-1">
+                <span className="text-xs text-ink-dim border-s border-ink/10 ps-3 ms-1">
                   {fill(t.caseYear, { year: current.year })}
                 </span>
               </div>
 
               {/* Key Outcome Headline */}
               {current.outcomeHeadline && (
-                <div className="p-3.5 rounded-xl bg-gradient-to-r ltr:bg-gradient-to-l from-[#12B8B0]/15 to-transparent border-s-4 border-[#12B8B0] text-sm sm:text-base font-bold text-white">
+                <div className="p-3.5 rounded-xl bg-gradient-to-r ltr:bg-gradient-to-l from-brand-fill/15 to-transparent border-s-4 border-brand text-sm sm:text-base font-bold text-ink-strong">
                   {current.outcomeHeadline}
                 </div>
               )}
 
               {/* Comment Content */}
-              <blockquote className="text-base sm:text-lg text-[#F7F7F3] leading-relaxed font-light min-h-[90px]">
+              <blockquote className="text-base sm:text-lg text-ink leading-relaxed font-light min-h-[90px]">
                 {t.quoteOpen}{current.comment}{t.quoteClose}
               </blockquote>
 
               {/* Author Info */}
-              <div className="pt-4 border-t border-white/10 flex items-center gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#12B8B0] to-[#0C252B] p-0.5 shadow-lg">
-                  <div className="w-full h-full rounded-[14px] bg-[#07191F] flex items-center justify-center text-[#E2C98C] font-black text-sm">
+              <div className="pt-4 border-t border-ink/10 flex items-center gap-4">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-fill to-surface p-0.5 shadow-lg">
+                  <div className="w-full h-full rounded-[14px] bg-canvas flex items-center justify-center text-gold font-black text-sm">
                     {current.clientName.substring(0, 2)}
                   </div>
                 </div>
                 <div>
-                  <h4 className="text-base font-bold text-[#F7F7F3] flex items-center gap-1.5">
+                  <h4 className="text-base font-bold text-ink flex items-center gap-1.5">
                     <span>{current.clientName}</span>
-                    <CheckCircle2 className="w-4 h-4 text-[#12B8B0]" />
+                    <CheckCircle2 className="w-4 h-4 text-brand" />
                   </h4>
-                  <span className="text-xs text-[#12B8B0] font-medium block mt-0.5">
+                  <span className="text-xs text-brand font-medium block mt-0.5">
                     {current.serviceUsed}
                   </span>
-                  <span className="text-[11px] text-[#718085] block mt-0.5">
+                  <span className="text-[11px] text-ink-dim block mt-0.5">
                     {current.routeOrContext}
                   </span>
                 </div>
@@ -353,17 +353,17 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
             </div>
 
             {/* Left Side: Service Journey Milestones & Navigation Controls (4 cols) */}
-            <div className="lg:col-span-4 space-y-5 lg:border-s lg:border-white/10 lg:ps-6">
+            <div className="lg:col-span-4 space-y-5 lg:border-s lg:border-ink/10 lg:ps-6">
               {/* Journey Milestones Drawer */}
-              <div className="p-4 rounded-2xl bg-[#07191F]/80 border border-white/10 space-y-3">
+              <div className="p-4 rounded-2xl bg-canvas/80 border border-ink/10 space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-[#E2C98C] flex items-center gap-1.5">
-                    <Sparkles className="w-3.5 h-3.5 text-[#12B8B0]" />
+                  <span className="text-xs font-bold text-gold flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5 text-brand" />
                     <span>{t.milestones}</span>
                   </span>
                   <button
                     onClick={() => setShowMilestones(!showMilestones)}
-                    className="text-[11px] text-[#12B8B0] hover:underline"
+                    className="text-[11px] text-brand hover:underline"
                   >
                     {showMilestones ? t.hide : t.show}
                   </button>
@@ -373,12 +373,12 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
                   <div className="space-y-2.5 pt-1">
                     {current.milestones.map((step, idx) => (
                       <div key={idx} className="flex items-start gap-2.5 text-start">
-                        <div className="w-5 h-5 rounded-full bg-[#12B8B0]/20 text-[#12B8B0] text-[10px] font-black flex items-center justify-center shrink-0 mt-0.5">
+                        <div className="w-5 h-5 rounded-full bg-brand/20 text-brand text-[10px] font-black flex items-center justify-center shrink-0 mt-0.5">
                           {idx + 1}
                         </div>
                         <div>
-                          <div className="text-xs font-bold text-white">{step.title}</div>
-                          <div className="text-[11px] text-[#718085] leading-tight mt-0.5">
+                          <div className="text-xs font-bold text-ink-strong">{step.title}</div>
+                          <div className="text-[11px] text-ink-dim leading-tight mt-0.5">
                             {step.desc}
                           </div>
                         </div>
@@ -389,15 +389,15 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
               </div>
 
               {/* Slider Controls & Carousel Status */}
-              <div className="p-4 rounded-2xl bg-[#07191F]/60 border border-white/10 space-y-3">
+              <div className="p-4 rounded-2xl bg-canvas/60 border border-ink/10 space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1.5 text-xs text-[#A2B6BC]">
+                  <div className="flex items-center gap-1.5 text-xs text-ink-muted">
                     <span>{t.caseLabel}</span>
-                    <span className="font-mono font-bold text-[#E2C98C]">
+                    <span className="font-mono font-bold text-gold">
                       {currentIndex + 1}
                     </span>
                     <span>{t.of}</span>
-                    <span className="font-mono text-white">
+                    <span className="font-mono text-ink-strong">
                       {filteredTestimonials.length}
                     </span>
                   </div>
@@ -405,7 +405,7 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
                   {/* Play / Pause Toggle */}
                   <button
                     onClick={() => setIsPlaying(!isPlaying)}
-                    className="p-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-[#A2B6BC] hover:text-white transition-colors"
+                    className="p-1.5 rounded-lg bg-ink/5 hover:bg-ink/10 text-ink-muted hover:text-ink-strong transition-colors"
                     title={isPlaying ? t.pause : t.play}
                     aria-label={isPlaying ? t.pause : t.play}
                   >
@@ -417,7 +417,7 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
                 <div className="flex items-center justify-between gap-2 pt-1">
                   <button
                     onClick={handlePrev}
-                    className="flex-1 py-2.5 rounded-xl bg-[#0C252B] border border-white/10 hover:border-[#12B8B0] hover:text-[#12B8B0] text-white text-xs font-bold flex items-center justify-center gap-1.5 transition-all active:scale-95"
+                    className="flex-1 py-2.5 rounded-xl bg-surface border border-ink/10 hover:border-brand hover:text-brand text-ink-strong text-xs font-bold flex items-center justify-center gap-1.5 transition-all active:scale-95"
                     aria-label={t.prevAria}
                   >
                     <ChevronRight className="w-4 h-4 ltr:-scale-x-100" />
@@ -426,7 +426,7 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
 
                   <button
                     onClick={handleNext}
-                    className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-[#12B8B0] to-[#087F7B] hover:brightness-110 text-[#07191F] text-xs font-black flex items-center justify-center gap-1.5 transition-all active:scale-95 shadow-md shadow-[#12B8B0]/20"
+                    className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-brand-fill to-[#087F7B] hover:brightness-110 text-on-accent text-xs font-black flex items-center justify-center gap-1.5 transition-all active:scale-95 shadow-md shadow-brand/20"
                     aria-label={t.nextAria}
                   >
                     <span>{t.next}</span>
@@ -446,23 +446,23 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
               onClick={() => selectTestimonial(idx)}
               className={`p-3.5 rounded-2xl text-start transition-all duration-300 relative overflow-hidden ${
                 currentIndex === idx
-                  ? 'bg-[#0C252B] border-2 border-[#12B8B0] shadow-lg shadow-[#12B8B0]/20 scale-[1.02]'
-                  : 'bg-[#0C252B]/40 border border-white/5 hover:border-white/20 hover:bg-[#0C252B]/70'
+                  ? 'bg-surface border-2 border-brand shadow-lg shadow-brand/20 scale-[1.02]'
+                  : 'bg-surface/40 border border-ink/5 hover:border-ink/20 hover:bg-surface/70'
               }`}
             >
               <div className="flex items-center justify-between gap-1 mb-1.5">
-                <span className="text-xs font-bold text-[#E2C98C] truncate max-w-[130px]">
+                <span className="text-xs font-bold text-gold truncate max-w-[130px]">
                   {item.clientName.split(' ')[0]} {item.clientName.split(' ')[1] || ''}
                 </span>
-                <span className="flex items-center gap-1 text-[11px] text-[#E2C98C] font-bold">
-                  <Star className="w-3 h-3 fill-[#E2C98C] text-[#C6A15B]" />
+                <span className="flex items-center gap-1 text-[11px] text-gold font-bold">
+                  <Star className="w-3 h-3 fill-gold text-gold-deep" />
                   <span>{t.thumbScore}</span>
                 </span>
               </div>
-              <p className="text-[11px] text-[#A2B6BC] line-clamp-1">
+              <p className="text-[11px] text-ink-muted line-clamp-1">
                 {item.serviceUsed}
               </p>
-              <span className="text-[10px] text-[#718085] block mt-1 truncate">
+              <span className="text-[10px] text-ink-dim block mt-1 truncate">
                 {item.originDestination || item.routeOrContext}
               </span>
             </button>
@@ -470,13 +470,13 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
         </div>
 
         {/* Continuous Animated Marquee Ticker */}
-        <div className="mt-14 pt-8 border-t border-white/10 overflow-hidden relative">
-          <div className="absolute top-0 bottom-0 right-0 w-24 bg-gradient-to-l from-[#07191F] to-transparent z-10 pointer-events-none"></div>
-          <div className="absolute top-0 bottom-0 left-0 w-24 bg-gradient-to-r from-[#07191F] to-transparent z-10 pointer-events-none"></div>
+        <div className="mt-14 pt-8 border-t border-ink/10 overflow-hidden relative">
+          <div className="absolute top-0 bottom-0 right-0 w-24 bg-gradient-to-l from-canvas to-transparent z-10 pointer-events-none"></div>
+          <div className="absolute top-0 bottom-0 left-0 w-24 bg-gradient-to-r from-canvas to-transparent z-10 pointer-events-none"></div>
 
           <div className="flex items-center gap-3 mb-3">
-            <span className="w-2 h-2 rounded-full bg-[#12B8B0] animate-pulse"></span>
-            <span className="text-xs font-bold text-[#E2C98C]">
+            <span className="w-2 h-2 rounded-full bg-brand-fill animate-pulse"></span>
+            <span className="text-xs font-bold text-gold">
               {t.marqueeTitle}
             </span>
           </div>
@@ -487,9 +487,9 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
             {[...MARQUEE_TRUST_QUOTES, ...MARQUEE_TRUST_QUOTES].map((quote, qIdx) => (
               <div
                 key={qIdx}
-                className="inline-flex items-center gap-3 px-5 py-2.5 mx-2 rounded-xl bg-[#0C252B]/80 border border-white/5 hover:border-[#12B8B0]/40 transition-colors text-xs text-[#F7F7F3] whitespace-nowrap shadow-sm"
+                className="inline-flex items-center gap-3 px-5 py-2.5 mx-2 rounded-xl bg-surface/80 border border-ink/5 hover:border-brand/40 transition-colors text-xs text-ink whitespace-nowrap shadow-sm"
               >
-                <Quote className="w-3.5 h-3.5 text-[#12B8B0] shrink-0" />
+                <Quote className="w-3.5 h-3.5 text-brand shrink-0" />
                 <span>{quote.replace(/[«»“”]/g, '')}</span>
               </div>
             ))}
@@ -498,7 +498,7 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
         </div>
 
         {/* Transparent Mock Notice as Required */}
-        <div className="mt-8 text-center text-[11px] text-[#718085] leading-relaxed">
+        <div className="mt-8 text-center text-[11px] text-ink-dim leading-relaxed">
           {t.notice}
         </div>
       </div>
@@ -506,46 +506,46 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
       {/* Review Submission Interactive Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
-          <div className="bg-[#0C252B] border border-[#12B8B0]/40 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative text-start">
+          <div className="bg-surface border border-brand/40 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative text-start">
             {/* Close Button */}
             <button
               onClick={() => setIsModalOpen(false)}
               aria-label={t.form.close}
-              className="absolute top-5 end-5 p-2 rounded-full bg-white/5 hover:bg-white/10 text-[#A2B6BC] hover:text-white transition-colors"
+              className="absolute top-5 end-5 p-2 rounded-full bg-ink/5 hover:bg-ink/10 text-ink-muted hover:text-ink-strong transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
 
             {/* Modal Header */}
             <div className="space-y-2 mb-6">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#12B8B0]/15 text-[#12B8B0] text-xs font-bold">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand/15 text-brand text-xs font-bold">
                 <MessageSquare className="w-3.5 h-3.5" />
                 <span>{t.form.eyebrow}</span>
               </div>
-              <h3 className="text-xl sm:text-2xl font-black text-white">
+              <h3 className="text-xl sm:text-2xl font-black text-ink-strong">
                 {t.form.title}
               </h3>
-              <p className="text-xs text-[#A2B6BC]">
+              <p className="text-xs text-ink-muted">
                 {t.form.lead}
               </p>
             </div>
 
             {submissionSuccess ? (
               <div className="py-8 text-center space-y-3">
-                <div className="w-14 h-14 rounded-full bg-[#12B8B0]/20 text-[#12B8B0] flex items-center justify-center mx-auto">
+                <div className="w-14 h-14 rounded-full bg-brand/20 text-brand flex items-center justify-center mx-auto">
                   <CheckCircle2 className="w-8 h-8" />
                 </div>
-                <h4 className="text-lg font-bold text-white">
+                <h4 className="text-lg font-bold text-ink-strong">
                   {t.form.successTitle}
                 </h4>
-                <p className="text-xs text-[#A2B6BC]">
+                <p className="text-xs text-ink-muted">
                   {t.form.successText}
                 </p>
               </div>
             ) : (
               <form onSubmit={handleSubmitReview} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-bold text-[#E2C98C] mb-1.5">
+                  <label className="block text-xs font-bold text-gold mb-1.5">
                     {t.form.name}
                   </label>
                   <input
@@ -554,19 +554,19 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder={t.form.namePlaceholder}
-                    className="w-full px-4 py-2.5 rounded-xl bg-[#07191F] border border-white/10 text-white placeholder:text-[#718085] text-xs focus:outline-none focus:border-[#12B8B0]"
+                    className="w-full px-4 py-2.5 rounded-xl bg-canvas border border-ink/10 text-ink-strong placeholder:text-ink-dim text-xs focus:outline-none focus:border-brand"
                   />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-bold text-[#E2C98C] mb-1.5">
+                    <label className="block text-xs font-bold text-gold mb-1.5">
                       {t.form.service}
                     </label>
                     <select
                       value={formData.serviceId}
                       onChange={(e) => setFormData({ ...formData, serviceId: e.target.value })}
-                      className="w-full px-3 py-2.5 rounded-xl bg-[#07191F] border border-white/10 text-white text-xs focus:outline-none focus:border-[#12B8B0]"
+                      className="w-full px-3 py-2.5 rounded-xl bg-canvas border border-ink/10 text-ink-strong text-xs focus:outline-none focus:border-brand"
                     >
                       <option value="">{t.form.otherServices}</option>
                       {services.map((service) => (
@@ -578,7 +578,7 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold text-[#E2C98C] mb-1.5">
+                    <label className="block text-xs font-bold text-gold mb-1.5">
                       {t.form.tracking}
                     </label>
                     <input
@@ -586,13 +586,13 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
                       value={formData.trackingCode}
                       onChange={(e) => setFormData({ ...formData, trackingCode: e.target.value })}
                       placeholder={t.form.trackingPlaceholder}
-                      className="w-full px-4 py-2.5 rounded-xl bg-[#07191F] border border-white/10 text-white placeholder:text-[#718085] text-xs focus:outline-none focus:border-[#12B8B0]"
+                      className="w-full px-4 py-2.5 rounded-xl bg-canvas border border-ink/10 text-ink-strong placeholder:text-ink-dim text-xs focus:outline-none focus:border-brand"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-[#E2C98C] mb-1.5">
+                  <label className="block text-xs font-bold text-gold mb-1.5">
                     {t.form.rating}
                   </label>
                   <div className="flex items-center gap-2 py-1">
@@ -606,20 +606,20 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
                         <Star
                           className={`w-6 h-6 ${
                             formData.rating >= starVal
-                              ? 'fill-[#E2C98C] text-[#C6A15B]'
-                              : 'text-[#718085]'
+                              ? 'fill-gold text-gold-deep'
+                              : 'text-ink-dim'
                           }`}
                         />
                       </button>
                     ))}
-                    <span className="text-xs font-bold text-[#E2C98C] ms-2">
+                    <span className="text-xs font-bold text-gold ms-2">
                       {fill(t.form.ratingValue, { rating: formData.rating })}
                     </span>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-[#E2C98C] mb-1.5">
+                  <label className="block text-xs font-bold text-gold mb-1.5">
                     {t.form.comment}
                   </label>
                   <textarea
@@ -628,12 +628,12 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
                     value={formData.comment}
                     onChange={(e) => setFormData({ ...formData, comment: e.target.value })}
                     placeholder={t.form.commentPlaceholder}
-                    className="w-full px-4 py-2.5 rounded-xl bg-[#07191F] border border-white/10 text-white placeholder:text-[#718085] text-xs focus:outline-none focus:border-[#12B8B0] resize-none"
+                    className="w-full px-4 py-2.5 rounded-xl bg-canvas border border-ink/10 text-ink-strong placeholder:text-ink-dim text-xs focus:outline-none focus:border-brand resize-none"
                   ></textarea>
                 </div>
 
                 {reviewError && (
-                  <p role="alert" className="text-xs leading-relaxed text-[#F58B8B]">
+                  <p role="alert" className="text-xs leading-relaxed text-danger">
                     {reviewError}
                   </p>
                 )}
@@ -642,14 +642,14 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
                   <button
                     type="button"
                     onClick={() => setIsModalOpen(false)}
-                    className="px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-[#A2B6BC] text-xs font-bold transition-colors"
+                    className="px-4 py-2.5 rounded-xl bg-ink/5 hover:bg-ink/10 text-ink-muted text-xs font-bold transition-colors"
                   >
                     {t.form.cancel}
                   </button>
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#12B8B0] to-[#087F7B] hover:brightness-110 disabled:opacity-70 disabled:cursor-wait text-[#07191F] text-xs font-black transition-all flex items-center gap-2 shadow-lg shadow-[#12B8B0]/20"
+                    className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-brand-fill to-[#087F7B] hover:brightness-110 disabled:opacity-70 disabled:cursor-wait text-on-accent text-xs font-black transition-all flex items-center gap-2 shadow-lg shadow-brand/20"
                   >
                     <Send className="w-4 h-4" />
                     <span>{isSubmitting ? t.form.sending : t.form.submit}</span>

@@ -13,7 +13,7 @@ import { TextField } from '../ui/TextField';
 import { useSite } from '../site/SiteProvider';
 import { useI18n } from '../../i18n/I18nProvider';
 
-const FOCUS = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E2C98C]';
+const FOCUS = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-line';
 
 const TIME_ICONS: Record<CallTimeKey, React.ElementType> = { morning: Sun, afternoon: CloudSun, asap: Zap };
 const TIMES = CALL_TIMES.map((time) => ({ value: time.key, icon: TIME_ICONS[time.key] }));
@@ -184,7 +184,7 @@ export const ConsultationPage: React.FC<{ services: TopicService[]; groups: Serv
           goTo(1);
         }}
         className={`inline-flex items-center gap-2 min-h-11 px-4 py-2 rounded-lg border text-sm font-bold text-start transition-colors ${FOCUS} ${
-          isSelected ? 'bg-[#E2C98C] border-[#E2C98C] text-[#07191F]' : 'bg-[#0C252B] border-white/15 text-[#D5E0E3] hover:border-[#E2C98C]/70 hover:text-white'
+          isSelected ? 'bg-gold-fill border-gold-line text-on-accent' : 'bg-surface border-ink/15 text-ink-soft hover:border-gold-line/70 hover:text-ink-strong'
         }`}
       >
         {service.shortTitle}
@@ -193,14 +193,14 @@ export const ConsultationPage: React.FC<{ services: TopicService[]; groups: Serv
   };
 
   return (
-    <main className="bg-[#07191F] text-[#F7F7F3]">
+    <main className="bg-canvas text-ink">
       <section className="relative isolate overflow-hidden lg:min-h-[calc(100svh-7rem)]">
         <ProgressMap reached={reference ? 3 : step} bandRef={bandRef} />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-14 lg:py-14 grid grid-cols-1 lg:grid-cols-12">
           <div className="lg:col-span-7 text-start lg:ltr:col-start-6">
-            <h1 className={`${step > 0 || reference ? 'sr-only lg:not-sr-only' : ''} mt-2 lg:mt-0 text-[1.9rem] sm:text-[2.6rem] xl:text-5xl font-black leading-[1.3] text-[#F7F7F3] [text-wrap:balance]`}>{t.title}</h1>
-            <p className={`${step > 0 || reference ? 'hidden lg:block' : ''} mt-4 max-w-2xl text-[15px] sm:text-lg leading-[1.95] text-[#C9D7DB]`}>
+            <h1 className={`${step > 0 || reference ? 'sr-only lg:not-sr-only' : ''} mt-2 lg:mt-0 text-[1.9rem] sm:text-[2.6rem] xl:text-5xl font-black leading-[1.3] text-ink [text-wrap:balance]`}>{t.title}</h1>
+            <p className={`${step > 0 || reference ? 'hidden lg:block' : ''} mt-4 max-w-2xl text-[15px] sm:text-lg leading-[1.95] text-ink-soft`}>
               {t.intro}
             </p>
 
@@ -216,27 +216,27 @@ export const ConsultationPage: React.FC<{ services: TopicService[]; groups: Serv
               </div>
             ) : (
               <>
-                <ol className="mt-3 lg:mt-8 grid grid-cols-3 border-t border-white/15" aria-label={t.stepsAria}>
+                <ol className="mt-3 lg:mt-8 grid grid-cols-3 border-t border-ink/15" aria-label={t.stepsAria}>
                   {t.steps.map((name, index) => {
                     const isCurrent = index === step;
                     const isDone = canReach(index + 1) || (index === 0 && Boolean(topic));
                     const reachable = canReach(index);
                     return (
                       <li key={name} className="relative">
-                        {isCurrent && <span aria-hidden="true" className="absolute -top-px inset-x-0 h-0.5 bg-[#E2C98C]" />}
+                        {isCurrent && <span aria-hidden="true" className="absolute -top-px inset-x-0 h-0.5 bg-gold-fill" />}
                         <button
                           type="button"
                           disabled={!reachable}
                           aria-current={isCurrent ? 'step' : undefined}
                           onClick={() => goTo(index)}
-                          className={`flex items-center gap-2 w-full min-h-12 py-2.5 pe-2 text-start text-[13px] sm:text-sm font-bold transition-colors rounded-b disabled:cursor-default focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[#E2C98C] ${
-                            isCurrent ? 'text-white' : reachable ? 'text-[#D5E0E3] hover:text-white' : 'text-[#7F979E]'
+                          className={`flex items-center gap-2 w-full min-h-12 py-2.5 pe-2 text-start text-[13px] sm:text-sm font-bold transition-colors rounded-b disabled:cursor-default focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-gold-line ${
+                            isCurrent ? 'text-ink-strong' : reachable ? 'text-ink-soft hover:text-ink-strong' : 'text-ink-dim'
                           }`}
                         >
                           <span
                             aria-hidden="true"
                             className={`shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-black ${
-                              isDone && !isCurrent ? 'bg-[#12B8B0] text-[#07191F]' : isCurrent ? 'bg-[#E2C98C] text-[#07191F]' : 'border border-white/25 text-[#A2B6BC]'
+                              isDone && !isCurrent ? 'bg-brand-fill text-on-accent' : isCurrent ? 'bg-gold-fill text-on-accent' : 'border border-ink/25 text-ink-muted'
                             }`}
                           >
                             {isDone && !isCurrent ? <Check className="w-3.5 h-3.5" /> : num(index + 1)}
@@ -251,7 +251,7 @@ export const ConsultationPage: React.FC<{ services: TopicService[]; groups: Serv
                 <div key={step} className="sup-answer mt-6">
                   {step === 0 && (
                     <div>
-                      <h2 ref={headingRef} tabIndex={-1} className="text-xl sm:text-2xl font-black text-white outline-none">
+                      <h2 ref={headingRef} tabIndex={-1} className="text-xl sm:text-2xl font-black text-ink-strong outline-none">
                         {t.topicQuestion}
                       </h2>
                       <button
@@ -263,7 +263,7 @@ export const ConsultationPage: React.FC<{ services: TopicService[]; groups: Serv
                           goTo(1);
                         }}
                         className={`group mt-4 w-full flex items-center gap-3 min-h-14 px-4 py-3 rounded-lg border text-start transition-colors ${FOCUS} ${
-                          topic === GENERAL_TOPIC ? 'bg-[#E2C98C] border-[#E2C98C] text-[#07191F]' : 'border-[#E2C98C]/50 text-[#E2C98C] hover:bg-[#C6A15B]/10'
+                          topic === GENERAL_TOPIC ? 'bg-gold-fill border-gold-line text-on-accent' : 'border-gold-line/50 text-gold hover:bg-gold-deep/10'
                         }`}
                       >
                         <HelpCircle aria-hidden="true" className="w-5 h-5 shrink-0" />
@@ -273,7 +273,7 @@ export const ConsultationPage: React.FC<{ services: TopicService[]; groups: Serv
                       <div className="mt-5 space-y-4">
                         {groups.map((line) => (
                           <div key={line.id}>
-                            <h3 className={`mb-2 text-[13px] font-bold ${line.tone === 'teal' ? 'text-[#3ED0C8]' : 'text-[#E2C98C]'}`}>{line.title}</h3>
+                            <h3 className={`mb-2 text-[13px] font-bold ${line.tone === 'teal' ? 'text-brand-bright' : 'text-gold'}`}>{line.title}</h3>
                             <div className="flex flex-wrap gap-2">
                               {line.slugs.map((slug) => {
                                 const service = services.find((s) => s.slug === slug);
@@ -288,11 +288,11 @@ export const ConsultationPage: React.FC<{ services: TopicService[]; groups: Serv
 
                   {step === 1 && (
                     <div>
-                      <h2 ref={headingRef} tabIndex={-1} className="text-xl sm:text-2xl font-black text-white outline-none">
+                      <h2 ref={headingRef} tabIndex={-1} className="text-xl sm:text-2xl font-black text-ink-strong outline-none">
                         {t.timeQuestion}
                       </h2>
-                      <p className="mt-2 text-sm text-[#A2B6BC]">
-                        {t.topicLabel} <span className="font-bold text-[#E2C98C]">{topic}</span>
+                      <p className="mt-2 text-sm text-ink-muted">
+                        {t.topicLabel} <span className="font-bold text-gold">{topic}</span>
                       </p>
                       <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
                         {TIMES.map((option) => {
@@ -309,13 +309,13 @@ export const ConsultationPage: React.FC<{ services: TopicService[]; groups: Serv
                                 goTo(2);
                               }}
                               className={`flex sm:flex-col items-center sm:items-start gap-3 sm:gap-2 min-h-16 p-4 rounded-lg border text-start transition-colors ${FOCUS} ${
-                                isSelected ? 'bg-[#E2C98C] border-[#E2C98C] text-[#07191F]' : 'bg-[#0C252B] border-white/15 text-white hover:border-[#E2C98C]/70'
+                                isSelected ? 'bg-gold-fill border-gold-line text-on-accent' : 'bg-surface border-ink/15 text-ink-strong hover:border-gold-line/70'
                               }`}
                             >
-                              <Icon aria-hidden="true" className={`w-5 h-5 shrink-0 ${isSelected ? '' : 'text-[#E2C98C]'}`} />
+                              <Icon aria-hidden="true" className={`w-5 h-5 shrink-0 ${isSelected ? '' : 'text-gold'}`} />
                               <span>
                                 <span className="block font-extrabold text-[15px]">{label.title}</span>
-                                <span className={`block mt-0.5 text-[13px] ${isSelected ? 'text-[#07191F]/75' : 'text-[#A2B6BC]'}`}>{label.hours}</span>
+                                <span className={`block mt-0.5 text-[13px] ${isSelected ? 'text-on-accent/75' : 'text-ink-muted'}`}>{label.hours}</span>
                               </span>
                             </button>
                           );
@@ -324,7 +324,7 @@ export const ConsultationPage: React.FC<{ services: TopicService[]; groups: Serv
                       <button
                         type="button"
                         onClick={() => goTo(0)}
-                        className={`mt-4 inline-flex items-center gap-2 py-2 text-sm font-bold text-[#A2B6BC] hover:text-white transition-colors rounded ${FOCUS}`}
+                        className={`mt-4 inline-flex items-center gap-2 py-2 text-sm font-bold text-ink-muted hover:text-ink-strong transition-colors rounded ${FOCUS}`}
                       >
                         <ArrowRight aria-hidden="true" className="w-4 h-4 ltr:rotate-180" />
                         <span>{t.changeTopic}</span>
@@ -334,12 +334,12 @@ export const ConsultationPage: React.FC<{ services: TopicService[]; groups: Serv
 
                   {step === 2 && (
                     <form onSubmit={handleSubmit} noValidate>
-                      <h2 ref={headingRef} tabIndex={-1} className="text-xl sm:text-2xl font-black text-white outline-none">
+                      <h2 ref={headingRef} tabIndex={-1} className="text-xl sm:text-2xl font-black text-ink-strong outline-none">
                         {t.contactQuestion}
                       </h2>
-                      <p className="mt-2 text-sm leading-relaxed text-[#A2B6BC]">
-                        {t.topicLabel} <span className="font-bold text-[#E2C98C]">{topic}</span>
-                        {t.separator} {t.timeLabel} <span className="font-bold text-[#E2C98C]">{time && callTimeText(time, locale)}</span>
+                      <p className="mt-2 text-sm leading-relaxed text-ink-muted">
+                        {t.topicLabel} <span className="font-bold text-gold">{topic}</span>
+                        {t.separator} {t.timeLabel} <span className="font-bold text-gold">{time && callTimeText(time, locale)}</span>
                       </p>
 
                       <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -373,8 +373,8 @@ export const ConsultationPage: React.FC<{ services: TopicService[]; groups: Serv
                       </div>
 
                       <div className="mt-5">
-                        <label htmlFor="consult-notes" className="block mb-2 text-sm font-bold text-[#F7F7F3]">
-                          {t.notes} <span className="font-normal text-[#A2B6BC]">{t.optional}</span>
+                        <label htmlFor="consult-notes" className="block mb-2 text-sm font-bold text-ink">
+                          {t.notes} <span className="font-normal text-ink-muted">{t.optional}</span>
                         </label>
                         <textarea
                           id="consult-notes"
@@ -382,12 +382,12 @@ export const ConsultationPage: React.FC<{ services: TopicService[]; groups: Serv
                           value={notes}
                           onChange={(event) => setNotes(event.target.value)}
                           placeholder={t.notesPlaceholder}
-                          className="w-full px-4 py-3.5 rounded-lg bg-[#0C252B] border border-white/15 hover:border-white/30 text-base leading-relaxed text-white placeholder:text-[#7F979E] outline-none transition-colors resize-none focus:border-[#E2C98C] focus:ring-1 focus:ring-[#E2C98C]"
+                          className="w-full px-4 py-3.5 rounded-lg bg-surface border border-ink/15 hover:border-ink/30 text-base leading-relaxed text-ink-strong placeholder:text-ink-dim outline-none transition-colors resize-none focus:border-gold-line focus:ring-1 focus:ring-gold-line"
                         />
                       </div>
 
                       {formError && (
-                        <p role="alert" className="mt-5 flex items-start gap-2 text-sm leading-relaxed text-[#F58B8B]">
+                        <p role="alert" className="mt-5 flex items-start gap-2 text-sm leading-relaxed text-danger">
                           <AlertCircle aria-hidden="true" className="w-4 h-4 mt-0.5 shrink-0" />
                           <span>{serverErrors.description ?? formError}</span>
                         </p>
@@ -397,7 +397,7 @@ export const ConsultationPage: React.FC<{ services: TopicService[]; groups: Serv
                         <button
                           type="submit"
                           disabled={isSubmitting}
-                          className={`inline-flex items-center justify-center gap-2.5 min-h-14 px-8 rounded-lg bg-[#12B8B0] hover:bg-[#3ED0C8] disabled:opacity-70 disabled:cursor-wait text-[#07191F] font-black text-base transition-colors ${FOCUS}`}
+                          className={`inline-flex items-center justify-center gap-2.5 min-h-14 px-8 rounded-lg bg-brand-fill hover:bg-brand-bright-fill disabled:opacity-70 disabled:cursor-wait text-on-accent font-black text-base transition-colors ${FOCUS}`}
                         >
                           <Send className="w-5 h-5" />
                           <span>{isSubmitting ? t.submitting : t.submit}</span>
@@ -405,14 +405,14 @@ export const ConsultationPage: React.FC<{ services: TopicService[]; groups: Serv
                         <button
                           type="button"
                           onClick={() => goTo(1)}
-                          className={`inline-flex items-center justify-center gap-2 py-2.5 px-3 text-sm font-bold text-[#A2B6BC] hover:text-white transition-colors rounded ${FOCUS}`}
+                          className={`inline-flex items-center justify-center gap-2 py-2.5 px-3 text-sm font-bold text-ink-muted hover:text-ink-strong transition-colors rounded ${FOCUS}`}
                         >
                           <ArrowRight aria-hidden="true" className="w-4 h-4 ltr:rotate-180" />
                           <span>{t.changeTime}</span>
                         </button>
                       </div>
-                      <p className="mt-3 flex items-start gap-2 text-[13px] leading-relaxed text-[#A2B6BC]">
-                        <ShieldCheck aria-hidden="true" className="w-4 h-4 mt-0.5 shrink-0 text-[#12B8B0]" />
+                      <p className="mt-3 flex items-start gap-2 text-[13px] leading-relaxed text-ink-muted">
+                        <ShieldCheck aria-hidden="true" className="w-4 h-4 mt-0.5 shrink-0 text-brand" />
                         <span>{t.privacy}</span>
                       </p>
                     </form>
@@ -424,11 +424,11 @@ export const ConsultationPage: React.FC<{ services: TopicService[]; groups: Serv
             {/* For anyone who can't wait for a call back */}
             <a
               href={telHref(SUPPORT_PHONE)}
-              className={`mt-8 flex flex-wrap items-center gap-x-2 gap-y-1 pt-5 border-t border-white/10 text-sm text-[#A2B6BC] hover:text-white transition-colors ${FOCUS}`}
+              className={`mt-8 flex flex-wrap items-center gap-x-2 gap-y-1 pt-5 border-t border-ink/10 text-sm text-ink-muted hover:text-ink-strong transition-colors ${FOCUS}`}
             >
-              <PhoneCall aria-hidden="true" className="w-4 h-4 text-[#12B8B0]" />
+              <PhoneCall aria-hidden="true" className="w-4 h-4 text-brand" />
               <span>{t.urgent}</span>
-              <span dir="ltr" className="font-bold text-[#F7F7F3] whitespace-nowrap">
+              <span dir="ltr" className="font-bold text-ink whitespace-nowrap">
                 {SUPPORT_PHONE}
               </span>
             </a>

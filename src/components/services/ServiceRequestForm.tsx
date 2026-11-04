@@ -13,19 +13,19 @@ interface ServiceRequestFormProps {
   serviceShortTitle: string;
 }
 
-const FOCUS = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E2C98C]';
+const FOCUS = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-line';
 
 // ---- The waybill: a live preview that fills in as the visitor types ------------
 
 const WaybillRow: React.FC<{ label: string; value: string; placeholder?: string; ltr?: boolean }> = ({ label, value, placeholder, ltr }) => (
-  <div className="flex items-baseline justify-between gap-4 py-2 border-b border-[#07191F]/15 last:border-b-0">
-    <span className="shrink-0 text-xs font-medium text-[#07191F]/70">{label}</span>
+  <div className="flex items-baseline justify-between gap-4 py-2 border-b border-canvas/15 last:border-b-0">
+    <span className="shrink-0 text-xs font-medium text-on-accent/70">{label}</span>
     {value ? (
-      <span dir={ltr ? 'ltr' : undefined} className="min-w-0 truncate text-sm font-extrabold text-[#07191F]">
+      <span dir={ltr ? 'ltr' : undefined} className="min-w-0 truncate text-sm font-extrabold text-on-accent">
         {value}
       </span>
     ) : (
-      <span className="text-xs text-[#07191F]/55">{placeholder}</span>
+      <span className="text-xs text-on-accent/55">{placeholder}</span>
     )}
   </div>
 );
@@ -40,9 +40,9 @@ const Waybill: React.FC<{
 }> = ({ title, fullName, phone, details, remaining, ready }) => {
   const t = useI18n().t.services.form;
   return (
-    <div aria-hidden="true" className="relative rounded-2xl overflow-hidden bg-[#E2C98C] text-[#07191F]">
+    <div aria-hidden="true" className="relative rounded-2xl overflow-hidden bg-gold-fill text-on-accent">
       <div className="px-5 sm:px-6 pt-5 pb-5">
-        <div className="flex items-center justify-between gap-3 text-xs font-bold text-[#07191F]/75">
+        <div className="flex items-center justify-between gap-3 text-xs font-bold text-on-accent/75">
           <span>{t.waybill}</span>
           <span>GITI</span>
         </div>
@@ -56,16 +56,16 @@ const Waybill: React.FC<{
       </div>
 
       {/* Tear line, with the notches a real ticket stub has */}
-      <div className="relative border-t-2 border-dashed border-[#07191F]/35">
-        <span className="absolute -top-2.5 -right-2.5 w-5 h-5 rounded-full bg-[#07191F]" />
-        <span className="absolute -top-2.5 -left-2.5 w-5 h-5 rounded-full bg-[#07191F]" />
+      <div className="relative border-t-2 border-dashed border-canvas/35">
+        <span className="absolute -top-2.5 -right-2.5 w-5 h-5 rounded-full bg-canvas" />
+        <span className="absolute -top-2.5 -left-2.5 w-5 h-5 rounded-full bg-canvas" />
       </div>
 
       <div className="relative px-5 sm:px-6 py-4 min-h-[84px] flex items-center">
         {/* Two stops are required: the name and the phone number */}
         <div className="flex-1 pe-24">
-          <p className="text-xs font-bold text-[#07191F]/75 mb-2">{ready ? t.ready : remaining === 2 ? t.twoLeft : t.oneLeft}</p>
-          <div className="relative h-1 rounded-full bg-[#07191F]/20">
+          <p className="text-xs font-bold text-on-accent/75 mb-2">{ready ? t.ready : remaining === 2 ? t.twoLeft : t.oneLeft}</p>
+          <div className="relative h-1 rounded-full bg-canvas/20">
             <span className="waybill-progress absolute inset-y-0 start-0 rounded-full bg-[#087F7B]" style={{ width: `${((2 - remaining) / 2) * 100}%` }} />
           </div>
         </div>
@@ -165,8 +165,8 @@ export const ServiceRequestForm: React.FC<ServiceRequestFormProps> = ({ serviceI
             </div>
 
             <div>
-              <label htmlFor="service-details" className="block mb-2 text-sm font-bold text-[#F7F7F3]">
-                {t.detailsLabel} <span className="font-normal text-[#A2B6BC]">{t.detailsOptional}</span>
+              <label htmlFor="service-details" className="block mb-2 text-sm font-bold text-ink">
+                {t.detailsLabel} <span className="font-normal text-ink-muted">{t.detailsOptional}</span>
               </label>
               <textarea
                 id="service-details"
@@ -175,9 +175,9 @@ export const ServiceRequestForm: React.FC<ServiceRequestFormProps> = ({ serviceI
                 value={details}
                 onChange={(event) => setDetails(event.target.value)}
                 placeholder={t.detailsPlaceholder}
-                className="w-full px-4 py-3.5 rounded-lg bg-[#0C252B] border border-white/15 hover:border-white/30 text-base leading-relaxed text-white placeholder:text-[#7F979E] outline-none transition-colors resize-none focus:border-[#E2C98C] focus:ring-1 focus:ring-[#E2C98C]"
+                className="w-full px-4 py-3.5 rounded-lg bg-surface border border-ink/15 hover:border-ink/30 text-base leading-relaxed text-ink-strong placeholder:text-ink-dim outline-none transition-colors resize-none focus:border-gold-line focus:ring-1 focus:ring-gold-line"
               />
-              {serverErrors.description && <p className="mt-2 text-[13px] text-[#F58B8B]">{serverErrors.description}</p>}
+              {serverErrors.description && <p className="mt-2 text-[13px] text-danger">{serverErrors.description}</p>}
             </div>
           </div>
         )}
@@ -189,7 +189,7 @@ export const ServiceRequestForm: React.FC<ServiceRequestFormProps> = ({ serviceI
         {!reference && (
           <>
             {formError && (
-              <p role="alert" className="mt-4 flex items-start gap-2 text-sm leading-relaxed text-[#F58B8B]">
+              <p role="alert" className="mt-4 flex items-start gap-2 text-sm leading-relaxed text-danger">
                 <AlertCircle aria-hidden="true" className="w-4 h-4 mt-0.5 shrink-0" />
                 <span>{formError}</span>
               </p>
@@ -197,13 +197,13 @@ export const ServiceRequestForm: React.FC<ServiceRequestFormProps> = ({ serviceI
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`mt-4 w-full inline-flex items-center justify-center gap-2.5 min-h-14 px-6 rounded-lg bg-[#12B8B0] hover:bg-[#3ED0C8] disabled:opacity-70 disabled:cursor-wait text-[#07191F] font-black text-base transition-colors ${FOCUS}`}
+              className={`mt-4 w-full inline-flex items-center justify-center gap-2.5 min-h-14 px-6 rounded-lg bg-brand-fill hover:bg-brand-bright-fill disabled:opacity-70 disabled:cursor-wait text-on-accent font-black text-base transition-colors ${FOCUS}`}
             >
               <Send className="w-5 h-5" />
               <span>{isSubmitting ? t.submitting : t.submit}</span>
             </button>
-            <p className="mt-3 flex items-start gap-2 text-[13px] leading-relaxed text-[#A2B6BC]">
-              <ShieldCheck aria-hidden="true" className="w-4 h-4 mt-0.5 shrink-0 text-[#12B8B0]" />
+            <p className="mt-3 flex items-start gap-2 text-[13px] leading-relaxed text-ink-muted">
+              <ShieldCheck aria-hidden="true" className="w-4 h-4 mt-0.5 shrink-0 text-brand" />
               <span>{t.privacy}</span>
             </p>
           </>

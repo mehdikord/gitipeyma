@@ -22,9 +22,9 @@ const useMapData = ({ services, lines }: MapProps) => {
 
 // Distance from a row's top to its station; the rail segments in globals.css use the same value.
 const STATION_Y = 30;
-const TONE_RAIL: Record<Tone, string> = { teal: 'bg-[#12B8B0]', gold: 'bg-[#C6A15B]' };
-const TONE_TEXT: Record<Tone, string> = { teal: 'text-[#3ED0C8]', gold: 'text-[#E2C98C]' };
-const FOCUS = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E2C98C]';
+const TONE_RAIL: Record<Tone, string> = { teal: 'bg-brand-fill', gold: 'bg-gold-deep-fill' };
+const TONE_TEXT: Record<Tone, string> = { teal: 'text-brand-bright', gold: 'text-gold' };
+const FOCUS = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-line';
 // Points forward in the reading direction: left on the Persian site, right on the others.
 const FORWARD = 'ltr:-scale-x-100';
 
@@ -44,7 +44,7 @@ const LineHeading: React.FC<{ title: string; tone: Tone; count: number; order: n
       <span aria-hidden="true" className={`svc-rail svc-rail-head ${TONE_RAIL[tone]}`} style={{ '--i': order } as React.CSSProperties} />
       <span
         aria-hidden="true"
-        className={`absolute start-[5px] top-[27px] w-3.5 h-3.5 rounded-full bg-[#07191F] border-[3px] ${tone === 'teal' ? 'border-[#12B8B0]' : 'border-[#C6A15B]'}`}
+        className={`absolute start-[5px] top-[27px] w-3.5 h-3.5 rounded-full bg-canvas border-[3px] ${tone === 'teal' ? 'border-brand' : 'border-gold-deep-line'}`}
       />
       <h3 className={`font-bold text-sm ${TONE_TEXT[tone]}`}>
         {title}
@@ -61,17 +61,17 @@ const ServicePanel: React.FC<{ service: ServiceItem }> = ({ service }) => {
   return (
     <div key={service.slug} className="svc-panel-content flex flex-col flex-none">
       <div className="relative z-10 px-7 -mt-20">
-        <span className="inline-block mb-2.5 px-2.5 py-1 rounded-md bg-[#07191F]/80 text-[#E2C98C] text-xs font-bold">{service.badge}</span>
-        <h3 className="text-[1.65rem] leading-[1.45] font-black text-white max-w-[30rem]">{service.title}</h3>
+        <span className="inline-block mb-2.5 px-2.5 py-1 rounded-md bg-canvas/80 text-gold text-xs font-bold">{service.badge}</span>
+        <h3 className="text-[1.65rem] leading-[1.45] font-black text-ink-strong max-w-[30rem]">{service.title}</h3>
       </div>
 
       <div className="px-7 pt-3 pb-6">
-        <p className="text-sm leading-[1.9] text-[#B7C8CD] max-w-[36rem]">{service.summary}</p>
+        <p className="text-sm leading-[1.9] text-ink-soft max-w-[36rem]">{service.summary}</p>
 
         <ul className="mt-3.5 space-y-1.5">
           {service.features.slice(0, 3).map((feature) => (
-            <li key={feature} className="flex items-start gap-2 text-[13px] leading-relaxed text-[#E4ECEE]">
-              <CheckCircle2 className="w-4 h-4 mt-0.5 text-[#12B8B0] shrink-0" />
+            <li key={feature} className="flex items-start gap-2 text-[13px] leading-relaxed text-ink-soft">
+              <CheckCircle2 className="w-4 h-4 mt-0.5 text-brand shrink-0" />
               <span>{feature}</span>
             </li>
           ))}
@@ -80,9 +80,9 @@ const ServicePanel: React.FC<{ service: ServiceItem }> = ({ service }) => {
         {/* The real steps of this service, drawn as a short line of its own */}
         <ol className="mt-5 grid grid-cols-4 gap-3" aria-label={t.stepsLabel}>
           {service.steps.slice(0, 4).map((step, index) => (
-            <li key={`${index}-${step.title}`} className="relative pt-4 text-[11.5px] leading-[1.6] text-[#A2B6BC]">
-              {index < 3 && <span aria-hidden="true" className="absolute top-[4px] start-0 -end-3 h-px bg-[#C6A15B]/45" />}
-              <span aria-hidden="true" className="absolute top-0 start-0 w-[9px] h-[9px] rounded-full bg-[#C6A15B]" />
+            <li key={`${index}-${step.title}`} className="relative pt-4 text-[11.5px] leading-[1.6] text-ink-muted">
+              {index < 3 && <span aria-hidden="true" className="absolute top-[4px] start-0 -end-3 h-px bg-gold-deep/45" />}
+              <span aria-hidden="true" className="absolute top-0 start-0 w-[9px] h-[9px] rounded-full bg-gold-deep-fill" />
               {step.title}
             </li>
           ))}
@@ -91,14 +91,14 @@ const ServicePanel: React.FC<{ service: ServiceItem }> = ({ service }) => {
         <div className="mt-5 flex flex-wrap items-center gap-3">
           <Link
             href={path(`/services/${service.slug}`)}
-            className={`group inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-[#12B8B0] hover:bg-[#3ED0C8] text-[#07191F] font-extrabold text-sm transition-colors ${FOCUS}`}
+            className={`group inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-brand-fill hover:bg-brand-bright-fill text-on-accent font-extrabold text-sm transition-colors ${FOCUS}`}
           >
             <span>{t.details}</span>
             <ArrowLeft className={`w-4 h-4 transition-transform rtl:group-hover:-translate-x-1 ltr:group-hover:translate-x-1 ${FORWARD}`} />
           </Link>
           <Link
             href={path(`/consultation?service=${service.slug}`)}
-            className={`inline-flex items-center px-4 py-3 rounded-lg text-[#E2C98C] hover:text-white font-bold text-sm transition-colors ${FOCUS}`}
+            className={`inline-flex items-center px-4 py-3 rounded-lg text-gold hover:text-ink-strong font-bold text-sm transition-colors ${FOCUS}`}
           >
             {t.consultAbout}
           </Link>
@@ -162,19 +162,19 @@ const DesktopMap: React.FC<MapProps> = (props) => {
                     style={{ '--i': order } as React.CSSProperties}
                   >
                     <Rail tone={line.tone} isLast={index === line.slugs.length - 1} order={order} />
-                    <span aria-hidden="true" className={`absolute start-[7px] top-[25px] w-2.5 h-2.5 rounded-full border-2 border-[#07191F] ${TONE_RAIL[line.tone]}`} />
+                    <span aria-hidden="true" className={`absolute start-[7px] top-[25px] w-2.5 h-2.5 rounded-full border-2 border-canvas ${TONE_RAIL[line.tone]}`} />
                     <Link
                       href={path(`/services/${slug}`)}
                       aria-current={isActive ? 'true' : undefined}
                       onMouseEnter={() => previewSoon(slug)}
                       onFocus={() => setActiveSlug(slug)}
-                      className={`ms-8 flex items-center gap-3 min-h-[60px] ps-3 pe-5 rounded-s-xl transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[#E2C98C] ${
-                        isActive ? 'bg-[#0C252B]' : 'hover:bg-white/[0.03]'
+                      className={`ms-8 flex items-center gap-3 min-h-[60px] ps-3 pe-5 rounded-s-xl transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-gold-line ${
+                        isActive ? 'bg-surface' : 'hover:bg-ink/[0.03]'
                       }`}
                     >
-                      <Icon className={`w-5 h-5 shrink-0 transition-colors ${isActive ? 'text-[#E2C98C]' : 'text-[#7FA2AA]'}`} />
-                      <span className={`font-bold text-[15.5px] transition-colors ${isActive ? 'text-white' : 'text-[#D5E0E3]'}`}>{service.shortTitle}</span>
-                      <span className={`hidden xl:block ms-auto text-xs text-end whitespace-nowrap transition-colors ${isActive ? 'text-[#E2C98C]' : 'text-[#7F979E]'}`}>{service.badge}</span>
+                      <Icon className={`w-5 h-5 shrink-0 transition-colors ${isActive ? 'text-gold' : 'text-ink-dim'}`} />
+                      <span className={`font-bold text-[15.5px] transition-colors ${isActive ? 'text-ink-strong' : 'text-ink-soft'}`}>{service.shortTitle}</span>
+                      <span className={`hidden xl:block ms-auto text-xs text-end whitespace-nowrap transition-colors ${isActive ? 'text-gold' : 'text-ink-dim'}`}>{service.badge}</span>
                     </Link>
                   </li>
                 );
@@ -190,23 +190,23 @@ const DesktopMap: React.FC<MapProps> = (props) => {
             className="svc-marker absolute start-0 top-0 w-6 h-6 rounded-full flex items-center justify-center"
             style={{ transform: `translateY(${markerY - 12}px)` }}
           >
-            <span className="absolute inset-0 rounded-full bg-[#E2C98C]/25" />
-            <span className="w-3.5 h-3.5 rounded-full bg-[#E2C98C] border-[3px] border-[#07191F] outline-1 outline-[#E2C98C]" />
+            <span className="absolute inset-0 rounded-full bg-gold/25" />
+            <span className="w-3.5 h-3.5 rounded-full bg-gold-fill border-[3px] border-canvas outline-1 outline-gold-line" />
           </span>
         )}
       </div>
 
       <aside
         aria-label={active.title}
-        className="col-span-7 sticky top-24 flex flex-col h-[calc(100svh-7rem)] min-h-[560px] max-h-[780px] rounded-2xl rounded-ss-none overflow-hidden bg-[#0C252B]"
+        className="col-span-7 sticky top-24 flex flex-col h-[calc(100svh-7rem)] min-h-[560px] max-h-[780px] rounded-2xl rounded-ss-none overflow-hidden bg-surface"
       >
-        <div className="relative flex-1 min-h-0 overflow-hidden bg-[#07191F]">
+        <div className="relative flex-1 min-h-0 overflow-hidden bg-canvas">
           {props.services.map((service) => (
             <div key={service.slug} data-active={service.slug === activeSlug} className="svc-photo absolute inset-0">
               <ServiceImage src={service.image} alt="" category={service.category} slug={service.slug} />
             </div>
           ))}
-          <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-[#0C252B] via-[#0C252B]/30 to-[#07191F]/10" />
+          <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-surface via-surface/30 to-canvas/10" />
         </div>
         <ServicePanel service={active} />
       </aside>
@@ -260,24 +260,24 @@ const MobileMap: React.FC<MapProps> = (props) => {
                   <span
                     aria-hidden="true"
                     className={`absolute top-[23px] rounded-full transition-all ${
-                      isOpen ? 'start-[4px] w-4 h-4 bg-[#E2C98C] border-[3px] border-[#07191F] outline-1 outline-[#E2C98C]' : `start-[7px] w-2.5 h-2.5 border-2 border-[#07191F] mt-[3px] ${TONE_RAIL[line.tone]}`
+                      isOpen ? 'start-[4px] w-4 h-4 bg-gold-fill border-[3px] border-canvas outline-1 outline-gold-line' : `start-[7px] w-2.5 h-2.5 border-2 border-canvas mt-[3px] ${TONE_RAIL[line.tone]}`
                     }`}
                   />
-                  <div className={`ms-8 rounded-xl transition-colors ${isOpen ? 'bg-[#0C252B]' : ''}`}>
+                  <div className={`ms-8 rounded-xl transition-colors ${isOpen ? 'bg-surface' : ''}`}>
                     <h4>
                       <button
                         type="button"
                         aria-expanded={isOpen}
                         aria-controls={panelId}
                         onClick={(event) => toggle(slug, event.currentTarget)}
-                        className="w-full min-h-[60px] flex items-center gap-3 px-3 py-2 text-start rounded-xl focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[#E2C98C]"
+                        className="w-full min-h-[60px] flex items-center gap-3 px-3 py-2 text-start rounded-xl focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-gold-line"
                       >
-                        <Icon className={`w-5 h-5 shrink-0 ${isOpen ? 'text-[#E2C98C]' : 'text-[#7FA2AA]'}`} />
+                        <Icon className={`w-5 h-5 shrink-0 ${isOpen ? 'text-gold' : 'text-ink-dim'}`} />
                         <span className="flex-1 min-w-0">
-                          <span className="block font-bold text-[15px] leading-snug text-white">{service.shortTitle}</span>
-                          <span className={`block mt-0.5 text-xs ${isOpen ? 'text-[#E2C98C]' : 'text-[#8FA5AB]'}`}>{service.badge}</span>
+                          <span className="block font-bold text-[15px] leading-snug text-ink-strong">{service.shortTitle}</span>
+                          <span className={`block mt-0.5 text-xs ${isOpen ? 'text-gold' : 'text-ink-dim'}`}>{service.badge}</span>
                         </span>
-                        <ChevronDown className={`w-5 h-5 shrink-0 text-[#7FA2AA] transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
+                        <ChevronDown className={`w-5 h-5 shrink-0 text-ink-dim transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
                       </button>
                     </h4>
 
@@ -285,28 +285,28 @@ const MobileMap: React.FC<MapProps> = (props) => {
                       <div className="overflow-hidden">
                         {visited.includes(slug) && (
                           <div className="px-3 pb-4">
-                            <div className="svc-photo relative aspect-[16/9] rounded-lg overflow-hidden bg-[#07191F]" data-active="true">
+                            <div className="svc-photo relative aspect-[16/9] rounded-lg overflow-hidden bg-canvas" data-active="true">
                               <ServiceImage src={service.image} alt="" category={service.category} slug={slug} />
                             </div>
-                            <p className="mt-3 text-sm leading-[1.9] text-[#B7C8CD]">{service.summary}</p>
+                            <p className="mt-3 text-sm leading-[1.9] text-ink-soft">{service.summary}</p>
                             <ul className="mt-3 space-y-1.5">
                               {service.features.slice(0, 2).map((feature) => (
-                                <li key={feature} className="flex items-start gap-2 text-[13px] leading-relaxed text-[#E4ECEE]">
-                                  <CheckCircle2 className="w-4 h-4 mt-0.5 text-[#12B8B0] shrink-0" />
+                                <li key={feature} className="flex items-start gap-2 text-[13px] leading-relaxed text-ink-soft">
+                                  <CheckCircle2 className="w-4 h-4 mt-0.5 text-brand shrink-0" />
                                   <span>{feature}</span>
                                 </li>
                               ))}
                             </ul>
                             <Link
                               href={path(`/services/${slug}`)}
-                              className={`mt-4 w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-[#12B8B0] text-[#07191F] font-extrabold text-sm ${FOCUS}`}
+                              className={`mt-4 w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-brand-fill text-on-accent font-extrabold text-sm ${FOCUS}`}
                             >
                               <span>{t.details}</span>
                               <ArrowLeft className={`w-4 h-4 ${FORWARD}`} />
                             </Link>
                             <Link
                               href={path(`/consultation?service=${slug}`)}
-                              className={`mt-2 w-full inline-flex items-center justify-center px-4 py-2.5 rounded-lg text-[#E2C98C] font-bold text-sm ${FOCUS}`}
+                              className={`mt-2 w-full inline-flex items-center justify-center px-4 py-2.5 rounded-lg text-gold font-bold text-sm ${FOCUS}`}
                             >
                               {t.consultAbout}
                             </Link>
@@ -333,13 +333,13 @@ export const ServicesHighlight: React.FC<MapProps> = ({ services, lines }) => {
   const { t: { home: { services: t } }, path } = useI18n();
 
   return (
-    <section ref={sectionRef} data-reveal={reveal} className="relative bg-[#07191F] border-y border-[#12B8B0]/20 py-16 sm:py-20 lg:py-24">
+    <section ref={sectionRef} data-reveal={reveal} className="relative bg-canvas border-y border-brand/20 py-16 sm:py-20 lg:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <header className="max-w-3xl mb-6 lg:mb-8 text-start">
-          <h2 className="text-[1.9rem] sm:text-[2.6rem] xl:text-5xl font-black leading-[1.35] text-[#F7F7F3] [text-wrap:balance]">
+          <h2 className="text-[1.9rem] sm:text-[2.6rem] xl:text-5xl font-black leading-[1.35] text-ink [text-wrap:balance]">
             {t.title}
           </h2>
-          <p className="mt-4 max-w-2xl text-[15px] sm:text-lg leading-[1.95] text-[#B7C8CD]">
+          <p className="mt-4 max-w-2xl text-[15px] sm:text-lg leading-[1.95] text-ink-soft">
             {t.lead}
           </p>
         </header>
@@ -351,21 +351,21 @@ export const ServicesHighlight: React.FC<MapProps> = ({ services, lines }) => {
           </>
         )}
 
-        <div className="mt-10 lg:mt-14 pt-7 border-t border-white/15 flex flex-col lg:flex-row lg:items-center justify-between gap-5 text-start">
+        <div className="mt-10 lg:mt-14 pt-7 border-t border-ink/15 flex flex-col lg:flex-row lg:items-center justify-between gap-5 text-start">
           <div>
-            <p className="font-extrabold text-lg sm:text-xl text-white">{t.unsureTitle}</p>
-            <p className="mt-1 text-sm text-[#A2B6BC]">{t.unsureText}</p>
+            <p className="font-extrabold text-lg sm:text-xl text-ink-strong">{t.unsureTitle}</p>
+            <p className="mt-1 text-sm text-ink-muted">{t.unsureText}</p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3 shrink-0">
             <Link
               href={path('/consultation')}
-              className={`inline-flex items-center justify-center px-6 py-3.5 rounded-lg bg-[#E2C98C] hover:bg-[#F0DCA8] text-[#07191F] font-extrabold text-sm transition-colors ${FOCUS}`}
+              className={`inline-flex items-center justify-center px-6 py-3.5 rounded-lg bg-gold-fill hover:bg-[#F0DCA8] text-on-accent font-extrabold text-sm transition-colors ${FOCUS}`}
             >
               {t.consultation}
             </Link>
             <Link
               href={path('/services')}
-              className={`inline-flex items-center justify-center px-6 py-3.5 rounded-lg text-[#F7F7F3] border border-white/25 hover:border-[#12B8B0] font-bold text-sm transition-colors ${FOCUS}`}
+              className={`inline-flex items-center justify-center px-6 py-3.5 rounded-lg text-ink border border-ink/25 hover:border-brand font-bold text-sm transition-colors ${FOCUS}`}
             >
               {t.browse}
             </Link>

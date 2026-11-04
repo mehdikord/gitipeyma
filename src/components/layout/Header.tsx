@@ -8,6 +8,7 @@ import { useNavigate } from '../../hooks/useNavigate';
 import { useI18n } from '../../i18n/I18nProvider';
 import { stripLocale } from '../../i18n/config';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import { ThemeToggle } from './ThemeToggle';
 
 export const Header: React.FC = () => {
   // Without the language, so it compares with the nav paths
@@ -48,25 +49,25 @@ export const Header: React.FC = () => {
   return (
     <>
       {/* Top emergency bar */}
-      <div className="bg-[#051115] border-b border-[#12B8B0]/15 py-1.5 px-4 text-xs text-[#A2B6BC]">
+      <div className="bg-canvas-deep border-b border-brand/15 py-1.5 px-4 text-xs text-ink-muted">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <span className="inline-block w-2 h-2 rounded-full bg-[#12B8B0] animate-pulse"></span>
-            <span className="text-[#E2C98C] font-medium">{t.officialAgent}</span>
-            <span className="hidden sm:inline text-[#718085]">|</span>
-            <span className="hidden md:inline text-[#F7F7F3]/80">{t.dailyVip}</span>
+            <span className="inline-block w-2 h-2 rounded-full bg-brand-fill animate-pulse"></span>
+            <span className="text-gold font-medium">{t.officialAgent}</span>
+            <span className="hidden sm:inline text-ink-dim">|</span>
+            <span className="hidden md:inline text-ink/80">{t.dailyVip}</span>
           </div>
 
           <div className="flex items-center gap-4 text-[11px]">
             <a
               href={`tel:${supportPhone.replace(/[\s()-]/g, '')}`}
-              className="flex items-center gap-1.5 text-[#12B8B0] hover:text-[#74FFF7] transition-colors"
+              className="flex items-center gap-1.5 text-brand hover:text-brand-bright transition-colors"
               dir="ltr"
             >
               <PhoneCall className="w-3.5 h-3.5" />
               <span className="font-mono">{supportPhone}</span>
             </a>
-            <span className="hidden sm:inline bg-[#12B8B0]/20 text-[#12B8B0] px-2 py-0.5 rounded font-mono">
+            <span className="hidden sm:inline bg-brand/20 text-brand px-2 py-0.5 rounded font-mono">
               {t.support247}
             </span>
           </div>
@@ -77,8 +78,8 @@ export const Header: React.FC = () => {
       <header
         className={`sticky top-0 z-40 transition-all duration-300 ${
           isScrolled
-            ? 'bg-[#07191F]/90 backdrop-blur-xl border-b border-[#12B8B0]/20 shadow-xl py-3'
-            : 'bg-[#07191F]/70 backdrop-blur-md border-b border-white/5 py-4'
+            ? 'bg-canvas/90 backdrop-blur-xl border-b border-brand/20 shadow-xl py-3'
+            : 'bg-canvas/70 backdrop-blur-md border-b border-ink/5 py-4'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
@@ -89,9 +90,9 @@ export const Header: React.FC = () => {
             aria-label={t.homeAria}
           >
             {/* Visual Logo Emblem */}
-            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-[#12B8B0] via-[#087F7B] to-[#052B29] p-0.5 shadow-lg shadow-[#12B8B0]/20 flex items-center justify-center transform group-hover:scale-105 transition-transform">
-              <div className="w-full h-full rounded-[10px] bg-[#07191F] flex items-center justify-center border border-[#E2C98C]/40">
-                <span className="font-['Plus_Jakarta_Sans',sans-serif] font-black text-lg tracking-wider text-[#E2C98C] group-hover:text-white transition-colors">
+            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-brand-fill via-[#087F7B] to-[#052B29] p-0.5 shadow-lg shadow-brand/20 flex items-center justify-center transform group-hover:scale-105 transition-transform">
+              <div className="w-full h-full rounded-[10px] bg-canvas flex items-center justify-center border border-gold-line/40">
+                <span className="font-['Plus_Jakarta_Sans',sans-serif] font-black text-lg tracking-wider text-gold group-hover:text-ink-strong transition-colors">
                   G
                 </span>
               </div>
@@ -99,21 +100,21 @@ export const Header: React.FC = () => {
 
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xl sm:text-2xl font-black text-[#F7F7F3] tracking-tight">
+                <span className="text-xl sm:text-2xl font-black text-ink tracking-tight">
                   {brand}
                 </span>
-                <span className="font-['Plus_Jakarta_Sans',sans-serif] text-xs font-extrabold tracking-widest text-[#12B8B0] bg-[#12B8B0]/10 px-1.5 py-0.5 rounded border border-[#12B8B0]/30">
+                <span className="font-['Plus_Jakarta_Sans',sans-serif] text-xs font-extrabold tracking-widest text-brand bg-brand/10 px-1.5 py-0.5 rounded border border-brand/30">
                   GITI
                 </span>
               </div>
-              <p className="text-[10px] text-[#A2B6BC] font-medium tracking-wide">
+              <p className="text-[10px] text-ink-muted font-medium tracking-wide">
                 {t.tagline}
               </p>
             </div>
           </button>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-1 bg-[#0C252B]/60 p-1 rounded-full border border-[#12B8B0]/15 backdrop-blur-sm">
+          <nav className="hidden lg:flex items-center gap-1 bg-surface/60 p-1 rounded-full border border-brand/15 backdrop-blur-sm">
             {navLinks.map((link) => {
               const isActive = currentPath === link.path || (link.path !== '/' && currentPath.startsWith(link.path));
               return (
@@ -122,8 +123,8 @@ export const Header: React.FC = () => {
                   onClick={() => handleNavClick(link.path)}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                     isActive
-                      ? 'bg-[#12B8B0] text-[#07191F] font-bold shadow-md shadow-[#12B8B0]/25'
-                      : 'text-[#F7F7F3]/80 hover:text-white hover:bg-white/5'
+                      ? 'bg-brand-fill text-on-accent font-bold shadow-md shadow-brand/25'
+                      : 'text-ink/80 hover:text-ink-strong hover:bg-ink/5'
                   }`}
                 >
                   {link.label}
@@ -134,10 +135,11 @@ export const Header: React.FC = () => {
 
           {/* Actions & Primary Consultation Button */}
           <div className="hidden sm:flex items-center gap-3">
+            <ThemeToggle />
             <LanguageSwitcher />
             <button
               onClick={() => handleNavClick('/consultation')}
-              className="relative group overflow-hidden px-5 py-2.5 rounded-full bg-gradient-to-r from-[#C6A15B] via-[#E2C98C] to-[#C6A15B] text-[#07191F] font-bold text-sm shadow-lg shadow-[#C6A15B]/20 hover:shadow-[#C6A15B]/40 transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center gap-2"
+              className="relative group overflow-hidden px-5 py-2.5 rounded-full bg-gradient-to-r from-gold-deep-fill via-gold-fill to-gold-deep-fill text-on-accent font-bold text-sm shadow-lg shadow-gold-deep-fill/20 hover:shadow-gold-deep-fill/40 transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center gap-2"
             >
               <span>{t.consultation}</span>
               <ArrowUpRight className="w-4 h-4 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
@@ -146,15 +148,16 @@ export const Header: React.FC = () => {
 
           {/* Mobile menu hamburger button */}
           <div className="flex items-center gap-2 lg:hidden">
+            <ThemeToggle className="sm:hidden" />
             <button
               onClick={() => handleNavClick('/consultation')}
-              className="sm:hidden px-3 py-1.5 rounded-full bg-[#C6A15B] text-[#07191F] text-xs font-bold"
+              className="sm:hidden px-3 py-1.5 rounded-full bg-gold-deep-fill text-on-accent text-xs font-bold"
             >
               {t.consultationShort}
             </button>
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 rounded-xl bg-[#0C252B] border border-[#12B8B0]/30 text-[#F7F7F3] hover:text-[#12B8B0] transition-colors"
+              className="p-2 rounded-xl bg-surface border border-brand/30 text-ink hover:text-brand transition-colors"
               aria-label={isMobileMenuOpen ? t.closeMenu : t.openMenu}
             >
               {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -164,7 +167,7 @@ export const Header: React.FC = () => {
 
         {/* Mobile menu dropdown */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden bg-[#07191F]/98 border-b border-[#12B8B0]/20 px-4 pt-3 pb-6 mt-3 space-y-2 backdrop-blur-2xl">
+          <div className="lg:hidden bg-canvas/98 border-b border-brand/20 px-4 pt-3 pb-6 mt-3 space-y-2 backdrop-blur-2xl">
             {navLinks.map((link) => {
               const isActive = currentPath === link.path || (link.path !== '/' && currentPath.startsWith(link.path));
               return (
@@ -173,8 +176,8 @@ export const Header: React.FC = () => {
                   onClick={() => handleNavClick(link.path)}
                   className={`w-full text-start px-4 py-3 rounded-xl text-base font-medium transition-colors ${
                     isActive
-                      ? 'bg-[#12B8B0] text-[#07191F] font-bold'
-                      : 'text-[#F7F7F3] hover:bg-[#0C252B]'
+                      ? 'bg-brand-fill text-on-accent font-bold'
+                      : 'text-ink hover:bg-surface'
                   }`}
                 >
                   {link.label}
@@ -182,11 +185,11 @@ export const Header: React.FC = () => {
               );
             })}
 
-            <div className="pt-3 border-t border-white/10 space-y-3">
+            <div className="pt-3 border-t border-ink/10 space-y-3">
               <LanguageSwitcher variant="list" />
               <button
                 onClick={() => handleNavClick('/consultation')}
-                className="w-full py-3 rounded-xl bg-gradient-to-r from-[#C6A15B] to-[#E2C98C] text-[#07191F] font-bold text-center block shadow-lg shadow-[#C6A15B]/30"
+                className="w-full py-3 rounded-xl bg-gradient-to-r from-gold-deep-fill to-gold-fill text-on-accent font-bold text-center block shadow-lg shadow-gold-deep-fill/30"
               >
                 {t.consultationFull}
               </button>

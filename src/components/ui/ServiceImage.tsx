@@ -56,95 +56,95 @@ export const ServiceImage: React.FC<ServiceImageProps> = ({
     switch (slug) {
       case 'bus-vip-tehran-istanbul':
         return (
-          <div className="w-full h-full bg-gradient-to-br from-[#0C252B] via-[#07191F] to-[#05151A] flex flex-col items-center justify-center p-6 relative overflow-hidden">
-            <div className="absolute inset-0 bg-[radial-gradient(#12B8B0_1px,transparent_1px)] [background-size:16px_16px] opacity-15"></div>
-            <div className="w-16 h-16 rounded-2xl bg-[#12B8B0]/20 border border-[#12B8B0]/40 flex items-center justify-center text-[#12B8B0] mb-3 shadow-lg shadow-[#12B8B0]/20">
+          <div className="w-full h-full bg-gradient-to-br from-surface via-canvas to-canvas-deep flex flex-col items-center justify-center p-6 relative overflow-hidden">
+            <div className="absolute inset-0 bg-[radial-gradient(var(--brand)_1px,transparent_1px)] [background-size:16px_16px] opacity-15"></div>
+            <div className="w-16 h-16 rounded-2xl bg-brand/20 border border-brand/40 flex items-center justify-center text-brand mb-3 shadow-lg shadow-brand/20">
               <Bus className="w-9 h-9" />
             </div>
-            <span className="text-base font-black text-white text-center">{t.bus}</span>
-            <span className="text-xs text-[#E2C98C] font-mono mt-1">GITI LUXURY EXPRESS COACH</span>
+            <span className="text-base font-black text-ink-strong text-center">{t.bus}</span>
+            <span className="text-xs text-gold font-mono mt-1">GITI LUXURY EXPRESS COACH</span>
           </div>
         );
       case 'cargo-express-postal':
       case 'cargo-customs-clearance':
         return (
-          <div className="w-full h-full bg-gradient-to-br from-[#0C252B] via-[#07191F] to-[#0A1A20] flex flex-col items-center justify-center p-6 relative overflow-hidden">
-            <div className="absolute inset-0 bg-[radial-gradient(#C6A15B_1px,transparent_1px)] [background-size:16px_16px] opacity-15"></div>
-            <div className="w-16 h-16 rounded-2xl bg-[#C6A15B]/20 border border-[#C6A15B]/40 flex items-center justify-center text-[#E2C98C] mb-3 shadow-lg shadow-[#C6A15B]/20">
+          <div className="w-full h-full bg-gradient-to-br from-surface via-canvas to-canvas-deep flex flex-col items-center justify-center p-6 relative overflow-hidden">
+            <div className="absolute inset-0 bg-[radial-gradient(var(--gold-deep)_1px,transparent_1px)] [background-size:16px_16px] opacity-15"></div>
+            <div className="w-16 h-16 rounded-2xl bg-gold-deep/20 border border-gold-deep-line/40 flex items-center justify-center text-gold mb-3 shadow-lg shadow-gold-deep-fill/20">
               <Boxes className="w-9 h-9" />
             </div>
-            <span className="text-base font-black text-white text-center">{t.cargo}</span>
-            <span className="text-xs text-[#12B8B0] font-mono mt-1">INTERNATIONAL CARGO & CMR</span>
+            <span className="text-base font-black text-ink-strong text-center">{t.cargo}</span>
+            <span className="text-xs text-brand font-mono mt-1">INTERNATIONAL CARGO & CMR</span>
           </div>
         );
       case 'company-registration':
         return (
-          <div className="w-full h-full bg-gradient-to-br from-[#0C252B] via-[#07191F] to-[#041014] flex flex-col items-center justify-center p-6 relative overflow-hidden">
-            <div className="w-16 h-16 rounded-2xl bg-[#12B8B0]/20 border border-[#12B8B0]/40 flex items-center justify-center text-[#12B8B0] mb-3">
+          <div className="w-full h-full bg-gradient-to-br from-surface via-canvas to-canvas-deep flex flex-col items-center justify-center p-6 relative overflow-hidden">
+            <div className="w-16 h-16 rounded-2xl bg-brand/20 border border-brand/40 flex items-center justify-center text-brand mb-3">
               <Building2 className="w-9 h-9" />
             </div>
-            <span className="text-base font-black text-white text-center">{t.company}</span>
-            <span className="text-xs text-[#E2C98C] font-mono mt-1">MERSİS & CORPORATE BANKING</span>
+            <span className="text-base font-black text-ink-strong text-center">{t.company}</span>
+            <span className="text-xs text-gold font-mono mt-1">MERSİS & CORPORATE BANKING</span>
           </div>
         );
       case 'currency-exchange-swift':
         return (
-          <div className="w-full h-full bg-gradient-to-br from-[#0C252B] via-[#07191F] to-[#051115] flex flex-col items-center justify-center p-6 relative overflow-hidden">
-            <div className="w-16 h-16 rounded-2xl bg-[#C6A15B]/20 border border-[#C6A15B]/40 flex items-center justify-center text-[#E2C98C] mb-3">
+          <div className="w-full h-full bg-gradient-to-br from-surface via-canvas to-canvas-deep flex flex-col items-center justify-center p-6 relative overflow-hidden">
+            <div className="w-16 h-16 rounded-2xl bg-gold-deep/20 border border-gold-deep-line/40 flex items-center justify-center text-gold mb-3">
               <CircleDollarSign className="w-9 h-9" />
             </div>
-            <span className="text-base font-black text-white text-center">{t.currency}</span>
-            <span className="text-xs text-[#74FFF7] font-mono mt-1">FAST / EFT / SWIFT SETTLEMENT</span>
+            <span className="text-base font-black text-ink-strong text-center">{t.currency}</span>
+            <span className="text-xs text-brand-bright font-mono mt-1">FAST / EFT / SWIFT SETTLEMENT</span>
           </div>
         );
       case 'international-visa':
         return (
-          <div className="w-full h-full bg-gradient-to-br from-[#0C252B] via-[#07191F] to-[#041115] flex flex-col items-center justify-center p-6 relative overflow-hidden">
-            <div className="w-16 h-16 rounded-2xl bg-[#12B8B0]/20 border border-[#12B8B0]/40 flex items-center justify-center text-[#12B8B0] mb-3">
+          <div className="w-full h-full bg-gradient-to-br from-surface via-canvas to-canvas-deep flex flex-col items-center justify-center p-6 relative overflow-hidden">
+            <div className="w-16 h-16 rounded-2xl bg-brand/20 border border-brand/40 flex items-center justify-center text-brand mb-3">
               <FileText className="w-9 h-9" />
             </div>
-            <span className="text-base font-black text-white text-center">{t.visa}</span>
-            <span className="text-xs text-[#E2C98C] font-mono mt-1">VISA CONSULTING & APPOINTMENT</span>
+            <span className="text-base font-black text-ink-strong text-center">{t.visa}</span>
+            <span className="text-xs text-gold font-mono mt-1">VISA CONSULTING & APPOINTMENT</span>
           </div>
         );
       case 'legal-power-of-attorney':
       case 'official-translation':
         return (
-          <div className="w-full h-full bg-gradient-to-br from-[#0C252B] via-[#07191F] to-[#041115] flex flex-col items-center justify-center p-6 relative overflow-hidden">
-            <div className="w-16 h-16 rounded-2xl bg-[#C6A15B]/20 border border-[#C6A15B]/40 flex items-center justify-center text-[#E2C98C] mb-3">
+          <div className="w-full h-full bg-gradient-to-br from-surface via-canvas to-canvas-deep flex flex-col items-center justify-center p-6 relative overflow-hidden">
+            <div className="w-16 h-16 rounded-2xl bg-gold-deep/20 border border-gold-deep-line/40 flex items-center justify-center text-gold mb-3">
               <Scale className="w-9 h-9" />
             </div>
-            <span className="text-base font-black text-white text-center">{t.legal}</span>
-            <span className="text-xs text-[#12B8B0] font-mono mt-1">NOTER & OFFICIAL APOSTILLE</span>
+            <span className="text-base font-black text-ink-strong text-center">{t.legal}</span>
+            <span className="text-xs text-brand font-mono mt-1">NOTER & OFFICIAL APOSTILLE</span>
           </div>
         );
       case 'turkey-weddings':
       case 'international-marriage':
         return (
-          <div className="w-full h-full bg-gradient-to-br from-[#0C252B] via-[#07191F] to-[#041115] flex flex-col items-center justify-center p-6 relative overflow-hidden">
-            <div className="w-16 h-16 rounded-2xl bg-[#E2C98C]/20 border border-[#E2C98C]/40 flex items-center justify-center text-[#E2C98C] mb-3">
+          <div className="w-full h-full bg-gradient-to-br from-surface via-canvas to-canvas-deep flex flex-col items-center justify-center p-6 relative overflow-hidden">
+            <div className="w-16 h-16 rounded-2xl bg-gold/20 border border-gold-line/40 flex items-center justify-center text-gold mb-3">
               <Heart className="w-9 h-9" />
             </div>
-            <span className="text-base font-black text-white text-center">{t.wedding}</span>
-            <span className="text-xs text-[#E2C98C] font-mono mt-1">AİLE CÜZDANI & BOSPHORUS CELEBRATION</span>
+            <span className="text-base font-black text-ink-strong text-center">{t.wedding}</span>
+            <span className="text-xs text-gold font-mono mt-1">AİLE CÜZDANI & BOSPHORUS CELEBRATION</span>
           </div>
         );
       case 'education-residence-permit':
       default:
         return (
-          <div className="w-full h-full bg-gradient-to-br from-[#0C252B] via-[#07191F] to-[#041115] flex flex-col items-center justify-center p-6 relative overflow-hidden">
-            <div className="w-16 h-16 rounded-2xl bg-[#12B8B0]/20 border border-[#12B8B0]/40 flex items-center justify-center text-[#12B8B0] mb-3">
+          <div className="w-full h-full bg-gradient-to-br from-surface via-canvas to-canvas-deep flex flex-col items-center justify-center p-6 relative overflow-hidden">
+            <div className="w-16 h-16 rounded-2xl bg-brand/20 border border-brand/40 flex items-center justify-center text-brand mb-3">
               <GraduationCap className="w-9 h-9" />
             </div>
-            <span className="text-base font-black text-white text-center">{t.education}</span>
-            <span className="text-xs text-[#E2C98C] font-mono mt-1">IKAMET & STUDY PERMIT</span>
+            <span className="text-base font-black text-ink-strong text-center">{t.education}</span>
+            <span className="text-xs text-gold font-mono mt-1">IKAMET & STUDY PERMIT</span>
           </div>
         );
     }
   };
 
   return (
-    <div className={`relative w-full h-full overflow-hidden bg-[#07191F] ${className}`}>
+    <div className={`relative w-full h-full overflow-hidden bg-canvas ${className}`}>
       {/* If error occurred, show the bespoke luxury SVG illustration; a page hero already names the service, so it gets the plain brand map */}
       {hasError ? (
         isHero ? (
@@ -157,7 +157,7 @@ export const ServiceImage: React.FC<ServiceImageProps> = ({
         <>
           {/* Subtle loading placeholder skeleton while image loads */}
           {!isLoaded && (
-            <div className="absolute inset-0 bg-[#0C252B] animate-pulse" />
+            <div className="absolute inset-0 bg-surface animate-pulse" />
           )}
           <img
             ref={imgRef}

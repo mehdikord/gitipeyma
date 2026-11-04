@@ -30,40 +30,40 @@ export const ServicesDirectory: React.FC<{ services: ServiceItem[]; categories: 
   });
 
   return (
-    <div className="min-h-screen bg-[#07191F] text-[#F7F7F3] pt-8 pb-24">
+    <div className="min-h-screen bg-canvas text-ink pt-8 pb-24">
       {/* Services Directory Hero */}
-      <div className="relative py-16 bg-gradient-to-b from-[#051115] to-[#07191F] border-b border-white/5 overflow-hidden">
-        <div className="absolute top-0 start-1/3 w-96 h-96 bg-[#12B8B0]/10 rounded-full blur-[140px] pointer-events-none"></div>
+      <div className="relative py-16 bg-gradient-to-b from-canvas-deep to-canvas border-b border-ink/5 overflow-hidden">
+        <div className="absolute top-0 start-1/3 w-96 h-96 bg-brand/10 rounded-full blur-[140px] pointer-events-none"></div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#12B8B0]/15 border border-[#12B8B0]/30 text-[#12B8B0] text-xs font-bold">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-brand/15 border border-brand/30 text-brand text-xs font-bold">
             <Sparkles className="w-3.5 h-3.5" />
             <span>{t.eyebrow}</span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-black text-[#F7F7F3] tracking-tight">
+          <h1 className="text-3xl sm:text-5xl font-black text-ink tracking-tight">
             {t.title}
           </h1>
 
-          <p className="text-sm sm:text-base text-[#A2B6BC] max-w-2xl mx-auto leading-relaxed">
+          <p className="text-sm sm:text-base text-ink-muted max-w-2xl mx-auto leading-relaxed">
             {t.intro}
           </p>
 
           {/* Search bar */}
           <div className="pt-4 max-w-md mx-auto">
             <div className="relative">
-              <Search className="w-4 h-4 text-[#718085] absolute start-3.5 top-1/2 -translate-y-1/2" />
+              <Search className="w-4 h-4 text-ink-dim absolute start-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={t.searchPlaceholder}
-                className="w-full ps-10 pe-4 py-3 rounded-full bg-[#0C252B] border border-[#12B8B0]/30 text-white text-xs sm:text-sm focus:outline-none focus:border-[#E2C98C] placeholder-[#718085]"
+                className="w-full ps-10 pe-4 py-3 rounded-full bg-surface border border-brand/30 text-ink-strong text-xs sm:text-sm focus:outline-none focus:border-gold-line placeholder-ink-dim"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="absolute end-3 top-1/2 -translate-y-1/2 text-xs text-[#718085] hover:text-white"
+                  className="absolute end-3 top-1/2 -translate-y-1/2 text-xs text-ink-dim hover:text-ink-strong"
                 >
                   {t.clear}
                 </button>
@@ -82,8 +82,8 @@ export const ServicesDirectory: React.FC<{ services: ServiceItem[]; categories: 
               onClick={() => setSelectedCategory(cat.key)}
               className={`px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition-all ${
                 selectedCategory === cat.key
-                  ? 'bg-[#12B8B0] text-[#07191F] shadow-lg shadow-[#12B8B0]/20'
-                  : 'bg-[#0C252B] text-[#A2B6BC] hover:text-white hover:bg-[#14282D] border border-white/5'
+                  ? 'bg-brand-fill text-on-accent shadow-lg shadow-brand/20'
+                  : 'bg-surface text-ink-muted hover:text-ink-strong hover:bg-surface-2 border border-ink/5'
               }`}
             >
               {cat.label}
@@ -92,7 +92,7 @@ export const ServicesDirectory: React.FC<{ services: ServiceItem[]; categories: 
         </div>
 
         {/* Results Counter */}
-        <div className="py-4 text-xs text-[#718085] flex items-center justify-between">
+        <div className="py-4 text-xs text-ink-dim flex items-center justify-between">
           <span>{fill(t.showing, { count: num(filteredServices.length) })}</span>
           {searchQuery && <span>{fill(t.filteredBy, { query: searchQuery })}</span>}
         </div>
@@ -103,7 +103,7 @@ export const ServicesDirectory: React.FC<{ services: ServiceItem[]; categories: 
             <div
               key={service.id}
               onClick={() => onNavigate(`/services/${service.slug}`)}
-              className="group cursor-pointer rounded-2xl overflow-hidden bg-[#0C252B] border border-[#12B8B0]/20 hover:border-[#C6A15B]/50 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between"
+              className="group cursor-pointer rounded-2xl overflow-hidden bg-surface border border-brand/20 hover:border-gold-deep-line/50 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between"
             >
               {/* Image with Robust Fallback */}
               <div className="relative h-56 overflow-hidden">
@@ -114,11 +114,11 @@ export const ServicesDirectory: React.FC<{ services: ServiceItem[]; categories: 
                   slug={service.slug}
                   className="w-full h-full transform group-hover:scale-105 transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0C252B] via-transparent to-black/40"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-black/40"></div>
 
                 {service.badge && (
                   <div className="absolute top-3 start-3">
-                    <span className="px-3 py-1 rounded-full bg-[#12B8B0] text-[#07191F] text-[11px] font-black shadow-md">
+                    <span className="px-3 py-1 rounded-full bg-brand-fill text-on-accent text-[11px] font-black shadow-md">
                       {service.badge}
                     </span>
                   </div>
@@ -134,26 +134,26 @@ export const ServicesDirectory: React.FC<{ services: ServiceItem[]; categories: 
               {/* Content */}
               <div className="p-6 flex-1 flex flex-col justify-between">
                 <div>
-                  <h3 className="text-lg font-bold text-[#F7F7F3] group-hover:text-[#E2C98C] transition-colors mb-2 leading-snug">
+                  <h3 className="text-lg font-bold text-ink group-hover:text-gold transition-colors mb-2 leading-snug">
                     {service.title}
                   </h3>
-                  <p className="text-xs text-[#A2B6BC] leading-relaxed line-clamp-2 mb-4">
+                  <p className="text-xs text-ink-muted leading-relaxed line-clamp-2 mb-4">
                     {service.summary}
                   </p>
 
                   <div className="space-y-1.5 mb-6">
                     {service.features.slice(0, 2).map((feat, fIdx) => (
-                      <div key={fIdx} className="flex items-start gap-2 text-xs text-[#718085]">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-[#12B8B0] shrink-0 mt-0.5" />
+                      <div key={fIdx} className="flex items-start gap-2 text-xs text-ink-dim">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-brand shrink-0 mt-0.5" />
                         <span className="line-clamp-1">{feat}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-white/10 flex items-center justify-between text-xs font-bold text-[#12B8B0]">
+                <div className="pt-4 border-t border-ink/10 flex items-center justify-between text-xs font-bold text-brand">
                   <span>{t.details}</span>
-                  <div className="w-7 h-7 rounded-full bg-[#12B8B0]/10 flex items-center justify-center group-hover:bg-[#12B8B0] group-hover:text-[#07191F] transition-colors">
+                  <div className="w-7 h-7 rounded-full bg-brand/10 flex items-center justify-center group-hover:bg-brand-fill group-hover:text-on-accent transition-colors">
                     <ArrowUpRight className="w-4 h-4" />
                   </div>
                 </div>
@@ -163,14 +163,14 @@ export const ServicesDirectory: React.FC<{ services: ServiceItem[]; categories: 
         </div>
 
         {filteredServices.length === 0 && (
-          <div className="text-center py-16 bg-[#0C252B] rounded-2xl border border-white/5 my-8 space-y-3">
-            <p className="text-base text-[#A2B6BC]">{t.empty}</p>
+          <div className="text-center py-16 bg-surface rounded-2xl border border-ink/5 my-8 space-y-3">
+            <p className="text-base text-ink-muted">{t.empty}</p>
             <button
               onClick={() => {
                 setSelectedCategory('all');
                 setSearchQuery('');
               }}
-              className="px-4 py-2 rounded-full bg-[#12B8B0] text-[#07191F] text-xs font-bold"
+              className="px-4 py-2 rounded-full bg-brand-fill text-on-accent text-xs font-bold"
             >
               {t.showAll}
             </button>

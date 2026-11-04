@@ -8,7 +8,7 @@ import { telHref } from '../../utils/contact';
 import { useSite } from '../site/SiteProvider';
 import { useI18n } from '../../i18n/I18nProvider';
 
-const FOCUS = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E2C98C]';
+const FOCUS = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-line';
 
 // The route starts right under the buttons, where the visitor is, and leaves for the horizon.
 // The SVG is anchored to the section's bottom edge, so the start stays put on every screen.
@@ -27,7 +27,7 @@ export const FinalCTA: React.FC = () => {
   const reveal = useRevealOnce(sectionRef);
 
   return (
-    <section ref={sectionRef} data-reveal={reveal} className="relative overflow-hidden bg-[#07191F] py-20 sm:py-24 lg:py-28">
+    <section ref={sectionRef} data-reveal={reveal} className="relative overflow-hidden bg-canvas py-20 sm:py-24 lg:py-28">
       <svg
         aria-hidden="true"
         viewBox="0 0 1200 800"
@@ -70,17 +70,17 @@ export const FinalCTA: React.FC = () => {
       </svg>
 
       <div className="relative max-w-3xl mx-auto px-4 sm:px-6 text-center">
-        <h2 className="cta-fade text-[2rem] sm:text-[2.6rem] xl:text-5xl font-black leading-[1.35] text-[#F7F7F3] [text-wrap:balance]">
+        <h2 className="cta-fade text-[2rem] sm:text-[2.6rem] xl:text-5xl font-black leading-[1.35] text-ink [text-wrap:balance]">
           {t.title}
         </h2>
-        <p className="cta-fade mt-4 max-w-xl mx-auto text-[15px] sm:text-lg leading-[1.95] text-[#B7C8CD]" style={{ '--cta-delay': '0.12s' } as React.CSSProperties}>
+        <p className="cta-fade mt-4 max-w-xl mx-auto text-[15px] sm:text-lg leading-[1.95] text-ink-soft" style={{ '--cta-delay': '0.12s' } as React.CSSProperties}>
           {t.lead}
         </p>
 
         <div className="cta-fade mt-8 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3" style={{ '--cta-delay': '0.24s' } as React.CSSProperties}>
           <Link
             href={path('/consultation')}
-            className={`group inline-flex items-center justify-center gap-2 px-7 py-4 rounded-lg bg-[#E2C98C] hover:bg-[#F0DCA8] text-[#07191F] font-black text-base transition-colors ${FOCUS}`}
+            className={`group inline-flex items-center justify-center gap-2 px-7 py-4 rounded-lg bg-gold-fill hover:bg-[#F0DCA8] text-on-accent font-black text-base transition-colors ${FOCUS}`}
           >
             <span>{t.consultation}</span>
             <ArrowLeft className="w-[18px] h-[18px] transition-transform rtl:group-hover:-translate-x-1 ltr:group-hover:translate-x-1 ltr:-scale-x-100" />
@@ -89,7 +89,7 @@ export const FinalCTA: React.FC = () => {
             href={WHATSAPP_URL}
             target="_blank"
             rel="noreferrer"
-            className={`inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-lg bg-[#12B8B0] hover:bg-[#3ED0C8] text-[#07191F] font-black text-base transition-colors ${FOCUS}`}
+            className={`inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-lg bg-brand-fill hover:bg-brand-bright-fill text-on-accent font-black text-base transition-colors ${FOCUS}`}
           >
             <MessageCircle className="w-5 h-5" />
             <span>{t.whatsapp}</span>
@@ -98,12 +98,12 @@ export const FinalCTA: React.FC = () => {
 
         <a
           href={SUPPORT_TEL}
-          className={`cta-fade mt-6 inline-flex flex-col sm:flex-row items-center gap-1 sm:gap-2 py-1 text-sm text-[#A2B6BC] hover:text-white transition-colors rounded ${FOCUS}`}
+          className={`cta-fade mt-6 inline-flex flex-col sm:flex-row items-center gap-1 sm:gap-2 py-1 text-sm text-ink-muted hover:text-ink-strong transition-colors rounded ${FOCUS}`}
           style={{ '--cta-delay': '0.36s' } as React.CSSProperties}
         >
-          <PhoneCall className="w-4 h-4 text-[#12B8B0]" />
+          <PhoneCall className="w-4 h-4 text-brand" />
           <span>{t.callDirect}</span>
-          <span dir="ltr" className="font-bold text-[#F7F7F3] whitespace-nowrap">
+          <span dir="ltr" className="font-bold text-ink whitespace-nowrap">
             {SUPPORT_PHONE}
           </span>
         </a>

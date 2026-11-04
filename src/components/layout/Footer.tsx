@@ -10,8 +10,8 @@ import { telHref } from '../../utils/contact';
 import { useI18n } from '../../i18n/I18nProvider';
 import { LanguageSwitcher } from './LanguageSwitcher';
 
-const FOCUS = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E2C98C]';
-const LINK = `inline-block py-1 text-[15px] text-[#B7C8CD] hover:text-white transition-colors rounded ${FOCUS}`;
+const FOCUS = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-line';
+const LINK = `inline-block py-1 text-[15px] text-ink-soft hover:text-ink-strong transition-colors rounded ${FOCUS}`;
 
 const PAGES = [
   { href: '/', key: 'home' },
@@ -43,7 +43,7 @@ const FooterSky: React.FC = () => (
         <span key={index} className="footer-city" style={{ ...stagePosition(city), '--i': index } as React.CSSProperties} />
       ))}
     </div>
-    <div className="absolute inset-0 bg-gradient-to-b from-[#07191F] via-[#07191F]/55 to-[#051115]/85" />
+    <div className="absolute inset-0 bg-gradient-to-b from-canvas via-canvas/55 to-canvas-deep/85" />
   </div>
 );
 
@@ -64,27 +64,27 @@ export const Footer: React.FC = () => {
   const headOffice = offices[0];
 
   return (
-    <footer className="relative overflow-hidden bg-[#051115] text-[#B7C8CD] border-t border-[#12B8B0]/20">
+    <footer className="relative overflow-hidden bg-canvas-deep text-ink-soft border-t border-brand/20">
       <FooterSky />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-14 sm:pt-16 pb-8">
-        <div className="grid grid-cols-2 lg:grid-cols-12 gap-x-6 sm:gap-x-8 gap-y-10 pb-12 border-b border-white/10">
+        <div className="grid grid-cols-2 lg:grid-cols-12 gap-x-6 sm:gap-x-8 gap-y-10 pb-12 border-b border-ink/10">
           {/* Who we are */}
           <div className="col-span-2 lg:col-span-4">
             <Link href={path('/')} className={`inline-flex items-center gap-3 rounded ${FOCUS}`} aria-label={t.homeAria}>
-              <span className="w-11 h-11 rounded-xl bg-[#07191F] border border-[#E2C98C]/50 flex items-center justify-center font-['Plus_Jakarta_Sans',sans-serif] font-black text-lg text-[#E2C98C]">
+              <span className="w-11 h-11 rounded-xl bg-canvas border border-gold-line/50 flex items-center justify-center font-['Plus_Jakarta_Sans',sans-serif] font-black text-lg text-gold">
                 G
               </span>
               <span>
-                <span className="block text-xl font-black text-[#F7F7F3]">{brand}</span>
-                <span className="block text-xs text-[#A2B6BC]">{t.tagline}</span>
+                <span className="block text-xl font-black text-ink">{brand}</span>
+                <span className="block text-xs text-ink-muted">{t.tagline}</span>
               </span>
             </Link>
 
-            <p className="mt-5 max-w-sm text-[15px] leading-[1.95] text-[#B7C8CD]">
+            <p className="mt-5 max-w-sm text-[15px] leading-[1.95] text-ink-soft">
               {t.about}
             </p>
-            <p className="mt-4 text-sm font-bold text-[#E2C98C]">{settings.brand_tagline}</p>
+            <p className="mt-4 text-sm font-bold text-gold">{settings.brand_tagline}</p>
 
             <ul className="mt-6 flex items-center gap-2">
               {socials.map((social) => {
@@ -96,7 +96,7 @@ export const Footer: React.FC = () => {
                       target="_blank"
                       rel="noreferrer"
                       aria-label={social.label}
-                      className={`flex items-center justify-center w-11 h-11 rounded-lg border border-white/15 text-[#B7C8CD] hover:text-[#07191F] hover:bg-[#12B8B0] hover:border-[#12B8B0] transition-colors ${FOCUS}`}
+                      className={`flex items-center justify-center w-11 h-11 rounded-lg border border-ink/15 text-ink-soft hover:text-on-accent hover:bg-brand-fill hover:border-brand transition-colors ${FOCUS}`}
                     >
                       <Icon className="w-5 h-5" />
                     </a>
@@ -107,7 +107,7 @@ export const Footer: React.FC = () => {
           </div>
 
           <nav aria-label={t.pagesAria} className="col-span-1 lg:col-span-2">
-            <h3 className="mb-3 text-sm font-extrabold text-[#F7F7F3]">{t.pages}</h3>
+            <h3 className="mb-3 text-sm font-extrabold text-ink">{t.pages}</h3>
             <ul className="space-y-1.5">
               {PAGES.map((page) => (
                 <li key={page.href}>
@@ -120,7 +120,7 @@ export const Footer: React.FC = () => {
           </nav>
 
           <nav aria-label={t.services} className="col-span-1 lg:col-span-3">
-            <h3 className="mb-3 text-sm font-extrabold text-[#F7F7F3]">{t.services}</h3>
+            <h3 className="mb-3 text-sm font-extrabold text-ink">{t.services}</h3>
             <ul className="space-y-1.5">
               {serviceLinks.slice(0, 6).map((service) => (
                 <li key={service.slug}>
@@ -130,7 +130,7 @@ export const Footer: React.FC = () => {
                 </li>
               ))}
               <li>
-                <Link href={path('/services')} className={`inline-block py-1 text-[15px] font-bold text-[#E2C98C] hover:text-white transition-colors rounded ${FOCUS}`}>
+                <Link href={path('/services')} className={`inline-block py-1 text-[15px] font-bold text-gold hover:text-ink-strong transition-colors rounded ${FOCUS}`}>
                   {fill(t.allServices, { count: num(serviceLinks.length) })}
                 </Link>
               </li>
@@ -139,22 +139,22 @@ export const Footer: React.FC = () => {
 
           {/* Where to reach us: the line that never closes first, then each office */}
           <div className="col-span-2 lg:col-span-3">
-            <h3 className="mb-3 text-sm font-extrabold text-[#F7F7F3]">{t.contact}</h3>
+            <h3 className="mb-3 text-sm font-extrabold text-ink">{t.contact}</h3>
             <a href={telHref(settings.support_phone)} className={`group block py-1 rounded ${FOCUS}`}>
-              <span className="flex items-center gap-2 text-sm text-[#E2C98C]">
+              <span className="flex items-center gap-2 text-sm text-gold">
                 <PhoneCall className="w-4 h-4" />
                 <span>{t.support}</span>
               </span>
-              <span dir="ltr" className="block mt-0.5 text-lg font-extrabold text-[#F7F7F3] group-hover:text-white rtl:text-right">
+              <span dir="ltr" className="block mt-0.5 text-lg font-extrabold text-ink group-hover:text-ink-strong rtl:text-right">
                 {settings.support_phone}
               </span>
             </a>
             <ul className="mt-4 grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-3">
               {offices.map((office) => (
                 <li key={office.id}>
-                  <span className="block text-sm font-bold text-[#F7F7F3]">{office.name}</span>
+                  <span className="block text-sm font-bold text-ink">{office.name}</span>
                   {office.phones[0] && (
-                    <a dir="ltr" href={telHref(office.phones[0])} className={`inline-block mt-0.5 text-[15px] text-[#B7C8CD] hover:text-white transition-colors rounded ${FOCUS}`}>
+                    <a dir="ltr" href={telHref(office.phones[0])} className={`inline-block mt-0.5 text-[15px] text-ink-soft hover:text-ink-strong transition-colors rounded ${FOCUS}`}>
                       {locale === 'fa' ? office.phones[0] : digits(office.phones[0])}
                     </a>
                   )}
@@ -162,19 +162,19 @@ export const Footer: React.FC = () => {
               ))}
             </ul>
             <div className="mt-5 max-w-60">
-              <h4 className="mb-2 text-xs font-bold text-[#8FA5AB]">{t.language}</h4>
+              <h4 className="mb-2 text-xs font-bold text-ink-dim">{t.language}</h4>
               <LanguageSwitcher variant="list" />
             </div>
             {headOffice?.email && (
-              <a href={`mailto:${headOffice.email}`} className={`mt-4 inline-flex items-center gap-2 py-1 text-[15px] text-[#B7C8CD] hover:text-white transition-colors rounded ${FOCUS}`}>
-                <Mail className="w-4 h-4 text-[#12B8B0]" />
+              <a href={`mailto:${headOffice.email}`} className={`mt-4 inline-flex items-center gap-2 py-1 text-[15px] text-ink-soft hover:text-ink-strong transition-colors rounded ${FOCUS}`}>
+                <Mail className="w-4 h-4 text-brand" />
                 <span dir="ltr">{headOffice.email}</span>
               </a>
             )}
           </div>
         </div>
 
-        <div className="pt-6 flex flex-col md:flex-row md:items-center justify-between gap-3 text-[13px] leading-relaxed text-[#8FA5AB]">
+        <div className="pt-6 flex flex-col md:flex-row md:items-center justify-between gap-3 text-[13px] leading-relaxed text-ink-dim">
           <p>
             © <span ref={yearRef} suppressHydrationWarning>{new Date().getFullYear()}</span> {t.rights}
           </p>

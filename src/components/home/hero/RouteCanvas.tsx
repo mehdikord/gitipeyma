@@ -146,6 +146,22 @@ export const RouteCanvas: React.FC<RouteCanvasProps> = ({ layer, paused, still }
     const glowTeal = makeGlow(TEAL);
     const glowGold = makeGlow(GOLD);
 
+    // The route and its markers take the page's text color, so they show on the light theme too.
+    let ink = WHITE;
+    let inkHex = '#F7F7F3';
+    const readInk = () => {
+      const value = getComputedStyle(document.documentElement).getPropertyValue('--ink').trim();
+      if (!/^#[0-9a-f]{6}$/i.test(value)) return;
+      inkHex = value;
+      ink = [1, 3, 5].map((i) => parseInt(value.slice(i, i + 2), 16)).join(', ');
+    };
+    readInk();
+    const themeObserver = new MutationObserver(() => {
+      readInk();
+      start();
+    });
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
     let unit = 1; // Stage units per CSS pixel, so strokes stay the same on every screen size.
     const resize = () => {
       const width = canvas.clientWidth;
@@ -302,16 +318,16 @@ export const RouteCanvas: React.FC<RouteCanvasProps> = ({ layer, paused, still }
       airLegs.forEach((leg, i) => {
         const reach = open * current.air;
         const end = Math.min(1, open * 1.05);
-        stroke(leg.ground, 0, end, WHITE, 0.07 * reach, 1);
-        stroke(leg.sky, 0, end, WHITE, 0.26 * reach, 1);
+        stroke(leg.ground, 0, end, ink, 0.07 * reach, 1);
+        stroke(leg.sky, 0, end, ink, 0.26 * reach, 1);
         if (t > FRANKFURT_AT) {
           const f = ((t * 0.07 + i * 0.5) % 1);
           const sky = pointAt(leg.sky, f);
           const shadow = pointAt(leg.ground, f);
           ctx.fillStyle = 'rgba(0, 0, 0, 1)';
           plane(shadow.x, shadow.y, shadow.angle, 0.4 * reach * open, 0.8);
-          comet(leg.sky, f, 0.14, WHITE, 0.75 * reach * open, 1.4);
-          ctx.fillStyle = '#F7F7F3';
+          comet(leg.sky, f, 0.14, ink, 0.75 * reach * open, 1.4);
+          ctx.fillStyle = inkHex;
           plane(sky.x, sky.y, sky.angle, reach * open, 1);
         }
       });
@@ -363,7 +379,7 @@ export const RouteCanvas: React.FC<RouteCanvasProps> = ({ layer, paused, still }
             glow(p.x, p.y, 26, glowGold, current.money);
             ctx.beginPath();
             ctx.arc(p.x, p.y, 2.6 * unit, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(${WHITE}, ${current.money})`;
+            ctx.fillStyle = `rgba(${ink}, ${current.money})`;
             ctx.fill();
           }
         });
@@ -376,7 +392,7 @@ export const RouteCanvas: React.FC<RouteCanvasProps> = ({ layer, paused, still }
         const pop = Math.min(1, (t - reached) / 0.35);
         ctx.beginPath();
         ctx.arc(p.x, p.y, 3.4 * pop * unit, 0, Math.PI * 2);
-        ctx.fillStyle = '#F7F7F3';
+        ctx.fillStyle = inkHex;
         ctx.fill();
         ctx.lineWidth = 1.4 * unit;
         ctx.strokeStyle = `rgb(${GOLD})`;
@@ -444,6 +460,7 @@ export const RouteCanvas: React.FC<RouteCanvasProps> = ({ layer, paused, still }
       cancelAnimationFrame(raf);
       observer.disconnect();
       sizer.disconnect();
+      themeObserver.disconnect();
       document.removeEventListener('visibilitychange', start);
       wake.current = () => {};
     };

@@ -7,7 +7,7 @@ import { LOCALES, LOCALE_COOKIE, LOCALE_INFO, Locale, localePath, stripLocale } 
 import { useI18n } from '../../i18n/I18nProvider';
 import { LocaleFlag } from './LocaleFlag';
 
-const FOCUS = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E2C98C]';
+const FOCUS = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-line';
 
 // The visitor's pick is remembered for a year and wins over the country they visit from.
 const remember = (locale: Locale) => {
@@ -54,7 +54,7 @@ export const LanguageSwitcher: React.FC<{ variant?: 'menu' | 'list' }> = ({ vari
         window.location.assign(`${hrefFor(target)}${window.location.search}`);
       }}
       className={`flex items-center gap-3 rounded-lg py-2 text-sm transition-colors ${variant === 'menu' ? 'justify-between px-3' : 'px-2.5'} ${FOCUS} ${
-        target === locale ? 'bg-[#12B8B0]/15 text-[#12B8B0] font-bold' : 'text-[#F7F7F3]/85 hover:bg-white/5 hover:text-white'
+        target === locale ? 'bg-brand/15 text-brand font-bold' : 'text-ink/85 hover:bg-ink/5 hover:text-ink-strong'
       }`}
     >
       <span className="flex items-center gap-2.5">
@@ -62,7 +62,7 @@ export const LanguageSwitcher: React.FC<{ variant?: 'menu' | 'list' }> = ({ vari
         {LOCALE_INFO[target].name}
       </span>
       {/* In the list the flag and the highlight already say it */}
-      {variant === 'list' ? null : target === locale ? <Check className="h-4 w-4" /> : <span className="font-['Plus_Jakarta_Sans',sans-serif] text-[11px] font-bold text-[#718085]">{LOCALE_INFO[target].short}</span>}
+      {variant === 'list' ? null : target === locale ? <Check className="h-4 w-4" /> : <span className="font-['Plus_Jakarta_Sans',sans-serif] text-[11px] font-bold text-ink-dim">{LOCALE_INFO[target].short}</span>}
     </a>
   ));
 
@@ -82,14 +82,14 @@ export const LanguageSwitcher: React.FC<{ variant?: 'menu' | 'list' }> = ({ vari
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label={t.common.language.choose}
-        className={`flex items-center gap-1.5 rounded-full border border-[#12B8B0]/25 bg-[#0C252B]/60 px-3 py-2 text-xs font-bold text-[#F7F7F3]/90 transition-colors hover:border-[#12B8B0]/60 hover:text-white ${FOCUS}`}
+        className={`flex items-center gap-1.5 rounded-full border border-brand/25 bg-surface/60 px-3 py-2 text-xs font-bold text-ink/90 transition-colors hover:border-brand/60 hover:text-ink-strong ${FOCUS}`}
       >
         <LocaleFlag locale={locale} />
         <span className="font-['Plus_Jakarta_Sans',sans-serif] tracking-wide">{LOCALE_INFO[locale].short}</span>
         <ChevronDown className={`h-3.5 w-3.5 transition-transform ${open ? 'rotate-180' : ''}`} />
       </button>
       {open && (
-        <div role="menu" className="absolute end-0 top-full z-50 mt-2 w-44 space-y-0.5 rounded-xl border border-[#12B8B0]/20 bg-[#07191F]/95 p-1.5 shadow-2xl backdrop-blur-xl">
+        <div role="menu" className="absolute end-0 top-full z-50 mt-2 w-44 space-y-0.5 rounded-xl border border-brand/20 bg-canvas/95 p-1.5 shadow-2xl backdrop-blur-xl">
           {links}
         </div>
       )}

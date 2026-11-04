@@ -1,5 +1,212 @@
 @import "tailwindcss";
 
+/*
+ * The site's palette as theme tokens. The dark theme is the brand's own; the light theme keeps the
+ * turquoise and gold but darkens them where they're used as text, so everything stays readable on white.
+ * `-fill` tokens are the solid accent fills: they keep their color in both themes and always carry on-accent text.
+ */
+:root {
+  color-scheme: dark;
+  --canvas: #07191F;
+  --canvas-deep: #051115;
+  --surface: #0C252B;
+  --surface-2: #14282D;
+  --ink: #F7F7F3;
+  --ink-strong: #FFFFFF;
+  --ink-soft: #D5E0E3;
+  --ink-muted: #A2B6BC;
+  --ink-dim: #718085;
+  --brand: #12B8B0;
+  --brand-bright: #3ED0C8;
+  --brand-fill: #12B8B0;
+  --brand-bright-fill: #3ED0C8;
+  --gold: #E2C98C;
+  --gold-deep: #C6A15B;
+  --gold-line: #E2C98C;
+  --gold-deep-line: #C6A15B;
+  --gold-fill: #E2C98C;
+  --gold-deep-fill: #C6A15B;
+  --on-accent: #07191F;
+  --danger: #F58B8B;
+}
+
+[data-theme='light'] {
+  color-scheme: light;
+  --canvas: #F3F6F7;
+  --canvas-deep: #E6ECEE;
+  --surface: #FFFFFF;
+  --surface-2: #E9EFF1;
+  --ink: #0C1F25;
+  --ink-strong: #07191F;
+  --ink-soft: #243940;
+  --ink-muted: #46595F;
+  --ink-dim: #66777C;
+  --brand: #0B7F79;
+  --brand-bright: #0A6E69;
+  --gold: #93701E;
+  --gold-deep: #7A5B12;
+  --gold-line: #C6A15B;
+  --gold-deep-line: #A8862F;
+  --danger: #B91C1C;
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-canvas-deep: var(--canvas-deep);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-strong: var(--ink-strong);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-dim: var(--ink-dim);
+  --color-brand: var(--brand);
+  --color-brand-bright: var(--brand-bright);
+  --color-brand-fill: var(--brand-fill);
+  --color-brand-bright-fill: var(--brand-bright-fill);
+  --color-gold: var(--gold);
+  --color-gold-deep: var(--gold-deep);
+  --color-gold-line: var(--gold-line);
+  --color-gold-deep-line: var(--gold-deep-line);
+  --color-gold-fill: var(--gold-fill);
+  --color-gold-deep-fill: var(--gold-deep-fill);
+  --color-on-accent: var(--on-accent);
+  --color-danger: var(--danger);
+}
+
+/* While the theme switches, colors glide instead of snapping. The toggle keeps its own motion. */
+html.theme-switching *:not(.theme-toggle, .theme-toggle *) {
+  transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease, fill 0.35s ease, stroke 0.35s ease !important;
+}
+
+/* Theme toggle: a night sky with a golden moon that slides into a daylight sun */
+.theme-toggle {
+  position: relative;
+  flex: none;
+  width: 58px;
+  height: 30px;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, #E2C98C 40%, transparent);
+  background: linear-gradient(135deg, #0B2E37 0%, #07191F 60%, #0A2229 100%);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.55);
+  cursor: pointer;
+  transition: background 0.45s ease, border-color 0.45s ease, box-shadow 0.45s ease;
+}
+
+.theme-toggle::before {
+  /* Stars */
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 68% 32%, rgba(255, 255, 255, 0.95) 0 1px, transparent 1.6px),
+    radial-gradient(circle at 82% 62%, rgba(255, 255, 255, 0.75) 0 0.8px, transparent 1.4px),
+    radial-gradient(circle at 56% 72%, rgba(255, 255, 255, 0.6) 0 0.7px, transparent 1.3px),
+    radial-gradient(circle at 44% 38%, rgba(226, 201, 140, 0.8) 0 0.7px, transparent 1.3px);
+  transition: opacity 0.4s ease;
+}
+
+.theme-toggle::after {
+  /* Daylight haze */
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 30% 50%, rgba(255, 224, 138, 0.55), transparent 55%),
+    radial-gradient(ellipse 40% 50% at 70% 70%, rgba(255, 255, 255, 0.9), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.theme-toggle:hover {
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.55), 0 0 0 3px color-mix(in srgb, #12B8B0 18%, transparent), 0 0 18px -2px color-mix(in srgb, #12B8B0 60%, transparent);
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--gold-line);
+  outline-offset: 3px;
+}
+
+.theme-toggle-knob {
+  position: absolute;
+  top: 3px;
+  inset-inline-start: 3px;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 9999px;
+  color: #07191F;
+  background: linear-gradient(145deg, #F5E3B8 0%, #E2C98C 45%, #C6A15B 100%);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45), 0 0 12px color-mix(in srgb, #E2C98C 55%, transparent);
+  transition: inset-inline-start 0.5s cubic-bezier(0.34, 1.4, 0.64, 1), background 0.45s ease, color 0.45s ease, box-shadow 0.45s ease, transform 0.2s ease;
+}
+
+.theme-toggle:active .theme-toggle-knob {
+  transform: scale(0.9);
+}
+
+.theme-toggle-knob svg {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  transition: opacity 0.3s ease, transform 0.5s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.theme-toggle-sun {
+  opacity: 0;
+  transform: rotate(-120deg) scale(0.4);
+}
+
+[data-theme='light'] .theme-toggle {
+  border-color: color-mix(in srgb, #0B7F79 45%, transparent);
+  background: linear-gradient(135deg, #BDEDEA 0%, #E5F6F5 55%, #FFF4D6 100%);
+  box-shadow: inset 0 1px 3px rgba(7, 25, 31, 0.15);
+}
+
+[data-theme='light'] .theme-toggle:hover {
+  box-shadow: inset 0 1px 3px rgba(7, 25, 31, 0.15), 0 0 0 3px color-mix(in srgb, #0B7F79 15%, transparent), 0 0 18px -2px color-mix(in srgb, #F5B73B 70%, transparent);
+}
+
+[data-theme='light'] .theme-toggle::before {
+  opacity: 0;
+}
+
+[data-theme='light'] .theme-toggle::after {
+  opacity: 1;
+}
+
+[data-theme='light'] .theme-toggle-knob {
+  inset-inline-start: calc(100% - 25px);
+  color: #5A3E00;
+  background: linear-gradient(145deg, #FFF1BF 0%, #FFD76A 45%, #F2A93B 100%);
+  box-shadow: 0 2px 8px rgba(7, 25, 31, 0.25), 0 0 16px rgba(245, 183, 59, 0.7);
+}
+
+[data-theme='light'] .theme-toggle-moon {
+  opacity: 0;
+  transform: rotate(120deg) scale(0.4);
+}
+
+[data-theme='light'] .theme-toggle-sun {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.theme-switching *:not(.theme-toggle, .theme-toggle *),
+  .theme-toggle,
+  .theme-toggle::before,
+  .theme-toggle::after,
+  .theme-toggle-knob,
+  .theme-toggle-knob svg {
+    transition: none !important;
+  }
+}
+
 @layer base {
   :root {
     --primary: #12B8B0;
@@ -25,29 +232,29 @@
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #07191F;
+  background: var(--canvas);
 }
 ::-webkit-scrollbar-thumb {
-  background: #0C252B;
+  background: var(--surface-2);
   border-radius: 4px;
-  border: 1px solid rgba(18, 184, 176, 0.2);
+  border: 1px solid color-mix(in srgb, var(--brand) 20%, transparent);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #12B8B0;
+  background: var(--brand);
 }
 
 /* Luxury glass & lighting styles */
 .glass-panel {
-  background: rgba(12, 37, 43, 0.72);
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(18, 184, 176, 0.2);
+  border: 1px solid color-mix(in srgb, var(--brand) 20%, transparent);
 }
 
 .glass-panel-gold {
-  background: rgba(198, 161, 91, 0.08);
+  background: color-mix(in srgb, var(--gold-deep) 8%, transparent);
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(198, 161, 91, 0.25);
+  border: 1px solid color-mix(in srgb, var(--gold-deep-line) 25%, transparent);
 }
 
 .gold-gradient-text {
@@ -60,6 +267,16 @@
   background: linear-gradient(135deg, #A8FFF8 0%, #12B8B0 50%, #087F7B 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+[data-theme='light'] .gold-gradient-text {
+  background: linear-gradient(135deg, #B8903A 0%, #93701E 50%, #6E5110 100%);
+  -webkit-background-clip: text;
+}
+
+[data-theme='light'] .turquoise-gradient-text {
+  background: linear-gradient(135deg, #12A8A0 0%, #0B7F79 50%, #075C57 100%);
+  -webkit-background-clip: text;
 }
 
 /* High-end Animations for Hero and Interactive UI */
@@ -156,7 +373,7 @@
   text-align: center;
   line-height: 1.5;
   pointer-events: none;
-  text-shadow: 0 0 6px #07191F, 0 0 2px #07191F, 0 1px 10px #07191F;
+  text-shadow: 0 0 6px var(--canvas), 0 0 2px var(--canvas), 0 1px 10px var(--canvas);
   transition: opacity 0.4s ease;
   animation: heroFadeIn 0.5s ease-out both;
   animation-delay: var(--label-delay, 0s);
@@ -644,8 +861,8 @@
   height: 12px;
   margin-top: -6px;
   border-radius: 9999px;
-  background: #3ED0C8;
-  border: 2px solid #07191F;
+  background: var(--brand-bright);
+  border: 2px solid var(--canvas);
   transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
@@ -654,8 +871,8 @@
   white-space: nowrap;
   font-size: 13px;
   font-weight: 700;
-  color: #D5E0E3;
-  text-shadow: 0 0 6px #07191F, 0 0 2px #07191F, 0 1px 10px #07191F;
+  color: var(--ink-soft);
+  text-shadow: 0 0 6px var(--canvas), 0 0 2px var(--canvas), 0 1px 10px var(--canvas);
   transition: color 0.3s ease;
 }
 
@@ -674,7 +891,7 @@
 }
 
 .contact-pin[data-active='true'] .contact-pin-name {
-  color: #FFFFFF;
+  color: var(--ink-strong);
   font-size: 15px;
 }
 
@@ -739,15 +956,15 @@
   height: 11px;
   margin-top: -5.5px;
   border-radius: 9999px;
-  background: #07191F;
-  border: 2px solid #7FA2AA;
+  background: var(--canvas);
+  border: 2px solid var(--ink-dim);
   transition: background-color 0.3s ease 0.7s, border-color 0.3s ease 0.7s;
 }
 
 .consult-stop[data-state='passed'] .consult-stop-dot,
 .consult-stop[data-state='current'] .consult-stop-dot {
-  background: #E2C98C;
-  border-color: #07191F;
+  background: var(--gold-fill);
+  border-color: var(--canvas);
 }
 
 .consult-stop[data-state='current'] .consult-stop-dot::after {
@@ -769,14 +986,14 @@
   white-space: nowrap;
   font-size: 12px;
   font-weight: 700;
-  color: #A2B6BC;
-  text-shadow: 0 0 6px #07191F, 0 0 2px #07191F, 0 1px 10px #07191F;
+  color: var(--ink-muted);
+  text-shadow: 0 0 6px var(--canvas), 0 0 2px var(--canvas), 0 1px 10px var(--canvas);
   transition: color 0.3s ease 0.7s;
 }
 
 .consult-stop[data-state='current'] .consult-stop-name,
 .consult-stop[data-state='passed'] .consult-stop-name {
-  color: #FFFFFF;
+  color: var(--ink-strong);
 }
 
 @media (prefers-reduced-motion: reduce) {
