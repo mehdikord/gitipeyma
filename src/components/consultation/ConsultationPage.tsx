@@ -20,12 +20,12 @@ const TIMES = CALL_TIMES.map((time) => ({ value: time.key, icon: TIME_ICONS[time
 
 type TopicService = { id: number; slug: string; shortTitle: string };
 
-// Each finished step carries the route one stop further: three steps, Tehran to Europe.
-const STOPS: { at: LonLat; name: 'tehran' | 'bazargan' | 'istanbul' | 'europe'; above?: boolean }[] = [
+// Each finished step carries the route one stop further: three steps, Tehran to Istanbul.
+const STOPS: { at: LonLat; name: 'tehran' | 'bazargan' | 'ankara' | 'istanbul'; above?: boolean }[] = [
   { at: CITIES.tehran, name: 'tehran' },
   { at: CITIES.bazargan, name: 'bazargan', above: true },
+  { at: CITIES.ankara, name: 'ankara', above: true },
   { at: CITIES.istanbul, name: 'istanbul' },
-  { at: CITIES.frankfurt, name: 'europe' },
 ];
 const STOP_FRACTIONS = STOPS.map((stop) => roadFraction(stop.at));
 

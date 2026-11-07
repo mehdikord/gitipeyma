@@ -22,9 +22,9 @@ export const SERVICES_DATA = [
       tr: 'Uluslararası taşımacılık',
     },
     eyebrow: {
-      fa: 'تنها نمایندگی رسمی شرکت بین‌المللی گیتی پیما در ترکیه',
-      en: 'The only official agency of GITI International in Turkey',
-      tr: 'GITI International\'ın Türkiye\'deki tek resmi acentesi',
+      fa: 'تنها نمایندگی رسمی شرکت بین‌المللی رویال تراول در ترکیه',
+      en: 'The only official agency of Royal Travel in Turkey',
+      tr: 'Royal Travel\'ın Türkiye\'deki tek resmi acentesi',
     },
     summary: {
       fa: 'ارائه سرویس‌های روزانه VIP با صندلی تک‌نفره تخت‌خواب‌شو، مانیتور اختصاصی و اینترنت وای‌فای از تهران به استانبول و بالعکس.',
@@ -32,15 +32,15 @@ export const SERVICES_DATA = [
       tr: 'Tahran ile İstanbul arasında her iki yönde günlük VIP seferler: tekli yataklı koltuk, kişisel ekran ve Wi-Fi.',
     },
     description: {
-      fa: 'گیتی پیما به عنوان تنها نمایندگی رسمی در ترکیه، سفرهای بین‌المللی جاده‌ای میان ایران و ترکیه را با بالاترین استانداردهای رفاهی ارائه می‌دهد. ناوگان پیشرفته مجهز به سیستم تهویه هوشمند، صندلی‌های ارگونومیک تک‌نفره، پذیرایی گرم و مهمانداران مسلط به زبان‌های فارسی و ترکی در تمام طول مسیر همراه شما خواهند بود.',
-      en: 'As the only official agency in Turkey, GITI Peyma runs road travel between Iran and Turkey to the highest standards of comfort. Our modern fleet has smart climate control, ergonomic single seats and hot meals, and hosts fluent in Persian and Turkish travel with you the whole way.',
-      tr: 'Türkiye\'deki tek resmi acente olarak GITI Peyma, İran ile Türkiye arasındaki kara yolculuklarını en yüksek konfor standartlarıyla sunar. Akıllı klima sistemi, ergonomik tekli koltuklar ve sıcak ikramlarla donatılmış modern filomuzda, Farsça ve Türkçe bilen hostesler yolculuk boyunca yanınızdadır.',
+      fa: 'رویال تراول به عنوان تنها نمایندگی رسمی در ترکیه، سفرهای بین‌المللی جاده‌ای میان ایران و ترکیه را با بالاترین استانداردهای رفاهی ارائه می‌دهد. ناوگان پیشرفته مجهز به سیستم تهویه هوشمند، صندلی‌های ارگونومیک تک‌نفره، پذیرایی گرم و مهمانداران مسلط به زبان‌های فارسی و ترکی در تمام طول مسیر همراه شما خواهند بود.',
+      en: 'As the only official agency in Turkey, Royal Travel runs road travel between Iran and Turkey to the highest standards of comfort. Our modern fleet has smart climate control, ergonomic single seats and hot meals, and hosts fluent in Persian and Turkish travel with you the whole way.',
+      tr: 'Türkiye\'deki tek resmi acente olarak Royal Travel, İran ile Türkiye arasındaki kara yolculuklarını en yüksek konfor standartlarıyla sunar. Akıllı klima sistemi, ergonomik tekli koltuklar ve sıcak ikramlarla donatılmış modern filomuzda, Farsça ve Türkçe bilen hostesler yolculuk boyunca yanınızdadır.',
     },
     detailedContent: [
       {
-        fa: 'سفر جاده‌ای میان تهران و استانبول یکی از زیباترین و خاطره‌انگیزترین مسیرهای ترانزیتی منطقه است. اتوبوس‌های ۲۵ نفره VIP گیتی پیما با فاصله صندلی استاندارد هواپیمایی، تجربه‌ای بدون خستگی را برای مسافران رقم می‌زنند.',
-        en: 'The road between Tehran and Istanbul is one of the most beautiful and memorable transit routes in the region. GITI Peyma’s 25-seat VIP coaches have airline-standard seat spacing, so passengers arrive rested.',
-        tr: 'Tahran – İstanbul kara yolu, bölgenin en güzel ve unutulmaz transit güzergâhlarından biridir. GITI Peyma\'nın 25 kişilik VIP otobüsleri, havayolu standardında koltuk aralığıyla yorgunluk hissettirmeyen bir yolculuk sunar.',
+        fa: 'سفر جاده‌ای میان تهران و استانبول یکی از زیباترین و خاطره‌انگیزترین مسیرهای ترانزیتی منطقه است. اتوبوس‌های ۲۵ نفره VIP رویال تراول با فاصله صندلی استاندارد هواپیمایی، تجربه‌ای بدون خستگی را برای مسافران رقم می‌زنند.',
+        en: 'The road between Tehran and Istanbul is one of the most beautiful and memorable transit routes in the region. Royal Travel’s 25-seat VIP coaches have airline-standard seat spacing, so passengers arrive rested.',
+        tr: 'Tahran – İstanbul kara yolu, bölgenin en güzel ve unutulmaz transit güzergâhlarından biridir. Royal Travel\'ın 25 kişilik VIP otobüsleri, havayolu standardında koltuk aralığıyla yorgunluk hissettirmeyen bir yolculuk sunar.',
       },
       {
         fa: 'حرکت‌های روزانه همه‌روزه از پایانه‌های غرب تهران و پایانه بیهقی به سمت پایانه اسنلر و آکسارای استانبول انجام می‌پذیرد و توقف‌های برنامه‌ریزی‌شده در مجتمع‌های رفاهی استاندارد مرزی و بین‌راهی در ترکیه تضمین‌کننده آسایش شماست.',
@@ -48,9 +48,9 @@ export const SERVICES_DATA = [
         tr: 'Seferler her gün Tahran Batı Terminali ve Beyhaghi Terminali\'nden İstanbul\'daki Esenler ve Aksaray terminallerine yapılır; sınırda ve Türkiye\'deki güzergâh boyunca standart dinlenme tesislerinde planlı molalar konforunuzu güvence altına alır.',
       },
       {
-        fa: 'امکان حمل بار مجاز مسافری تا ۳۰ کیلوگرم، بیمه‌نامه مسافرتی بین‌المللی معتبر در طول سفر، و پشتیبانی مرزی ۲۴ ساعته در مرز بازرگان - گوربولاغ از دیگر مزایای ویژه سفر با گیتی پیما است.',
-        en: 'A passenger baggage allowance of up to 30 kg, valid international travel insurance for the whole journey, and 24-hour support at the Bazargan – Gürbulak border are among the other benefits of travelling with GITI Peyma.',
-        tr: '30 kg\'a kadar yolcu bagaj hakkı, yolculuk boyunca geçerli uluslararası seyahat sigortası ve Bazargan – Gürbulak sınır kapısında 7/24 destek, GITI Peyma ile seyahatin diğer ayrıcalıklarıdır.',
+        fa: 'امکان حمل بار مجاز مسافری تا ۳۰ کیلوگرم، بیمه‌نامه مسافرتی بین‌المللی معتبر در طول سفر، و پشتیبانی مرزی ۲۴ ساعته در مرز بازرگان - گوربولاغ از دیگر مزایای ویژه سفر با رویال تراول است.',
+        en: 'A passenger baggage allowance of up to 30 kg, valid international travel insurance for the whole journey, and 24-hour support at the Bazargan – Gürbulak border are among the other benefits of travelling with Royal Travel.',
+        tr: '30 kg\'a kadar yolcu bagaj hakkı, yolculuk boyunca geçerli uluslararası seyahat sigortası ve Bazargan – Gürbulak sınır kapısında 7/24 destek, Royal Travel ile seyahatin diğer ayrıcalıklarıdır.',
       },
     ],
     features: [
@@ -176,9 +176,9 @@ export const SERVICES_DATA = [
           tr: 'Türkiye\'de yolcular için Wi-Fi var mı?',
         },
         answer: {
-          fa: 'بله، اتوبوس‌های VIP گیتی پیما مجهز به مودم‌های سلولار بین‌المللی هستند که به محض ورود به خاک ترکیه اینترنت پرسرعت را در اختیار مسافران قرار می‌دهند.',
-          en: 'Yes. GITI Peyma VIP coaches carry international cellular modems that give passengers high-speed internet as soon as they enter Turkey.',
-          tr: 'Evet. GITI Peyma VIP otobüslerinde uluslararası hücresel modemler bulunur; Türkiye\'ye girer girmez yolculara yüksek hızlı internet sağlanır.',
+          fa: 'بله، اتوبوس‌های VIP رویال تراول مجهز به مودم‌های سلولار بین‌المللی هستند که به محض ورود به خاک ترکیه اینترنت پرسرعت را در اختیار مسافران قرار می‌دهند.',
+          en: 'Yes. Royal Travel VIP coaches carry international cellular modems that give passengers high-speed internet as soon as they enter Turkey.',
+          tr: 'Evet. Royal Travel VIP otobüslerinde uluslararası hücresel modemler bulunur; Türkiye\'ye girer girmez yolculara yüksek hızlı internet sağlanır.',
         },
       },
     ],
@@ -220,15 +220,15 @@ export const SERVICES_DATA = [
       tr: 'İran\'dan Türkiye\'ye ve Türkiye\'den İran\'a kargo gönderimi ve müşteri ihtiyacına uygun uzman posta hizmetleri.',
     },
     description: {
-      fa: 'اگر قصد ارسال مدارک فوری، بسته‌های شخصی، پوشاک یا نمونه‌های تجاری سبک بین شهرهای ایران و تمامی استان‌های ترکیه را دارید، سرویس پستی اختصاصی گیتی پیما با بسته‌بندی مکانیزه و رهگیری لحظه‌ای مرسوله بهترین گزینه شماست.',
-      en: 'Whether you need to send urgent documents, personal parcels, clothing or light trade samples between cities in Iran and any province of Turkey, GITI Peyma’s dedicated postal service, with machine packing and live parcel tracking, is your best option.',
-      tr: 'İran şehirleri ile Türkiye\'nin tüm illeri arasında acil evrak, kişisel paket, giyim veya hafif ticari numune göndermek istiyorsanız, makineli paketleme ve anlık gönderi takibi sunan GITI Peyma posta hizmeti en iyi seçeneğinizdir.',
+      fa: 'اگر قصد ارسال مدارک فوری، بسته‌های شخصی، پوشاک یا نمونه‌های تجاری سبک بین شهرهای ایران و تمامی استان‌های ترکیه را دارید، سرویس پستی اختصاصی رویال تراول با بسته‌بندی مکانیزه و رهگیری لحظه‌ای مرسوله بهترین گزینه شماست.',
+      en: 'Whether you need to send urgent documents, personal parcels, clothing or light trade samples between cities in Iran and any province of Turkey, Royal Travel’s dedicated postal service, with machine packing and live parcel tracking, is your best option.',
+      tr: 'İran şehirleri ile Türkiye\'nin tüm illeri arasında acil evrak, kişisel paket, giyim veya hafif ticari numune göndermek istiyorsanız, makineli paketleme ve anlık gönderi takibi sunan Royal Travel posta hizmeti en iyi seçeneğinizdir.',
     },
     detailedContent: [
       {
-        fa: 'خدمات پستی گیتی پیما با همکاری دفاتر هماهنگی در تهران، تبریز و استانبول انجام می‌شود. بسته‌های پستی بر اساس زمان‌بندی دقیق و استانداردهای پستی بین‌المللی بارگیری و توزیع می‌گردند.',
-        en: 'GITI Peyma’s postal services run through our coordination offices in Tehran, Tabriz and Istanbul. Parcels are loaded and delivered on a precise schedule and to international postal standards.',
-        tr: 'GITI Peyma posta hizmetleri Tahran, Tebriz ve İstanbul\'daki koordinasyon ofislerimizle yürütülür. Paketler hassas bir zaman planına ve uluslararası posta standartlarına göre yüklenir ve dağıtılır.',
+        fa: 'خدمات پستی رویال تراول با همکاری دفاتر هماهنگی در تهران، تبریز و استانبول انجام می‌شود. بسته‌های پستی بر اساس زمان‌بندی دقیق و استانداردهای پستی بین‌المللی بارگیری و توزیع می‌گردند.',
+        en: 'Royal Travel’s postal services run through our coordination offices in Tehran, Tabriz and Istanbul. Parcels are loaded and delivered on a precise schedule and to international postal standards.',
+        tr: 'Royal Travel posta hizmetleri Tahran, Tebriz ve İstanbul\'daki koordinasyon ofislerimizle yürütülür. Paketler hassas bir zaman planına ve uluslararası posta standartlarına göre yüklenir ve dağıtılır.',
       },
       {
         fa: 'ما امکان تحویل درب به درب (Door to Door) را در استانبول، آنکارا، ازمیر، آنتالیا و کلان‌شهرهای ایران فراهم کرده‌ایم تا بدون نیاز به مراجعه حضوری، محموله خود را ارسال یا دریافت فرمایید.',
@@ -277,9 +277,9 @@ export const SERVICES_DATA = [
           tr: 'Talep oluşturma ve tartım',
         },
         description: {
-          fa: 'تحویل مرسوله به دفاتر گیتی پیما یا هماهنگی پیک جهت دریافت مرسوله از محل شما.',
-          en: 'Drop your parcel at a GITI Peyma office or book a courier to collect it from you.',
-          tr: 'Gönderinizi GITI Peyma ofislerine teslim edin ya da adresinizden alınması için kurye ayarlayın.',
+          fa: 'تحویل مرسوله به دفاتر رویال تراول یا هماهنگی پیک جهت دریافت مرسوله از محل شما.',
+          en: 'Drop your parcel at a Royal Travel office or book a courier to collect it from you.',
+          tr: 'Gönderinizi Royal Travel ofislerine teslim edin ya da adresinizden alınması için kurye ayarlayın.',
         },
       },
       {
@@ -303,9 +303,9 @@ export const SERVICES_DATA = [
           tr: 'Ekspres hava veya kara taşımacılığı',
         },
         description: {
-          fa: 'انتقال سریع از طریق خطوط اختصاصی گیتی پیما و عبور از خطوط بازرسی پستی گمرک.',
-          en: 'Fast transfer on GITI Peyma’s dedicated lines and through customs postal inspection.',
-          tr: 'GITI Peyma\'nın özel hatlarıyla hızlı aktarım ve gümrük posta denetiminden geçiş.',
+          fa: 'انتقال سریع از طریق خطوط اختصاصی رویال تراول و عبور از خطوط بازرسی پستی گمرک.',
+          en: 'Fast transfer on Royal Travel’s dedicated lines and through customs postal inspection.',
+          tr: 'Royal Travel\'ın özel hatlarıyla hızlı aktarım ve gümrük posta denetiminden geçiş.',
         },
       },
       {
@@ -342,9 +342,9 @@ export const SERVICES_DATA = [
           tr: 'Paketimin nerede olduğunu nasıl takip edebilirim?',
         },
         answer: {
-          fa: 'با وارد کردن کد رهگیری ۱۰ رقمی درج‌شده روی بارنامه در سامانه پیگیری گیتی پیما می‌توانید موقعیت لحظه‌ای مرسوله را مشاهده فرمایید.',
-          en: 'Enter the 10-digit tracking code printed on your waybill in the GITI Peyma tracking system to see where your parcel is at any moment.',
-          tr: 'İrsaliyenizdeki 10 haneli takip kodunu GITI Peyma takip sistemine girerek gönderinizin anlık konumunu görebilirsiniz.',
+          fa: 'با وارد کردن کد رهگیری ۱۰ رقمی درج‌شده روی بارنامه در سامانه پیگیری رویال تراول می‌توانید موقعیت لحظه‌ای مرسوله را مشاهده فرمایید.',
+          en: 'Enter the 10-digit tracking code printed on your waybill in the Royal Travel tracking system to see where your parcel is at any moment.',
+          tr: 'İrsaliyenizdeki 10 haneli takip kodunu Royal Travel takip sistemine girerek gönderinizin anlık konumunu görebilirsiniz.',
         },
       },
     ],
@@ -381,14 +381,14 @@ export const SERVICES_DATA = [
       tr: 'Resmi izinlerle eksiksiz ithalat ve ihracat çözümü',
     },
     summary: {
-      fa: 'ارسال بار تجاری و انجام تشریفات ترخیص رسمی کالا از گمرکات رسمی بین ایران، ترکیه و ترانزیت اروپایی.',
-      en: 'Commercial freight and official customs clearance through the customs offices of Iran and Turkey, with transit to Europe.',
-      tr: 'İran ve Türkiye resmi gümrükleri üzerinden ticari yük taşımacılığı ve resmi gümrükleme, Avrupa\'ya transit dahil.',
+      fa: 'ارسال بار تجاری و انجام تشریفات ترخیص رسمی کالا از گمرکات رسمی بین ایران و ترکیه.',
+      en: 'Commercial freight and official customs clearance through the customs offices of Iran and Turkey.',
+      tr: 'İran ve Türkiye resmi gümrükleri üzerinden ticari yük taşımacılığı ve resmi gümrükleme.',
     },
     description: {
-      fa: 'برای بازرگانان، شرکت‌های تولیدی و واردکنندگان، ترخیص به‌موقع و ایمن کالا حیاتی است. گیتی پیما با تیمی از حق‌العمل‌کاران و ترخیص‌کاران رسمی در گمرکات بازرگان، غرب تهران، سهلان و گمرکات ترکیه، فرآیند ترخیص کالا را در کمترین زمان و با کمترین هزینه عملیاتی محقق می‌سازد.',
-      en: 'For traders, manufacturers and importers, clearing goods on time and safely is vital. With a team of licensed customs brokers at Bazargan, West Tehran and Sahlan customs and at Turkish customs, GITI Peyma clears your goods in the shortest time and at the lowest operating cost.',
-      tr: 'Tüccarlar, üreticiler ve ithalatçılar için malların zamanında ve güvenle gümrükten çekilmesi hayati önem taşır. GITI Peyma, Bazargan, Batı Tahran, Sahlan ve Türkiye gümrüklerindeki lisanslı gümrük müşavirlerinden oluşan ekibiyle gümrükleme sürecini en kısa sürede ve en düşük operasyon maliyetiyle tamamlar.',
+      fa: 'برای بازرگانان، شرکت‌های تولیدی و واردکنندگان، ترخیص به‌موقع و ایمن کالا حیاتی است. رویال تراول با تیمی از حق‌العمل‌کاران و ترخیص‌کاران رسمی در گمرکات بازرگان، غرب تهران، سهلان و گمرکات ترکیه، فرآیند ترخیص کالا را در کمترین زمان و با کمترین هزینه عملیاتی محقق می‌سازد.',
+      en: 'For traders, manufacturers and importers, clearing goods on time and safely is vital. With a team of licensed customs brokers at Bazargan, West Tehran and Sahlan customs and at Turkish customs, Royal Travel clears your goods in the shortest time and at the lowest operating cost.',
+      tr: 'Tüccarlar, üreticiler ve ithalatçılar için malların zamanında ve güvenle gümrükten çekilmesi hayati önem taşır. Royal Travel, Bazargan, Batı Tahran, Sahlan ve Türkiye gümrüklerindeki lisanslı gümrük müşavirlerinden oluşan ekibiyle gümrükleme sürecini en kısa sürede ve en düşük operasyon maliyetiyle tamamlar.',
     },
     detailedContent: [
       {
@@ -514,9 +514,9 @@ export const SERVICES_DATA = [
     id: 'service-4',
     slug: 'company-registration',
     title: {
-      fa: 'ثبت شرکت بین‌المللی در ترکیه و حوزه اروپا',
-      en: 'International Company Registration in Turkey and Europe',
-      tr: 'Türkiye ve Avrupa\'da Uluslararası Şirket Kuruluşu',
+      fa: 'ثبت شرکت بین‌المللی در ترکیه',
+      en: 'International Company Registration in Turkey',
+      tr: 'Türkiye\'de Uluslararası Şirket Kuruluşu',
     },
     shortTitle: {
       fa: 'ثبت شرکت بین‌المللی',
@@ -540,9 +540,9 @@ export const SERVICES_DATA = [
       tr: 'Hedef ülke mevzuatı çerçevesinde limited ve sınırsız sorumlu şirket kuruluş hizmetleri.',
     },
     description: {
-      fa: 'افتتاح شرکت در ترکیه پلی استوار برای ورود به بازارهای جهانی، افتتاح حساب‌های بانکی سوئیفت‌دار بین‌المللی و تجارت بدون تحریم است. تیم وکلای تجاری گیتی پیما صفر تا صد مراحل ثبت شرکت با مسئولیت محدود (Limited Şirket) را با رعایت تمامی موازین قانونی کشور ترکیه پیگیری می‌نمایند.',
-      en: 'A company in Turkey is a solid bridge into global markets, international bank accounts with SWIFT, and trade free of sanctions. GITI Peyma’s commercial lawyers handle every step of registering a limited company (Limited Şirket) in full compliance with Turkish law.',
-      tr: 'Türkiye\'de şirket kurmak; küresel pazarlara, SWIFT\'li uluslararası banka hesaplarına ve yaptırımsız ticarete açılan sağlam bir köprüdür. GITI Peyma\'nın ticaret hukuku avukatları, limited şirket kuruluşunun tüm aşamalarını Türk mevzuatına tam uyumla takip eder.',
+      fa: 'افتتاح شرکت در ترکیه پلی استوار برای ورود به بازارهای جهانی، افتتاح حساب‌های بانکی سوئیفت‌دار بین‌المللی و تجارت بدون تحریم است. تیم وکلای تجاری رویال تراول صفر تا صد مراحل ثبت شرکت با مسئولیت محدود (Limited Şirket) را با رعایت تمامی موازین قانونی کشور ترکیه پیگیری می‌نمایند.',
+      en: 'A company in Turkey is a solid bridge into global markets, international bank accounts with SWIFT, and trade free of sanctions. Royal Travel’s commercial lawyers handle every step of registering a limited company (Limited Şirket) in full compliance with Turkish law.',
+      tr: 'Türkiye\'de şirket kurmak; küresel pazarlara, SWIFT\'li uluslararası banka hesaplarına ve yaptırımsız ticarete açılan sağlam bir köprüdür. Royal Travel\'ın ticaret hukuku avukatları, limited şirket kuruluşunun tüm aşamalarını Türk mevzuatına tam uyumla takip eder.',
     },
     detailedContent: [
       {
@@ -551,9 +551,9 @@ export const SERVICES_DATA = [
         tr: 'Kuruluş süreci; MERSİS sisteminde ana sözleşmenin hazırlanması, ilk vergi numarasının alınması, noterde imza onayı, Ticaret Sicil Gazetesi\'nde ilan ve vergi dairesinin adres yoklamasını kapsar.',
       },
       {
-        fa: 'گیتی پیما همچنین خدمات ارائه دفتر مجازی (Virtual Office) استاندارد، معرفی حسابدار رسمی تاییدشده (Mali Müşavir) و دریافت کارت بازرگانی بین‌المللی را پشتیبانی می‌کند.',
-        en: 'GITI Peyma also provides a standard virtual office, referral to a certified accountant (Mali Müşavir) and support in obtaining an international trade card.',
-        tr: 'GITI Peyma ayrıca standart sanal ofis, onaylı mali müşavir yönlendirmesi ve uluslararası ticaret kartı alımında destek sunar.',
+        fa: 'رویال تراول همچنین خدمات ارائه دفتر مجازی (Virtual Office) استاندارد، معرفی حسابدار رسمی تاییدشده (Mali Müşavir) و دریافت کارت بازرگانی بین‌المللی را پشتیبانی می‌کند.',
+        en: 'Royal Travel also provides a standard virtual office, referral to a certified accountant (Mali Müşavir) and support in obtaining an international trade card.',
+        tr: 'Royal Travel ayrıca standart sanal ofis, onaylı mali müşavir yönlendirmesi ve uluslararası ticaret kartı alımında destek sunar.',
       },
     ],
     features: [
@@ -672,9 +672,9 @@ export const SERVICES_DATA = [
       tr: 'Uluslararası Vize Danışmanlığı ve Başvurusu',
     },
     shortTitle: {
-      fa: 'ویزای بین‌المللی (شنگن و کانادا)',
-      en: 'International Visas (Schengen and Canada)',
-      tr: 'Uluslararası Vize (Schengen ve Kanada)',
+      fa: 'ویزای بین‌المللی (کانادا و آمریکا)',
+      en: 'International Visas (Canada and the US)',
+      tr: 'Uluslararası Vize (Kanada ve ABD)',
     },
     category: 'immigration',
     categoryLabel: {
@@ -688,20 +688,20 @@ export const SERVICES_DATA = [
       tr: 'Evrak hazırlığı ve konsolosluk randevusunda uzman destek',
     },
     summary: {
-      fa: 'ارائه خدمات مشاوره و پیگیری درخواست ویزای شنگن، کانادا و آمریکا برای متقاضیان واجد شرایط.',
-      en: 'Consulting and follow-up on Schengen, Canadian and US visa applications for eligible applicants.',
-      tr: 'Şartları sağlayan başvuru sahipleri için Schengen, Kanada ve ABD vize başvurularında danışmanlık ve takip.',
+      fa: 'ارائه خدمات مشاوره و پیگیری درخواست ویزای کانادا و آمریکا برای متقاضیان واجد شرایط.',
+      en: 'Consulting and follow-up on Canadian and US visa applications for eligible applicants.',
+      tr: 'Şartları sağlayan başvuru sahipleri için Kanada ve ABD vize başvurularında danışmanlık ve takip.',
     },
     description: {
-      fa: 'درخواست ویزاهای توریستی، تجاری و تحصیلی کشورهای حوزه شنگن، بریتانیا و کانادا مستلزم تنظیم پرونده‌ای دقیق و بی‌نقص است. کارشناسان امور بین‌الملل گیتی پیما مدارک شغلی، مالی و سفری شما را بازبینی کرده و بهترین استراتژی ارائه به افسر ویزا را تدوین می‌کنند.',
-      en: 'Tourist, business and student visas for the Schengen area, the UK and Canada call for a precise, flawless file. GITI Peyma’s international affairs specialists review your employment, financial and travel documents and plan the best way to present your case to the visa officer.',
-      tr: 'Schengen bölgesi, Birleşik Krallık ve Kanada\'nın turistik, ticari ve öğrenci vizeleri eksiksiz ve titiz bir dosya gerektirir. GITI Peyma uluslararası işler uzmanları iş, mali ve seyahat belgelerinizi inceler ve dosyanızı vize memuruna sunmanın en iyi yolunu planlar.',
+      fa: 'درخواست ویزاهای توریستی، تجاری و تحصیلی کانادا و آمریکا مستلزم تنظیم پرونده‌ای دقیق و بی‌نقص است. کارشناسان امور بین‌الملل رویال تراول مدارک شغلی، مالی و سفری شما را بازبینی کرده و بهترین استراتژی ارائه به افسر ویزا را تدوین می‌کنند.',
+      en: 'Tourist, business and student visas for Canada and the US call for a precise, flawless file. Royal Travel’s international affairs specialists review your employment, financial and travel documents and plan the best way to present your case to the visa officer.',
+      tr: 'Kanada ve ABD\'nin turistik, ticari ve öğrenci vizeleri eksiksiz ve titiz bir dosya gerektirir. Royal Travel uluslararası işler uzmanları iş, mali ve seyahat belgelerinizi inceler ve dosyanızı vize memuruna sunmanın en iyi yolunu planlar.',
     },
     detailedContent: [
       {
-        fa: 'خدمات شامل تنظیم Cover Letter اختصاصی، رزرو هتل و پرواز معتبر هماهنگ با تاریخ سفر، بیمه‌نامه مسافرتی شنگن با پوشش ۳۰,۰۰۰ یورو و اخذ وقت ملاقات فوری در کارگزاری‌های رسمی VFS Global, BLS International و کنسولگری‌ها است.',
-        en: 'Our service includes a tailored cover letter, valid hotel and flight bookings matched to your travel dates, Schengen travel insurance with €30,000 cover, and fast appointments at official centres such as VFS Global and BLS International and at consulates.',
-        tr: 'Hizmetimiz; size özel niyet mektubu, seyahat tarihlerinize uygun geçerli otel ve uçuş rezervasyonu, 30.000 € teminatlı Schengen seyahat sigortası ve VFS Global, BLS International gibi resmi merkezlerde ve konsolosluklarda hızlı randevuyu kapsar.',
+        fa: 'خدمات شامل تنظیم Cover Letter اختصاصی، رزرو هتل و پرواز معتبر هماهنگ با تاریخ سفر، بیمه‌نامه مسافرتی بین‌المللی معتبر و اخذ وقت ملاقات فوری در کارگزاری‌های رسمی VFS Global و کنسولگری‌ها است.',
+        en: 'Our service includes a tailored cover letter, valid hotel and flight bookings matched to your travel dates, valid international travel insurance, and fast appointments at official centres such as VFS Global and at consulates.',
+        tr: 'Hizmetimiz; size özel niyet mektubu, seyahat tarihlerinize uygun geçerli otel ve uçuş rezervasyonu, geçerli uluslararası seyahat sigortası ve VFS Global gibi resmi merkezlerde ve konsolosluklarda hızlı randevuyu kapsar.',
       },
       {
         fa: 'مشاوره شبیه‌سازی مصاحبه سفارت و راهنمایی در خصوص اثبات تمکن مالی و علایق بازگشت به کشور از مؤلفه‌های کلیدی موفقیت پرونده‌های متقاضیان است.',
@@ -803,9 +803,9 @@ export const SERVICES_DATA = [
           tr: 'Vize garantili mi?',
         },
         answer: {
-          fa: 'تصمیم‌گیری نهایی منحصراً در صلاحیت کنسولگری و افسر ویزا است؛ گیتی پیما بدون وعده‌های واهی تضمینی، پرونده شما را در استانداردترین حالت ممکن تنظیم می‌کند.',
-          en: 'The final decision rests solely with the consulate and the visa officer. GITI Peyma makes no empty promises; we prepare your file to the highest possible standard.',
-          tr: 'Nihai karar yalnızca konsolosluğa ve vize memuruna aittir. GITI Peyma boş garanti vaat etmez; dosyanızı mümkün olan en yüksek standartta hazırlar.',
+          fa: 'تصمیم‌گیری نهایی منحصراً در صلاحیت کنسولگری و افسر ویزا است؛ رویال تراول بدون وعده‌های واهی تضمینی، پرونده شما را در استانداردترین حالت ممکن تنظیم می‌کند.',
+          en: 'The final decision rests solely with the consulate and the visa officer. Royal Travel makes no empty promises; we prepare your file to the highest possible standard.',
+          tr: 'Nihai karar yalnızca konsolosluğa ve vize memuruna aittir. Royal Travel boş garanti vaat etmez; dosyanızı mümkün olan en yüksek standartta hazırlar.',
         },
       },
     ],
@@ -846,9 +846,9 @@ export const SERVICES_DATA = [
       tr: 'Türkiye\'de nikâh ve düğün törenlerinin planlanması ve düzenlenmesi.',
     },
     description: {
-      fa: 'ترکیه با عمارات باشکوه عثمانی در حاشیه تنگه بسفر، کشتی‌های مجلل تفریحی و هتل‌های ۵ ستاره بین‌المللی، رویایی‌ترین مقصد برای برگزاری جشن‌های ازدواج است. تیم تشریفات اختصاصی گیتی پیما از طراحی دکور و گل‌آرایی ژورنالی تا پذیرایی و مدیریت مهمانان را بر عهده می‌گیرد.',
-      en: 'With grand Ottoman mansions along the Bosphorus, luxury yachts and international five-star hotels, Turkey is a dream destination for weddings. GITI Peyma’s dedicated events team takes care of everything from décor and editorial-style floral design to catering and guest management.',
-      tr: 'Boğaz kıyısındaki görkemli Osmanlı konakları, lüks yatları ve uluslararası beş yıldızlı otelleriyle Türkiye, düğünler için hayalinizdeki adrestir. GITI Peyma\'nın özel organizasyon ekibi; dekor ve editoryal çiçek tasarımından ikram ve misafir yönetimine kadar her şeyi üstlenir.',
+      fa: 'ترکیه با عمارات باشکوه عثمانی در حاشیه تنگه بسفر، کشتی‌های مجلل تفریحی و هتل‌های ۵ ستاره بین‌المللی، رویایی‌ترین مقصد برای برگزاری جشن‌های ازدواج است. تیم تشریفات اختصاصی رویال تراول از طراحی دکور و گل‌آرایی ژورنالی تا پذیرایی و مدیریت مهمانان را بر عهده می‌گیرد.',
+      en: 'With grand Ottoman mansions along the Bosphorus, luxury yachts and international five-star hotels, Turkey is a dream destination for weddings. Royal Travel’s dedicated events team takes care of everything from décor and editorial-style floral design to catering and guest management.',
+      tr: 'Boğaz kıyısındaki görkemli Osmanlı konakları, lüks yatları ve uluslararası beş yıldızlı otelleriyle Türkiye, düğünler için hayalinizdeki adrestir. Royal Travel\'ın özel organizasyon ekibi; dekor ve editoryal çiçek tasarımından ikram ve misafir yönetimine kadar her şeyi üstlenir.',
     },
     detailedContent: [
       {
@@ -999,9 +999,9 @@ export const SERVICES_DATA = [
       tr: 'Türkiye\'den İran\'a ve İran\'dan Türkiye\'ye vekâletname düzenlenmesi; Türkiye\'de hukuki davaların kabulü ve takibi.',
     },
     description: {
-      fa: 'انجام امور ملکی، بانکی، انحصار وراثت و اداری در ایران بدون سفر حضوری، با تنظیم وکالتنامه‌های رسمی در نوترهای ترکیه یا سرکنسولگری ایران در استانبول امکان‌پذیر است. وکلای مجرب همکار گیتی پیما متن وکالتنامه را با دقت حقوقی تنظیم کرده و در تمامی مراحل حضور خواهند داشت.',
-      en: 'Property, banking, inheritance and administrative matters in Iran can be handled without travelling, with an official power of attorney drawn up at a Turkish notary or at the Consulate General of Iran in Istanbul. GITI Peyma’s experienced partner lawyers draft the document with legal precision and stay with you at every step.',
-      tr: 'İran\'daki tapu, banka, veraset ve idari işlerinizi seyahat etmeden; Türkiye\'deki noterlerde veya İran\'ın İstanbul Başkonsolosluğu\'nda düzenlenen resmi vekâletnameyle halledebilirsiniz. GITI Peyma\'nın deneyimli iş ortağı avukatları metni hukuki titizlikle hazırlar ve her aşamada yanınızda olur.',
+      fa: 'انجام امور ملکی، بانکی، انحصار وراثت و اداری در ایران بدون سفر حضوری، با تنظیم وکالتنامه‌های رسمی در نوترهای ترکیه یا سرکنسولگری ایران در استانبول امکان‌پذیر است. وکلای مجرب همکار رویال تراول متن وکالتنامه را با دقت حقوقی تنظیم کرده و در تمامی مراحل حضور خواهند داشت.',
+      en: 'Property, banking, inheritance and administrative matters in Iran can be handled without travelling, with an official power of attorney drawn up at a Turkish notary or at the Consulate General of Iran in Istanbul. Royal Travel’s experienced partner lawyers draft the document with legal precision and stay with you at every step.',
+      tr: 'İran\'daki tapu, banka, veraset ve idari işlerinizi seyahat etmeden; Türkiye\'deki noterlerde veya İran\'ın İstanbul Başkonsolosluğu\'nda düzenlenen resmi vekâletnameyle halledebilirsiniz. Royal Travel\'ın deneyimli iş ortağı avukatları metni hukuki titizlikle hazırlar ve her aşamada yanınızda olur.',
     },
     detailedContent: [
       {
@@ -1095,9 +1095,9 @@ export const SERVICES_DATA = [
           tr: 'Varış noktasına güvenli gönderim',
         },
         description: {
-          fa: 'ارسال اصل سند وکالتنامه از طریق پست اکسپرس گیتی پیما به دست وکیل در ایران.',
-          en: 'The original document is sent by GITI Peyma express post to your attorney in Iran.',
-          tr: 'Vekâletnamenin aslı GITI Peyma ekspres postasıyla İran\'daki vekilinize ulaştırılır.',
+          fa: 'ارسال اصل سند وکالتنامه از طریق پست اکسپرس رویال تراول به دست وکیل در ایران.',
+          en: 'The original document is sent by Royal Travel express post to your attorney in Iran.',
+          tr: 'Vekâletnamenin aslı Royal Travel ekspres postasıyla İran\'daki vekilinize ulaştırılır.',
         },
       },
     ],
@@ -1152,9 +1152,9 @@ export const SERVICES_DATA = [
       tr: 'Uluslararası işlemler için belgelerin yeminli tercüme hizmetleri.',
     },
     description: {
-      fa: 'ترجمه دقیق اسناد هویتی، مدارک دانشگاهی، گزارش‌های مالی و قراردادهای بازرگانی پایه و اساس کلیه اقدامات اقامتی، تحصیلی و تجاری است. دارالترجمه رسمی همکار گیتی پیما با بهره‌گیری از مترجمان معتمد رسمی، بالاترین دقت و سریع‌ترین زمان تحویل را ارائه می‌نماید.',
-      en: 'Accurate translation of identity documents, academic records, financial reports and commercial contracts underpins every residency, study and business application. GITI Peyma’s partner certified translation office works with sworn translators to deliver the highest accuracy and the fastest turnaround.',
-      tr: 'Kimlik belgeleri, diplomalar, mali raporlar ve ticari sözleşmelerin doğru tercümesi tüm oturum, eğitim ve ticari başvuruların temelidir. GITI Peyma\'nın iş ortağı yeminli tercüme bürosu, yeminli tercümanlarla en yüksek doğruluğu ve en hızlı teslimatı sunar.',
+      fa: 'ترجمه دقیق اسناد هویتی، مدارک دانشگاهی، گزارش‌های مالی و قراردادهای بازرگانی پایه و اساس کلیه اقدامات اقامتی، تحصیلی و تجاری است. دارالترجمه رسمی همکار رویال تراول با بهره‌گیری از مترجمان معتمد رسمی، بالاترین دقت و سریع‌ترین زمان تحویل را ارائه می‌نماید.',
+      en: 'Accurate translation of identity documents, academic records, financial reports and commercial contracts underpins every residency, study and business application. Royal Travel’s partner certified translation office works with sworn translators to deliver the highest accuracy and the fastest turnaround.',
+      tr: 'Kimlik belgeleri, diplomalar, mali raporlar ve ticari sözleşmelerin doğru tercümesi tüm oturum, eğitim ve ticari başvuruların temelidir. Royal Travel\'ın iş ortağı yeminli tercüme bürosu, yeminli tercümanlarla en yüksek doğruluğu ve en hızlı teslimatı sunar.',
     },
     detailedContent: [
       {
@@ -1300,20 +1300,20 @@ export const SERVICES_DATA = [
       tr: 'Düşük komisyon ve geçerli makbuzla güvenli döviz çevirme ve transfer',
     },
     summary: {
-      fa: 'تبدیل و انتقال حواله‌های ارزی از ایران به دبی، ترکیه و اروپا و بالعکس، همراه با خدمات ارسال سوئیفت بین‌المللی.',
-      en: 'Exchange and transfer of funds from Iran to Dubai, Turkey and Europe and back, together with international SWIFT transfers.',
-      tr: 'İran\'dan Dubai, Türkiye ve Avrupa\'ya ve tersi yönde döviz çevirme ve transferi, uluslararası SWIFT gönderimi ile birlikte.',
+      fa: 'تبدیل و انتقال حواله‌های ارزی از ایران به دبی و ترکیه و بالعکس، همراه با خدمات ارسال سوئیفت بین‌المللی.',
+      en: 'Exchange and transfer of funds from Iran to Dubai and Turkey and back, together with international SWIFT transfers.',
+      tr: 'İran\'dan Dubai ve Türkiye\'ye ve tersi yönde döviz çevirme ve transferi, uluslararası SWIFT gönderimi ile birlikte.',
     },
     description: {
-      fa: 'گیتی پیما بستری امن و بدون واسطه برای تسویه وجوه ارزی، پرداخت شهریه دانشگاه‌های خارجی، انتقال وجوه خرید ملک و حواله‌های بازرگانی فراهم آورده است. تبدیل ریال به لیر، دلار، یورو و درهم با نرخ‌های لحظه‌ای رقابتی و تحویل نقدی در دفاتر استانبول و دبی یا واریز مستقیم بانکی انجام می‌شود.',
-      en: 'GITI Peyma offers a safe, direct way to settle foreign currency payments, pay tuition at universities abroad, transfer funds for property purchases and make commercial transfers. Rials are exchanged into lira, dollars, euros and dirhams at competitive live rates, with cash collection at our Istanbul and Dubai offices or direct bank deposit.',
-      tr: 'GITI Peyma; döviz ödemelerinin kapatılması, yurt dışı üniversite harçlarının ödenmesi, gayrimenkul alımı için fon transferi ve ticari havaleler için aracısız ve güvenli bir altyapı sunar. Riyal; lira, dolar, avro ve dirheme rekabetçi anlık kurlarla çevrilir, İstanbul ve Dubai ofislerimizde nakit teslim edilir ya da doğrudan banka hesabına yatırılır.',
+      fa: 'رویال تراول بستری امن و بدون واسطه برای تسویه وجوه ارزی، پرداخت شهریه دانشگاه‌های خارجی، انتقال وجوه خرید ملک و حواله‌های بازرگانی فراهم آورده است. تبدیل ریال به لیر، دلار، یورو و درهم با نرخ‌های لحظه‌ای رقابتی و تحویل نقدی در دفاتر استانبول و دبی یا واریز مستقیم بانکی انجام می‌شود.',
+      en: 'Royal Travel offers a safe, direct way to settle foreign currency payments, pay tuition at universities abroad, transfer funds for property purchases and make commercial transfers. Rials are exchanged into lira, dollars, euros and dirhams at competitive live rates, with cash collection at our Istanbul and Dubai offices or direct bank deposit.',
+      tr: 'Royal Travel; döviz ödemelerinin kapatılması, yurt dışı üniversite harçlarının ödenmesi, gayrimenkul alımı için fon transferi ve ticari havaleler için aracısız ve güvenli bir altyapı sunar. Riyal; lira, dolar, avro ve dirheme rekabetçi anlık kurlarla çevrilir, İstanbul ve Dubai ofislerimizde nakit teslim edilir ya da doğrudan banka hesabına yatırılır.',
     },
     detailedContent: [
       {
-        fa: 'انتقال حواله‌های سوئیفت به حساب‌های شرکتی و شخصی در اروپا، ترکیه و امارات همراه با ارائه مدرک رسمی منبع وجه (Source of Funds) جهت جلوگیری از مسدود شدن حساب‌های بانکی.',
-        en: 'SWIFT transfers to corporate and personal accounts in Europe, Turkey and the UAE, with official source-of-funds documentation so your bank accounts are not blocked.',
-        tr: 'Avrupa, Türkiye ve BAE\'deki kurumsal ve bireysel hesaplara, banka hesaplarınızın bloke olmaması için resmi fon kaynağı belgesiyle birlikte SWIFT transferi.',
+        fa: 'انتقال حواله‌های سوئیفت به حساب‌های شرکتی و شخصی در ترکیه و امارات همراه با ارائه مدرک رسمی منبع وجه (Source of Funds) جهت جلوگیری از مسدود شدن حساب‌های بانکی.',
+        en: 'SWIFT transfers to corporate and personal accounts in Turkey and the UAE, with official source-of-funds documentation so your bank accounts are not blocked.',
+        tr: 'Türkiye ve BAE\'deki kurumsal ve bireysel hesaplara, banka hesaplarınızın bloke olmaması için resmi fon kaynağı belgesiyle birlikte SWIFT transferi.',
       },
       {
         fa: 'تسویه سریع واریزهای شتابی در ایران و انتقال لیر به حساب‌های زراعت بانک، ایش بانک، واکیف بانک و گارانتی بی‌بی‌وی‌ای در کوتاه‌ترین زمان.',
@@ -1328,9 +1328,9 @@ export const SERVICES_DATA = [
         tr: 'Riyalden liraya ve tersine doğrudan çevirme, Türkiye\'deki tüm bankalara anında yatırım',
       },
       {
-        fa: 'حواله دلار و یورو به بانک‌های کشورهای اروپایی و حوزه شنگن',
-        en: 'Dollar and euro transfers to banks in Europe and the Schengen area',
-        tr: 'Avrupa ve Schengen bölgesindeki bankalara dolar ve avro transferi',
+        fa: 'حواله دلار و یورو به بانک‌های ترکیه و امارات',
+        en: 'Dollar and euro transfers to banks in Turkey and the UAE',
+        tr: 'Türkiye ve BAE bankalarına dolar ve avro transferi',
       },
       {
         fa: 'حواله سوئیفت شرکتی همراه با ارائه فاکتور و مدارک منبع پول قانونی',
@@ -1375,9 +1375,9 @@ export const SERVICES_DATA = [
           tr: 'Riyal veya döviz ödemesi',
         },
         description: {
-          fa: 'واریز به حساب‌های بانکی امن گیتی پیما و ارائه رسید تراکنش بانکی معتبر.',
-          en: 'Deposit to GITI Peyma’s secure bank accounts and provide a valid bank receipt.',
-          tr: 'GITI Peyma\'nın güvenli banka hesaplarına yatırın ve geçerli banka dekontunu iletin.',
+          fa: 'واریز به حساب‌های بانکی امن رویال تراول و ارائه رسید تراکنش بانکی معتبر.',
+          en: 'Deposit to Royal Travel’s secure bank accounts and provide a valid bank receipt.',
+          tr: 'Royal Travel\'ın güvenli banka hesaplarına yatırın ve geçerli banka dekontunu iletin.',
         },
       },
       {
@@ -1449,19 +1449,19 @@ export const SERVICES_DATA = [
       tr: 'Konsolosluk ve oturum hizmetleri',
     },
     eyebrow: {
-      fa: 'مسیر مطمئن زندگی، تحصیل و کار در ترکیه و اروپا',
-      en: 'A reliable path to living, studying and working in Turkey and Europe',
-      tr: 'Türkiye ve Avrupa\'da yaşam, eğitim ve çalışma için güvenilir yol',
+      fa: 'مسیر مطمئن زندگی، تحصیل و کار در ترکیه',
+      en: 'A reliable path to living, studying and working in Turkey',
+      tr: 'Türkiye\'de yaşam, eğitim ve çalışma için güvenilir yol',
     },
     summary: {
-      fa: 'ارائه خدمات پذیرش دانشجو و پیگیری امور اقامت کاری، سرمایه‌گذاری، تحصیلی و توریستی در کشورهای اروپایی، ترکیه و کشورهای عربی؛ همچنین خدمات مرتبط با مجوز کار (Çalışma İzni).',
-      en: 'Student admissions and follow-up of work, investment, student and tourist residency in Europe, Turkey and the Arab countries, plus work permit (Çalışma İzni) services.',
-      tr: 'Avrupa ülkeleri, Türkiye ve Arap ülkelerinde öğrenci kabulü ile çalışma, yatırım, öğrenci ve turistik oturum işlemlerinin takibi; ayrıca çalışma izni hizmetleri.',
+      fa: 'ارائه خدمات پذیرش دانشجو و پیگیری امور اقامت کاری، سرمایه‌گذاری، تحصیلی و توریستی در ترکیه و کشورهای عربی؛ همچنین خدمات مرتبط با مجوز کار (Çalışma İzni).',
+      en: 'Student admissions and follow-up of work, investment, student and tourist residency in Turkey and the Arab countries, plus work permit (Çalışma İzni) services.',
+      tr: 'Türkiye ve Arap ülkelerinde öğrenci kabulü ile çalışma, yatırım, öğrenci ve turistik oturum işlemlerinin takibi; ayrıca çalışma izni hizmetleri.',
     },
     description: {
-      fa: 'تیم تخصصی مهاجرت تحصیلی و اقامتی گیتی پیما شما را در انتخاب رشته، اخذ پذیرش با بورسیه‌های ۳۰ تا ۱۰۰ درصدی از برترین دانشگاه‌های ترکیه و اروپا، و ثبت پرونده اقامت در اداره کل مدیریت مهاجرت (Göç İdaresi) همراهی می‌نماید.',
-      en: 'GITI Peyma’s study and residency team helps you choose a programme, gain admission with 30% to 100% scholarships at leading universities in Turkey and Europe, and file your residence application with the Presidency of Migration Management (Göç İdaresi).',
-      tr: 'GITI Peyma\'nın eğitim ve oturum ekibi; bölüm seçiminde, Türkiye ve Avrupa\'nın önde gelen üniversitelerinden %30 ila %100 burslu kabul almada ve Göç İdaresi\'ne oturum başvurusu yapmada size eşlik eder.',
+      fa: 'تیم تخصصی مهاجرت تحصیلی و اقامتی رویال تراول شما را در انتخاب رشته، اخذ پذیرش با بورسیه‌های ۳۰ تا ۱۰۰ درصدی از برترین دانشگاه‌های ترکیه، و ثبت پرونده اقامت در اداره کل مدیریت مهاجرت (Göç İdaresi) همراهی می‌نماید.',
+      en: 'Royal Travel’s study and residency team helps you choose a programme, gain admission with 30% to 100% scholarships at leading universities in Turkey, and file your residence application with the Presidency of Migration Management (Göç İdaresi).',
+      tr: 'Royal Travel\'ın eğitim ve oturum ekibi; bölüm seçiminde, Türkiye\'nin önde gelen üniversitelerinden %30 ila %100 burslu kabul almada ve Göç İdaresi\'ne oturum başvurusu yapmada size eşlik eder.',
     },
     detailedContent: [
       {
@@ -1612,15 +1612,15 @@ export const SERVICES_DATA = [
       tr: 'Uluslararası evliliğe ilişkin tüm işlem ve formalitelerde baştan sona rehberlik ve takip.',
     },
     description: {
-      fa: 'ترکیه عضو کنوانسیون بین‌المللی احوال شخصیه (CIEC) است و سند رسمی ازدواج صادر شده توسط شهرداری‌های این کشور (Ailê Cüzdanı) دارای اعتبار بین‌المللی بدون نیاز به تایید مجدد در کشورهای اروپایی، کانادا و آمریکاست. گیتی پیما کلیه مراحل اخذ برگه تجرد، آزمایشات ژنتیک و خون، ترجمه و ثبت شهرداری را ظرف ۲ الی ۳ روز کاری ساماندهی می‌کند.',
-      en: 'Turkey is a member of the International Commission on Civil Status (CIEC), and the official marriage certificate issued by its municipalities (Aile Cüzdanı) is recognised internationally, with no further approval needed in European countries, Canada or the US. GITI Peyma arranges the certificate of single status, genetic and blood tests, translation and municipal registration within 2 to 3 working days.',
-      tr: 'Türkiye Uluslararası Nüfus Komisyonu (CIEC) üyesidir ve belediyelerin düzenlediği resmi evlilik belgesi (Aile Cüzdanı), Avrupa ülkeleri, Kanada ve ABD\'de ek onaya gerek kalmadan uluslararası geçerliliğe sahiptir. GITI Peyma; bekârlık belgesi, genetik ve kan testleri, tercüme ve belediye kaydının tüm aşamalarını 2 ila 3 iş günü içinde organize eder.',
+      fa: 'ترکیه عضو کنوانسیون بین‌المللی احوال شخصیه (CIEC) است و سند رسمی ازدواج صادر شده توسط شهرداری‌های این کشور (Ailê Cüzdanı) دارای اعتبار بین‌المللی بدون نیاز به تایید مجدد در کانادا و آمریکاست. رویال تراول کلیه مراحل اخذ برگه تجرد، آزمایشات ژنتیک و خون، ترجمه و ثبت شهرداری را ظرف ۲ الی ۳ روز کاری ساماندهی می‌کند.',
+      en: 'Turkey is a member of the International Commission on Civil Status (CIEC), and the official marriage certificate issued by its municipalities (Aile Cüzdanı) is recognised internationally, with no further approval needed in Canada or the US. Royal Travel arranges the certificate of single status, genetic and blood tests, translation and municipal registration within 2 to 3 working days.',
+      tr: 'Türkiye Uluslararası Nüfus Komisyonu (CIEC) üyesidir ve belediyelerin düzenlediği resmi evlilik belgesi (Aile Cüzdanı), Kanada ve ABD\'de ek onaya gerek kalmadan uluslararası geçerliliğe sahiptir. Royal Travel; bekârlık belgesi, genetik ve kan testleri, tercüme ve belediye kaydının tüm aşamalarını 2 ila 3 iş günü içinde organize eder.',
     },
     detailedContent: [
       {
-        fa: 'این خدمت ویژه متقاضیانی است که زوجین دارای دو تابعیت مختلف هستند، یا قصد اقدام جهت پرونده‌های الحاق به همسر (Family Reunion) در سفارتخانه‌های آلمان، اتریش، سوئد، کانادا و انگلستان را دارند.',
-        en: 'This service is for couples of two different nationalities, or those applying for family reunion at the embassies of Germany, Austria, Sweden, Canada or the UK.',
-        tr: 'Bu hizmet, farklı uyruklardan çiftler ile Almanya, Avusturya, İsveç, Kanada ve Birleşik Krallık büyükelçiliklerinde aile birleşimi başvurusu yapacaklar içindir.',
+        fa: 'این خدمت ویژه متقاضیانی است که زوجین دارای دو تابعیت مختلف هستند، یا قصد اقدام جهت پرونده‌های الحاق به همسر (Family Reunion) در سفارتخانه‌های کانادا، آمریکا و استرالیا را دارند.',
+        en: 'This service is for couples of two different nationalities, or those applying for family reunion at the embassies of Canada, the US or Australia.',
+        tr: 'Bu hizmet, farklı uyruklardan çiftler ile Kanada, ABD ve Avustralya büyükelçiliklerinde aile birleşimi başvurusu yapacaklar içindir.',
       },
       {
         fa: 'همچنین برای ثبت رسمی این واقعه در شناسنامه ایرانی، هماهنگی کامل جهت ثبت کنسولی در سرکنسولگری جمهوری اسلامی ایران در استانبول انجام می‌پذیرد.',
@@ -1717,9 +1717,9 @@ export const SERVICES_DATA = [
     faqs: [
       {
         question: {
-          fa: 'آیا سند ازدواج ترکیه در سفارت آلمان یا کانادا معتبر است؟',
-          en: 'Is a Turkish marriage certificate valid at the German or Canadian embassy?',
-          tr: 'Türkiye evlilik belgesi Almanya veya Kanada büyükelçiliğinde geçerli mi?',
+          fa: 'آیا سند ازدواج ترکیه در سفارت کانادا یا آمریکا معتبر است؟',
+          en: 'Is a Turkish marriage certificate valid at the Canadian or US embassy?',
+          tr: 'Türkiye evlilik belgesi Kanada veya ABD büyükelçiliğinde geçerli mi?',
         },
         answer: {
           fa: 'بله، سند بین‌المللی ازدواج ترکیه به دلیل عضویت در کنوانسیون آپوستیل و احوال شخصیه بین‌المللی، دارای بالاترین اعتبار حقوقی برای سفارتخانه‌هاست.',

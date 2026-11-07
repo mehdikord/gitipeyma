@@ -4,9 +4,9 @@ import { defineMessages } from './define';
 export const services = defineMessages({
   fa: {
     directory: {
-      eyebrow: 'فهرست جامع خدمات نمایندگی گیتی پیما',
+      eyebrow: 'فهرست جامع خدمات نمایندگی رویال تراول',
       title: 'خدمات یکپارچه بین‌المللی',
-      intro: 'از سفر VIP جاده‌ای تهران به استانبول و کارگو گمرکی تا خدمات ارزی، حقوقی، اقامتی و تشریفات فرامرزی در ترکیه و اروپا.',
+      intro: 'از سفر VIP جاده‌ای تهران به استانبول و کارگو گمرکی تا خدمات ارزی، حقوقی، اقامتی و تشریفات فرامرزی در ترکیه.',
       searchPlaceholder: 'جستجو در عناوین و موضوعات خدمات...',
       clear: 'پاک کردن',
       all: 'همه خدمات ({count})',
@@ -29,7 +29,7 @@ export const services = defineMessages({
       stepsTitle: 'مراحل انجام کار',
       faqTitle: 'پرسش‌های متداول',
       requestTitle: 'ثبت درخواست',
-      requestIntro: 'نام و شماره تماس خود را بگذارید و اگر خواستید، شرایط‌تان را کوتاه بنویسید. کارشناس گیتی پیما درخواست را بررسی می‌کند و با شما تماس می‌گیرد.',
+      requestIntro: 'نام و شماره تماس خود را بگذارید و اگر خواستید، شرایط‌تان را کوتاه بنویسید. کارشناس رویال تراول درخواست را بررسی می‌کند و با شما تماس می‌گیرد.',
       related: 'خدمات مرتبط',
       request: 'ثبت درخواست',
       bus: {
@@ -44,7 +44,7 @@ export const services = defineMessages({
       },
     },
     form: {
-      waybill: 'برگه درخواست گیتی پیما',
+      waybill: 'برگه درخواست رویال تراول',
       applicant: 'نام متقاضی',
       phone: 'شماره تماس',
       description: 'توضیحات',
@@ -80,14 +80,14 @@ export const services = defineMessages({
       fee: 'کارمزد ترانزیت مالی: {fee}',
       delivery: 'تحویل نقدی در استانبول یا واریز فوری',
       sameCurrency: 'لطفاً دو ارز متفاوت برای تبدیل انتخاب کنید.',
-      disclaimer: '* نرخ‌های فوق تخمینی هستند. جهت دریافت نرخ دقیق و تسویه قطعی در ساعات معاملاتی، با واحد ارزی گیتی پیما تماس حاصل فرمایید.',
+      disclaimer: '* نرخ‌های فوق تخمینی هستند. جهت دریافت نرخ دقیق و تسویه قطعی در ساعات معاملاتی، با واحد ارزی رویال تراول تماس حاصل فرمایید.',
     },
   },
   en: {
     directory: {
-      eyebrow: 'The full range of GITI Peyma services',
+      eyebrow: 'The full range of Royal Travel services',
       title: 'Integrated international services',
-      intro: 'From VIP road travel between Tehran and Istanbul and customs cargo to currency, legal, residency and cross-border event services in Turkey and Europe.',
+      intro: 'From VIP road travel between Tehran and Istanbul and customs cargo to currency, legal, residency and cross-border event services in Turkey.',
       searchPlaceholder: 'Search services by name or topic...',
       clear: 'Clear',
       all: 'All services ({count})',
@@ -110,7 +110,7 @@ export const services = defineMessages({
       stepsTitle: 'How it works',
       faqTitle: 'Frequently asked questions',
       requestTitle: 'Send a request',
-      requestIntro: 'Leave your name and phone number and, if you like, a short note about your situation. A GITI Peyma specialist will review your request and call you.',
+      requestIntro: 'Leave your name and phone number and, if you like, a short note about your situation. A Royal Travel specialist will review your request and call you.',
       related: 'Related services',
       request: 'Send a request',
       bus: {
@@ -125,7 +125,7 @@ export const services = defineMessages({
       },
     },
     form: {
-      waybill: 'GITI Peyma request slip',
+      waybill: 'Royal Travel request slip',
       applicant: 'Applicant',
       phone: 'Phone',
       description: 'Details',
@@ -161,14 +161,14 @@ export const services = defineMessages({
       fee: 'Transfer fee: {fee}',
       delivery: 'Cash pickup in Istanbul or instant deposit',
       sameCurrency: 'Please choose two different currencies to convert.',
-      disclaimer: '* These rates are estimates. For an exact rate and final settlement during trading hours, please contact the GITI Peyma currency desk.',
+      disclaimer: '* These rates are estimates. For an exact rate and final settlement during trading hours, please contact the Royal Travel currency desk.',
     },
   },
   tr: {
     directory: {
-      eyebrow: 'GITI Peyma hizmetlerinin tamamı',
+      eyebrow: 'Royal Travel hizmetlerinin tamamı',
       title: 'Bütünleşik uluslararası hizmetler',
-      intro: "Tahran–İstanbul VIP kara yolculuğu ve gümrüklü kargodan Türkiye ve Avrupa'da döviz, hukuk, oturum ve sınır ötesi organizasyon hizmetlerine kadar.",
+      intro: "Tahran–İstanbul VIP kara yolculuğu ve gümrüklü kargodan Türkiye'de döviz, hukuk, oturum ve sınır ötesi organizasyon hizmetlerine kadar.",
       searchPlaceholder: 'Hizmet adı veya konusuna göre arayın...',
       clear: 'Temizle',
       all: 'Tüm hizmetler ({count})',
@@ -191,7 +191,7 @@ export const services = defineMessages({
       stepsTitle: 'Süreç nasıl işler',
       faqTitle: 'Sıkça sorulan sorular',
       requestTitle: 'Talep gönderin',
-      requestIntro: 'Adınızı ve telefon numaranızı bırakın; dilerseniz durumunuzu kısaca yazın. GITI Peyma uzmanı talebinizi inceleyip sizi arayacak.',
+      requestIntro: 'Adınızı ve telefon numaranızı bırakın; dilerseniz durumunuzu kısaca yazın. Royal Travel uzmanı talebinizi inceleyip sizi arayacak.',
       related: 'İlgili hizmetler',
       request: 'Talep gönder',
       bus: {
@@ -206,7 +206,7 @@ export const services = defineMessages({
       },
     },
     form: {
-      waybill: 'GITI Peyma talep formu',
+      waybill: 'Royal Travel talep formu',
       applicant: 'Başvuru sahibi',
       phone: 'Telefon',
       description: 'Açıklama',
@@ -242,7 +242,7 @@ export const services = defineMessages({
       fee: 'Transfer komisyonu: {fee}',
       delivery: "İstanbul'da nakit teslim veya anında havale",
       sameCurrency: 'Lütfen dönüştürmek için iki farklı döviz seçin.',
-      disclaimer: '* Bu kurlar tahminidir. İşlem saatlerinde kesin kur ve nihai ödeme için GITI Peyma döviz birimiyle iletişime geçin.',
+      disclaimer: '* Bu kurlar tahminidir. İşlem saatlerinde kesin kur ve nihai ödeme için Royal Travel döviz birimiyle iletişime geçin.',
     },
   },
 });

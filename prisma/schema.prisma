@@ -1,4 +1,4 @@
-// GITI database schema.
+// Royal Travel database schema.
 //
 // Conventions (Laravel style), followed by every model so new phases stay consistent:
 // - Tables are snake_case plurals, columns snake_case (models and fields stay camelCase in code).

@@ -6,7 +6,7 @@ import '../globals.css';
 import './admin.css';
 
 export const metadata: Metadata = {
-  title: { default: 'پنل مدیریت | گیتی پیما', template: '%s | پنل مدیریت گیتی پیما' },
+  title: { default: 'پنل مدیریت | رویال تراول', template: '%s | پنل مدیریت رویال تراول' },
   robots: { index: false, follow: false },
   icons: { icon: 'data:,' },
 };

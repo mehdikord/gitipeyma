@@ -1,6 +1,6 @@
 {
-  "name": "گیتی پیما | GITI International",
-  "description": "سامانه رسمی گیتی پیما؛ خدمات بین‌المللی مسافری VIP، کارگو، خدمات ارزی، حقوقی، ثبت شرکت و اقامت فرامرزی بین ایران، ترکیه و اروپا.",
+  "name": "رویال تراول | Royal Travel",
+  "description": "سامانه رسمی رویال تراول؛ خدمات بین‌المللی مسافری VIP، کارگو، خدمات ارزی، حقوقی، ثبت شرکت و اقامت فرامرزی بین ایران و ترکیه.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

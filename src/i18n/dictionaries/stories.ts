@@ -6,7 +6,7 @@ export const stories = defineMessages({
     trust: [
       {
         title: 'فعالیت تخصصی بین‌المللی',
-        desc: 'تمرکز ویژه بر تعاملات تجاری، حمل‌ونقل و مبادلات فرامرزی میان ایران، ترکیه و اتحادیه اروپا با استانداردهای قانونی.',
+        desc: 'تمرکز ویژه بر تعاملات تجاری، حمل‌ونقل و مبادلات فرامرزی میان ایران و ترکیه با استانداردهای قانونی.',
       },
       {
         title: 'تنوع خدمات در یک مجموعه',
@@ -22,15 +22,15 @@ export const stories = defineMessages({
       },
     ],
     story: {
-      imageAlt: 'نمای استانبول و تنگه بسفر - هاب بین‌المللی گیتی پیما',
+      imageAlt: 'نمای استانبول و تنگه بسفر - هاب بین‌المللی رویال تراول',
       officeTitle: 'دفتر مرکزی ترکیه (استانبول - فاتیح)',
-      officeText: 'نقطه اتصال ترانزیت جاده‌ای خاورمیانه به دروازه‌های اروپایی با ارائه خدمات جامع اقامتی و تجاری.',
+      officeText: 'مقصد نهایی مسیر ترانزیت جاده‌ای ایران به ترکیه، با ارائه خدمات جامع اقامتی و تجاری.',
       badgeTitle: 'تنها نمایندگی رسمی',
-      badgeText: 'شرکت بین‌المللی گیتی پیما',
+      badgeText: 'شرکت بین‌المللی رویال تراول',
       eyebrow: 'هویت و رسالت مجموعه',
       titleLine1: 'یک همراه مطمئن،',
       titleLine2: 'برای مسیرهایی فراتر از مرزها',
-      lead: '«گیتی پیما» نامی آشنا و پرسابقه در عرصه ترانزیت و ارتباطات بین‌المللی است. با تاسیس نمایندگی رسمی در ترکیه، توانسته‌ایم زنجیره‌ای یکپارچه از خدمات ضروری را به ایرانیان، بازرگانان، دانشجویان و مسافران ارائه دهیم.',
+      lead: '«رویال تراول» نامی آشنا و پرسابقه در عرصه ترانزیت و ارتباطات بین‌المللی است. با تاسیس نمایندگی رسمی در ترکیه، توانسته‌ایم زنجیره‌ای یکپارچه از خدمات ضروری را به ایرانیان، بازرگانان، دانشجویان و مسافران ارائه دهیم.',
       body: 'رویکرد ما بر پایه شفافیت حقوقی، احترام به وقت متقاضیان، حذف واسطه‌های غیررسمی و ارائه خدمات بی‌واسطه در شهرهای استانبول و تهران بنا شده است. از سفر جاده‌ای ۲۵ نفره VIP تا ثبت رسمی شرکت و ترخیص بارهای تجاری، تیم ما متعهد به همراهی تا پایان فرآیند است.',
       values: [
         'پاسخگویی مستقیم بدون واسطه‌گری',
@@ -38,11 +38,11 @@ export const stories = defineMessages({
         'تسلط بر موازین قانونی هر دو کشور',
         'شبکه ترانزیت روزانه بدون وقفه',
       ],
-      more: 'آشنایی بیشتر با گیتی پیما',
+      more: 'آشنایی بیشتر با رویال تراول',
     },
     advantages: {
-      eyebrow: 'WHY GITI SERVICES',
-      title: 'مزیت‌های متمایز انتخاب گیتی پیما',
+      eyebrow: 'WHY ROYAL TRAVEL',
+      title: 'مزیت‌های متمایز انتخاب رویال تراول',
       lead: 'استانداردهای حرفه‌ای که امنیت خاطر و سرعت عمل را در تمامی امور فرامرزی شما تضمین می‌کنند.',
       items: [
         {
@@ -68,7 +68,7 @@ export const stories = defineMessages({
       ],
     },
     team: {
-      eyebrow: 'متخصصان میدانی گیتی پیما',
+      eyebrow: 'متخصصان میدانی رویال تراول',
       title: 'کادر اجرایی و مشاوران امور بین‌الملل',
       lead: 'تلفیقی از کارشناسان باسابقه ترانزیت جاده‌ای، وکلای تجاری و مشاوران اقامتی مستقر در دفاتر استانبول و تهران.',
       note: '* تمامی فرآیندهای اداری، حقوقی و ترانزیتی در مراجع رسمی توسط وکلای پایه یک و کارگزاران مورد تایید نهادهای قانونی نظارت و انجام می‌پذیرند.',
@@ -92,7 +92,7 @@ export const stories = defineMessages({
       caseYear: 'ثبت پرونده: سال {year}',
       quoteOpen: '«',
       quoteClose: '»',
-      milestones: 'مراحل اجرایی پرونده در گیتی پیما',
+      milestones: 'مراحل اجرایی پرونده در رویال تراول',
       hide: 'بستن',
       show: 'نمایش',
       caseLabel: 'پرونده',
@@ -105,14 +105,14 @@ export const stories = defineMessages({
       next: 'تجربه بعدی',
       marqueeTitle: 'مرور لحظه‌ای گزیده دیدگاه‌های ثبت‌شده در پایانه آکسارای استانبول و شعب گمرکی',
       notice:
-        '* بازخوردهای فوق گزیده‌ای مستند از مراجعان حقیقی خطوط VIP، خدمات گمرکی و اداری گیتی پیما است. با ثبت نظر در فرم بالا، تجربه شما به این پورتال افزوده خواهد شد.',
+        '* بازخوردهای فوق گزیده‌ای مستند از مراجعان حقیقی خطوط VIP، خدمات گمرکی و اداری رویال تراول است. با ثبت نظر در فرم بالا، تجربه شما به این پورتال افزوده خواهد شد.',
       form: {
         close: 'بستن',
-        eyebrow: 'باشگاه مشتریان گیتی پیما',
+        eyebrow: 'باشگاه مشتریان رویال تراول',
         title: 'ثبت تجربه همکاری یا سفر شما',
         lead: 'دیدگاه شما پس از ارزیابی کیفی، در بخش بازتاب اعتماد و همراهی نمایش داده خواهد شد.',
         successTitle: 'با سپاس، نظر شما با موفقیت ثبت شد!',
-        successText: 'تجربه شما پس از بررسی کارشناسان گیتی پیما در این بخش نمایش داده می‌شود.',
+        successText: 'تجربه شما پس از بررسی کارشناسان رویال تراول در این بخش نمایش داده می‌شود.',
         name: 'نام و نام خانوادگی یا عنوان شرکت *',
         namePlaceholder: 'مثال: مهندس رامین خسروی (صنایع الکترونیک)',
         service: 'نوع خدمت دریافتی *',
@@ -122,7 +122,7 @@ export const stories = defineMessages({
         rating: 'امتیاز شما به کیفیت خدمات',
         ratingValue: '({rating} از ۵ ستاره)',
         comment: 'متن تجربه و میزان رضایت شما *',
-        commentPlaceholder: 'لطفاً جزییات تجربه سفر یا ترخیص و همکاری خود با گیتی پیما را بنویسید...',
+        commentPlaceholder: 'لطفاً جزییات تجربه سفر یا ترخیص و همکاری خود با رویال تراول را بنویسید...',
         cancel: 'انصراف',
         sending: 'در حال ثبت...',
         submit: 'ثبت بازخورد',
@@ -133,7 +133,7 @@ export const stories = defineMessages({
     trust: [
       {
         title: 'International specialists',
-        desc: 'Focused on trade, transport and cross-border dealings between Iran, Turkey and the European Union, done to legal standards.',
+        desc: 'Focused on trade, transport and cross-border dealings between Iran and Turkey, done to legal standards.',
       },
       {
         title: 'Every service under one roof',
@@ -149,15 +149,15 @@ export const stories = defineMessages({
       },
     ],
     story: {
-      imageAlt: 'Istanbul and the Bosphorus, the international hub of GITI Peyma',
+      imageAlt: 'Istanbul and the Bosphorus, the international hub of Royal Travel',
       officeTitle: 'Turkey head office (Istanbul, Fatih)',
-      officeText: 'Where the Middle East’s road transit meets the gateways to Europe, with full residency and business services.',
+      officeText: 'The final stop on the road transit route from Iran to Turkey, with full residency and business services.',
       badgeTitle: 'The only official agency',
-      badgeText: 'of GITI International',
+      badgeText: 'of Royal Travel',
       eyebrow: 'Who we are and what we do',
       titleLine1: 'A partner you can rely on,',
       titleLine2: 'for journeys beyond borders',
-      lead: 'GITI Peyma is a long-established, trusted name in transit and international connections. With our official agency in Turkey, we offer Iranians, traders, students and travellers a complete chain of essential services.',
+      lead: 'Royal Travel is a long-established, trusted name in transit and international connections. With our official agency in Turkey, we offer Iranians, traders, students and travellers a complete chain of essential services.',
       body: 'Our approach rests on legal transparency, respect for our clients’ time, cutting out unofficial middlemen and serving you directly in Istanbul and Tehran. From 25-seat VIP road travel to official company registration and commercial customs clearance, our team stays with you until the process is complete.',
       values: [
         'Direct answers, no middlemen',
@@ -165,11 +165,11 @@ export const stories = defineMessages({
         'Expertise in the law of both countries',
         'A daily transit network that never stops',
       ],
-      more: 'Learn more about GITI Peyma',
+      more: 'Learn more about Royal Travel',
     },
     advantages: {
-      eyebrow: 'WHY GITI SERVICES',
-      title: 'Why clients choose GITI Peyma',
+      eyebrow: 'WHY ROYAL TRAVEL',
+      title: 'Why clients choose Royal Travel',
       lead: 'Professional standards that give you peace of mind and fast results in all your cross-border affairs.',
       items: [
         {
@@ -195,7 +195,7 @@ export const stories = defineMessages({
       ],
     },
     team: {
-      eyebrow: 'GITI Peyma’s field specialists',
+      eyebrow: 'Royal Travel’s field specialists',
       title: 'Our executive team and international advisers',
       lead: 'Experienced road-transit specialists, business lawyers and residency advisers, based in our Istanbul and Tehran offices.',
       note: '* All administrative, legal and transit procedures with official authorities are carried out and supervised by senior licensed lawyers and officially approved agents.',
@@ -219,7 +219,7 @@ export const stories = defineMessages({
       caseYear: 'Case filed: {year}',
       quoteOpen: '“',
       quoteClose: '”',
-      milestones: 'How GITI Peyma handled this case',
+      milestones: 'How Royal Travel handled this case',
       hide: 'Hide',
       show: 'Show',
       caseLabel: 'Case',
@@ -232,14 +232,14 @@ export const stories = defineMessages({
       next: 'Next',
       marqueeTitle: 'Highlights from reviews left at the Aksaray terminal in Istanbul and our customs branches',
       notice:
-        '* The reviews above are a documented selection from real clients of GITI Peyma’s VIP lines, customs and administrative services. Share yours with the form above to add it here.',
+        '* The reviews above are a documented selection from real clients of Royal Travel’s VIP lines, customs and administrative services. Share yours with the form above to add it here.',
       form: {
         close: 'Close',
-        eyebrow: 'GITI Peyma client club',
+        eyebrow: 'Royal Travel client club',
         title: 'Tell us about your trip or project',
         lead: 'Your review will appear in this section once our team has checked it.',
         successTitle: 'Thank you, your review has been received!',
-        successText: 'It will appear here once GITI Peyma’s team has reviewed it.',
+        successText: 'It will appear here once Royal Travel’s team has reviewed it.',
         name: 'Full name or company *',
         namePlaceholder: 'e.g. Ramin Khosravi (Electronics Industries)',
         service: 'Service you used *',
@@ -249,7 +249,7 @@ export const stories = defineMessages({
         rating: 'How would you rate our service?',
         ratingValue: '({rating} of 5 stars)',
         comment: 'Your experience *',
-        commentPlaceholder: 'Tell us about your trip, customs clearance or work with GITI Peyma...',
+        commentPlaceholder: 'Tell us about your trip, customs clearance or work with Royal Travel...',
         cancel: 'Cancel',
         sending: 'Sending...',
         submit: 'Submit review',
@@ -260,7 +260,7 @@ export const stories = defineMessages({
     trust: [
       {
         title: 'Uluslararası uzmanlık',
-        desc: 'İran, Türkiye ve Avrupa Birliği arasındaki ticaret, taşımacılık ve sınır ötesi işlemlerde yasal standartlara uygun hizmet.',
+        desc: 'İran ve Türkiye arasındaki ticaret, taşımacılık ve sınır ötesi işlemlerde yasal standartlara uygun hizmet.',
       },
       {
         title: 'Tüm hizmetler tek çatı altında',
@@ -276,15 +276,15 @@ export const stories = defineMessages({
       },
     ],
     story: {
-      imageAlt: 'İstanbul ve Boğaz manzarası, GITI Peyma’nın uluslararası merkezi',
+      imageAlt: 'İstanbul ve Boğaz manzarası, Royal Travel’ın uluslararası merkezi',
       officeTitle: 'Türkiye merkez ofisi (İstanbul, Fatih)',
-      officeText: 'Orta Doğu’nun kara yolu transitini Avrupa’nın kapılarına bağlayan nokta; kapsamlı oturum ve ticari hizmetlerle.',
+      officeText: 'İran’dan Türkiye’ye uzanan kara yolu transitinin son durağı; kapsamlı oturum ve ticari hizmetlerle.',
       badgeTitle: 'Tek resmi acente',
-      badgeText: 'GITI International',
+      badgeText: 'Royal Travel',
       eyebrow: 'Kimliğimiz ve misyonumuz',
       titleLine1: 'Güvenebileceğiniz bir yol arkadaşı,',
       titleLine2: 'sınırların ötesine uzanan yollar için',
-      lead: 'GITI Peyma, transit ve uluslararası bağlantılar alanında köklü ve tanınmış bir isimdir. Türkiye’deki resmi acentemizle İranlılara, tüccarlara, öğrencilere ve yolculara eksiksiz bir temel hizmet zinciri sunuyoruz.',
+      lead: 'Royal Travel, transit ve uluslararası bağlantılar alanında köklü ve tanınmış bir isimdir. Türkiye’deki resmi acentemizle İranlılara, tüccarlara, öğrencilere ve yolculara eksiksiz bir temel hizmet zinciri sunuyoruz.',
       body: 'Yaklaşımımız hukuki şeffaflığa, müşterilerimizin zamanına saygıya, gayriresmî aracıları ortadan kaldırmaya ve İstanbul ile Tahran’da doğrudan hizmet vermeye dayanır. 25 kişilik VIP kara yolu yolculuğundan resmi şirket kuruluşuna ve ticari gümrük işlemlerine kadar ekibimiz süreç tamamlanana dek yanınızdadır.',
       values: [
         'Aracısız, doğrudan iletişim',
@@ -292,11 +292,11 @@ export const stories = defineMessages({
         'İki ülkenin mevzuatına hâkimiyet',
         'Kesintisiz günlük transit ağı',
       ],
-      more: 'GITI Peyma’yı yakından tanıyın',
+      more: 'Royal Travel’ı yakından tanıyın',
     },
     advantages: {
-      eyebrow: 'WHY GITI SERVICES',
-      title: 'Neden GITI Peyma?',
+      eyebrow: 'WHY ROYAL TRAVEL',
+      title: 'Neden Royal Travel?',
       lead: 'Tüm sınır ötesi işlerinizde içinizi rahatlatan ve hız kazandıran profesyonel standartlar.',
       items: [
         {
@@ -322,7 +322,7 @@ export const stories = defineMessages({
       ],
     },
     team: {
-      eyebrow: 'GITI Peyma saha uzmanları',
+      eyebrow: 'Royal Travel saha uzmanları',
       title: 'Yönetim kadromuz ve uluslararası danışmanlarımız',
       lead: 'İstanbul ve Tahran ofislerimizde görev yapan deneyimli kara yolu transit uzmanları, ticaret avukatları ve oturum danışmanları.',
       note: '* Resmi kurumlardaki tüm idari, hukuki ve transit işlemler kıdemli avukatlar ve yetkili kurumlarca onaylanmış temsilciler tarafından yürütülür ve denetlenir.',
@@ -346,7 +346,7 @@ export const stories = defineMessages({
       caseYear: 'Dosya yılı: {year}',
       quoteOpen: '“',
       quoteClose: '”',
-      milestones: 'Dosyanın GITI Peyma’daki aşamaları',
+      milestones: 'Dosyanın Royal Travel’daki aşamaları',
       hide: 'Gizle',
       show: 'Göster',
       caseLabel: 'Dosya',
@@ -359,14 +359,14 @@ export const stories = defineMessages({
       next: 'Sonraki',
       marqueeTitle: 'İstanbul Aksaray terminalinde ve gümrük şubelerimizde bırakılan yorumlardan seçmeler',
       notice:
-        '* Yukarıdaki yorumlar, GITI Peyma’nın VIP hatları, gümrük ve idari hizmetlerini kullanan gerçek müşterilerden belgelenmiş bir seçkidir. Yukarıdaki formla deneyiminizi paylaşarak buraya ekleyebilirsiniz.',
+        '* Yukarıdaki yorumlar, Royal Travel’ın VIP hatları, gümrük ve idari hizmetlerini kullanan gerçek müşterilerden belgelenmiş bir seçkidir. Yukarıdaki formla deneyiminizi paylaşarak buraya ekleyebilirsiniz.',
       form: {
         close: 'Kapat',
-        eyebrow: 'GITI Peyma müşteri kulübü',
+        eyebrow: 'Royal Travel müşteri kulübü',
         title: 'Yolculuk veya iş deneyiminizi paylaşın',
         lead: 'Yorumunuz ekibimiz tarafından incelendikten sonra bu bölümde yayımlanır.',
         successTitle: 'Teşekkürler, yorumunuz alındı!',
-        successText: 'GITI Peyma ekibi inceledikten sonra burada yayımlanacak.',
+        successText: 'Royal Travel ekibi inceledikten sonra burada yayımlanacak.',
         name: 'Ad soyad veya şirket adı *',
         namePlaceholder: 'Örn: Ramin Khosravi (Elektronik Sanayi)',
         service: 'Aldığınız hizmet *',
@@ -376,7 +376,7 @@ export const stories = defineMessages({
         rating: 'Hizmet kalitemize puanınız',
         ratingValue: '({rating} / 5 yıldız)',
         comment: 'Deneyiminiz ve memnuniyetiniz *',
-        commentPlaceholder: 'Lütfen yolculuk, gümrük işlemi veya GITI Peyma ile çalışma deneyiminizi anlatın...',
+        commentPlaceholder: 'Lütfen yolculuk, gümrük işlemi veya Royal Travel ile çalışma deneyiminizi anlatın...',
         cancel: 'Vazgeç',
         sending: 'Gönderiliyor...',
         submit: 'Yorumu gönder',

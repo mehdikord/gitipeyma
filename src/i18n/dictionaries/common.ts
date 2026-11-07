@@ -3,12 +3,12 @@ import { defineMessages } from './define';
 // Shared by every page: the brand, the page titles and the language switcher.
 export const common = defineMessages({
   fa: {
-    brand: 'گیتی پیما',
+    brand: 'رویال تراول',
     meta: {
-      title: 'گیتی پیما | GITI International',
-      titleTemplate: '%s | گیتی پیما',
+      title: 'رویال تراول | Royal Travel',
+      titleTemplate: '%s | رویال تراول',
       description:
-        'سامانه رسمی گیتی پیما؛ خدمات بین‌المللی مسافری VIP، کارگو، خدمات ارزی، حقوقی، ثبت شرکت و اقامت فرامرزی بین ایران، ترکیه و اروپا.',
+        'سامانه رسمی رویال تراول؛ خدمات بین‌المللی مسافری VIP، کارگو، خدمات ارزی، حقوقی، ثبت شرکت و اقامت فرامرزی بین ایران و ترکیه.',
       services: 'فهرست خدمات',
       about: 'درباره ما',
       contact: 'ارتباط با ما',
@@ -18,12 +18,12 @@ export const common = defineMessages({
     language: { label: 'زبان', choose: 'انتخاب زبان' },
   },
   en: {
-    brand: 'GITI Peyma',
+    brand: 'Royal Travel',
     meta: {
-      title: 'GITI Peyma | GITI International',
-      titleTemplate: '%s | GITI Peyma',
+      title: 'Royal Travel',
+      titleTemplate: '%s | Royal Travel',
       description:
-        'The official GITI Peyma platform: VIP passenger travel, cargo, currency transfers, legal services, company registration and residency across Iran, Turkey and Europe.',
+        'The official Royal Travel platform: VIP passenger travel, cargo, currency transfers, legal services, company registration and residency between Iran and Turkey.',
       services: 'Services',
       about: 'About us',
       contact: 'Contact us',
@@ -33,12 +33,12 @@ export const common = defineMessages({
     language: { label: 'Language', choose: 'Choose language' },
   },
   tr: {
-    brand: 'GITI Peyma',
+    brand: 'Royal Travel',
     meta: {
-      title: 'GITI Peyma | GITI International',
-      titleTemplate: '%s | GITI Peyma',
+      title: 'Royal Travel',
+      titleTemplate: '%s | Royal Travel',
       description:
-        'GITI Peyma resmi platformu: İran, Türkiye ve Avrupa arasında VIP yolcu taşımacılığı, kargo, döviz transferi, hukuki hizmetler, şirket kuruluşu ve oturum işlemleri.',
+        'Royal Travel resmi platformu: İran ve Türkiye arasında VIP yolcu taşımacılığı, kargo, döviz transferi, hukuki hizmetler, şirket kuruluşu ve oturum işlemleri.',
       services: 'Hizmetler',
       about: 'Hakkımızda',
       contact: 'İletişim',

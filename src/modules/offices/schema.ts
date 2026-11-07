@@ -43,8 +43,6 @@ export const TIME_ZONES = [
   { value: 'Europe/Istanbul', label: 'ترکیه (Europe/Istanbul)' },
   { value: 'Asia/Tehran', label: 'ایران (Asia/Tehran)' },
   { value: 'Asia/Dubai', label: 'امارات (Asia/Dubai)' },
-  { value: 'Europe/Berlin', label: 'آلمان و اروپای مرکزی (Europe/Berlin)' },
-  { value: 'Europe/London', label: 'بریتانیا (Europe/London)' },
 ];
 
 export const WEEKDAYS = ['یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنجشنبه', 'جمعه', 'شنبه'];

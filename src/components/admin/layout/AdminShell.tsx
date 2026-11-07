@@ -53,9 +53,9 @@ const Sidebar: React.FC<{ badges: NavBadges; onNavigate?: () => void }> = ({ bad
 
 const Brand = () => (
   <Link href="/admins" className="flex items-center gap-3 rounded-lg px-5 py-5 focus-visible:outline-2 focus-visible:outline-[#E2C98C]">
-    <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#E2C98C]/50 bg-[#0C252B] font-['Plus_Jakarta_Sans',sans-serif] text-lg font-black text-[#E2C98C]">G</span>
+    <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#E2C98C]/50 bg-[#0C252B] font-['Plus_Jakarta_Sans',sans-serif] text-lg font-black text-[#E2C98C]">RT</span>
     <span>
-      <span className="block text-base font-black text-white">گیتی پیما</span>
+      <span className="block text-base font-black text-white">رویال تراول</span>
       <span className="block text-[11px] text-[#A2B6BC]">پنل مدیریت</span>
     </span>
   </Link>

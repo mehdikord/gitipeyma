@@ -62,7 +62,7 @@ export const ServiceImage: React.FC<ServiceImageProps> = ({
               <Bus className="w-9 h-9" />
             </div>
             <span className="text-base font-black text-ink-strong text-center">{t.bus}</span>
-            <span className="text-xs text-gold font-mono mt-1">GITI LUXURY EXPRESS COACH</span>
+            <span className="text-xs text-gold font-mono mt-1">ROYAL TRAVEL EXPRESS COACH</span>
           </div>
         );
       case 'cargo-express-postal':

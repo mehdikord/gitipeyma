@@ -38,7 +38,7 @@ const SERVICES: {
 ];
 
 const LABELS: {
-  id: 'tehran' | 'tabriz' | 'bazargan' | 'istanbul';
+  id: 'tehran' | 'tabriz' | 'bazargan' | 'ankara' | 'istanbul';
   at: LonLat;
   // Which side of the marker the label sits on, in stage terms.
   place: 'above' | 'below' | 'left' | 'right';
@@ -50,6 +50,7 @@ const LABELS: {
   { id: 'tehran', at: CITIES.tehran, place: 'below', delay: 0.1, layers: ['bus', 'cargo', 'currency', 'offices'] },
   { id: 'tabriz', at: CITIES.tabriz, place: 'below', delay: 0.8, layers: ['offices'], compactOnlyWhenActive: true },
   { id: 'bazargan', at: CITIES.bazargan, place: 'above', delay: 1.1, layers: ['bus', 'cargo'] },
+  { id: 'ankara', at: CITIES.ankara, place: 'above', delay: 1.9, layers: ['bus', 'cargo'] },
   { id: 'istanbul', at: CITIES.istanbul, place: 'below', delay: 2.4, layers: ['bus', 'cargo', 'currency', 'offices'] },
 ];
 

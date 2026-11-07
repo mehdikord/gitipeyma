@@ -3,7 +3,7 @@ export const COMPANY_CONFIG = {
   offices: [
     {
       country: { fa: 'ترکیه', en: 'Turkey', tr: 'Türkiye' },
-      address: { fa: 'استانبول، منطقه فاتیح، آکسارای، پایانه بین‌المللی اتوبوسرانی، دفتر مرکزی گیتی پیما', en: 'GITI Peyma head office, International Bus Terminal, Aksaray, Fatih, Istanbul', tr: 'GITI Peyma Merkez Ofisi, Uluslararası Otobüs Terminali, Aksaray, Fatih, İstanbul' },
+      address: { fa: 'استانبول، منطقه فاتیح، آکسارای، پایانه بین‌المللی اتوبوسرانی، دفتر مرکزی رویال تراول', en: 'Royal Travel head office, International Bus Terminal, Aksaray, Fatih, Istanbul', tr: 'Royal Travel Merkez Ofisi, Uluslararası Otobüs Terminali, Aksaray, Fatih, İstanbul' },
       phones: ['+90 (212) 588 40 40', '+90 (536) 700 80 90'],
       email: 'istanbul@gitipuri.com',
       workingHours: { fa: 'سه‌شنبه تا یکشنبه: ۰۸:۰۰ الی ۲۲:۰۰ (خدمات شبانه‌روزی مسافری)', en: 'Tuesday to Sunday: 08:00 to 22:00 (passenger services around the clock)', tr: 'Salı – Pazar: 08:00 – 22:00 (yolcu hizmetleri 7/24)' },
@@ -12,7 +12,7 @@ export const COMPANY_CONFIG = {
     },
     {
       country: { fa: 'ایران', en: 'Iran', tr: 'İran' },
-      address: { fa: 'تهران، میدان آزادی، پایانه مسافربری غرب، غرفه نمایندگی بین‌المللی گیتی پیما', en: 'GITI Peyma international agency desk, West Passenger Terminal, Azadi Square, Tehran', tr: 'GITI Peyma uluslararası acente bankosu, Batı Yolcu Terminali, Azadi Meydanı, Tahran' },
+      address: { fa: 'تهران، میدان آزادی، پایانه مسافربری غرب، غرفه نمایندگی بین‌المللی رویال تراول', en: 'Royal Travel international agency desk, West Passenger Terminal, Azadi Square, Tehran', tr: 'Royal Travel uluslararası acente bankosu, Batı Yolcu Terminali, Azadi Meydanı, Tahran' },
       phones: ['۰۲۱-۴۴۶۶۸۰۸۰', '۰۲۱-۴۴۶۶۸۰۸۱'],
       email: 'tehran@gitipuri.com',
       workingHours: { fa: 'همه‌روزه: ۰۷:۰۰ الی ۲۳:۰۰', en: 'Every day: 07:00 to 23:00', tr: 'Her gün: 07:00 – 23:00' },
@@ -70,7 +70,7 @@ export const TEAM_MEMBERS = [
     id: 'team-2',
     name: { fa: 'سحر اردلان', en: 'Sahar Ardalan', tr: 'Sahar Ardalan' },
     role: { fa: 'سرپرست دپارتمان امور کنسولی و ثبت شرکت', en: 'Head of Consular Affairs and Company Registration', tr: 'Konsolosluk İşleri ve Şirket Kuruluşu Bölüm Sorumlusu' },
-    specialty: { fa: 'حقوق تجارت بین‌الملل و ثبت شرکت در ترکیه و اروپا', en: 'International trade law and company registration in Turkey and Europe', tr: 'Uluslararası ticaret hukuku ile Türkiye ve Avrupa\'da şirket kuruluşu' },
+    specialty: { fa: 'حقوق تجارت بین‌الملل و ثبت شرکت در ترکیه', en: 'International trade law and company registration in Turkey', tr: 'Uluslararası ticaret hukuku ile Türkiye\'de şirket kuruluşu' },
     department: { fa: 'حقوقی و ثبت شرکت', en: 'Legal and company registration', tr: 'Hukuk ve şirket kuruluşu' },
     image: '/images/team/team-2.webp',
   },

@@ -44,7 +44,7 @@ const Waybill: React.FC<{
       <div className="px-5 sm:px-6 pt-5 pb-5">
         <div className="flex items-center justify-between gap-3 text-xs font-bold text-on-accent/75">
           <span>{t.waybill}</span>
-          <span>GITI</span>
+          <span>ROYAL TRAVEL</span>
         </div>
         <p className="mt-3 text-xl sm:text-[1.4rem] font-black leading-snug">{title}</p>
 

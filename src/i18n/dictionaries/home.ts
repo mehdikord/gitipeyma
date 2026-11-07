@@ -6,7 +6,7 @@ export const home = defineMessages({
     hero: {
       titleFirst: 'مرزها، پایان مسیر نیستند؛',
       titleSecond: 'آغاز فرصت‌های تازه‌اند.',
-      lead: 'گیتی پیما، همراه مطمئن شما در مسیر خدمات بین‌المللی، تجارت، حمل‌ونقل و راهکارهای فرامرزی؛ از ایران تا ترکیه، اروپا و فراتر از آن.',
+      lead: 'رویال تراول، همراه مطمئن شما در مسیر خدمات بین‌المللی، تجارت، حمل‌ونقل و راهکارهای فرامرزی میان ایران و ترکیه.',
       allServices: 'مشاهده ۱۱ خدمت فرامرزی',
       consultation: 'درخواست مشاوره ۲۴ ساعته',
       playMap: 'پخش انیمیشن نقشه',
@@ -14,19 +14,20 @@ export const home = defineMessages({
       services: {
         bus: { title: 'ناوگان روزانه VIP', fact: 'تهران ⇄ استانبول', detail: 'حرکت همه‌روزه از پایانه آزادی و بیهقی' },
         cargo: { title: 'کارگو و ترخیص رسمی', fact: '۳ الی ۵ روز اکسپرس', detail: 'بیمه‌نامه CMR و ترخیص گمرکات' },
-        currency: { title: 'تسویه ارزی و سوئیفت', fact: 'زیر ۳۰ دقیقه', detail: 'واریز به بانک‌های ترکیه و اروپا' },
+        currency: { title: 'تسویه ارزی و سوئیفت', fact: 'زیر ۳۰ دقیقه', detail: 'واریز به بانک‌های ترکیه' },
         offices: { title: 'دفاتر فیزیکی معتبر', fact: 'استانبول، تهران، تبریز', detail: 'پاسخگویی مستقیم ۲۴/۷' },
       },
       places: {
         tehran: { name: 'تهران', note: 'پایانه آزادی و گمرک غرب' },
         tabriz: { name: 'تبریز', note: '' },
         bazargan: { name: 'مرز بازرگان', note: 'ترخیص رسمی و گیت مرزی' },
+        ankara: { name: 'آنکارا', note: '' },
         istanbul: { name: 'استانبول', note: 'پایانه آکسارای و هالکالی' },
       },
     },
     services: {
-      title: 'خدمات تخصصی و بین‌المللی گیتی پیما',
-      lead: 'ارائه زنجیره‌ای هماهنگ و بدون واسطه از خدمات حمل‌ونقل مسافری، کارگو گمرکی، ثبت شرکت و صرافی رسمی میان ایران، ترکیه و اتحادیه اروپا.',
+      title: 'خدمات تخصصی و بین‌المللی رویال تراول',
+      lead: 'ارائه زنجیره‌ای هماهنگ و بدون واسطه از خدمات حمل‌ونقل مسافری، کارگو گمرکی، ثبت شرکت و صرافی رسمی میان ایران و ترکیه.',
       lineCount: '({count} خدمت)',
       stepsLabel: 'مراحل انجام خدمت',
       details: 'جزئیات کامل و مدارک',
@@ -38,7 +39,7 @@ export const home = defineMessages({
     },
     support: {
       title: 'مرکز پاسخگویی و همراهی شبانه‌روزی',
-      lead: 'در تمام مسیر، تنها نخواهید بود. از رزرو بلیت و ترخیص کارگو تا تشریفات قانونی، از پایانه‌های ایران تا استانبول و اروپا همراه شما هستیم.',
+      lead: 'در تمام مسیر، تنها نخواهید بود. از رزرو بلیت و ترخیص کارگو تا تشریفات قانونی، از پایانه‌های ایران تا استانبول همراه شما هستیم.',
       needLegend: 'الان به چه کمکی نیاز دارید؟',
       actions: {
         callSupport: 'تماس با پشتیبانی ۲۴ ساعته',
@@ -91,10 +92,10 @@ export const home = defineMessages({
     },
     cta: {
       title: 'برای شروع یک مسیر تازه آماده‌اید؟',
-      lead: 'نیاز خود را با ما در میان بگذارید تا کارشناسان گیتی پیما شما را راهنمایی کنند.',
+      lead: 'نیاز خود را با ما در میان بگذارید تا کارشناسان رویال تراول شما را راهنمایی کنند.',
       consultation: 'درخواست مشاوره',
       whatsapp: 'ارسال پیام در واتس‌اپ',
-      whatsappText: 'سلام، می‌خواهم درباره خدمات گیتی پیما راهنمایی بگیرم.',
+      whatsappText: 'سلام، می‌خواهم درباره خدمات رویال تراول راهنمایی بگیرم.',
       callDirect: 'یا تماس مستقیم، در هر ساعت شبانه‌روز:',
     },
   },
@@ -102,7 +103,7 @@ export const home = defineMessages({
     hero: {
       titleFirst: 'Borders aren’t an ending;',
       titleSecond: 'they open new horizons.',
-      lead: 'GITI Peyma is your trusted partner for international services, trade, transport and cross-border solutions, from Iran to Turkey, Europe and beyond.',
+      lead: 'Royal Travel is your trusted partner for international services, trade, transport and cross-border solutions between Iran and Turkey.',
       allServices: 'Explore our 11 cross-border services',
       consultation: 'Request a consultation, 24/7',
       playMap: 'Play the map animation',
@@ -110,19 +111,20 @@ export const home = defineMessages({
       services: {
         bus: { title: 'Daily VIP coaches', fact: 'Tehran ⇄ Istanbul', detail: 'Departures every day from Azadi and Beyhaghi terminals' },
         cargo: { title: 'Cargo & customs clearance', fact: '3–5 day express', detail: 'CMR insurance and customs clearance' },
-        currency: { title: 'Currency & SWIFT transfers', fact: 'Under 30 minutes', detail: 'Deposits to banks in Turkey and Europe' },
+        currency: { title: 'Currency & SWIFT transfers', fact: 'Under 30 minutes', detail: 'Deposits to banks in Turkey' },
         offices: { title: 'Real, staffed offices', fact: 'Istanbul, Tehran, Tabriz', detail: 'Direct support, 24/7' },
       },
       places: {
         tehran: { name: 'Tehran', note: 'Azadi terminal & western customs' },
         tabriz: { name: 'Tabriz', note: '' },
         bazargan: { name: 'Bazargan border', note: 'Official clearance & border gate' },
+        ankara: { name: 'Ankara', note: '' },
         istanbul: { name: 'Istanbul', note: 'Aksaray & Halkalı terminals' },
       },
     },
     services: {
-      title: 'GITI Peyma’s international services',
-      lead: 'One coordinated chain, with no middlemen: passenger transport, customs cargo, company registration and licensed currency exchange between Iran, Turkey and the European Union.',
+      title: 'Royal Travel’s international services',
+      lead: 'One coordinated chain, with no middlemen: passenger transport, customs cargo, company registration and licensed currency exchange between Iran and Turkey.',
       lineCount: '({count} services)',
       stepsLabel: 'How this service works',
       details: 'Full details & documents',
@@ -134,7 +136,7 @@ export const home = defineMessages({
     },
     support: {
       title: 'Support and assistance, around the clock',
-      lead: 'You are never on your own along the way. From booking tickets and clearing cargo to legal formalities, we are with you from Iran’s terminals to Istanbul and Europe.',
+      lead: 'You are never on your own along the way. From booking tickets and clearing cargo to legal formalities, we are with you from Iran’s terminals to Istanbul.',
       needLegend: 'What do you need help with right now?',
       actions: {
         callSupport: 'Call 24/7 support',
@@ -187,10 +189,10 @@ export const home = defineMessages({
     },
     cta: {
       title: 'Ready to start a new journey?',
-      lead: 'Tell us what you need, and GITI Peyma’s specialists will guide you.',
+      lead: 'Tell us what you need, and Royal Travel’s specialists will guide you.',
       consultation: 'Request a consultation',
       whatsapp: 'Message us on WhatsApp',
-      whatsappText: 'Hello, I would like some guidance about GITI Peyma’s services.',
+      whatsappText: 'Hello, I would like some guidance about Royal Travel’s services.',
       callDirect: 'Or call us directly, at any hour:',
     },
   },
@@ -198,7 +200,7 @@ export const home = defineMessages({
     hero: {
       titleFirst: 'Sınırlar yolun sonu değil;',
       titleSecond: 'yeni ufukların başlangıcı.',
-      lead: 'GITI Peyma; uluslararası hizmetler, ticaret, taşımacılık ve sınır ötesi çözümlerde İran’dan Türkiye’ye, Avrupa’ya ve ötesine güvenilir yol arkadaşınız.',
+      lead: 'Royal Travel; uluslararası hizmetler, ticaret, taşımacılık ve sınır ötesi çözümlerde İran ile Türkiye arasında güvenilir yol arkadaşınız.',
       allServices: '11 sınır ötesi hizmetimizi inceleyin',
       consultation: '7/24 danışmanlık talebi',
       playMap: 'Harita animasyonunu oynat',
@@ -206,19 +208,20 @@ export const home = defineMessages({
       services: {
         bus: { title: 'Her gün VIP otobüs', fact: 'Tahran ⇄ İstanbul', detail: 'Azadi ve Beyhaghi terminallerinden her gün sefer' },
         cargo: { title: 'Kargo ve resmi gümrükleme', fact: '3–5 gün ekspres', detail: 'CMR sigortası ve gümrük işlemleri' },
-        currency: { title: 'Döviz ve SWIFT transferi', fact: '30 dakikadan kısa', detail: 'Türkiye ve Avrupa’daki bankalara ödeme' },
+        currency: { title: 'Döviz ve SWIFT transferi', fact: '30 dakikadan kısa', detail: 'Türkiye’deki bankalara ödeme' },
         offices: { title: 'Gerçek, resmi ofisler', fact: 'İstanbul, Tahran, Tebriz', detail: '7/24 doğrudan destek' },
       },
       places: {
         tehran: { name: 'Tahran', note: 'Azadi terminali ve batı gümrüğü' },
         tabriz: { name: 'Tebriz', note: '' },
         bazargan: { name: 'Bazargan sınırı', note: 'Resmi gümrükleme ve sınır kapısı' },
+        ankara: { name: 'Ankara', note: '' },
         istanbul: { name: 'İstanbul', note: 'Aksaray ve Halkalı terminalleri' },
       },
     },
     services: {
-      title: 'GITI Peyma uluslararası hizmetleri',
-      lead: 'İran, Türkiye ve Avrupa Birliği arasında yolcu taşımacılığı, gümrüklü kargo, şirket kuruluşu ve lisanslı döviz işlemlerini aracısız, tek elden ve uyum içinde sunuyoruz.',
+      title: 'Royal Travel uluslararası hizmetleri',
+      lead: 'İran ve Türkiye arasında yolcu taşımacılığı, gümrüklü kargo, şirket kuruluşu ve lisanslı döviz işlemlerini aracısız, tek elden ve uyum içinde sunuyoruz.',
       lineCount: '({count} hizmet)',
       stepsLabel: 'Hizmetin aşamaları',
       details: 'Tüm ayrıntılar ve belgeler',
@@ -230,7 +233,7 @@ export const home = defineMessages({
     },
     support: {
       title: '7/24 destek ve yol arkadaşlığı',
-      lead: 'Yol boyunca asla yalnız değilsiniz. Bilet rezervasyonundan kargo gümrüklemesine ve yasal işlemlere kadar, İran’daki terminallerden İstanbul’a ve Avrupa’ya yanınızdayız.',
+      lead: 'Yol boyunca asla yalnız değilsiniz. Bilet rezervasyonundan kargo gümrüklemesine ve yasal işlemlere kadar, İran’daki terminallerden İstanbul’a kadar yanınızdayız.',
       needLegend: 'Şu anda neye ihtiyacınız var?',
       actions: {
         callSupport: '7/24 destek hattını arayın',
@@ -283,10 +286,10 @@ export const home = defineMessages({
     },
     cta: {
       title: 'Yeni bir yolculuğa başlamaya hazır mısınız?',
-      lead: 'İhtiyacınızı bizimle paylaşın, GITI Peyma uzmanları size yol göstersin.',
+      lead: 'İhtiyacınızı bizimle paylaşın, Royal Travel uzmanları size yol göstersin.',
       consultation: 'Danışmanlık talebi',
       whatsapp: 'WhatsApp’tan mesaj gönderin',
-      whatsappText: 'Merhaba, GITI Peyma hizmetleri hakkında bilgi almak istiyorum.',
+      whatsappText: 'Merhaba, Royal Travel hizmetleri hakkında bilgi almak istiyorum.',
       callDirect: 'Ya da günün her saatinde doğrudan arayın:',
     },
   },

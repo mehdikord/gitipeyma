@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import { CITIES, HERO_AIR_LEGS, HERO_ROAD, LonLat, STAGE, StagePoint, catmullRom, project } from './geo';
+import { AIR_LEGS, CITIES, LonLat, ROAD, STAGE, StagePoint, catmullRom, project } from './geo';
 import { IRAN_TURKEY } from './borders.generated';
 
 export type HeroLayer = 'bus' | 'cargo' | 'currency' | 'offices';
@@ -81,14 +81,17 @@ const fractionNear = (track: Track, target: LonLat) => {
   return track.lengths[best] / track.total;
 };
 
-const road = buildTrack(catmullRom(HERO_ROAD));
+const road = buildTrack(catmullRom(ROAD));
 const BAZARGAN_F = fractionNear(road, CITIES.bazargan);
+const ANKARA_F = fractionNear(road, CITIES.ankara);
 
-const airLegs = HERO_AIR_LEGS.map((leg) => buildArc(leg, 92));
-const moneyLegs = HERO_AIR_LEGS.map((leg) => buildArc(leg, 150));
+const airLegs = AIR_LEGS.map((leg) => buildArc(leg, 92));
+const moneyLegs = AIR_LEGS.map((leg) => buildArc(leg, 150));
 const borderEast = IRAN_TURKEY.map((line) => line.map(project));
 const OFFICES = [CITIES.tehran, CITIES.tabriz, CITIES.istanbul].map(project);
-const STOPS = [CITIES.tehran, CITIES.tabriz, CITIES.bazargan, CITIES.istanbul].map(project);
+const STOPS = [CITIES.tehran, CITIES.tabriz, CITIES.bazargan, CITIES.ankara, CITIES.istanbul].map(project);
+
+const ANKARA_AT = BORDER_AT + ((ANKARA_F - BAZARGAN_F) / (1 - BAZARGAN_F)) * (ISTANBUL_AT - BORDER_AT);
 
 // Piecewise time → road fraction for the opening.
 const openingFraction = (t: number) => {
@@ -375,7 +378,7 @@ export const RouteCanvas: React.FC<RouteCanvasProps> = ({ layer, paused, still }
 
       // Stop markers.
       STOPS.forEach((p, i) => {
-        const reached = [0, BORDER_AT * 0.72, BORDER_AT, ISTANBUL_AT][i];
+        const reached = [0, BORDER_AT * 0.72, BORDER_AT, ANKARA_AT, ISTANBUL_AT][i];
         if (t < reached) return;
         const pop = Math.min(1, (t - reached) / 0.35);
         ctx.beginPath();

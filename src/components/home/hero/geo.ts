@@ -39,11 +39,11 @@ export const CITIES = {
   tehran: [51.39, 35.69],
   tabriz: [46.29, 38.08],
   bazargan: [44.39, 39.39],
+  ankara: [32.85, 39.93],
   istanbul: [28.98, 41.01],
-  frankfurt: [8.68, 50.11],
 } as const satisfies Record<string, LonLat>;
 
-// The road the Tehran–Istanbul line actually follows, continued into Europe.
+// The road the Tehran–Istanbul line actually follows.
 export const ROAD: readonly LonLat[] = [
   CITIES.tehran,
   [50.0, 36.27], // Qazvin
@@ -52,23 +52,11 @@ export const ROAD: readonly LonLat[] = [
   CITIES.bazargan,
   [41.27, 39.9], // Erzurum
   [37.02, 39.75], // Sivas
-  [32.85, 39.93], // Ankara
+  CITIES.ankara,
   CITIES.istanbul,
-  [26.55, 41.72], // Edirne
-  [23.32, 42.7], // Sofia
-  [20.46, 44.82], // Belgrade
-  [16.37, 48.21], // Vienna
-  CITIES.frankfurt,
 ];
 
-export const AIR_LEGS: readonly (readonly [LonLat, LonLat])[] = [
-  [CITIES.tehran, CITIES.istanbul],
-  [CITIES.istanbul, CITIES.frankfurt],
-];
-
-// The hero map only covers Iran to Istanbul.
-export const HERO_ROAD: readonly LonLat[] = ROAD.slice(0, ROAD.indexOf(CITIES.istanbul) + 1);
-export const HERO_AIR_LEGS: readonly (readonly [LonLat, LonLat])[] = [[CITIES.tehran, CITIES.istanbul]];
+export const AIR_LEGS: readonly (readonly [LonLat, LonLat])[] = [[CITIES.tehran, CITIES.istanbul]];
 
 export const catmullRom = (input: readonly LonLat[], perSegment = 14): StagePoint[] => {
   const p = input.map(project);
@@ -100,7 +88,7 @@ const roadLengths = ROAD_POINTS.reduce<number[]>((lengths, point, index) => {
   return [...lengths, lengths[index - 1] + Math.hypot(point.x - previous.x, point.y - previous.y)];
 }, []);
 
-// How far along the whole road a stop is, from 0 at Tehran to 1 in Europe.
+// How far along the whole road a stop is, from 0 at Tehran to 1 at Istanbul.
 export const roadFraction = (stop: LonLat) => {
   const target = project(stop);
   let nearest = 0;

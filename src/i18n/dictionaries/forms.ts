@@ -6,7 +6,7 @@ export const forms = defineMessages({
   fa: {
     received: {
       title: 'درخواست شما ثبت شد',
-      text: 'کارشناسان گیتی پیما درخواست شما را بررسی می‌کنند و به‌زودی با شماره‌ای که وارد کردید تماس می‌گیرند.',
+      text: 'کارشناسان رویال تراول درخواست شما را بررسی می‌کنند و به‌زودی با شماره‌ای که وارد کردید تماس می‌گیرند.',
       reset: 'ثبت درخواست دیگر',
       reference: 'شماره پیگیری',
       urgent: 'کارتان فوری است؟',
@@ -16,7 +16,7 @@ export const forms = defineMessages({
       cargo: 'کارگو تجاری و ترخیص گمرکی',
       company: 'ثبت شرکت بین‌المللی',
       currency: 'حواله ارزی و تسویه سوئیفت',
-      visa: 'ویزای بین‌المللی (شنگن و کانادا)',
+      visa: 'ویزای بین‌المللی (کانادا و آمریکا)',
       legal: 'خدمات حقوقی، وکالتنامه و ترجمه',
       wedding: 'تشریفات ازدواج بین‌المللی در ترکیه',
       education: 'پذیرش دانشگاهی و کارت اقامت',
@@ -25,7 +25,7 @@ export const forms = defineMessages({
   en: {
     received: {
       title: 'Your request has been received',
-      text: 'GITI Peyma specialists will review your request and call you shortly on the number you entered.',
+      text: 'Royal Travel specialists will review your request and call you shortly on the number you entered.',
       reset: 'Send another request',
       reference: 'Reference number',
       urgent: 'Is it urgent?',
@@ -35,7 +35,7 @@ export const forms = defineMessages({
       cargo: 'Commercial cargo and customs clearance',
       company: 'International company registration',
       currency: 'Currency transfers and SWIFT settlement',
-      visa: 'International visas (Schengen and Canada)',
+      visa: 'International visas (Canada and the US)',
       legal: 'Legal services, power of attorney and translation',
       wedding: 'International wedding arrangements in Turkey',
       education: 'University admission and residence permits',
@@ -44,7 +44,7 @@ export const forms = defineMessages({
   tr: {
     received: {
       title: 'Talebiniz alındı',
-      text: 'GITI Peyma uzmanları talebinizi inceleyecek ve girdiğiniz numaradan kısa süre içinde sizi arayacak.',
+      text: 'Royal Travel uzmanları talebinizi inceleyecek ve girdiğiniz numaradan kısa süre içinde sizi arayacak.',
       reset: 'Yeni bir talep gönder',
       reference: 'Takip numarası',
       urgent: 'Acil mi?',
@@ -54,7 +54,7 @@ export const forms = defineMessages({
       cargo: 'Ticari kargo ve gümrük işlemleri',
       company: 'Uluslararası şirket kuruluşu',
       currency: 'Döviz transferi ve SWIFT ödemeleri',
-      visa: 'Uluslararası vize (Schengen ve Kanada)',
+      visa: 'Uluslararası vize (Kanada ve ABD)',
       legal: 'Hukuki hizmetler, vekâletname ve tercüme',
       wedding: "Türkiye'de uluslararası düğün organizasyonu",
       education: 'Üniversite kabulü ve ikamet izni',

@@ -93,7 +93,7 @@ export const Header: React.FC = () => {
             <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-brand-fill via-[#087F7B] to-[#052B29] p-0.5 shadow-lg shadow-brand/20 flex items-center justify-center transform group-hover:scale-105 transition-transform">
               <div className="w-full h-full rounded-[10px] bg-canvas flex items-center justify-center border border-gold-line/40">
                 <span className="font-['Plus_Jakarta_Sans',sans-serif] font-black text-lg tracking-wider text-gold group-hover:text-ink-strong transition-colors">
-                  G
+                  RT
                 </span>
               </div>
             </div>
@@ -103,9 +103,12 @@ export const Header: React.FC = () => {
                 <span className="text-xl sm:text-2xl font-black text-ink tracking-tight">
                   {brand}
                 </span>
-                <span className="font-['Plus_Jakarta_Sans',sans-serif] text-xs font-extrabold tracking-widest text-brand bg-brand/10 px-1.5 py-0.5 rounded border border-brand/30">
-                  GITI
-                </span>
+                {/* The Latin name only adds anything next to the Persian one */}
+                {locale === 'fa' && (
+                  <span className="hidden sm:inline font-['Plus_Jakarta_Sans',sans-serif] text-xs font-extrabold tracking-widest text-brand bg-brand/10 px-1.5 py-0.5 rounded border border-brand/30">
+                    ROYAL TRAVEL
+                  </span>
+                )}
               </div>
               <p className="text-[10px] text-ink-muted font-medium tracking-wide">
                 {t.tagline}

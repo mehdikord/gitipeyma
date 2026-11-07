@@ -28,7 +28,7 @@ const stagePosition = (at: LonLat) => {
   return { left: `${(point.x / STAGE.width) * 100}%`, top: `${(point.y / STAGE.height) * 100}%` };
 };
 
-const LIT_CITIES: LonLat[] = [CITIES.tehran, CITIES.istanbul, CITIES.frankfurt];
+const LIT_CITIES: LonLat[] = [CITIES.tehran, CITIES.ankara, CITIES.istanbul];
 
 const FooterSky: React.FC = () => (
   <div aria-hidden="true" className="footer-sky">
@@ -73,7 +73,7 @@ export const Footer: React.FC = () => {
           <div className="col-span-2 lg:col-span-4">
             <Link href={path('/')} className={`inline-flex items-center gap-3 rounded ${FOCUS}`} aria-label={t.homeAria}>
               <span className="w-11 h-11 rounded-xl bg-canvas border border-gold-line/50 flex items-center justify-center font-['Plus_Jakarta_Sans',sans-serif] font-black text-lg text-gold">
-                G
+                RT
               </span>
               <span>
                 <span className="block text-xl font-black text-ink">{brand}</span>

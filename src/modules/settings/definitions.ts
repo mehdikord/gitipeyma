@@ -17,7 +17,7 @@ export const SETTING_GROUPS = [
         label: 'نام شرکت',
         type: 'text',
         translatable: true,
-        default: { fa: 'نمایندگی رسمی گیتی پیما', en: 'GITI International Services', tr: 'GITI Uluslararası Hizmetler' },
+        default: { fa: 'نمایندگی رسمی رویال تراول', en: 'Royal Travel International Services', tr: 'Royal Travel Uluslararası Hizmetler' },
       },
       {
         key: 'brand_tagline',
