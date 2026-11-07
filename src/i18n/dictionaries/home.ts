@@ -22,7 +22,6 @@ export const home = defineMessages({
         tabriz: { name: 'تبریز', note: '' },
         bazargan: { name: 'مرز بازرگان', note: 'ترخیص رسمی و گیت مرزی' },
         istanbul: { name: 'استانبول', note: 'پایانه آکسارای و هالکالی' },
-        europe: { name: 'اروپا', note: 'کریدور شنگن' },
       },
     },
     services: {
@@ -119,7 +118,6 @@ export const home = defineMessages({
         tabriz: { name: 'Tabriz', note: '' },
         bazargan: { name: 'Bazargan border', note: 'Official clearance & border gate' },
         istanbul: { name: 'Istanbul', note: 'Aksaray & Halkalı terminals' },
-        europe: { name: 'Europe', note: 'Schengen corridor' },
       },
     },
     services: {
@@ -216,7 +214,6 @@ export const home = defineMessages({
         tabriz: { name: 'Tebriz', note: '' },
         bazargan: { name: 'Bazargan sınırı', note: 'Resmi gümrükleme ve sınır kapısı' },
         istanbul: { name: 'İstanbul', note: 'Aksaray ve Halkalı terminalleri' },
-        europe: { name: 'Avrupa', note: 'Schengen koridoru' },
       },
     },
     services: {

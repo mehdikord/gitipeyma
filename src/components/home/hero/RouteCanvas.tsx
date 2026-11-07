@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import { AIR_LEGS, CITIES, LonLat, ROAD, STAGE, StagePoint, catmullRom, project } from './geo';
-import { IRAN_TURKEY, TURKEY_EU } from './borders.generated';
+import { CITIES, HERO_AIR_LEGS, HERO_ROAD, LonLat, STAGE, StagePoint, catmullRom, project } from './geo';
+import { IRAN_TURKEY } from './borders.generated';
 
 export type HeroLayer = 'bus' | 'cargo' | 'currency' | 'offices';
 
@@ -14,16 +14,15 @@ const WHITE = '247, 247, 243';
 // headline line in globals.css (.hero-line-second) is timed to BORDER_AT.
 const BORDER_AT = 1.1;
 const ISTANBUL_AT = 2.4;
-const FRANKFURT_AT = 3.4;
-const OPENING_ENDS = 4.6;
+const OPENING_ENDS = 3.6;
 
 // How visible each part of the map is for each service in the strip below it.
-type Emphasis = { roadEast: number; roadWest: number; air: number; money: number; offices: number; buses: number; trucks: number };
+type Emphasis = { road: number; air: number; money: number; offices: number; buses: number; trucks: number };
 const EMPHASIS: Record<HeroLayer, Emphasis> = {
-  bus: { roadEast: 1, roadWest: 0.14, air: 0.1, money: 0, offices: 0, buses: 1, trucks: 0 },
-  cargo: { roadEast: 1, roadWest: 1, air: 1, money: 0, offices: 0, buses: 0, trucks: 1 },
-  currency: { roadEast: 0.16, roadWest: 0.16, air: 0, money: 1, offices: 0, buses: 0, trucks: 0 },
-  offices: { roadEast: 0.22, roadWest: 0.1, air: 0, money: 0, offices: 1, buses: 0, trucks: 0 },
+  bus: { road: 1, air: 0.1, money: 0, offices: 0, buses: 1, trucks: 0 },
+  cargo: { road: 1, air: 1, money: 0, offices: 0, buses: 0, trucks: 1 },
+  currency: { road: 0.16, air: 0, money: 1, offices: 0, buses: 0, trucks: 0 },
+  offices: { road: 0.22, air: 0, money: 0, offices: 1, buses: 0, trucks: 0 },
 };
 
 // ---- Path helpers -----------------------------------------------------------
@@ -82,25 +81,21 @@ const fractionNear = (track: Track, target: LonLat) => {
   return track.lengths[best] / track.total;
 };
 
-const road = buildTrack(catmullRom(ROAD));
+const road = buildTrack(catmullRom(HERO_ROAD));
 const BAZARGAN_F = fractionNear(road, CITIES.bazargan);
-const ISTANBUL_F = fractionNear(road, CITIES.istanbul);
-const EDIRNE_F = fractionNear(road, [26.55, 41.72]);
 
-const airLegs = AIR_LEGS.map((leg) => buildArc(leg, 92));
-const moneyLegs = AIR_LEGS.map((leg, i) => buildArc(leg, i === 0 ? 150 : 120));
+const airLegs = HERO_AIR_LEGS.map((leg) => buildArc(leg, 92));
+const moneyLegs = HERO_AIR_LEGS.map((leg) => buildArc(leg, 150));
 const borderEast = IRAN_TURKEY.map((line) => line.map(project));
-const borderWest = TURKEY_EU.map((line) => line.map(project));
 const OFFICES = [CITIES.tehran, CITIES.tabriz, CITIES.istanbul].map(project);
-const STOPS = [CITIES.tehran, CITIES.tabriz, CITIES.bazargan, CITIES.istanbul, CITIES.frankfurt].map(project);
+const STOPS = [CITIES.tehran, CITIES.tabriz, CITIES.bazargan, CITIES.istanbul].map(project);
 
 // Piecewise time → road fraction for the opening.
 const openingFraction = (t: number) => {
   const ease = (x: number) => 1 - (1 - x) * (1 - x);
   if (t <= 0) return 0;
   if (t < BORDER_AT) return ease(t / BORDER_AT) * BAZARGAN_F;
-  if (t < ISTANBUL_AT) return BAZARGAN_F + ((t - BORDER_AT) / (ISTANBUL_AT - BORDER_AT)) * (ISTANBUL_F - BAZARGAN_F);
-  if (t < FRANKFURT_AT) return ISTANBUL_F + ((t - ISTANBUL_AT) / (FRANKFURT_AT - ISTANBUL_AT)) * (1 - ISTANBUL_F);
+  if (t < ISTANBUL_AT) return BAZARGAN_F + ((t - BORDER_AT) / (ISTANBUL_AT - BORDER_AT)) * (1 - BAZARGAN_F);
   return 1;
 };
 
@@ -174,7 +169,7 @@ export const RouteCanvas: React.FC<RouteCanvasProps> = ({ layer, paused, still }
       unit = STAGE.width / width;
     };
 
-    const current: Emphasis = { roadEast: 1, roadWest: 1, air: 1, money: 0, offices: 0, buses: 0.5, trucks: 0.5 };
+    const current: Emphasis = { road: 1, air: 1, money: 0, offices: 0, buses: 0.5, trucks: 0.5 };
 
     const stroke = (track: Track, from: number, to: number, rgb: string, alpha: number, width: number) => {
       if (alpha < 0.01 || to <= from) return;
@@ -296,7 +291,7 @@ export const RouteCanvas: React.FC<RouteCanvasProps> = ({ layer, paused, still }
       const { layer: activeLayer, still: isStill } = state.current;
       const t = isStill ? Math.max(clock, OPENING_ENDS + 6) : clock;
       const progress = openingFraction(t);
-      const open = Math.min(1, Math.max(0, (t - FRANKFURT_AT) / (OPENING_ENDS - FRANKFURT_AT)));
+      const open = Math.min(1, Math.max(0, (t - ISTANBUL_AT) / (OPENING_ENDS - ISTANBUL_AT)));
 
       const target = activeLayer ? EMPHASIS[activeLayer] : null;
       const blend = isStill && !dt ? 1 : 1 - Math.exp(-dt * 4);
@@ -312,7 +307,6 @@ export const RouteCanvas: React.FC<RouteCanvasProps> = ({ layer, paused, still }
       // Borders flash at the moment the opening shipment crosses them.
       const flashAt = (at: number) => (t < at ? 0 : Math.exp(-(t - at) * 1.25));
       drawBorder(borderEast, flashAt(BORDER_AT));
-      drawBorder(borderWest, flashAt(BORDER_AT + ((EDIRNE_F - BAZARGAN_F) / (ISTANBUL_F - BAZARGAN_F)) * (ISTANBUL_AT - BORDER_AT)));
 
       // Air routes: ground shadow first, then the arc.
       airLegs.forEach((leg, i) => {
@@ -320,7 +314,7 @@ export const RouteCanvas: React.FC<RouteCanvasProps> = ({ layer, paused, still }
         const end = Math.min(1, open * 1.05);
         stroke(leg.ground, 0, end, ink, 0.07 * reach, 1);
         stroke(leg.sky, 0, end, ink, 0.26 * reach, 1);
-        if (t > FRANKFURT_AT) {
+        if (t > ISTANBUL_AT) {
           const f = ((t * 0.07 + i * 0.5) % 1);
           const sky = pointAt(leg.sky, f);
           const shadow = pointAt(leg.ground, f);
@@ -332,25 +326,19 @@ export const RouteCanvas: React.FC<RouteCanvasProps> = ({ layer, paused, still }
         }
       });
 
-      // Road: a soft bed with a bright line on top, split at Istanbul so the
-      // bus layer can light only the part the bus line runs on.
-      const eastEnd = Math.min(progress, ISTANBUL_F);
-      stroke(road, 0, eastEnd, GOLD, 0.2 * current.roadEast, 6);
-      stroke(road, 0, eastEnd, GOLD, 0.92 * current.roadEast, 1.8);
-      if (progress > ISTANBUL_F) {
-        stroke(road, ISTANBUL_F, progress, GOLD, 0.2 * current.roadWest, 6);
-        stroke(road, ISTANBUL_F, progress, GOLD, 0.92 * current.roadWest, 1.8);
-      }
+      // Road: a soft bed with a bright line on top.
+      stroke(road, 0, progress, GOLD, 0.2 * current.road, 6);
+      stroke(road, 0, progress, GOLD, 0.92 * current.road, 1.8);
 
       // Head of the opening shipment.
-      if (t < FRANKFURT_AT && !isStill) {
+      if (t < ISTANBUL_AT && !isStill) {
         const head = pointAt(road, progress);
         glow(head.x, head.y, 54, glowGold, 1);
       }
 
       if (open > 0) {
-        // Buses run both ways between Tehran and Istanbul; trucks go on to Europe.
-        const busLength = ISTANBUL_F;
+        // Buses run both ways between Tehran and Istanbul; trucks head west.
+        const busLength = 1;
         for (let i = 0; i < 4; i++) {
           const f = (t * 0.022 + i / 4) % 1;
           const eastbound = i % 2 === 1;
@@ -387,7 +375,7 @@ export const RouteCanvas: React.FC<RouteCanvasProps> = ({ layer, paused, still }
 
       // Stop markers.
       STOPS.forEach((p, i) => {
-        const reached = [0, BORDER_AT * 0.72, BORDER_AT, ISTANBUL_AT, FRANKFURT_AT][i];
+        const reached = [0, BORDER_AT * 0.72, BORDER_AT, ISTANBUL_AT][i];
         if (t < reached) return;
         const pop = Math.min(1, (t - reached) / 0.35);
         ctx.beginPath();

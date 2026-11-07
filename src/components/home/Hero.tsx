@@ -38,7 +38,7 @@ const SERVICES: {
 ];
 
 const LABELS: {
-  id: 'tehran' | 'tabriz' | 'bazargan' | 'istanbul' | 'europe';
+  id: 'tehran' | 'tabriz' | 'bazargan' | 'istanbul';
   at: LonLat;
   // Which side of the marker the label sits on, in stage terms.
   place: 'above' | 'below' | 'left' | 'right';
@@ -51,7 +51,6 @@ const LABELS: {
   { id: 'tabriz', at: CITIES.tabriz, place: 'below', delay: 0.8, layers: ['offices'], compactOnlyWhenActive: true },
   { id: 'bazargan', at: CITIES.bazargan, place: 'above', delay: 1.1, layers: ['bus', 'cargo'] },
   { id: 'istanbul', at: CITIES.istanbul, place: 'below', delay: 2.4, layers: ['bus', 'cargo', 'currency', 'offices'] },
-  { id: 'europe', at: CITIES.frankfurt, place: 'below', delay: 3.4, layers: ['cargo', 'currency'] },
 ];
 
 const OPENING_MS = 5000;
@@ -122,7 +121,7 @@ export const Hero: React.FC = () => {
       </div>
 
       <div className="order-1 lg:order-none relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12 lg:pt-16 pb-2 lg:pb-8 lg:flex-1">
-        {/* Sits over the empty north-east of the map in every language, clear of Europe's labels */}
+        {/* Sits over the empty north-east of the map in every language, clear of the route labels */}
         <div className="max-w-[38rem] text-start lg:ltr:ml-auto">
           <h1 className="hero-title font-black text-ink leading-[1.32]">
             <span className="block">{t.titleFirst}</span>

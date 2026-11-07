@@ -360,7 +360,7 @@ html.theme-switching *:not(.theme-toggle, .theme-toggle *) {
 
   .hero-stage {
     --stage-w: max(100vw, 1120px);
-    /* Keep Europe on screen, and Tehran's label just clear of the service strip. */
+    /* Keep Istanbul on screen, and Tehran's label just clear of the service strip. */
     left: max(calc(50% - var(--stage-w) * 0.635), calc(60px - var(--stage-w) * 0.216));
     top: calc(100% - 185px - var(--stage-w) * 0.625 * 0.751);
   }

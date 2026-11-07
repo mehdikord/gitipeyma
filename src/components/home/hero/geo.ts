@@ -66,6 +66,10 @@ export const AIR_LEGS: readonly (readonly [LonLat, LonLat])[] = [
   [CITIES.istanbul, CITIES.frankfurt],
 ];
 
+// The hero map only covers Iran to Istanbul.
+export const HERO_ROAD: readonly LonLat[] = ROAD.slice(0, ROAD.indexOf(CITIES.istanbul) + 1);
+export const HERO_AIR_LEGS: readonly (readonly [LonLat, LonLat])[] = [[CITIES.tehran, CITIES.istanbul]];
+
 export const catmullRom = (input: readonly LonLat[], perSegment = 14): StagePoint[] => {
   const p = input.map(project);
   const out: StagePoint[] = [];
