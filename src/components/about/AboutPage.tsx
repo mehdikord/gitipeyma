@@ -2,15 +2,14 @@
 
 import React from 'react';
 import { Compass, ShieldCheck, Award, Users, Globe2, Building2, CheckCircle2, ArrowLeft } from 'lucide-react';
-import { useNavigate } from '../../hooks/useNavigate';
+import Link from 'next/link';
 import { useI18n } from '../../i18n/I18nProvider';
 
 // Title colour of each core value card, in the order of the about dictionary's values.
 const VALUE_COLORS = ['text-brand', 'text-gold', 'text-brand-bright'];
 
 export const AboutPage: React.FC = () => {
-  const onNavigate = useNavigate();
-  const { t: { about: t } } = useI18n();
+  const { t: { about: t }, path } = useI18n();
   return (
     <div className="min-h-screen bg-canvas text-ink pb-24">
       {/* About Hero */}
@@ -116,12 +115,14 @@ export const AboutPage: React.FC = () => {
           <p className="text-sm text-ink-muted max-w-lg mx-auto">
             {t.ctaText}
           </p>
-          <button
-            onClick={() => onNavigate('/consultation')}
-            className="px-8 py-3.5 rounded-full bg-brand-fill hover:bg-[#087F7B] text-on-accent font-bold text-sm shadow-xl transition-all hover:scale-105"
+          <Link
+            href={path('/consultation')}
+            scroll={false}
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="inline-block px-8 py-3.5 rounded-full bg-brand-fill hover:bg-[#087F7B] text-on-accent font-bold text-sm shadow-xl transition-all hover:scale-105"
           >
             {t.ctaButton}
-          </button>
+          </Link>
         </div>
       </div>
     </div>

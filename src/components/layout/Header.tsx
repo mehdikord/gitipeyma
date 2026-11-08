@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { PhoneCall, Menu, X, ArrowUpRight, ShieldCheck, ChevronDown, Compass } from 'lucide-react';
 import { useSite } from '../site/SiteProvider';
 import { usePathname, useRouter } from 'next/navigation';
-import { useNavigate } from '../../hooks/useNavigate';
 import { useI18n } from '../../i18n/I18nProvider';
 import { stripLocale } from '../../i18n/config';
 import { LanguageSwitcher } from './LanguageSwitcher';
@@ -15,7 +15,6 @@ export const Header: React.FC = () => {
   const currentPath = stripLocale(usePathname());
   const router = useRouter();
   const { t: { layout: { header: t }, common: { brand } }, path, locale } = useI18n();
-  const onNavigate = useNavigate();
   const supportPhone = useSite().settings.support_phone;
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -41,9 +40,10 @@ export const Header: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router, locale]);
 
-  const handleNavClick = (path: string) => {
-    onNavigate(path);
+  // Real links, so crawlers can follow the menu; the scroll to the top stays smooth as before
+  const handleNavClick = () => {
     setIsMobileMenuOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
@@ -84,8 +84,10 @@ export const Header: React.FC = () => {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           {/* Logo & Brand Identity */}
-          <button
-            onClick={() => handleNavClick('/')}
+          <Link
+            href={path('/')}
+            scroll={false}
+            onClick={handleNavClick}
             className="flex items-center gap-3 text-start group focus:outline-none"
             aria-label={t.homeAria}
           >
@@ -114,16 +116,18 @@ export const Header: React.FC = () => {
                 {t.tagline}
               </p>
             </div>
-          </button>
+          </Link>
 
           {/* Desktop Navigation Links */}
           <nav className="hidden lg:flex items-center gap-1 bg-surface/60 p-1 rounded-full border border-brand/15 backdrop-blur-sm">
             {navLinks.map((link) => {
               const isActive = currentPath === link.path || (link.path !== '/' && currentPath.startsWith(link.path));
               return (
-                <button
+                <Link
                   key={link.path}
-                  onClick={() => handleNavClick(link.path)}
+                  href={path(link.path)}
+                  scroll={false}
+                  onClick={handleNavClick}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                     isActive
                       ? 'bg-brand-fill text-on-accent font-bold shadow-md shadow-brand/25'
@@ -131,7 +135,7 @@ export const Header: React.FC = () => {
                   }`}
                 >
                   {link.label}
-                </button>
+                </Link>
               );
             })}
           </nav>
@@ -140,24 +144,28 @@ export const Header: React.FC = () => {
           <div className="hidden sm:flex items-center gap-3">
             <ThemeToggle />
             <LanguageSwitcher />
-            <button
-              onClick={() => handleNavClick('/consultation')}
+            <Link
+              href={path('/consultation')}
+              scroll={false}
+              onClick={handleNavClick}
               className="relative group overflow-hidden px-5 py-2.5 rounded-full bg-gradient-to-r from-gold-deep-fill via-gold-fill to-gold-deep-fill text-on-accent font-bold text-sm shadow-lg shadow-gold-deep-fill/20 hover:shadow-gold-deep-fill/40 transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center gap-2"
             >
               <span>{t.consultation}</span>
               <ArrowUpRight className="w-4 h-4 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-            </button>
+            </Link>
           </div>
 
           {/* Mobile menu hamburger button */}
           <div className="flex items-center gap-2 lg:hidden">
             <ThemeToggle className="sm:hidden" />
-            <button
-              onClick={() => handleNavClick('/consultation')}
+            <Link
+              href={path('/consultation')}
+              scroll={false}
+              onClick={handleNavClick}
               className="sm:hidden px-3 py-1.5 rounded-full bg-gold-deep-fill text-on-accent text-xs font-bold"
             >
               {t.consultationShort}
-            </button>
+            </Link>
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="p-2 rounded-xl bg-surface border border-brand/30 text-ink hover:text-brand transition-colors"
@@ -174,28 +182,32 @@ export const Header: React.FC = () => {
             {navLinks.map((link) => {
               const isActive = currentPath === link.path || (link.path !== '/' && currentPath.startsWith(link.path));
               return (
-                <button
+                <Link
                   key={link.path}
-                  onClick={() => handleNavClick(link.path)}
-                  className={`w-full text-start px-4 py-3 rounded-xl text-base font-medium transition-colors ${
+                  href={path(link.path)}
+                  scroll={false}
+                  onClick={handleNavClick}
+                  className={`block w-full text-start px-4 py-3 rounded-xl text-base font-medium transition-colors ${
                     isActive
                       ? 'bg-brand-fill text-on-accent font-bold'
                       : 'text-ink hover:bg-surface'
                   }`}
                 >
                   {link.label}
-                </button>
+                </Link>
               );
             })}
 
             <div className="pt-3 border-t border-ink/10 space-y-3">
               <LanguageSwitcher variant="list" />
-              <button
-                onClick={() => handleNavClick('/consultation')}
+              <Link
+                href={path('/consultation')}
+                scroll={false}
+                onClick={handleNavClick}
                 className="w-full py-3 rounded-xl bg-gradient-to-r from-gold-deep-fill to-gold-fill text-on-accent font-bold text-center block shadow-lg shadow-gold-deep-fill/30"
               >
                 {t.consultationFull}
-              </button>
+              </Link>
             </div>
           </div>
         )}

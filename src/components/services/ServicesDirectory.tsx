@@ -4,12 +4,11 @@ import React, { useState } from 'react';
 import { ServiceCategoryItem, ServiceItem } from '../../types';
 import { ServiceImage } from '../ui/ServiceImage';
 import { Search, Filter, ArrowLeft, ArrowUpRight, CheckCircle2, Sparkles } from 'lucide-react';
-import { useNavigate } from '../../hooks/useNavigate';
+import Link from 'next/link';
 import { useI18n } from '../../i18n/I18nProvider';
 
 export const ServicesDirectory: React.FC<{ services: ServiceItem[]; categories: ServiceCategoryItem[] }> = ({ services, categories: serviceCategories }) => {
-  const onNavigate = useNavigate();
-  const { t: { services: { directory: t } }, num, fill, intl } = useI18n();
+  const { t: { services: { directory: t } }, num, fill, intl, path } = useI18n();
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -100,9 +99,11 @@ export const ServicesDirectory: React.FC<{ services: ServiceItem[]; categories: 
         {/* Services Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-4">
           {filteredServices.map((service, idx) => (
-            <div
+            <Link
               key={service.id}
-              onClick={() => onNavigate(`/services/${service.slug}`)}
+              href={path(`/services/${service.slug}`)}
+              scroll={false}
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               className="group cursor-pointer rounded-2xl overflow-hidden bg-surface border border-brand/20 hover:border-gold-deep-line/50 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5 flex flex-col justify-between"
             >
               {/* Image with Robust Fallback */}
@@ -158,7 +159,7 @@ export const ServicesDirectory: React.FC<{ services: ServiceItem[]; categories: 
                   </div>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 

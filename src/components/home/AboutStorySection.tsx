@@ -2,12 +2,11 @@
 
 import React from 'react';
 import { ArrowLeft, CheckCircle2, Shield, Compass, Award } from 'lucide-react';
-import { useNavigate } from '../../hooks/useNavigate';
+import Link from 'next/link';
 import { useI18n } from '../../i18n/I18nProvider';
 
 export const AboutStorySection: React.FC = () => {
-  const onNavigate = useNavigate();
-  const { t: { stories: { story: t } } } = useI18n();
+  const { t: { stories: { story: t } }, path } = useI18n();
   return (
     <section className="py-24 bg-canvas text-ink relative overflow-hidden border-b border-ink/5">
       {/* Decorative background glow */}
@@ -80,13 +79,15 @@ export const AboutStorySection: React.FC = () => {
             </div>
 
             <div className="pt-4">
-              <button
-                onClick={() => onNavigate('/about')}
-                className="px-6 py-3 rounded-full bg-surface hover:bg-brand-fill hover:text-on-accent text-ink border border-brand/30 font-bold text-sm transition-all duration-300 flex items-center gap-2 group"
+              <Link
+                href={path('/about')}
+                scroll={false}
+                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                className="inline-flex w-fit px-6 py-3 rounded-full bg-surface hover:bg-brand-fill hover:text-on-accent text-ink border border-brand/30 font-bold text-sm transition-all duration-300 items-center gap-2 group"
               >
                 <span>{t.more}</span>
                 <ArrowLeft className="w-4 h-4 transform ltr:-scale-x-100 rtl:group-hover:-translate-x-1 ltr:group-hover:translate-x-1 transition-transform" />
-              </button>
+              </Link>
             </div>
           </div>
         </div>

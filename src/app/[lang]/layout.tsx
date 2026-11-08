@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import React from 'react';
 import { cookies } from 'next/headers';
 import '../globals.css';
@@ -9,19 +9,36 @@ import { currentLocale, getI18n } from '../../i18n/server';
 import { SiteShell } from '../../components/site/SiteShell';
 import { ThemeProvider } from '../../components/site/ThemeProvider';
 import { THEME_COOKIE, themeFromCookie } from '../../theme';
+import { siteUrl } from '../../lib/seo';
+import { OrganizationJsonLd } from '../../components/seo/OrganizationJsonLd';
 
 export async function generateMetadata(): Promise<Metadata> {
   const { t } = await getI18n();
   const { title, titleTemplate, description } = t.common.meta;
   return {
-    metadataBase: process.env.SITE_URL ? new URL(process.env.SITE_URL) : undefined,
+    metadataBase: new URL(await siteUrl()),
+    applicationName: t.common.brand,
     title: { default: title, template: titleTemplate },
     description,
-    openGraph: { title, description, type: 'website' },
-    twitter: { card: 'summary_large_image' },
-    icons: { icon: 'data:,' },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1, 'max-video-preview': -1 },
+    },
+    // The code Google Search Console gives for the "HTML tag" check, set in .env
+    verification: process.env.GOOGLE_SITE_VERIFICATION ? { google: process.env.GOOGLE_SITE_VERIFICATION } : undefined,
+    formatDetection: { telephone: false, email: false, address: false },
   };
 }
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: [
+    { media: '(prefers-color-scheme: dark)', color: '#07191F' },
+    { media: '(prefers-color-scheme: light)', color: '#F3F6F7' },
+  ],
+};
 
 export function generateStaticParams() {
   return LOCALES.map((lang) => ({ lang }));
@@ -42,6 +59,7 @@ export default async function LocaleLayout({ children }: { children: React.React
         />
       </head>
       <body className="bg-canvas text-ink font-['Vazirmatn',sans-serif] antialiased">
+        <OrganizationJsonLd />
         <I18nProvider locale={locale} dictionary={getDictionary(locale)}>
           <ThemeProvider initial={theme}>
             <SiteShell>{children}</SiteShell>

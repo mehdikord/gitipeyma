@@ -8,7 +8,6 @@ import './admin.css';
 export const metadata: Metadata = {
   title: { default: 'پنل مدیریت | رویال تراول', template: '%s | پنل مدیریت رویال تراول' },
   robots: { index: false, follow: false },
-  icons: { icon: 'data:,' },
 };
 
 // The panel is its own root, always in Persian, whatever language the site is viewed in.
