@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { normalizeDigits, validateFullName, validatePhoneNumber, validateMessage } from './validation';
 import { calculateCurrencyConversion, rateTable } from './currency';
 import { serviceRequestSubmitSchema } from '../modules/serviceRequests/schema';
+import { answerText, checkAnswer, PublicFormField } from '../modules/serviceForms/fields';
 import { consultationSubmitSchema } from '../modules/consultations/schema';
 import { adminPhone, fieldErrors } from '../lib/validation';
 import { Office, officeStatus, telHref } from './contact';
@@ -62,18 +63,58 @@ test('calculateCurrencyConversion calculates accurate transfer estimates', () =>
   assert.equal(calculateCurrencyConversion(26000000, 'TOMAN', 'TRY', rates, 2)?.finalReceiveAmount, 9800);
 });
 
-test('a service request is the same three fields for every service, stored with Latin digits', () => {
-  const parsed = serviceRequestSubmitSchema().safeParse({ serviceId: '3', name: ' علی احمدی ', phone: '۰۹۱۲ ۳۴۵ ۶۷۸۹', description: '   ' });
+test('a service request carries the name, the phone with Latin digits, and the answers to its own form', () => {
+  const parsed = serviceRequestSubmitSchema().safeParse({ serviceId: '3', name: ' علی احمدی ', phone: '۰۹۱۲ ۳۴۵ ۶۷۸۹', answers: { '7': 'هوایی', '8': ['a', 'b'], '9': true } });
   assert.equal(parsed.success, true);
   if (parsed.success) {
-    assert.deepEqual(parsed.data, { serviceId: 3, name: 'علی احمدی', phone: '09123456789', description: null });
+    assert.deepEqual(parsed.data, { serviceId: 3, name: 'علی احمدی', phone: '09123456789', answers: { '7': 'هوایی', '8': ['a', 'b'], '9': true } });
   }
+  assert.deepEqual(serviceRequestSubmitSchema().safeParse({ serviceId: 3, name: 'علی احمدی', phone: '09123456789' }).data?.answers, {});
 
-  const invalid = serviceRequestSubmitSchema().safeParse({ serviceId: 0, name: 'ع', phone: '123', description: '' });
+  const invalid = serviceRequestSubmitSchema().safeParse({ serviceId: 0, name: 'ع', phone: '123' });
   assert.equal(invalid.success, false);
   if (!invalid.success) {
     assert.deepEqual(Object.keys(fieldErrors(invalid.error)).sort(), ['name', 'phone', 'serviceId']);
   }
+});
+
+const question = (patch: Partial<PublicFormField>): PublicFormField => ({ id: 1, type: 'text', label: 'Q', help: null, required: false, multiple: false, multiline: false, options: [], ...patch });
+
+test('each kind of question checks its answer the same way in the browser and on the server', () => {
+  // Text: trimmed, empty is null unless required, length capped
+  assert.deepEqual(checkAnswer(question({}), '  hi  ', 'en'), { value: 'hi' });
+  assert.deepEqual(checkAnswer(question({}), '   ', 'en'), { value: null });
+  assert.equal(checkAnswer(question({ required: true }), '', 'fa').error, 'این مورد را تکمیل کنید.');
+  assert.ok(checkAnswer(question({}), 'x'.repeat(256), 'en').error);
+  assert.equal(checkAnswer(question({ multiline: true }), 'x'.repeat(256), 'en').error, undefined);
+
+  // Numbers in any digits; Turkish uses a decimal comma
+  assert.deepEqual(checkAnswer(question({ type: 'number' }), '۱۲٬۵۰۰٫۵', 'fa'), { value: 12500.5 });
+  assert.deepEqual(checkAnswer(question({ type: 'number' }), '12,500.5', 'en'), { value: 12500.5 });
+  assert.deepEqual(checkAnswer(question({ type: 'number' }), '12.500,5', 'tr'), { value: 12500.5 });
+  assert.ok(checkAnswer(question({ type: 'number' }), '12kg', 'en').error);
+
+  // Choices must be among the options; single takes one, multiple a list
+  const options = [{ value: 'air', label: 'Air' }, { value: 'sea', label: 'Sea' }];
+  assert.deepEqual(checkAnswer(question({ type: 'select', options }), 'sea', 'en'), { value: 'sea' });
+  assert.ok(checkAnswer(question({ type: 'select', options }), 'road', 'en').error);
+  assert.ok(checkAnswer(question({ type: 'select', options }), ['air', 'sea'], 'en').error);
+  assert.equal(checkAnswer(question({ type: 'select', options, required: true }), '', 'en').error, 'Please choose one of the options.');
+  assert.deepEqual(checkAnswer(question({ type: 'select', options, multiple: true }), ['sea', 'air', 'sea'], 'en'), { value: ['sea', 'air'] });
+  assert.equal(checkAnswer(question({ type: 'select', options, multiple: true, required: true }), [], 'tr').error, 'Lütfen en az bir seçenek seçin.');
+
+  // A required checkbox must be ticked
+  assert.deepEqual(checkAnswer(question({ type: 'checkbox' }), false, 'en'), { value: false });
+  assert.ok(checkAnswer(question({ type: 'checkbox', required: true }), false, 'en').error);
+});
+
+test('the panel reads each answer as one line in Persian', () => {
+  assert.equal(answerText({ fieldId: 1, type: 'checkbox', label: {}, value: true }), 'بله');
+  assert.equal(answerText({ fieldId: 1, type: 'checkbox', label: {}, value: false }), 'خیر');
+  assert.equal(answerText({ fieldId: 1, type: 'number', label: {}, value: 1500 }), '۱٬۵۰۰');
+  assert.equal(answerText({ fieldId: 1, type: 'text', label: {}, value: null }), '—');
+  const options = [{ value: 'air', label: { fa: 'هوایی', en: 'Air' } }, { value: 'sea', label: { en: 'Sea' } }];
+  assert.equal(answerText({ fieldId: 1, type: 'select', label: {}, value: ['air', 'sea', 'gone'], options }), 'هوایی، Sea، gone');
 });
 
 test('a consultation without a service is general guidance, and needs a known call time', () => {

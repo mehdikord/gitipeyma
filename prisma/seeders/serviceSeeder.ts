@@ -28,6 +28,22 @@ const ICONS: Record<string, string> = {
   'turkey-weddings': 'PartyPopper',
 };
 
+// Every service starts with the optional description box; the panel's form builder adds the rest.
+const DEFAULT_FORM_FIELDS = [
+  {
+    type: 'text' as const,
+    label: { fa: 'توضیحات', en: 'Details', tr: 'Açıklama' },
+    help: {
+      fa: 'هر چیزی که به کارشناس کمک می‌کند؛ مثل تاریخ، مسیر، وزن بار یا شرایط خاص پرونده.',
+      en: 'Anything that helps our specialist, such as dates, route, cargo weight or special circumstances.',
+      tr: 'Uzmanımıza yardımcı olacak her şey; tarih, güzergâh, yük ağırlığı veya dosyanızın özel durumu gibi.',
+    },
+    isMultiline: true,
+    options: [],
+    sortOrder: 1,
+  },
+];
+
 export const serviceSeeder: Seeder = async (db) => {
   if (await db.service.count()) return;
 
@@ -69,6 +85,7 @@ export const serviceSeeder: Seeder = async (db) => {
         features: { create: service.features.map((title, order) => ({ title, sortOrder: order + 1 })) },
         steps: { create: service.steps.map((step, order) => ({ title: step.title, description: step.description, sortOrder: order + 1 })) },
         faqs: { create: service.faqs.map((faq, order) => ({ question: faq.question, answer: faq.answer, sortOrder: order + 1 })) },
+        formFields: { create: DEFAULT_FORM_FIELDS },
       },
     });
   }

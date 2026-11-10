@@ -107,6 +107,7 @@ model Service {
   features             ServiceFeature[]
   steps                ServiceStep[]
   faqs                 ServiceFaq[]
+  formFields           ServiceFormField[]
   requests             ServiceRequest[]
   consultationRequests ConsultationRequest[]
 
@@ -157,6 +158,39 @@ model ServiceFaq {
   @@map("service_faqs")
 }
 
+enum ServiceFormFieldType {
+  text
+  number
+  select
+  checkbox
+}
+
+// The questions on a service's request form, after the name and phone number every form starts with.
+// A request keeps a copy of the questions it answered (service_requests.answers), so editing or
+// deleting a field here never changes what an earlier request shows.
+model ServiceFormField {
+  id          BigInt               @id @default(autoincrement()) @db.UnsignedBigInt
+  serviceId   BigInt               @map("service_id") @db.UnsignedBigInt
+  type        ServiceFormFieldType @default(text)
+  label       Json
+  // Shown under the field as a guide; optional.
+  help        Json
+  isRequired  Boolean              @default(false) @map("is_required")
+  // select: the visitor may pick more than one option.
+  isMultiple  Boolean              @default(false) @map("is_multiple")
+  // text: a multi-line box instead of a one-line input.
+  isMultiline Boolean              @default(false) @map("is_multiline")
+  // select: [{"value": "air", "label": {"fa": ..., "en": ..., "tr": ...}}, ...]; the value is the same in every language.
+  options     Json
+  sortOrder   Int                  @default(0) @map("sort_order") @db.UnsignedInt
+  createdAt   DateTime             @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt   DateTime             @updatedAt @map("updated_at") @db.Timestamp(0)
+  service     Service              @relation(fields: [serviceId], references: [id], onDelete: Cascade, map: "service_form_fields_service_id_foreign")
+
+  @@index([serviceId], map: "service_form_fields_service_id_foreign")
+  @@map("service_form_fields")
+}
+
 // ---- What visitors send -------------------------------------------------------------
 
 enum RequestStatus {
@@ -166,14 +200,16 @@ enum RequestStatus {
   cancelled
 }
 
-// One shape for every service: who, how to reach them, and what they need.
+// Who sent it and how to reach them, plus their answers to the service's own form.
 // A service with requests cannot be deleted (deactivate it instead), so no request loses its service.
 model ServiceRequest {
   id          BigInt        @id @default(autoincrement()) @db.UnsignedBigInt
   serviceId   BigInt        @map("service_id") @db.UnsignedBigInt
   name        String        @db.VarChar(255)
   phone       String        @db.VarChar(30)
-  description String?       @db.Text
+  // The form's questions as they were when it was sent, with the answers (RequestAnswer[] in
+  // src/modules/serviceForms/fields.ts).
+  answers     Json?
   status      RequestStatus @default(pending)
   adminNote   String?       @map("admin_note") @db.Text
   createdAt   DateTime      @default(now()) @map("created_at") @db.Timestamp(0)

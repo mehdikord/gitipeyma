@@ -33,6 +33,7 @@ export type ServiceAdminRow = {
   faqs: { question: Translated; answer: Translated }[];
   requestCount: number;
   pendingCount: number;
+  formFieldCount: number;
 };
 
 export async function listServicesForAdmin(params: Record<string, string | string[] | undefined>): Promise<ServiceAdminRow[]> {
@@ -56,7 +57,7 @@ export async function listServicesForAdmin(params: Record<string, string | strin
         features: { orderBy: ordered },
         steps: { orderBy: ordered },
         faqs: { orderBy: ordered },
-        _count: { select: { requests: true } },
+        _count: { select: { requests: true, formFields: true } },
       },
     }),
     db.serviceRequest.groupBy({ by: ['serviceId'], where: { status: 'pending' }, _count: { _all: true } }),
@@ -88,6 +89,7 @@ export async function listServicesForAdmin(params: Record<string, string | strin
     faqs: service.faqs.map((faq) => ({ question: asTranslated(faq.question), answer: asTranslated(faq.answer) })),
     requestCount: service._count.requests,
     pendingCount: pendingBy.get(Number(service.id)) ?? 0,
+    formFieldCount: service._count.formFields,
   }));
 }
 

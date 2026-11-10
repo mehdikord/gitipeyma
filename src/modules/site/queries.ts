@@ -15,6 +15,8 @@ import { formatNumber } from '../../i18n/format';
 import { pick, pickOrNull } from '../../i18n/translated';
 import type { Prisma } from '../../generated/prisma/client';
 import type { Locale } from '../../i18n/config';
+import { publicFormField } from '../serviceForms/public';
+import type { PublicFormField } from '../serviceForms/fields';
 import type {
   CurrencyRate,
   MetricItem,
@@ -133,6 +135,14 @@ export const getServiceBySlug = cache(async (slug: string): Promise<ServiceItem 
   const locale = await currentLocale();
   const service = await db.service.findFirst({ where: { slug, isActive: true }, include: serviceInclude });
   return service ? toService(service, locale) : null;
+});
+
+/** The questions of a service's request form, in the visitor's language. */
+export const getServiceFormFields = cache(async (serviceId: number): Promise<PublicFormField[]> => {
+  await connection();
+  const locale = await currentLocale();
+  const fields = await db.serviceFormField.findMany({ where: { serviceId }, orderBy: ordered });
+  return fields.map((field) => publicFormField(field, locale));
 });
 
 /** Categories that have at least one active service, for the filters on /services. */

@@ -1,17 +1,25 @@
 'use client';
 
-import React, { useRef, useState, useTransition } from 'react';
+import React, { useMemo, useRef, useState, useTransition } from 'react';
 import { AlertCircle, Send, ShieldCheck } from 'lucide-react';
 import { validateFullName, validatePhoneNumber } from '../../utils/validation';
 import { submitServiceRequest } from '../../modules/site/actions';
 import { RequestReceived } from '../ui/RequestReceived';
 import { TextField } from '../ui/TextField';
 import { useI18n } from '../../i18n/I18nProvider';
+import { checkAnswer, PublicFormField, RawAnswer } from '../../modules/serviceForms/fields';
+import { emptyAnswer, fieldInputId, isAnswered, isWide, ServiceFormField } from './ServiceFormField';
 
 interface ServiceRequestFormProps {
   serviceId: number;
   serviceShortTitle: string;
+  // The service's own questions, designed in the panel; they come after the name and phone.
+  fields: PublicFormField[];
 }
+
+type Answers = Record<string, RawAnswer>;
+
+const emptyAnswers = (fields: PublicFormField[]): Answers => Object.fromEntries(fields.map((field) => [String(field.id), emptyAnswer(field)]));
 
 const FOCUS = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-line';
 
@@ -34,11 +42,14 @@ const Waybill: React.FC<{
   title: string;
   fullName: string;
   phone: string;
-  details: string;
+  // How many of the service's own questions are answered, out of how many
+  details: { done: number; total: number };
+  required: { done: number; total: number };
+  // Answers still missing or wrong, required or not
   remaining: number;
   ready: boolean;
-}> = ({ title, fullName, phone, details, remaining, ready }) => {
-  const t = useI18n().t.services.form;
+}> = ({ title, fullName, phone, details, required, remaining, ready }) => {
+  const { t: { services: { form: t } }, num, fill } = useI18n();
   return (
     <div aria-hidden="true" className="relative rounded-2xl overflow-hidden bg-gold-fill text-on-accent">
       <div className="px-5 sm:px-6 pt-5 pb-5">
@@ -51,7 +62,9 @@ const Waybill: React.FC<{
         <div className="mt-4">
           <WaybillRow label={t.applicant} value={fullName.trim()} placeholder={t.notEntered} />
           <WaybillRow label={t.phone} value={phone.trim()} placeholder={t.notEntered} ltr />
-          <WaybillRow label={t.description} value={details.trim() ? t.written : ''} placeholder={t.optional} />
+          {details.total > 0 && (
+            <WaybillRow label={t.details} value={details.done ? fill(t.answered, { done: num(details.done), total: num(details.total) }) : ''} placeholder={t.notEntered} />
+          )}
         </div>
       </div>
 
@@ -62,11 +75,11 @@ const Waybill: React.FC<{
       </div>
 
       <div className="relative px-5 sm:px-6 py-4 min-h-[84px] flex items-center">
-        {/* Two stops are required: the name and the phone number */}
+        {/* The required stops: the name, the phone number and the service's required questions */}
         <div className="flex-1 pe-24">
-          <p className="text-xs font-bold text-on-accent/75 mb-2">{ready ? t.ready : remaining === 2 ? t.twoLeft : t.oneLeft}</p>
+          <p className="text-xs font-bold text-on-accent/75 mb-2">{ready ? t.ready : fill(t.left, { count: num(remaining) })}</p>
           <div className="relative h-1 rounded-full bg-canvas/20">
-            <span className="waybill-progress absolute inset-y-0 start-0 rounded-full bg-[#087F7B]" style={{ width: `${((2 - remaining) / 2) * 100}%` }} />
+            <span className="waybill-progress absolute inset-y-0 start-0 rounded-full bg-[#087F7B]" style={{ width: `${(required.done / required.total) * 100}%` }} />
           </div>
         </div>
         {ready && (
@@ -81,11 +94,11 @@ const Waybill: React.FC<{
   );
 };
 
-export const ServiceRequestForm: React.FC<ServiceRequestFormProps> = ({ serviceId, serviceShortTitle }) => {
+export const ServiceRequestForm: React.FC<ServiceRequestFormProps> = ({ serviceId, serviceShortTitle, fields }) => {
   const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('');
-  const [details, setDetails] = useState('');
-  const [touched, setTouched] = useState({ fullName: false, phone: false });
+  const [answers, setAnswers] = useState<Answers>(() => emptyAnswers(fields));
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [serverErrors, setServerErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState<string | null>(null);
   const [reference, setReference] = useState<number | null>(null);
@@ -97,17 +110,46 @@ export const ServiceRequestForm: React.FC<ServiceRequestFormProps> = ({ serviceI
 
   const nameCheck = validateFullName(fullName, locale);
   const phoneCheck = validatePhoneNumber(phone, locale);
-  const ready = nameCheck.isValid && phoneCheck.isValid;
-  const filled = Number(nameCheck.isValid) + Number(phoneCheck.isValid);
+  // The same check the server runs, per question
+  const fieldErrors = useMemo(
+    () => Object.fromEntries(fields.map((field) => [String(field.id), checkAnswer(field, answers[String(field.id)], locale).error])),
+    [fields, answers, locale],
+  );
+  const firstInvalid = fields.find((field) => fieldErrors[String(field.id)]);
+  const ready = nameCheck.isValid && phoneCheck.isValid && !firstInvalid;
+
+  const requiredFields = fields.filter((field) => field.required);
+  const required = {
+    total: 2 + requiredFields.length,
+    done: Number(nameCheck.isValid) + Number(phoneCheck.isValid) + requiredFields.filter((field) => !fieldErrors[String(field.id)]).length,
+  };
+  const remaining = Number(!nameCheck.isValid) + Number(!phoneCheck.isValid) + fields.filter((field) => fieldErrors[String(field.id)]).length;
+  const details = { total: fields.length, done: fields.filter((field) => isAnswered(answers[String(field.id)])).length };
+
+  const touch = (key: string) => setTouched((current) => (current[key] ? current : { ...current, [key]: true }));
+
+  const setAnswer = (field: PublicFormField, value: RawAnswer) => {
+    const key = String(field.id);
+    setAnswers((current) => ({ ...current, [key]: value }));
+    // A choice is made in one go, so its error can show right away; typed answers wait for blur
+    if (field.type === 'select' || field.type === 'checkbox') touch(key);
+    if (serverErrors[`answers.${key}`]) setServerErrors(({ [`answers.${key}`]: _, ...rest }) => rest);
+  };
+
+  const errorFor = (field: PublicFormField) => {
+    const key = String(field.id);
+    return touched[key] ? fieldErrors[key] ?? serverErrors[`answers.${key}`] : serverErrors[`answers.${key}`];
+  };
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    setTouched({ fullName: true, phone: true });
+    setTouched({ fullName: true, phone: true, ...Object.fromEntries(fields.map((field) => [String(field.id), true])) });
     if (!nameCheck.isValid) return nameRef.current?.focus();
     if (!phoneCheck.isValid) return phoneRef.current?.focus();
+    if (firstInvalid) return document.getElementById(fieldInputId(firstInvalid))?.focus();
 
     startSubmit(async () => {
-      const result = await submitServiceRequest({ serviceId, name: fullName, phone, description: details }, locale);
+      const result = await submitServiceRequest({ serviceId, name: fullName, phone, answers }, locale);
       if (result.ok) {
         setReference(result.data!.reference);
         setServerErrors({});
@@ -123,8 +165,8 @@ export const ServiceRequestForm: React.FC<ServiceRequestFormProps> = ({ serviceI
     setReference(null);
     setFullName('');
     setPhone('');
-    setDetails('');
-    setTouched({ fullName: false, phone: false });
+    setAnswers(emptyAnswers(fields));
+    setTouched({});
   };
 
   return (
@@ -145,7 +187,7 @@ export const ServiceRequestForm: React.FC<ServiceRequestFormProps> = ({ serviceI
                 valid={nameCheck.isValid}
                 error={touched.fullName ? nameCheck.error ?? serverErrors.name : undefined}
                 onChange={setFullName}
-                onBlur={() => setTouched((current) => ({ ...current, fullName: fullName !== '' || current.fullName }))}
+                onBlur={() => fullName !== '' && touch('fullName')}
               />
               <TextField
                 id="service-phone"
@@ -160,31 +202,31 @@ export const ServiceRequestForm: React.FC<ServiceRequestFormProps> = ({ serviceI
                 valid={phoneCheck.isValid}
                 error={touched.phone ? phoneCheck.error ?? serverErrors.phone : undefined}
                 onChange={setPhone}
-                onBlur={() => setTouched((current) => ({ ...current, phone: phone !== '' || current.phone }))}
+                onBlur={() => phone !== '' && touch('phone')}
               />
             </div>
 
-            <div>
-              <label htmlFor="service-details" className="block mb-2 text-sm font-bold text-ink">
-                {t.detailsLabel} <span className="font-normal text-ink-muted">{t.detailsOptional}</span>
-              </label>
-              <textarea
-                id="service-details"
-                rows={5}
-                maxLength={2000}
-                value={details}
-                onChange={(event) => setDetails(event.target.value)}
-                placeholder={t.detailsPlaceholder}
-                className="w-full px-4 py-3.5 rounded-lg bg-surface border border-ink/15 hover:border-ink/30 text-base leading-relaxed text-ink-strong placeholder:text-ink-dim outline-none transition-colors resize-none focus:border-gold-line focus:ring-1 focus:ring-gold-line"
-              />
-              {serverErrors.description && <p className="mt-2 text-[13px] text-danger">{serverErrors.description}</p>}
-            </div>
+            {fields.length > 0 && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-7 border-t border-ink/10">
+                {fields.map((field) => (
+                  <div key={field.id} className={isWide(field) ? 'sm:col-span-2' : undefined}>
+                    <ServiceFormField
+                      field={field}
+                      value={answers[String(field.id)]}
+                      error={errorFor(field)}
+                      onChange={(value) => setAnswer(field, value)}
+                      onBlur={() => isAnswered(answers[String(field.id)]) && touch(String(field.id))}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>
 
       <div className="lg:col-span-5 lg:sticky lg:top-36">
-        <Waybill title={serviceShortTitle} fullName={fullName} phone={phone} details={details} remaining={2 - filled} ready={ready} />
+        <Waybill title={serviceShortTitle} fullName={fullName} phone={phone} details={details} required={required} remaining={remaining} ready={ready} />
 
         {!reference && (
           <>

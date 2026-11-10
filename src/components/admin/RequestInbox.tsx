@@ -22,7 +22,8 @@ export type InboxRow = {
   id: number;
   name: string;
   phone: string;
-  description: string | null;
+  // Requests with a free-text box (consultations); service requests show their form answers instead.
+  description?: string | null;
   status: RequestStatus;
   adminNote: string | null;
   createdAt: string;
@@ -36,6 +37,8 @@ type RequestInboxProps<R extends InboxRow> = {
   columns: Column<R>[];
   // Extra lines in the detail modal, e.g. the service and the call time.
   details: (row: R) => { label: string; value: React.ReactNode }[];
+  // What the applicant wrote, under the details. By default their description.
+  body?: (row: R) => React.ReactNode;
   update: (input: { id: number; status: RequestStatus; adminNote: string }) => Promise<ActionResult<unknown>>;
   remove: (id: number) => Promise<ActionResult<unknown>>;
   // A request opened from a link (?open=12), even when it is not on this page of the list.
@@ -50,7 +53,7 @@ const Detail: React.FC<{ label: string; children: React.ReactNode }> = ({ label,
   </div>
 );
 
-export function RequestInbox<R extends InboxRow>({ rows, pagination, columns, details, update, remove, initialOpen, emptyText }: RequestInboxProps<R>) {
+export function RequestInbox<R extends InboxRow>({ rows, pagination, columns, details, body, update, remove, initialOpen, emptyText }: RequestInboxProps<R>) {
   const [selected, setSelected] = useState<R | null>(initialOpen ?? null);
   const form = useForm({ status: 'pending' as RequestStatus, adminNote: '' });
   const confirm = useConfirm();
@@ -187,10 +190,14 @@ export function RequestInbox<R extends InboxRow>({ rows, pagination, columns, de
                 ))}
                 {selected.updatedAt !== selected.createdAt && <Detail label="آخرین تغییر">{formatDateTime(selected.updatedAt)}</Detail>}
               </dl>
-              <div className="mt-4">
-                <p className="mb-1.5 text-[13px] text-[#5F7177]">توضیحات متقاضی</p>
-                <p className="whitespace-pre-line rounded-lg bg-[#F4F6F7] px-4 py-3 text-sm leading-7 text-[#14282D]">{selected.description || 'توضیحی نوشته نشده است.'}</p>
-              </div>
+              {body ? (
+                body(selected)
+              ) : (
+                <div className="mt-4">
+                  <p className="mb-1.5 text-[13px] text-[#5F7177]">توضیحات متقاضی</p>
+                  <p className="whitespace-pre-line rounded-lg bg-[#F4F6F7] px-4 py-3 text-sm leading-7 text-[#14282D]">{selected.description || 'توضیحی نوشته نشده است.'}</p>
+                </div>
+              )}
             </div>
 
             <div className="space-y-4 md:col-span-2 md:border-r md:border-[#EEF2F3] md:pr-6">

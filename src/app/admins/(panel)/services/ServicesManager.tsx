@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { ClipboardList, Eye, EyeOff, ExternalLink } from 'lucide-react';
+import { ClipboardList, Eye, EyeOff, ExternalLink, ListChecks } from 'lucide-react';
 import type { ServiceAdminRow } from '../../../../modules/services/queries';
 import { deleteService, saveService, setServiceActive } from '../../../../modules/services/actions';
 import { SERVICE_ICONS, serviceIcon } from '../../../../modules/services/icons';
@@ -178,7 +178,7 @@ export const ServicesManager: React.FC<{ services: ServiceAdminRow[]; categories
   return (
     <CrudManager<ServiceAdminRow, Values>
       title="خدمات"
-      description="هر خدمت یک صفحه در سایت دارد و فرم درخواست آن (نام، شماره تماس، توضیحات) برای همه خدمات یکسان است."
+      description="هر خدمت یک صفحه در سایت و فرم درخواست مخصوص خودش را دارد. فرم هر خدمت را از دکمه «مدیریت فرم خدمت» طراحی کنید."
       noun="خدمت"
       rows={services}
       modalSize="xl"
@@ -224,6 +224,17 @@ export const ServicesManager: React.FC<{ services: ServiceAdminRow[]; categories
             </Link>
           ),
         },
+        {
+          key: 'form',
+          header: 'فرم درخواست',
+          hideOnMobile: true,
+          cell: (row) => (
+            <Link href={`/admins/services/${row.id}/form`} onClick={(event) => event.stopPropagation()} className="inline-flex items-center gap-1.5 text-[#3F5257] hover:text-[#0B7A75]">
+              <ListChecks className="h-4 w-4" />
+              {row.formFieldCount > 0 ? `${row.formFieldCount.toLocaleString('fa-IR')} فیلد` : <span className="text-[#94A3A8]">فقط نام و تماس</span>}
+            </Link>
+          ),
+        },
         { key: 'state', header: 'وضعیت', cell: (row) => <ActiveBadge active={row.isActive} /> },
         { key: 'sortOrder', header: 'ترتیب', hideOnMobile: true, className: 'text-[#5F7177]', cell: (row) => row.sortOrder.toLocaleString('fa-IR') },
       ]}
@@ -239,6 +250,14 @@ export const ServicesManager: React.FC<{ services: ServiceAdminRow[]; categories
           >
             <ExternalLink className="h-4 w-4" />
           </a>
+          <Link
+            href={`/admins/services/${row.id}/form`}
+            title="مدیریت فرم خدمت"
+            aria-label="مدیریت فرم خدمت"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[#3F5257] hover:bg-[#EEF2F3]"
+          >
+            <ListChecks className="h-4 w-4" />
+          </Link>
           <Link href={`/admins/service-requests?service=${row.id}`} title="درخواست‌های این خدمت" aria-label="درخواست‌های این خدمت" className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[#3F5257] hover:bg-[#EEF2F3]">
             <ClipboardList className="h-4 w-4" />
           </Link>

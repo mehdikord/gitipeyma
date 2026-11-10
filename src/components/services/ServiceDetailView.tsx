@@ -11,10 +11,13 @@ import { ServiceImage } from '../ui/ServiceImage';
 import { ServiceRequestForm } from './ServiceRequestForm';
 import { CurrencyCalculator } from './CurrencyCalculator';
 import { useI18n } from '../../i18n/I18nProvider';
+import type { PublicFormField } from '../../modules/serviceForms/fields';
 
 interface ServiceDetailViewProps {
   service: ServiceItem;
   relatedServices: ServiceItem[];
+  // The questions of this service's request form, after the name and phone number.
+  formFields: PublicFormField[];
   // Only the currency service shows the calculator, with these rates.
   currencies?: { rates: CurrencyRate[]; feePercent: number };
 }
@@ -25,7 +28,7 @@ const SECTION_TITLE = 'text-2xl sm:text-3xl font-black text-ink leading-snug';
 // The page's sections in order; their labels are in the dictionary under detail.sections.
 const SECTIONS = ['about', 'benefits', 'steps', 'faq', 'request'] as const;
 
-export const ServiceDetailView: React.FC<ServiceDetailViewProps> = ({ service, relatedServices, currencies }) => {
+export const ServiceDetailView: React.FC<ServiceDetailViewProps> = ({ service, relatedServices, formFields, currencies }) => {
   const SUPPORT_TEL = telHref(useSite().settings.support_phone);
   const { t: { services: { detail: t } }, num, path } = useI18n();
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
@@ -254,7 +257,7 @@ export const ServiceDetailView: React.FC<ServiceDetailViewProps> = ({ service, r
               {t.requestIntro}
             </p>
           </div>
-          <ServiceRequestForm key={service.slug} serviceId={service.id} serviceShortTitle={service.shortTitle} />
+          <ServiceRequestForm key={service.slug} serviceId={service.id} serviceShortTitle={service.shortTitle} fields={formFields} />
         </section>
 
         <section className="pt-16 sm:pt-24 pb-16 sm:pb-24">

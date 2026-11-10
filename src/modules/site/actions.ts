@@ -10,12 +10,14 @@ import { db } from '../../lib/db';
 import { ActionResult, FormError, publicAction } from '../../lib/actions';
 import { clientIp, tooManyAttempts } from '../../lib/rateLimit';
 import { isLocale, Locale, LOCALES } from '../../i18n/config';
-import type { Translated } from '../../i18n/translated';
+import { asTranslated, Translated } from '../../i18n/translated';
 import { serviceRequestSubmitSchema, ServiceRequestSubmitInput } from '../serviceRequests/schema';
 import { consultationSubmitSchema, ConsultationSubmitInput } from '../consultations/schema';
 import { contactMessageSubmitSchema, ContactMessageSubmitInput } from '../contactMessages/schema';
 import { testimonialSubmitSchema, TestimonialSubmitInput } from '../testimonials/schema';
 import { SITE_MESSAGES } from './messages';
+import { asOptions, checkAnswer, RequestAnswer } from '../serviceForms/fields';
+import { publicFormField } from '../serviceForms/public';
 
 const LIMIT = 5;
 const WINDOW = 10 * 60 * 1000;
@@ -43,8 +45,27 @@ export async function submitServiceRequest(input: ServiceRequestSubmitInput, lan
     async (data) => {
       await throttle('service-request', locale);
       const service = await activeService(data.serviceId, locale);
+      const fields = await db.serviceFormField.findMany({ where: { serviceId: service.id }, orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }] });
+
+      // Every question of the service as it is now, each with a copy of its title in all languages
+      const errors: Record<string, string> = {};
+      const answers: RequestAnswer[] = fields.map((row) => {
+        const field = publicFormField(row, locale);
+        const checked = checkAnswer(field, data.answers[String(field.id)], locale);
+        if (checked.error) errors[`answers.${field.id}`] = checked.error;
+        const chosen = Array.isArray(checked.value) ? checked.value : typeof checked.value === 'string' ? [checked.value] : [];
+        return {
+          fieldId: field.id,
+          type: field.type,
+          label: asTranslated(row.label),
+          value: checked.value,
+          ...(field.type === 'select' ? { options: asOptions(row.options).filter((option) => chosen.includes(option.value)) } : {}),
+        };
+      });
+      if (Object.keys(errors).length) throw new FormError(SITE_MESSAGES[locale].invalid, errors);
+
       const request = await db.serviceRequest.create({
-        data: { serviceId: service.id, name: data.name, phone: data.phone, description: data.description },
+        data: { serviceId: service.id, name: data.name, phone: data.phone, answers },
       });
       return { ok: true, data: { reference: Number(request.id) } };
     },

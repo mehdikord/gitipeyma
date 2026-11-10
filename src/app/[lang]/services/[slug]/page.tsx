@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ServiceDetailView } from '../../../../components/services/ServiceDetailView';
-import { getCurrencies, getServiceBySlug, getServices, getSettings } from '../../../../modules/site/queries';
+import { getCurrencies, getServiceBySlug, getServiceFormFields, getServices, getSettings } from '../../../../modules/site/queries';
 import { getI18n, pageMetadata } from '../../../../i18n/metadata';
 import { currentLocale } from '../../../../i18n/server';
 import { localePath } from '../../../../i18n/config';
@@ -23,8 +23,9 @@ export default async function Page({ params }: Props) {
   const service = await getServiceBySlug(decodeURIComponent((await params).slug));
   if (!service) notFound();
 
-  const [services, currencies, settings, { t }, locale, base] = await Promise.all([
+  const [services, formFields, currencies, settings, { t }, locale, base] = await Promise.all([
     getServices(),
+    getServiceFormFields(service.id),
     service.slug === CURRENCY_SERVICE_SLUG ? getCurrencies() : null,
     getSettings(),
     getI18n(),
@@ -82,6 +83,7 @@ export default async function Page({ params }: Props) {
       <ServiceDetailView
       service={service}
       relatedServices={relatedServices}
+      formFields={formFields}
       currencies={currencies ? { rates: currencies, feePercent: Number(settings.currency_fee_percent) || 0 } : undefined}
     />
     </>

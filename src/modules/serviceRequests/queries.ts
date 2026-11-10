@@ -5,13 +5,15 @@ import { pageArgs, paginated, param } from '../../lib/pagination';
 import { normalizeDigits } from '../../utils/validation';
 import { REQUEST_STATUS_KEYS } from './statuses';
 import { fa } from '../../i18n/translated';
+import { answerText, asAnswers } from '../serviceForms/fields';
 import type { Prisma, RequestStatus } from '../../generated/prisma/client';
 
 export type ServiceRequestRow = {
   id: number;
   name: string;
   phone: string;
-  description: string | null;
+  // The service's questions as they were when the request was sent, with the visitor's answers.
+  answers: { label: string; value: string }[];
   status: RequestStatus;
   adminNote: string | null;
   service: { id: number; title: string; slug: string };
@@ -52,7 +54,7 @@ export async function listServiceRequests(params: Record<string, string | string
     id: Number(row.id),
     name: row.name,
     phone: row.phone,
-    description: row.description,
+    answers: asAnswers(row.answers).map((answer) => ({ label: fa(answer.label) || 'بدون عنوان', value: answerText(answer) })),
     status: row.status,
     adminNote: row.adminNote,
     service: { id: Number(row.service.id), title: fa(row.service.shortTitle), slug: row.service.slug },

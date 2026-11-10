@@ -12,9 +12,28 @@ import { FilterBar } from '../../../../components/admin/ui/FilterBar';
 import { PageHeader } from '../../../../components/admin/ui/PageHeader';
 import type { Option } from '../../../../components/admin/ui/fields';
 
+// The visitor's answers to the service's form, one line each: "label : value".
+const Answers: React.FC<{ row: ServiceRequestRow }> = ({ row }) => (
+  <div className="mt-4">
+    <p className="mb-1.5 text-[13px] text-[#5F7177]">اطلاعات فرم خدمت</p>
+    {row.answers.length === 0 ? (
+      <p className="rounded-lg bg-[#F4F6F7] px-4 py-3 text-sm text-[#5F7177]">این درخواست اطلاعات دیگری جز نام و شماره تماس ندارد.</p>
+    ) : (
+      <dl className="divide-y divide-[#E3E8EA] rounded-lg bg-[#F4F6F7] px-4">
+        {row.answers.map((answer, index) => (
+          <div key={index} className="flex flex-col gap-1 py-2.5 text-sm sm:flex-row sm:gap-2">
+            <dt className="shrink-0 text-[#5F7177] sm:max-w-[45%]">{answer.label} :</dt>
+            <dd className={`min-w-0 whitespace-pre-line break-words font-bold leading-7 ${answer.value === '—' ? 'text-[#94A3A8]' : 'text-[#14282D]'}`}>{answer.value}</dd>
+          </div>
+        ))}
+      </dl>
+    )}
+  </div>
+);
+
 export const ServiceRequestsView: React.FC<{ list: Paginated<ServiceRequestRow> & { opened: ServiceRequestRow | null }; services: Option[] }> = ({ list, services }) => (
   <>
-    <PageHeader title="درخواست خدمات" description="درخواست‌هایی که بازدیدکنندگان از صفحه هر خدمت ثبت کرده‌اند: نام، شماره تماس و توضیحات." />
+    <PageHeader title="درخواست خدمات" description="درخواست‌هایی که بازدیدکنندگان با فرم صفحه هر خدمت ثبت کرده‌اند: نام، شماره تماس و پاسخ به پرسش‌های فرم همان خدمت." />
     <FilterBar
       searchPlaceholder="جستجوی نام یا شماره تماس"
       filters={[
@@ -34,13 +53,14 @@ export const ServiceRequestsView: React.FC<{ list: Paginated<ServiceRequestRow> 
         {
           label: 'خدمت',
           value: (
-            <Link href={`/services/${row.service.slug}`} target="_blank" className="inline-flex items-center gap-1 text-[#0B7A75] hover:underline">
+            <Link href={`/fa/services/${row.service.slug}`} target="_blank" className="inline-flex items-center gap-1 text-[#0B7A75] hover:underline">
               {row.service.title}
               <ExternalLink className="h-3.5 w-3.5" />
             </Link>
           ),
         },
       ]}
+      body={(row) => <Answers row={row} />}
     />
   </>
 );
