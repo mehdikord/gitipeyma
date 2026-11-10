@@ -1,6 +1,6 @@
 import 'server-only';
 import { db } from '../../lib/db';
-import { requireAdmin } from '../../lib/auth/currentAdmin';
+import { requireRoot } from '../../lib/auth/currentAdmin';
 import { param } from '../../lib/pagination';
 import type { Prisma } from '../../generated/prisma/client';
 import { asTranslated, fa, Translated } from '../../i18n/translated';
@@ -37,7 +37,7 @@ export type ServiceAdminRow = {
 };
 
 export async function listServicesForAdmin(params: Record<string, string | string[] | undefined>): Promise<ServiceAdminRow[]> {
-  await requireAdmin();
+  await requireRoot();
   const q = param(params, 'q');
   const category = Number(param(params, 'category'));
   const state = param(params, 'state');
@@ -94,13 +94,13 @@ export async function listServicesForAdmin(params: Record<string, string | strin
 }
 
 export async function categoryOptions() {
-  await requireAdmin();
+  await requireRoot();
   const categories = await db.serviceCategory.findMany({ orderBy: ordered, select: { id: true, title: true } });
   return categories.map((category) => ({ value: String(category.id), label: fa(category.title) }));
 }
 
 export async function groupOptions() {
-  await requireAdmin();
+  await requireRoot();
   const groups = await db.serviceGroup.findMany({ orderBy: ordered, select: { id: true, title: true } });
   return groups.map((group) => ({ value: String(group.id), label: fa(group.title) }));
 }

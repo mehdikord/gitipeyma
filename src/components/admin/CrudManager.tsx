@@ -30,6 +30,8 @@ export type CrudManagerProps<R extends Row, V extends Record<string, unknown>> =
   renderForm: (form: FormApi<V>, editing: R | null) => React.ReactNode;
   deleteMessage?: (row: R) => React.ReactNode;
   canDelete?: (row: R) => boolean;
+  // Rows that open read-only: no edit button, and clicking them does nothing
+  canEdit?: (row: R) => boolean;
   rowActions?: (row: R) => React.ReactNode;
   highlight?: (row: R) => boolean;
   toolbar?: React.ReactNode;
@@ -45,7 +47,7 @@ export type CrudManagerProps<R extends Row, V extends Record<string, unknown>> =
  * the list a column showing which languages each item is written in.
  */
 export function CrudManager<R extends Row, V extends Record<string, unknown>>(props: CrudManagerProps<R, V>) {
-  const { title, description, noun, rows, columns, emptyValues, toValues, save, remove, renderForm, deleteMessage, canDelete, rowActions, highlight, toolbar, pagination, modalSize = 'md', emptyText } = props;
+  const { title, description, noun, rows, columns, emptyValues, toValues, save, remove, renderForm, deleteMessage, canDelete, canEdit, rowActions, highlight, toolbar, pagination, modalSize = 'md', emptyText } = props;
   const form = useForm<V>(emptyValues());
   const confirm = useConfirm();
   const toast = useToast();
@@ -102,13 +104,13 @@ export function CrudManager<R extends Row, V extends Record<string, unknown>>(pr
         rows={rows}
         columns={allColumns}
         rowKey={(row) => row.id}
-        onRowClick={openEdit}
+        onRowClick={(row) => (canEdit?.(row) ?? true) && openEdit(row)}
         highlight={highlight}
         emptyText={emptyText}
         actions={(row) => (
           <>
             {rowActions?.(row)}
-            <IconButton label="ویرایش" icon={Pencil} onClick={() => openEdit(row)} />
+            {(canEdit?.(row) ?? true) && <IconButton label="ویرایش" icon={Pencil} onClick={() => openEdit(row)} />}
             {remove && (canDelete?.(row) ?? true) && <IconButton label="حذف" icon={Trash2} tone="danger" onClick={() => handleDelete(row)} />}
           </>
         )}

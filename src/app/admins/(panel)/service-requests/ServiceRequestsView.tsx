@@ -11,6 +11,7 @@ import { RequestInbox } from '../../../../components/admin/RequestInbox';
 import { FilterBar } from '../../../../components/admin/ui/FilterBar';
 import { PageHeader } from '../../../../components/admin/ui/PageHeader';
 import type { Option } from '../../../../components/admin/ui/fields';
+import { RequestNotes } from './RequestNotes';
 
 // The visitor's answers to the service's form, one line each: "label : value".
 const Answers: React.FC<{ row: ServiceRequestRow }> = ({ row }) => (
@@ -31,9 +32,25 @@ const Answers: React.FC<{ row: ServiceRequestRow }> = ({ row }) => (
   </div>
 );
 
-export const ServiceRequestsView: React.FC<{ list: Paginated<ServiceRequestRow> & { opened: ServiceRequestRow | null }; services: Option[] }> = ({ list, services }) => (
+// A root admin sees every request; an internal admin only those of their services (the query
+// already limits them), and cannot delete.
+export const ServiceRequestsView: React.FC<{ list: Paginated<ServiceRequestRow> & { opened: ServiceRequestRow | null }; services: Option[]; isRoot: boolean }> = ({
+  list,
+  services,
+  isRoot,
+}) => (
   <>
-    <PageHeader title="درخواست خدمات" description="درخواست‌هایی که بازدیدکنندگان با فرم صفحه هر خدمت ثبت کرده‌اند: نام، شماره تماس و پاسخ به پرسش‌های فرم همان خدمت." />
+    <PageHeader
+      title="درخواست خدمات"
+      description={
+        isRoot
+          ? 'درخواست‌هایی که بازدیدکنندگان با فرم صفحه هر خدمت ثبت کرده‌اند: نام، شماره تماس و پاسخ به پرسش‌های فرم همان خدمت.'
+          : `درخواست‌های ثبت‌شده برای خدماتی که به شما سپرده شده است${services.length ? `: ${services.map((service) => service.label).join('، ')}` : '.'}`
+      }
+    />
+    {!isRoot && services.length === 0 && (
+      <p className="mb-4 rounded-lg border border-[#FDE68A] bg-[#FFFBEB] px-4 py-3 text-sm text-[#92400E]">هنوز هیچ خدمتی به شما سپرده نشده است؛ برای دیدن درخواست‌ها با مدیر کل هماهنگ کنید.</p>
+    )}
     <FilterBar
       searchPlaceholder="جستجوی نام یا شماره تماس"
       filters={[
@@ -47,7 +64,9 @@ export const ServiceRequestsView: React.FC<{ list: Paginated<ServiceRequestRow> 
       initialOpen={list.opened}
       emptyText="درخواستی با این مشخصات پیدا نشد."
       update={updateServiceRequest}
-      remove={deleteServiceRequest}
+      remove={isRoot ? deleteServiceRequest : undefined}
+      modalSize="xl"
+      notes={(row) => <RequestNotes requestId={row.id} notes={row.notes} />}
       columns={[{ key: 'service', header: 'خدمت', cell: (row) => <span className="font-normal">{row.service.title}</span> }]}
       details={(row) => [
         {

@@ -1,6 +1,6 @@
 import 'server-only';
 import { db } from '../../lib/db';
-import { requireAdmin } from '../../lib/auth/currentAdmin';
+import { requireRoot } from '../../lib/auth/currentAdmin';
 import { pageArgs, paginated, param } from '../../lib/pagination';
 import { personSearch, statusFilter } from '../serviceRequests/queries';
 import { fa } from '../../i18n/translated';
@@ -20,7 +20,7 @@ export type ConsultationRow = {
 };
 
 export async function listConsultations(params: Record<string, string | string[] | undefined>) {
-  await requireAdmin();
+  await requireRoot();
   const page = pageArgs(params);
   const service = param(params, 'service');
   const where: Prisma.ConsultationRequestWhereInput = {

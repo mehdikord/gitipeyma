@@ -1,6 +1,6 @@
 import 'server-only';
 import { db } from '../../lib/db';
-import { requireAdmin } from '../../lib/auth/currentAdmin';
+import { requireRoot } from '../../lib/auth/currentAdmin';
 import { toInputs } from '../../i18n/translated';
 import type { Locale } from '../../i18n/config';
 import { SETTING_FIELDS, SETTING_KEYS, SettingKey, storedDefault } from './definitions';
@@ -18,7 +18,7 @@ const parse = (value: string) => {
 };
 
 export async function getSettingsForAdmin(): Promise<SettingValues> {
-  await requireAdmin();
+  await requireRoot();
   const rows = await db.setting.findMany({ where: { key: { in: SETTING_KEYS } } });
   const stored = new Map(rows.map((row) => [row.key, row.value]));
   const values = {} as SettingValues;

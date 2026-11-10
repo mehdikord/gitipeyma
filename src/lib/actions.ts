@@ -66,16 +66,14 @@ export async function publicAction<S extends z.ZodType, T = null>(
   }
 }
 
-/**
- * An action from the admin panel: the admin is confirmed first, and once the handler succeeds
- * the panel is re-rendered so lists, counters and the sidebar badges show the change.
- */
-export async function adminAction<S extends z.ZodType, T = null>(
+const NO_ACCESS = 'شما به این بخش دسترسی ندارید.';
+
+async function runAdminAction<S extends z.ZodType, T>(
+  admin: CurrentAdmin,
   schema: S,
   input: unknown,
   handler: (data: z.output<S>, admin: CurrentAdmin) => Promise<ActionResult<T> | void>,
 ): Promise<ActionResult<T>> {
-  const admin = await requireAdmin();
   const parsed = schema.safeParse(input);
   if (!parsed.success) return { ok: false, message: INVALID, errors: fieldErrors(parsed.error) };
   try {
@@ -86,5 +84,35 @@ export async function adminAction<S extends z.ZodType, T = null>(
     return failure(error);
   }
 }
+
+/**
+ * An action from the admin panel, for root admins only (the default: anything new is closed to
+ * internal admins until it is deliberately opened with staffAction). Once the handler succeeds the
+ * panel is re-rendered so lists, counters and the sidebar badges show the change.
+ */
+export async function adminAction<S extends z.ZodType, T = null>(
+  schema: S,
+  input: unknown,
+  handler: (data: z.output<S>, admin: CurrentAdmin) => Promise<ActionResult<T> | void>,
+): Promise<ActionResult<T>> {
+  const admin = await requireAdmin();
+  if (!admin.isRoot) return { ok: false, message: NO_ACCESS };
+  return runAdminAction(admin, schema, input, handler);
+}
+
+/**
+ * An action any signed-in admin may call: work on service requests and their own profile. The
+ * handler must still limit an internal admin to their own services (see serviceRequests/access.ts).
+ */
+export async function staffAction<S extends z.ZodType, T = null>(
+  schema: S,
+  input: unknown,
+  handler: (data: z.output<S>, admin: CurrentAdmin) => Promise<ActionResult<T> | void>,
+): Promise<ActionResult<T>> {
+  return runAdminAction(await requireAdmin(), schema, input, handler);
+}
+
+/** Thrown inside a staffAction when the admin may not touch that record. */
+export const noAccess = () => new FormError(NO_ACCESS);
 
 export const idSchema = z.object({ id: z.coerce.number().int().positive() });

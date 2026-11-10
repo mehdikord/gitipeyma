@@ -25,7 +25,8 @@ export type InboxRow = {
   // Requests with a free-text box (consultations); service requests show their form answers instead.
   description?: string | null;
   status: RequestStatus;
-  adminNote: string | null;
+  // The single internal note of a consultation; service requests keep a list of notes instead (notes prop).
+  adminNote?: string | null;
   createdAt: string;
   updatedAt: string;
 };
@@ -40,10 +41,14 @@ type RequestInboxProps<R extends InboxRow> = {
   // What the applicant wrote, under the details. By default their description.
   body?: (row: R) => React.ReactNode;
   update: (input: { id: number; status: RequestStatus; adminNote: string }) => Promise<ActionResult<unknown>>;
-  remove: (id: number) => Promise<ActionResult<unknown>>;
+  // Left out when this admin may not delete requests
+  remove?: (id: number) => Promise<ActionResult<unknown>>;
+  // The team's notes on a request, in place of the single note box
+  notes?: (row: R) => React.ReactNode;
   // A request opened from a link (?open=12), even when it is not on this page of the list.
   initialOpen?: R | null;
   emptyText: string;
+  modalSize?: 'lg' | 'xl';
 };
 
 const Detail: React.FC<{ label: string; children: React.ReactNode }> = ({ label, children }) => (
@@ -53,8 +58,10 @@ const Detail: React.FC<{ label: string; children: React.ReactNode }> = ({ label,
   </div>
 );
 
-export function RequestInbox<R extends InboxRow>({ rows, pagination, columns, details, body, update, remove, initialOpen, emptyText }: RequestInboxProps<R>) {
-  const [selected, setSelected] = useState<R | null>(initialOpen ?? null);
+export function RequestInbox<R extends InboxRow>({ rows, pagination, columns, details, body, update, remove, notes, initialOpen, emptyText, modalSize = 'lg' }: RequestInboxProps<R>) {
+  const [picked, setSelected] = useState<R | null>(initialOpen ?? null);
+  // The open request as the server last sent it, so a saved note or status shows without closing it
+  const selected = picked ? (rows.find((row) => row.id === picked.id) ?? (initialOpen?.id === picked.id ? initialOpen : null) ?? picked) : null;
   const form = useForm({ status: 'pending' as RequestStatus, adminNote: '' });
   const confirm = useConfirm();
   const toast = useToast();
@@ -84,6 +91,7 @@ export function RequestInbox<R extends InboxRow>({ rows, pagination, columns, de
   };
 
   const handleDelete = async (row: R) => {
+    if (!remove) return;
     const agreed = await confirm({ title: 'حذف درخواست', message: `درخواست «${row.name}» برای همیشه حذف شود؟` });
     if (!agreed) return;
     const result = await remove(row.id);
@@ -131,7 +139,7 @@ export function RequestInbox<R extends InboxRow>({ rows, pagination, columns, de
         actions={(row) => (
           <>
             <IconButton label="مشاهده و رسیدگی" icon={Eye} onClick={() => setSelected(row)} />
-            <IconButton label="حذف" icon={Trash2} tone="danger" onClick={() => handleDelete(row)} />
+            {remove && <IconButton label="حذف" icon={Trash2} tone="danger" onClick={() => handleDelete(row)} />}
           </>
         )}
       />
@@ -142,14 +150,16 @@ export function RequestInbox<R extends InboxRow>({ rows, pagination, columns, de
         onClose={() => !form.pending && close()}
         title={selected ? `درخواست شماره ${selected.id.toLocaleString('fa-IR', { useGrouping: false })}` : ''}
         description={selected ? `ثبت‌شده در ${formatDateTime(selected.createdAt)}` : undefined}
-        size="lg"
+        size={modalSize}
         onSubmit={save}
         footer={
           selected && (
             <>
-              <Button variant="ghost" icon={Trash2} className="ml-auto text-[#B91C1C]" onClick={() => handleDelete(selected)} disabled={form.pending}>
-                حذف
-              </Button>
+              {remove && (
+                <Button variant="ghost" icon={Trash2} className="ml-auto text-[#B91C1C]" onClick={() => handleDelete(selected)} disabled={form.pending}>
+                  حذف
+                </Button>
+              )}
               <Button variant="secondary" onClick={close} disabled={form.pending}>
                 بستن
               </Button>
@@ -209,14 +219,18 @@ export function RequestInbox<R extends InboxRow>({ rows, pagination, columns, de
                 options={REQUEST_STATUSES.map((status) => ({ value: status.key, label: status.label }))}
                 error={form.errors.status}
               />
-              <TextArea
-                label="یادداشت داخلی"
-                hint="فقط مدیران می‌بینند؛ مثلاً نتیجه تماس یا قدم بعدی."
-                rows={6}
-                value={form.values.adminNote}
-                onChange={(value) => form.set('adminNote', value)}
-                error={form.errors.adminNote}
-              />
+              {notes ? (
+                notes(selected)
+              ) : (
+                <TextArea
+                  label="یادداشت داخلی"
+                  hint="فقط مدیران می‌بینند؛ مثلاً نتیجه تماس یا قدم بعدی."
+                  rows={6}
+                  value={form.values.adminNote}
+                  onChange={(value) => form.set('adminNote', value)}
+                  error={form.errors.adminNote}
+                />
+              )}
             </div>
           </div>
         )}

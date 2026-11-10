@@ -1,6 +1,6 @@
 import 'server-only';
 import { db } from '../../lib/db';
-import { requireAdmin } from '../../lib/auth/currentAdmin';
+import { requireRoot } from '../../lib/auth/currentAdmin';
 import { asTranslated, fa, Translated } from '../../i18n/translated';
 import { asOptions, FormFieldType } from './fields';
 
@@ -22,7 +22,7 @@ export type ServiceFormAdmin = {
 
 /** A service's form for the builder in the panel; null when there is no such service. */
 export async function getServiceFormForAdmin(serviceId: number): Promise<ServiceFormAdmin | null> {
-  await requireAdmin();
+  await requireRoot();
   if (!Number.isInteger(serviceId) || serviceId <= 0) return null;
   const service = await db.service.findUnique({
     where: { id: serviceId },

@@ -1,6 +1,6 @@
 import 'server-only';
 import { db } from '../../lib/db';
-import { requireAdmin } from '../../lib/auth/currentAdmin';
+import { requireRoot } from '../../lib/auth/currentAdmin';
 import { pageArgs, paginated, param } from '../../lib/pagination';
 import type { Prisma, TestimonialSource } from '../../generated/prisma/client';
 import { asTranslated, fa, Translated } from '../../i18n/translated';
@@ -29,7 +29,7 @@ export type TestimonialRow = {
 };
 
 export async function listTestimonials(params: Record<string, string | string[] | undefined>) {
-  await requireAdmin();
+  await requireRoot();
   const page = pageArgs(params);
   const state = param(params, 'state');
   const q = param(params, 'q');

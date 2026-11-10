@@ -1,6 +1,6 @@
 import 'server-only';
 import { db } from '../../lib/db';
-import { requireAdmin } from '../../lib/auth/currentAdmin';
+import { requireRoot } from '../../lib/auth/currentAdmin';
 import { pageArgs, paginated, param } from '../../lib/pagination';
 import { personSearch } from '../serviceRequests/queries';
 import type { Prisma } from '../../generated/prisma/client';
@@ -8,7 +8,7 @@ import type { Prisma } from '../../generated/prisma/client';
 export type ContactMessageRow = { id: number; topic: string | null; name: string; phone: string; message: string; readAt: string | null; createdAt: string };
 
 export async function listContactMessages(params: Record<string, string | string[] | undefined>) {
-  await requireAdmin();
+  await requireRoot();
   const page = pageArgs(params);
   const state = param(params, 'state');
   const where: Prisma.ContactMessageWhereInput = {

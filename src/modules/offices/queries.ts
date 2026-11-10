@@ -1,6 +1,6 @@
 import 'server-only';
 import { db } from '../../lib/db';
-import { requireAdmin } from '../../lib/auth/currentAdmin';
+import { requireRoot } from '../../lib/auth/currentAdmin';
 import { asTranslated, Translated } from '../../i18n/translated';
 
 export type OfficeRow = {
@@ -23,7 +23,7 @@ export type OfficeRow = {
 };
 
 export async function listOffices(): Promise<OfficeRow[]> {
-  await requireAdmin();
+  await requireRoot();
   const rows = await db.office.findMany({ orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }] });
   return rows.map(({ id, createdAt, updatedAt, phones, closedWeekdays, name, role, country, address, workingHours, ...row }) => ({
     id: Number(id),

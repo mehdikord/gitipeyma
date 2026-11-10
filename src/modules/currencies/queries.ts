@@ -1,12 +1,12 @@
 import 'server-only';
 import { db } from '../../lib/db';
-import { requireAdmin } from '../../lib/auth/currentAdmin';
+import { requireRoot } from '../../lib/auth/currentAdmin';
 import { asTranslated, Translated } from '../../i18n/translated';
 
 export type CurrencyRow = { id: number; code: string; name: Translated; symbol: string; flag: string | null; rateToToman: number; isActive: boolean; sortOrder: number; updatedAt: string };
 
 export async function listCurrencies(): Promise<CurrencyRow[]> {
-  await requireAdmin();
+  await requireRoot();
   const rows = await db.currency.findMany({ orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }] });
   return rows.map((row) => ({
     id: Number(row.id),

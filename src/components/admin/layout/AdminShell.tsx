@@ -5,16 +5,16 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ExternalLink, LogOut, Menu, UserCog, X } from 'lucide-react';
 import { logout } from '../../../modules/auth/actions';
-import { NAVIGATION, NavBadges } from './navigation';
+import { navigationFor, NavBadges } from './navigation';
 import { FOCUS } from '../ui/styles';
 
 const isActive = (pathname: string, href: string) => (href === '/admins' ? pathname === href : pathname === href || pathname.startsWith(`${href}/`));
 
-const Sidebar: React.FC<{ badges: NavBadges; onNavigate?: () => void }> = ({ badges, onNavigate }) => {
+const Sidebar: React.FC<{ badges: NavBadges; isRoot: boolean; onNavigate?: () => void }> = ({ badges, isRoot, onNavigate }) => {
   const pathname = usePathname();
   return (
     <nav aria-label="منوی پنل مدیریت" className="flex-1 overflow-y-auto px-3 pb-6">
-      {NAVIGATION.map((section, index) => (
+      {navigationFor(isRoot).map((section, index) => (
         <div key={section.title ?? index} className="mt-5 first:mt-2">
           {section.title && <p className="mb-1.5 px-3 text-[11px] font-bold text-[#7F979E]">{section.title}</p>}
           <ul className="space-y-0.5">
@@ -51,8 +51,8 @@ const Sidebar: React.FC<{ badges: NavBadges; onNavigate?: () => void }> = ({ bad
   );
 };
 
-const Brand = () => (
-  <Link href="/admins" className="flex items-center gap-3 rounded-lg px-5 py-5 focus-visible:outline-2 focus-visible:outline-[#E2C98C]">
+const Brand = ({ href }: { href: string }) => (
+  <Link href={href} className="flex items-center gap-3 rounded-lg px-5 py-5 focus-visible:outline-2 focus-visible:outline-[#E2C98C]">
     <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#E2C98C]/50 bg-[#0C252B] font-['Plus_Jakarta_Sans',sans-serif] text-lg font-black text-[#E2C98C]">RT</span>
     <span>
       <span className="block text-base font-black text-white">رویال تراول</span>
@@ -61,7 +61,7 @@ const Brand = () => (
   </Link>
 );
 
-export const AdminShell: React.FC<{ admin: { name: string; phone: string }; badges: NavBadges; children: React.ReactNode }> = ({ admin, badges, children }) => {
+export const AdminShell: React.FC<{ admin: { name: string; phone: string; isRoot: boolean }; home: string; badges: NavBadges; children: React.ReactNode }> = ({ admin, home, badges, children }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const pathname = usePathname();
 
@@ -71,8 +71,8 @@ export const AdminShell: React.FC<{ admin: { name: string; phone: string }; badg
     <div className="min-h-screen lg:pr-64">
       {/* Desktop sidebar */}
       <aside className="fixed inset-y-0 right-0 z-30 hidden w-64 flex-col bg-[#07191F] lg:flex">
-        <Brand />
-        <Sidebar badges={badges} />
+        <Brand href={home} />
+        <Sidebar badges={badges} isRoot={admin.isRoot} />
       </aside>
 
       {/* Phone drawer */}
@@ -81,12 +81,12 @@ export const AdminShell: React.FC<{ admin: { name: string; phone: string }; badg
           <button type="button" aria-label="بستن منو" className="absolute inset-0 bg-black/40" onClick={() => setDrawerOpen(false)} />
           <aside className="admin-drawer absolute inset-y-0 right-0 flex w-72 max-w-[85vw] flex-col bg-[#07191F]">
             <div className="flex items-center justify-between pl-3">
-              <Brand />
+              <Brand href={home} />
               <button type="button" onClick={() => setDrawerOpen(false)} aria-label="بستن منو" className="rounded-lg p-2 text-[#B7C8CD] hover:bg-white/10">
                 <X className="h-5 w-5" />
               </button>
             </div>
-            <Sidebar badges={badges} onNavigate={() => setDrawerOpen(false)} />
+            <Sidebar badges={badges} isRoot={admin.isRoot} onNavigate={() => setDrawerOpen(false)} />
           </aside>
         </div>
       )}
@@ -106,9 +106,7 @@ export const AdminShell: React.FC<{ admin: { name: string; phone: string }; badg
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#E6F4F3] text-sm font-black text-[#0B5F5B]">{admin.name.trim().charAt(0) || 'م'}</span>
             <span className="hidden text-right sm:block">
               <span className="block text-[13px] font-bold leading-tight text-[#14282D]">{admin.name}</span>
-              <span dir="ltr" className="block text-[11px] leading-tight text-[#5F7177]">
-                {admin.phone}
-              </span>
+              <span className="block text-[11px] leading-tight text-[#5F7177]">{admin.isRoot ? 'مدیر کل' : 'مدیر داخلی'}</span>
             </span>
             <UserCog className="h-4 w-4 text-[#5F7177] sm:hidden" />
           </Link>

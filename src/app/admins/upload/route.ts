@@ -5,7 +5,10 @@ import { storeImage } from '../../../lib/uploads';
 // Image uploads from the panel's forms. A route handler rather than a server action, so a
 // several-megabyte photo is not held to the server action body limit.
 export async function POST(request: Request) {
-  if (!(await getCurrentAdmin())) return NextResponse.json({ message: 'ابتدا وارد پنل شوید.' }, { status: 401 });
+  const admin = await getCurrentAdmin();
+  if (!admin) return NextResponse.json({ message: 'ابتدا وارد پنل شوید.' }, { status: 401 });
+  // Uploads are for site content, which only root admins edit
+  if (!admin.isRoot) return NextResponse.json({ message: 'شما به این بخش دسترسی ندارید.' }, { status: 403 });
 
   const form = await request.formData().catch(() => null);
   const file = form?.get('file');

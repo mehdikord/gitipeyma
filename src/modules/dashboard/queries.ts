@@ -1,12 +1,18 @@
 import 'server-only';
 import { db } from '../../lib/db';
-import { requireAdmin } from '../../lib/auth/currentAdmin';
+import { requireAdmin, requireRoot } from '../../lib/auth/currentAdmin';
+import { requestScope } from '../serviceRequests/access';
 import type { NavBadges } from '../../components/admin/layout/navigation';
 import { fa } from '../../i18n/translated';
 
 /** What is waiting for the team: new requests, unread messages, reviews to approve. */
 export async function getNavBadges(): Promise<NavBadges> {
-  await requireAdmin();
+  const admin = await requireAdmin();
+  // An internal admin only sees their services' requests, and none of the other sections
+  if (!admin.isRoot) {
+    const serviceRequests = await db.serviceRequest.count({ where: { status: 'pending', ...requestScope(admin) } });
+    return { serviceRequests, consultations: 0, messages: 0, testimonials: 0 };
+  }
   const [serviceRequests, consultations, messages, testimonials] = await Promise.all([
     db.serviceRequest.count({ where: { status: 'pending' } }),
     db.consultationRequest.count({ where: { status: 'pending' } }),
@@ -17,7 +23,7 @@ export async function getNavBadges(): Promise<NavBadges> {
 }
 
 export async function getDashboard() {
-  await requireAdmin();
+  await requireRoot();
   const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
   const [badges, requestsThisWeek, totalRequests, activeServices, publishedTestimonials, latestRequests, latestConsultations, latestMessages, topServices] = await Promise.all([
     getNavBadges(),

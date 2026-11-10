@@ -20,16 +20,38 @@ datasource db {
 // ---- Admin panel ------------------------------------------------------------------
 
 model Admin {
-  id          BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
-  name        String    @db.VarChar(255)
-  phone       String    @db.VarChar(20)
-  password    String    @db.VarChar(255)
-  lastLoginAt DateTime? @map("last_login_at") @db.Timestamp(0)
-  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamp(0)
-  updatedAt   DateTime  @updatedAt @map("updated_at") @db.Timestamp(0)
+  id          BigInt               @id @default(autoincrement()) @db.UnsignedBigInt
+  name        String               @db.VarChar(255)
+  phone       String               @db.VarChar(20)
+  password    String               @db.VarChar(255)
+  // A root admin (مدیر کل) can do everything. Everyone else is an internal admin (مدیر داخلی) who only
+  // works on the requests of the services linked in admin_service. The panel never makes a root
+  // admin; that is changed by hand in the database.
+  isRoot      Boolean              @default(false) @map("is_root")
+  lastLoginAt DateTime?            @map("last_login_at") @db.Timestamp(0)
+  createdAt   DateTime             @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt   DateTime             @updatedAt @map("updated_at") @db.Timestamp(0)
+  services    AdminService[]
+  notes       ServiceRequestNote[] @relation("NoteAuthor")
+  editedNotes ServiceRequestNote[] @relation("NoteEditor")
 
   @@unique([phone], map: "admins_phone_unique")
   @@map("admins")
+}
+
+// The services whose requests an internal admin works on.
+model AdminService {
+  id        BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  adminId   BigInt   @map("admin_id") @db.UnsignedBigInt
+  serviceId BigInt   @map("service_id") @db.UnsignedBigInt
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
+  admin     Admin    @relation(fields: [adminId], references: [id], onDelete: Cascade, map: "admin_service_admin_id_foreign")
+  service   Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade, map: "admin_service_service_id_foreign")
+
+  @@unique([adminId, serviceId], map: "admin_service_admin_id_service_id_unique")
+  @@index([serviceId], map: "admin_service_service_id_foreign")
+  @@map("admin_service")
 }
 
 // Free-form site settings (company name, support phones, WhatsApp number, ...).
@@ -108,6 +130,7 @@ model Service {
   steps                ServiceStep[]
   faqs                 ServiceFaq[]
   formFields           ServiceFormField[]
+  admins               AdminService[]
   requests             ServiceRequest[]
   consultationRequests ConsultationRequest[]
 
@@ -203,18 +226,18 @@ enum RequestStatus {
 // Who sent it and how to reach them, plus their answers to the service's own form.
 // A service with requests cannot be deleted (deactivate it instead), so no request loses its service.
 model ServiceRequest {
-  id          BigInt        @id @default(autoincrement()) @db.UnsignedBigInt
-  serviceId   BigInt        @map("service_id") @db.UnsignedBigInt
-  name        String        @db.VarChar(255)
-  phone       String        @db.VarChar(30)
+  id        BigInt               @id @default(autoincrement()) @db.UnsignedBigInt
+  serviceId BigInt               @map("service_id") @db.UnsignedBigInt
+  name      String               @db.VarChar(255)
+  phone     String               @db.VarChar(30)
   // The form's questions as they were when it was sent, with the answers (RequestAnswer[] in
   // src/modules/serviceForms/fields.ts).
-  answers     Json?
-  status      RequestStatus @default(pending)
-  adminNote   String?       @map("admin_note") @db.Text
-  createdAt   DateTime      @default(now()) @map("created_at") @db.Timestamp(0)
-  updatedAt   DateTime      @updatedAt @map("updated_at") @db.Timestamp(0)
-  service     Service       @relation(fields: [serviceId], references: [id], onDelete: Restrict, map: "service_requests_service_id_foreign")
+  answers   Json?
+  status    RequestStatus        @default(pending)
+  createdAt DateTime             @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt DateTime             @updatedAt @map("updated_at") @db.Timestamp(0)
+  service   Service              @relation(fields: [serviceId], references: [id], onDelete: Restrict, map: "service_requests_service_id_foreign")
+  notes     ServiceRequestNote[]
 
   @@index([serviceId], map: "service_requests_service_id_foreign")
   @@index([status], map: "service_requests_status_index")
@@ -222,6 +245,27 @@ model ServiceRequest {
 }
 
 // From /consultation. No service means the visitor asked for general guidance.
+// The team's written log on a service request. Anyone who can see the request can add notes and edit
+// any of them; the author and the last editor are kept (null once that admin is deleted).
+model ServiceRequestNote {
+  id               BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+  serviceRequestId BigInt         @map("service_request_id") @db.UnsignedBigInt
+  adminId          BigInt?        @map("admin_id") @db.UnsignedBigInt
+  editorId         BigInt?        @map("editor_id") @db.UnsignedBigInt
+  body             String         @db.Text
+  editedAt         DateTime?      @map("edited_at") @db.Timestamp(0)
+  createdAt        DateTime       @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt        DateTime       @updatedAt @map("updated_at") @db.Timestamp(0)
+  request          ServiceRequest @relation(fields: [serviceRequestId], references: [id], onDelete: Cascade, map: "service_request_notes_service_request_id_foreign")
+  admin            Admin?         @relation("NoteAuthor", fields: [adminId], references: [id], onDelete: SetNull, map: "service_request_notes_admin_id_foreign")
+  editor           Admin?         @relation("NoteEditor", fields: [editorId], references: [id], onDelete: SetNull, map: "service_request_notes_editor_id_foreign")
+
+  @@index([serviceRequestId], map: "service_request_notes_service_request_id_foreign")
+  @@index([adminId], map: "service_request_notes_admin_id_foreign")
+  @@index([editorId], map: "service_request_notes_editor_id_foreign")
+  @@map("service_request_notes")
+}
+
 model ConsultationRequest {
   id          BigInt        @id @default(autoincrement()) @db.UnsignedBigInt
   serviceId   BigInt?       @map("service_id") @db.UnsignedBigInt
@@ -274,7 +318,7 @@ model Testimonial {
   year              Json
   rating            Int                    @default(5) @db.UnsignedTinyInt
   categoryLabel     Json                   @map("category_label")
-  verifiedCode      Json                @map("verified_code")
+  verifiedCode      Json                   @map("verified_code")
   outcomeHeadline   Json                   @map("outcome_headline")
   originDestination Json                   @map("origin_destination")
   trackingCode      String?                @map("tracking_code") @db.VarChar(100)
