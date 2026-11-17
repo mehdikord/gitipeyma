@@ -11,11 +11,13 @@ import { FilterBar } from '../../../../components/admin/ui/FilterBar';
 import { PageHeader } from '../../../../components/admin/ui/PageHeader';
 import type { Option } from '../../../../components/admin/ui/fields';
 
-const topic = (row: ConsultationRow) => row.service?.title ?? 'مشاوره عمومی (هنوز نمی‌داند)';
+const topic = (row: ConsultationRow) => row.service?.title ?? 'مشاوره عمومی';
+// Only requests from the old three-step form chose a call time.
+const callTime = (row: ConsultationRow) => (row.callTime ? callTimeText(row.callTime) : '—');
 
 export const ConsultationsView: React.FC<{ list: Paginated<ConsultationRow> & { opened: ConsultationRow | null }; services: Option[] }> = ({ list, services }) => (
   <>
-    <PageHeader title="درخواست مشاوره" description="درخواست‌های صفحه مشاوره، با موضوع و زمانی که متقاضی برای تماس خواسته است." />
+    <PageHeader title="درخواست مشاوره" description="درخواست‌های صفحه مشاوره: نام، شماره تماس و پیام متقاضی." />
     <FilterBar
       searchPlaceholder="جستجوی نام یا شماره تماس"
       filters={[
@@ -32,11 +34,11 @@ export const ConsultationsView: React.FC<{ list: Paginated<ConsultationRow> & { 
       remove={deleteConsultation}
       columns={[
         { key: 'topic', header: 'موضوع', cell: (row) => <span className="font-normal">{topic(row)}</span> },
-        { key: 'callTime', header: 'زمان تماس', hideOnMobile: true, cell: (row) => <span className="font-normal">{callTimeText(row.callTime)}</span> },
+        { key: 'callTime', header: 'زمان تماس', hideOnMobile: true, cell: (row) => <span className="font-normal">{callTime(row)}</span> },
       ]}
       details={(row) => [
         { label: 'موضوع', value: topic(row) },
-        { label: 'زمان تماس', value: callTimeText(row.callTime) },
+        ...(row.callTime ? [{ label: 'زمان تماس', value: callTime(row) }] : []),
       ]}
     />
   </>

@@ -1,12 +1,10 @@
 'use client';
 
 import React, { useEffect, useRef, useState, useTransition } from 'react';
-import { AlertCircle, ArrowLeft, ArrowRight, Check, CloudSun, HelpCircle, PhoneCall, Send, ShieldCheck, Sun, Zap } from 'lucide-react';
-import type { ServiceGroupItem } from '../../types';
+import { AlertCircle, PhoneCall, Plane, Send, ShieldCheck, X } from 'lucide-react';
 import { CITIES, LonLat, ROAD_PATH, STAGE, project, roadFraction } from '../home/hero/geo';
 import { telHref } from '../../utils/contact';
-import { validateFullName, validatePhoneNumber } from '../../utils/validation';
-import { CALL_TIMES, CallTimeKey, callTimeLabel, callTimeText } from '../../modules/consultations/callTimes';
+import { validateFullName, validateMessage, validatePhoneNumber } from '../../utils/validation';
 import { submitConsultationRequest } from '../../modules/site/actions';
 import { RequestReceived } from '../ui/RequestReceived';
 import { TextField } from '../ui/TextField';
@@ -14,55 +12,40 @@ import { useSite } from '../site/SiteProvider';
 import { useI18n } from '../../i18n/I18nProvider';
 
 const FOCUS = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-line';
-
-const TIME_ICONS: Record<CallTimeKey, React.ElementType> = { morning: Sun, afternoon: CloudSun, asap: Zap };
-const TIMES = CALL_TIMES.map((time) => ({ value: time.key, icon: TIME_ICONS[time.key] }));
+const MESSAGE_MAX = 3000;
 
 type TopicService = { id: number; slug: string; shortTitle: string };
 
-// Each finished step carries the route one stop further: three steps, Tehran to Istanbul.
+// Every field that is filled in carries the route one stop further: three fields, Tehran to Istanbul.
 const STOPS: { at: LonLat; name: 'tehran' | 'bazargan' | 'ankara' | 'istanbul'; above?: boolean }[] = [
-  { at: CITIES.tehran, name: 'tehran' },
+  { at: CITIES.tehran, name: 'tehran', above: true },
   { at: CITIES.bazargan, name: 'bazargan', above: true },
   { at: CITIES.ankara, name: 'ankara', above: true },
-  { at: CITIES.istanbul, name: 'istanbul' },
+  { at: CITIES.istanbul, name: 'istanbul', above: true },
 ];
 const STOP_FRACTIONS = STOPS.map((stop) => roadFraction(stop.at));
+const LEGS = STOPS.length - 1;
 
-// ---- The route that grows as the visitor moves through the form -----------------
+// ---- The map the form is docked under ----------------------------------------------
 
-const ProgressMap: React.FC<{ reached: number; bandRef: React.RefObject<HTMLDivElement | null> }> = ({ reached, bandRef }) => {
+const RouteMap: React.FC<{ reached: number; arrived: boolean }> = ({ reached, arrived }) => {
   const names = useI18n().t.consultation.stops;
-  // On desktop the map sits beside the text: on the left in Persian, on the right in English and Turkish
   return (
-    <div
-      ref={bandRef}
-      aria-hidden="true"
-      className="consult-band lg:ltr:left-auto! lg:ltr:right-0! lg:ltr:[-webkit-mask-image:linear-gradient(to_right,transparent,#000_12%)]! lg:ltr:[mask-image:linear-gradient(to_right,transparent,#000_12%)]!"
-    >
+    <div aria-hidden="true" data-arrived={arrived} className="consult-band">
       <div className="consult-stage">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/hero/map.svg" alt="" width={STAGE.width} height={STAGE.height} className="hero-map-image map-soft-edges absolute inset-0 w-full h-full" />
-        <svg viewBox={`0 0 ${STAGE.width} ${STAGE.height}`} className="absolute inset-0 w-full h-full">
-          <path d={ROAD_PATH} fill="none" stroke="#7FA2AA" strokeOpacity="0.4" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="2 14" />
-          <path
-            className="consult-route"
-            d={ROAD_PATH}
-            fill="none"
-            stroke="#E2C98C"
-            strokeWidth="6"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            pathLength={1}
-            style={{ strokeDashoffset: 1 - STOP_FRACTIONS[reached] }}
-          />
+        <img src="/hero/map.svg" alt="" width={STAGE.width} height={STAGE.height} className="hero-map-image absolute inset-0 w-full h-full" />
+        <svg viewBox={`0 0 ${STAGE.width} ${STAGE.height}`} className="absolute inset-0 w-full h-full overflow-visible">
+          <path d={ROAD_PATH} className="consult-road" />
+          <path d={ROAD_PATH} className="consult-route-glow" pathLength={1} style={{ strokeDashoffset: 1 - STOP_FRACTIONS[reached] }} />
+          <path d={ROAD_PATH} className="consult-route" pathLength={1} style={{ strokeDashoffset: 1 - STOP_FRACTIONS[reached] }} />
         </svg>
         {STOPS.map((stop, index) => {
           const point = project(stop.at);
           return (
             <span
               key={stop.name}
-              data-state={index === reached ? 'current' : index < reached ? 'passed' : 'ahead'}
+              data-state={arrived || index < reached ? 'passed' : index === reached ? 'current' : 'ahead'}
               data-above={stop.above}
               className="consult-stop"
               style={{ left: `${(point.x / STAGE.width) * 100}%`, top: `${(point.y / STAGE.height) * 100}%` }}
@@ -77,77 +60,74 @@ const ProgressMap: React.FC<{ reached: number; bandRef: React.RefObject<HTMLDivE
   );
 };
 
+// ---- The same journey in small, at the top of the card where the visitor is typing ----
+
+const TicketRoute: React.FC<{ done: number }> = ({ done }) => {
+  const { t: { consultation: t }, num, fill } = useI18n();
+  const percent = (done / LEGS) * 100;
+  const count = fill(t.routeCount, { done: num(done), total: num(LEGS) });
+  return (
+    <div role="img" aria-label={`${t.routeAria}: ${count}`} className="flex items-center gap-3 sm:gap-4">
+      <span className="flex items-center gap-2 text-sm font-extrabold text-ink-strong">
+        <span className="w-2.5 h-2.5 rounded-full bg-gold-fill ring-4 ring-gold-line/20" />
+        {t.routeFrom}
+      </span>
+      <span className="relative flex-1 h-8">
+        <span className="absolute inset-x-0 top-1/2 border-t-2 border-dashed border-ink/20" />
+        <span className="consult-ticket-fill absolute start-0 top-1/2 -mt-px h-0.5 rounded-full" style={{ width: `${percent}%` }} />
+        <span className="consult-ticket-plane absolute top-1/2 -translate-y-1/2 ltr:-scale-x-100" style={{ insetInlineStart: `calc(${percent}% - ${(percent / 100) * 1.5}rem)` }}>
+          <Plane className="w-6 h-6 rotate-45 text-gold fill-gold/25" strokeWidth={1.75} />
+        </span>
+      </span>
+      <span className="flex items-center gap-2 text-sm font-extrabold text-ink-muted data-[done=true]:text-ink-strong" data-done={done === LEGS}>
+        {t.routeTo}
+        <span className={`w-2.5 h-2.5 rounded-full transition-colors duration-500 ${done === LEGS ? 'bg-gold-fill ring-4 ring-gold-line/20' : 'border-2 border-ink/30'}`} />
+      </span>
+      <span className="hidden sm:inline-flex shrink-0 items-center px-2.5 py-1 rounded-full bg-ink/5 text-xs font-bold tabular-nums text-ink-muted">{count}</span>
+    </div>
+  );
+};
+
 // ---- Page ----------------------------------------------------------------------
 
-export const ConsultationPage: React.FC<{ services: TopicService[]; groups: ServiceGroupItem[] }> = ({ services, groups }) => {
+export const ConsultationPage: React.FC<{ services: TopicService[] }> = ({ services }) => {
   const SUPPORT_PHONE = useSite().settings.support_phone;
-  const { t: { consultation: t }, locale, num, fill } = useI18n();
-  const GENERAL_TOPIC = t.generalTopic;
-  const [step, setStep] = useState(0);
-  // The topic as shown, and the service it is about (null for general guidance).
-  const [topic, setTopic] = useState('');
-  const [topicServiceId, setTopicServiceId] = useState<number | null>(null);
-  const [time, setTime] = useState<CallTimeKey | ''>('');
+  const { t: { consultation: t }, locale, num } = useI18n();
+  // Set only when the visitor came from a service's "consult about this" link
+  const [service, setService] = useState<TopicService | null>(null);
   const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('');
-  const [notes, setNotes] = useState('');
-  const [touched, setTouched] = useState({ fullName: false, phone: false });
+  const [message, setMessage] = useState('');
+  const [touched, setTouched] = useState({ fullName: false, phone: false, message: false });
   const [serverErrors, setServerErrors] = useState<Record<string, string>>({});
   const [formError, setFormError] = useState<string | null>(null);
   const [reference, setReference] = useState<number | null>(null);
   const [isSubmitting, startSubmit] = useTransition();
 
-  const bandRef = useRef<HTMLDivElement>(null);
-  const headingRef = useRef<HTMLHeadingElement>(null);
   const nameRef = useRef<HTMLInputElement>(null);
   const phoneRef = useRef<HTMLInputElement>(null);
-  const hasMoved = useRef(false);
+  const messageRef = useRef<HTMLTextAreaElement>(null);
 
   const nameCheck = validateFullName(fullName, locale);
   const phoneCheck = validatePhoneNumber(phone, locale);
+  const messageCheck = validateMessage(message, true, locale);
+  const messageError = touched.message ? messageCheck.error ?? serverErrors.message : undefined;
+  const done = reference ? LEGS : [nameCheck.isValid, phoneCheck.isValid, messageCheck.isValid].filter(Boolean).length;
 
-  // Arriving from a service's "consult about this" link means the first step is already done
   useEffect(() => {
     const slug = new URLSearchParams(window.location.search).get('service');
-    const service = services.find((s) => s.slug === slug);
-    if (service) {
-      setTopic(service.shortTitle);
-      setTopicServiceId(service.id);
-      setStep(1);
-    }
+    setService(services.find((s) => s.slug === slug) ?? null);
   }, [services]);
-
-  const goTo = (next: number) => {
-    hasMoved.current = true;
-    setStep(next);
-  };
-
-  // On phones the map sits above the form, so return to it: seeing the route move is the point
-  const showProgress = () => {
-    if (window.innerWidth < 1024) bandRef.current?.scrollIntoView({ block: 'start' });
-  };
-
-  // Moving between steps replaces the content, so keyboard and screen reader users go with it
-  useEffect(() => {
-    if (!hasMoved.current) return;
-    headingRef.current?.focus({ preventScroll: true });
-    showProgress();
-  }, [step]);
-
-  useEffect(() => {
-    if (reference) showProgress();
-  }, [reference]);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    setTouched({ fullName: true, phone: true });
+    setTouched({ fullName: true, phone: true, message: true });
     if (!nameCheck.isValid) return nameRef.current?.focus();
     if (!phoneCheck.isValid) return phoneRef.current?.focus();
-
-    if (!time) return goTo(1);
+    if (!messageCheck.isValid) return messageRef.current?.focus();
 
     startSubmit(async () => {
-      const result = await submitConsultationRequest({ serviceId: topicServiceId, callTime: time, name: fullName, phone, description: notes }, locale);
+      const result = await submitConsultationRequest({ serviceId: service?.id ?? null, name: fullName, phone, message }, locale);
       if (result.ok) {
         setReference(result.data!.reference);
         setServerErrors({});
@@ -161,278 +141,163 @@ export const ConsultationPage: React.FC<{ services: TopicService[]; groups: Serv
 
   const startOver = () => {
     setReference(null);
-    setTopic('');
-    setTopicServiceId(null);
-    setTime('');
-    setNotes('');
-    hasMoved.current = true;
-    setStep(0);
-  };
-
-  const canReach = (index: number) => index === 0 || (index === 1 && Boolean(topic)) || (index === 2 && Boolean(topic && time));
-
-  const topicButton = (service: TopicService) => {
-    const isSelected = topicServiceId === service.id;
-    return (
-      <button
-        key={service.id}
-        type="button"
-        aria-pressed={isSelected}
-        onClick={() => {
-          setTopic(service.shortTitle);
-          setTopicServiceId(service.id);
-          goTo(1);
-        }}
-        className={`inline-flex items-center gap-2 min-h-11 px-4 py-2 rounded-lg border text-sm font-bold text-start transition-colors ${FOCUS} ${
-          isSelected ? 'bg-gold-fill border-gold-line text-on-accent' : 'bg-surface border-ink/15 text-ink-soft hover:border-gold-line/70 hover:text-ink-strong'
-        }`}
-      >
-        {service.shortTitle}
-      </button>
-    );
+    setMessage('');
+    setTouched({ fullName: false, phone: false, message: false });
   };
 
   return (
     <main className="bg-canvas text-ink">
-      <section className="relative isolate overflow-hidden lg:min-h-[calc(100svh-7rem)]">
-        <ProgressMap reached={reference ? 3 : step} bandRef={bandRef} />
+      <section className="consult-section relative isolate overflow-hidden pb-16 sm:pb-24">
+        <div className="relative max-w-3xl mx-auto px-4 sm:px-6 pt-10 sm:pt-16 text-center">
+          <p className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full border border-gold-line/30 bg-gold-deep/10 text-[13px] font-bold text-gold">
+            <span className="relative flex w-2 h-2">
+              <span className="consult-live absolute inset-0 rounded-full bg-gold-fill" />
+              <span className="relative w-2 h-2 rounded-full bg-gold-fill" />
+            </span>
+            {t.eyebrow}
+          </p>
+          <h1 className="mt-5 text-[2rem] sm:text-5xl lg:text-[3.6rem] font-black leading-[1.25] text-ink-strong [text-wrap:balance]">{t.title}</h1>
+          <p className="mt-5 mx-auto max-w-2xl text-[15px] sm:text-lg leading-[1.95] text-ink-soft [text-wrap:pretty]">{t.intro}</p>
+        </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-14 lg:py-14 grid grid-cols-1 lg:grid-cols-12">
-          <div className="lg:col-span-7 text-start lg:ltr:col-start-6">
-            <h1 className={`${step > 0 || reference ? 'sr-only lg:not-sr-only' : ''} mt-2 lg:mt-0 text-[1.9rem] sm:text-[2.6rem] xl:text-5xl font-black leading-[1.3] text-ink [text-wrap:balance]`}>{t.title}</h1>
-            <p className={`${step > 0 || reference ? 'hidden lg:block' : ''} mt-4 max-w-2xl text-[15px] sm:text-lg leading-[1.95] text-ink-soft`}>
-              {t.intro}
-            </p>
+        <RouteMap reached={done} arrived={Boolean(reference)} />
 
-            {reference ? (
-              <div className="mt-8">
-                <RequestReceived
-                  reference={reference}
-                  title={t.receivedTitle}
-                  text={fill(t.receivedText, { time: callTimeText(time, locale) })}
-                  onReset={startOver}
-                  resetLabel={t.another}
-                />
+        <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 -mt-20 sm:-mt-28 lg:-mt-36">
+          <div className="consult-card rounded-[1.4rem] p-px">
+            <div className="rounded-[calc(1.4rem-1px)] bg-surface/90 backdrop-blur-xl">
+              <div className="px-5 sm:px-8 pt-6 sm:pt-7 pb-6">
+                <TicketRoute done={done} />
               </div>
-            ) : (
-              <>
-                <ol className="mt-3 lg:mt-8 grid grid-cols-3 border-t border-ink/15" aria-label={t.stepsAria}>
-                  {t.steps.map((name, index) => {
-                    const isCurrent = index === step;
-                    const isDone = canReach(index + 1) || (index === 0 && Boolean(topic));
-                    const reachable = canReach(index);
-                    return (
-                      <li key={name} className="relative">
-                        {isCurrent && <span aria-hidden="true" className="absolute -top-px inset-x-0 h-0.5 bg-gold-fill" />}
-                        <button
-                          type="button"
-                          disabled={!reachable}
-                          aria-current={isCurrent ? 'step' : undefined}
-                          onClick={() => goTo(index)}
-                          className={`flex items-center gap-2 w-full min-h-12 py-2.5 pe-2 text-start text-[13px] sm:text-sm font-bold transition-colors rounded-b disabled:cursor-default focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-gold-line ${
-                            isCurrent ? 'text-ink-strong' : reachable ? 'text-ink-soft hover:text-ink-strong' : 'text-ink-dim'
-                          }`}
-                        >
-                          <span
-                            aria-hidden="true"
-                            className={`shrink-0 w-6 h-6 rounded-full flex items-center justify-center text-xs font-black ${
-                              isDone && !isCurrent ? 'bg-brand-fill text-on-accent' : isCurrent ? 'bg-gold-fill text-on-accent' : 'border border-ink/25 text-ink-muted'
-                            }`}
+
+              {/* The perforation between the ticket's stub and its body */}
+              <div aria-hidden="true" className="relative">
+                <span className="absolute -start-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-canvas" />
+                <span className="absolute -end-3 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-canvas" />
+                <span className="block mx-5 sm:mx-8 border-t-2 border-dashed border-ink/10" />
+              </div>
+
+              <div className="px-5 sm:px-8 pt-7 pb-7 sm:pb-8 text-start">
+                {reference ? (
+                  <RequestReceived reference={reference} title={t.receivedTitle} text={t.receivedText} onReset={startOver} resetLabel={t.another} />
+                ) : (
+                  <form onSubmit={handleSubmit} noValidate>
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <h2 className="text-xl sm:text-2xl font-black text-ink-strong">{t.formTitle}</h2>
+                      {service && (
+                        <span className="inline-flex items-center gap-1.5 ps-3 pe-1 py-1 rounded-full bg-brand/10 border border-brand/25 text-[13px] text-ink-soft">
+                          {t.about} <span className="font-bold text-brand-bright">{service.shortTitle}</span>
+                          <button
+                            type="button"
+                            onClick={() => setService(null)}
+                            aria-label={t.removeAbout}
+                            className={`flex items-center justify-center w-6 h-6 rounded-full text-ink-muted hover:text-ink-strong hover:bg-ink/10 transition-colors ${FOCUS}`}
                           >
-                            {isDone && !isCurrent ? <Check className="w-3.5 h-3.5" /> : num(index + 1)}
-                          </span>
-                          <span>{name}</span>
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ol>
-
-                <div key={step} className="sup-answer mt-6">
-                  {step === 0 && (
-                    <div>
-                      <h2 ref={headingRef} tabIndex={-1} className="text-xl sm:text-2xl font-black text-ink-strong outline-none">
-                        {t.topicQuestion}
-                      </h2>
-                      <button
-                        type="button"
-                        aria-pressed={topic === GENERAL_TOPIC}
-                        onClick={() => {
-                          setTopic(GENERAL_TOPIC);
-                          setTopicServiceId(null);
-                          goTo(1);
-                        }}
-                        className={`group mt-4 w-full flex items-center gap-3 min-h-14 px-4 py-3 rounded-lg border text-start transition-colors ${FOCUS} ${
-                          topic === GENERAL_TOPIC ? 'bg-gold-fill border-gold-line text-on-accent' : 'border-gold-line/50 text-gold hover:bg-gold-deep/10'
-                        }`}
-                      >
-                        <HelpCircle aria-hidden="true" className="w-5 h-5 shrink-0" />
-                        <span className="font-extrabold text-[15px]">{t.notSure}</span>
-                        <ArrowLeft aria-hidden="true" className="w-4 h-4 ms-auto shrink-0 transition-transform ltr:rotate-180 rtl:group-hover:-translate-x-1 ltr:group-hover:translate-x-1" />
-                      </button>
-                      <div className="mt-5 space-y-4">
-                        {groups.map((line) => (
-                          <div key={line.id}>
-                            <h3 className={`mb-2 text-[13px] font-bold ${line.tone === 'teal' ? 'text-brand-bright' : 'text-gold'}`}>{line.title}</h3>
-                            <div className="flex flex-wrap gap-2">
-                              {line.slugs.map((slug) => {
-                                const service = services.find((s) => s.slug === slug);
-                                return service ? topicButton(service) : null;
-                              })}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
+                            <X aria-hidden="true" className="w-3.5 h-3.5" />
+                          </button>
+                        </span>
+                      )}
                     </div>
-                  )}
 
-                  {step === 1 && (
-                    <div>
-                      <h2 ref={headingRef} tabIndex={-1} className="text-xl sm:text-2xl font-black text-ink-strong outline-none">
-                        {t.timeQuestion}
-                      </h2>
-                      <p className="mt-2 text-sm text-ink-muted">
-                        {t.topicLabel} <span className="font-bold text-gold">{topic}</span>
-                      </p>
-                      <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        {TIMES.map((option) => {
-                          const Icon = option.icon;
-                          const isSelected = time === option.value;
-                          const label = callTimeLabel(option.value, locale);
-                          return (
-                            <button
-                              key={option.value}
-                              type="button"
-                              aria-pressed={isSelected}
-                              onClick={() => {
-                                setTime(option.value);
-                                goTo(2);
-                              }}
-                              className={`flex sm:flex-col items-center sm:items-start gap-3 sm:gap-2 min-h-16 p-4 rounded-lg border text-start transition-colors ${FOCUS} ${
-                                isSelected ? 'bg-gold-fill border-gold-line text-on-accent' : 'bg-surface border-ink/15 text-ink-strong hover:border-gold-line/70'
-                              }`}
-                            >
-                              <Icon aria-hidden="true" className={`w-5 h-5 shrink-0 ${isSelected ? '' : 'text-gold'}`} />
-                              <span>
-                                <span className="block font-extrabold text-[15px]">{label.title}</span>
-                                <span className={`block mt-0.5 text-[13px] ${isSelected ? 'text-on-accent/75' : 'text-ink-muted'}`}>{label.hours}</span>
-                              </span>
-                            </button>
-                          );
-                        })}
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => goTo(0)}
-                        className={`mt-4 inline-flex items-center gap-2 py-2 text-sm font-bold text-ink-muted hover:text-ink-strong transition-colors rounded ${FOCUS}`}
-                      >
-                        <ArrowRight aria-hidden="true" className="w-4 h-4 ltr:rotate-180" />
-                        <span>{t.changeTopic}</span>
-                      </button>
+                    <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-5">
+                      <TextField
+                        id="consult-fullname"
+                        label={t.name}
+                        value={fullName}
+                        inputRef={nameRef}
+                        autoComplete="name"
+                        placeholder={t.namePlaceholder}
+                        valid={nameCheck.isValid}
+                        error={touched.fullName ? nameCheck.error ?? serverErrors.name : undefined}
+                        onChange={setFullName}
+                        onBlur={() => setTouched((current) => ({ ...current, fullName: fullName !== '' || current.fullName }))}
+                      />
+                      <TextField
+                        id="consult-phone"
+                        label={t.phone}
+                        value={phone}
+                        inputRef={phoneRef}
+                        type="tel"
+                        inputMode="tel"
+                        autoComplete="tel"
+                        placeholder={t.phonePlaceholder}
+                        ltr
+                        valid={phoneCheck.isValid}
+                        error={touched.phone ? phoneCheck.error ?? serverErrors.phone : undefined}
+                        onChange={setPhone}
+                        onBlur={() => setTouched((current) => ({ ...current, phone: phone !== '' || current.phone }))}
+                      />
                     </div>
-                  )}
 
-                  {step === 2 && (
-                    <form onSubmit={handleSubmit} noValidate>
-                      <h2 ref={headingRef} tabIndex={-1} className="text-xl sm:text-2xl font-black text-ink-strong outline-none">
-                        {t.contactQuestion}
-                      </h2>
-                      <p className="mt-2 text-sm leading-relaxed text-ink-muted">
-                        {t.topicLabel} <span className="font-bold text-gold">{topic}</span>
-                        {t.separator} {t.timeLabel} <span className="font-bold text-gold">{time && callTimeText(time, locale)}</span>
-                      </p>
-
-                      <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-5">
-                        <TextField
-                          id="consult-fullname"
-                          label={t.name}
-                          value={fullName}
-                          inputRef={nameRef}
-                          autoComplete="name"
-                          placeholder={t.namePlaceholder}
-                          valid={nameCheck.isValid}
-                          error={touched.fullName ? nameCheck.error ?? serverErrors.name : undefined}
-                          onChange={setFullName}
-                          onBlur={() => setTouched((current) => ({ ...current, fullName: fullName !== '' || current.fullName }))}
-                        />
-                        <TextField
-                          id="consult-phone"
-                          label={t.phone}
-                          value={phone}
-                          inputRef={phoneRef}
-                          type="tel"
-                          inputMode="tel"
-                          autoComplete="tel"
-                          placeholder={t.phonePlaceholder}
-                          ltr
-                          valid={phoneCheck.isValid}
-                          error={touched.phone ? phoneCheck.error ?? serverErrors.phone : undefined}
-                          onChange={setPhone}
-                          onBlur={() => setTouched((current) => ({ ...current, phone: phone !== '' || current.phone }))}
-                        />
-                      </div>
-
-                      <div className="mt-5">
-                        <label htmlFor="consult-notes" className="block mb-2 text-sm font-bold text-ink">
-                          {t.notes} <span className="font-normal text-ink-muted">{t.optional}</span>
-                        </label>
+                    <div className="mt-5">
+                      <label htmlFor="consult-message" className="block mb-2 text-sm font-bold text-ink">
+                        {t.message}
+                      </label>
+                      <div className="relative">
                         <textarea
-                          id="consult-notes"
-                          rows={3}
-                          value={notes}
-                          onChange={(event) => setNotes(event.target.value)}
-                          placeholder={t.notesPlaceholder}
-                          className="w-full px-4 py-3.5 rounded-lg bg-surface border border-ink/15 hover:border-ink/30 text-base leading-relaxed text-ink-strong placeholder:text-ink-dim outline-none transition-colors resize-none focus:border-gold-line focus:ring-1 focus:ring-gold-line"
+                          ref={messageRef}
+                          id="consult-message"
+                          rows={5}
+                          required
+                          maxLength={MESSAGE_MAX}
+                          value={message}
+                          aria-invalid={Boolean(messageError)}
+                          aria-describedby={messageError ? 'consult-message-error' : undefined}
+                          onChange={(event) => setMessage(event.target.value)}
+                          onBlur={() => setTouched((current) => ({ ...current, message: message !== '' || current.message }))}
+                          placeholder={t.messagePlaceholder}
+                          className={`block w-full min-h-36 px-4 pt-3.5 pb-8 rounded-lg bg-surface border text-base leading-relaxed text-ink-strong placeholder:text-ink-dim outline-none transition-colors resize-y focus:border-gold-line focus:ring-1 focus:ring-gold-line ${
+                            messageError ? 'border-danger' : 'border-ink/15 hover:border-ink/30'
+                          }`}
                         />
+                        <span aria-hidden="true" className="pointer-events-none absolute bottom-2.5 end-4 text-xs tabular-nums text-ink-dim">
+                          {num(message.length)} / {num(MESSAGE_MAX)}
+                        </span>
                       </div>
-
-                      {formError && (
-                        <p role="alert" className="mt-5 flex items-start gap-2 text-sm leading-relaxed text-danger">
+                      {messageError && (
+                        <p id="consult-message-error" className="flex items-start gap-1.5 mt-2 text-[13px] leading-relaxed text-danger">
                           <AlertCircle aria-hidden="true" className="w-4 h-4 mt-0.5 shrink-0" />
-                          <span>{serverErrors.description ?? formError}</span>
+                          <span>{messageError}</span>
                         </p>
                       )}
+                    </div>
 
-                      <div className="mt-5 flex flex-col sm:flex-row sm:items-center gap-3">
-                        <button
-                          type="submit"
-                          disabled={isSubmitting}
-                          className={`inline-flex items-center justify-center gap-2.5 min-h-14 px-8 rounded-lg bg-brand-fill hover:bg-brand-bright-fill disabled:opacity-70 disabled:cursor-wait text-on-accent font-black text-base transition-colors ${FOCUS}`}
-                        >
-                          <Send className="w-5 h-5" />
-                          <span>{isSubmitting ? t.submitting : t.submit}</span>
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => goTo(1)}
-                          className={`inline-flex items-center justify-center gap-2 py-2.5 px-3 text-sm font-bold text-ink-muted hover:text-ink-strong transition-colors rounded ${FOCUS}`}
-                        >
-                          <ArrowRight aria-hidden="true" className="w-4 h-4 ltr:rotate-180" />
-                          <span>{t.changeTime}</span>
-                        </button>
-                      </div>
-                      <p className="mt-3 flex items-start gap-2 text-[13px] leading-relaxed text-ink-muted">
-                        <ShieldCheck aria-hidden="true" className="w-4 h-4 mt-0.5 shrink-0 text-brand" />
-                        <span>{t.privacy}</span>
+                    {formError && (
+                      <p role="alert" className="mt-5 flex items-start gap-2 text-sm leading-relaxed text-danger">
+                        <AlertCircle aria-hidden="true" className="w-4 h-4 mt-0.5 shrink-0" />
+                        <span>{formError}</span>
                       </p>
-                    </form>
-                  )}
-                </div>
-              </>
-            )}
+                    )}
 
-            {/* For anyone who can't wait for a call back */}
-            <a
-              href={telHref(SUPPORT_PHONE)}
-              className={`mt-8 flex flex-wrap items-center gap-x-2 gap-y-1 pt-5 border-t border-ink/10 text-sm text-ink-muted hover:text-ink-strong transition-colors ${FOCUS}`}
-            >
-              <PhoneCall aria-hidden="true" className="w-4 h-4 text-brand" />
-              <span>{t.urgent}</span>
-              <span dir="ltr" className="font-bold text-ink whitespace-nowrap">
-                {SUPPORT_PHONE}
-              </span>
-            </a>
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className={`consult-submit group relative mt-6 w-full inline-flex items-center justify-center gap-3 min-h-14 px-8 rounded-xl overflow-hidden bg-gold-fill text-on-accent font-black text-base sm:text-[17px] disabled:opacity-70 disabled:cursor-wait transition-[transform,box-shadow] active:scale-[0.985] ${FOCUS}`}
+                    >
+                      <span>{isSubmitting ? t.submitting : t.submit}</span>
+                      <Send aria-hidden="true" className="w-5 h-5 transition-transform ltr:group-hover:translate-x-1 rtl:-scale-x-100 rtl:group-hover:-translate-x-1" />
+                    </button>
+
+                    <p className="mt-4 flex items-start justify-center gap-2 text-[13px] leading-relaxed text-ink-muted">
+                      <ShieldCheck aria-hidden="true" className="w-4 h-4 mt-0.5 shrink-0 text-brand" />
+                      <span>{t.privacy}</span>
+                    </p>
+                  </form>
+                )}
+              </div>
+            </div>
           </div>
+
+          {/* For anyone who can't wait for a call back */}
+          <a
+            href={telHref(SUPPORT_PHONE)}
+            className={`mt-8 mx-auto flex w-fit flex-wrap items-center justify-center gap-x-2 gap-y-1 px-4 py-2 rounded-full text-sm text-ink-muted hover:text-ink-strong transition-colors ${FOCUS}`}
+          >
+            <PhoneCall aria-hidden="true" className="w-4 h-4 text-brand" />
+            <span>{t.urgent}</span>
+            <span dir="ltr" className="font-bold text-ink whitespace-nowrap">
+              {SUPPORT_PHONE}
+            </span>
+          </a>
         </div>
       </section>
     </main>

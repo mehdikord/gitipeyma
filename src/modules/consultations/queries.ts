@@ -11,7 +11,7 @@ export type ConsultationRow = {
   name: string;
   phone: string;
   description: string | null;
-  callTime: string;
+  callTime: string | null;
   status: RequestStatus;
   adminNote: string | null;
   service: { id: number; title: string } | null;

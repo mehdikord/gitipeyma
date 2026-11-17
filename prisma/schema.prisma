@@ -269,8 +269,8 @@ model ServiceRequestNote {
 model ConsultationRequest {
   id          BigInt        @id @default(autoincrement()) @db.UnsignedBigInt
   serviceId   BigInt?       @map("service_id") @db.UnsignedBigInt
-  // One of the keys in src/modules/consultations/callTimes.ts.
-  callTime    String        @map("call_time") @db.VarChar(32)
+  // One of the keys in src/modules/consultations/callTimes.ts; only older requests chose a call time.
+  callTime    String?       @map("call_time") @db.VarChar(32)
   name        String        @db.VarChar(255)
   phone       String        @db.VarChar(30)
   description String?       @db.Text

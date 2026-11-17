@@ -82,7 +82,7 @@ export async function submitConsultationRequest(input: ConsultationSubmitInput, 
       await throttle('consultation', locale);
       const service = data.serviceId ? await activeService(data.serviceId, locale) : null;
       const request = await db.consultationRequest.create({
-        data: { serviceId: service?.id ?? null, callTime: data.callTime, name: data.name, phone: data.phone, description: data.description },
+        data: { serviceId: service?.id ?? null, name: data.name, phone: data.phone, description: data.message },
       });
       return { ok: true, data: { reference: Number(request.id) } };
     },

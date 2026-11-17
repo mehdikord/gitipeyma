@@ -2,16 +2,20 @@ import { z } from 'zod';
 import { optionalId, personName, visitorPhone } from '../../lib/validation';
 import type { Locale } from '../../i18n/config';
 import { SITE_MESSAGES } from '../site/messages';
-import { CALL_TIME_KEYS } from './callTimes';
 
-// No service means "I don't know yet, guide me".
-export const consultationSubmitSchema = (locale: Locale = 'fa') =>
-  z.object({
+// Name, number and what they want advice on. A service is set only when they came from that service's page.
+export const consultationSubmitSchema = (locale: Locale = 'fa') => {
+  const messages = SITE_MESSAGES[locale];
+  return z.object({
     serviceId: optionalId,
-    callTime: z.enum(CALL_TIME_KEYS, { error: SITE_MESSAGES[locale].chooseCallTime }),
     name: personName(locale),
     phone: visitorPhone(locale),
-    description: z.string().trim().max(2000, { error: SITE_MESSAGES[locale].descriptionLong }).nullish().transform((value) => value || null),
+    message: z
+      .string({ error: messages.messageMissing })
+      .trim()
+      .min(10, { error: messages.messageShort })
+      .max(3000, { error: messages.messageLong }),
   });
+};
 
 export type ConsultationSubmitInput = z.input<ReturnType<typeof consultationSubmitSchema>>;

@@ -117,12 +117,14 @@ test('the panel reads each answer as one line in Persian', () => {
   assert.equal(answerText({ fieldId: 1, type: 'select', label: {}, value: ['air', 'sea', 'gone'], options }), 'هوایی، Sea، gone');
 });
 
-test('a consultation without a service is general guidance, and needs a known call time', () => {
-  const general = consultationSubmitSchema().safeParse({ serviceId: '', callTime: 'asap', name: 'سارا رضایی', phone: '+905321234567' });
+test('a consultation without a service is general guidance, and needs a message', () => {
+  const visitor = { name: 'سارا رضایی', phone: '+905321234567' };
+  const general = consultationSubmitSchema().safeParse({ serviceId: '', ...visitor, message: 'برای اقامت ترکیه مشاوره می‌خواهم.' });
   assert.equal(general.success, true);
   if (general.success) assert.equal(general.data.serviceId, null);
 
-  assert.equal(consultationSubmitSchema().safeParse({ serviceId: null, callTime: 'midnight', name: 'سارا رضایی', phone: '+905321234567' }).success, false);
+  assert.equal(consultationSubmitSchema().safeParse({ serviceId: null, ...visitor, message: '' }).success, false);
+  assert.equal(consultationSubmitSchema().safeParse({ serviceId: null, ...visitor, message: 'کوتاه' }).success, false);
 });
 
 test('admin logins are Iranian mobile numbers, whatever digits they were typed in', () => {
