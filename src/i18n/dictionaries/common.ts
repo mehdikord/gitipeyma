@@ -10,6 +10,7 @@ export const common = defineMessages({
       description:
         'سامانه رسمی رویال تراول؛ خدمات بین‌المللی مسافری VIP، کارگو، خدمات ارزی، حقوقی، ثبت شرکت و اقامت فرامرزی بین ایران و ترکیه.',
       services: 'فهرست خدمات',
+      blog: 'مقالات',
       about: 'درباره ما',
       contact: 'ارتباط با ما',
       consultation: 'درخواست مشاوره',
@@ -25,6 +26,7 @@ export const common = defineMessages({
       description:
         'The official Royal Travel platform: VIP passenger travel, cargo, currency transfers, legal services, company registration and residency between Iran and Turkey.',
       services: 'Services',
+      blog: 'Articles',
       about: 'About us',
       contact: 'Contact us',
       consultation: 'Request a consultation',
@@ -40,6 +42,7 @@ export const common = defineMessages({
       description:
         'Royal Travel resmi platformu: İran ve Türkiye arasında VIP yolcu taşımacılığı, kargo, döviz transferi, hukuki hizmetler, şirket kuruluşu ve oturum işlemleri.',
       services: 'Hizmetler',
+      blog: 'Makaleler',
       about: 'Hakkımızda',
       contact: 'İletişim',
       consultation: 'Danışmanlık talebi',

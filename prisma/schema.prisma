@@ -34,6 +34,7 @@ model Admin {
   services    AdminService[]
   notes       ServiceRequestNote[] @relation("NoteAuthor")
   editedNotes ServiceRequestNote[] @relation("NoteEditor")
+  articles    Article[]
 
   @@unique([phone], map: "admins_phone_unique")
   @@map("admins")
@@ -389,6 +390,85 @@ model TeamMember {
   updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
 
   @@map("team_members")
+}
+
+// ---- Blog -----------------------------------------------------------------------------
+
+// A section of the blog; only a name, in each language.
+model ArticleCategory {
+  id        BigInt    @id @default(autoincrement()) @db.UnsignedBigInt
+  name      Json
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamp(0)
+  articles  Article[]
+
+  @@map("article_categories")
+}
+
+// A topic an article can be labelled with; an article has any number of them.
+model Tag {
+  id        BigInt       @id @default(autoincrement()) @db.UnsignedBigInt
+  name      Json
+  createdAt DateTime     @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt DateTime     @updatedAt @map("updated_at") @db.Timestamp(0)
+  articles  ArticleTag[]
+
+  @@map("tags")
+}
+
+enum ArticleStatus {
+  draft
+  published
+}
+
+// A blog post. It is on the site once it is published and its publish time has come, so a post
+// published with a time in the future appears on its own at that time.
+model Article {
+  id                BigInt          @id @default(autoincrement()) @db.UnsignedBigInt
+  articleCategoryId BigInt          @map("article_category_id") @db.UnsignedBigInt
+  // The admin who wrote it; kept for the panel only, the site signs posts with the brand.
+  adminId           BigInt?         @map("admin_id") @db.UnsignedBigInt
+  // One address for every language: /fa/blog/<slug>, /en/blog/<slug>, ...
+  slug              String          @db.VarChar(191)
+  title             Json
+  // The short introduction on cards and under the title; also the default meta description.
+  excerpt           Json
+  // The body as HTML from the panel's editor, cleaned on save (src/modules/articles/html.ts).
+  content           Json
+  image             String?         @db.VarChar(500)
+  // What search engines and shared links show; empty means the title and excerpt are used.
+  metaTitle         Json            @map("meta_title")
+  metaDescription   Json            @map("meta_description")
+  status            ArticleStatus   @default(draft)
+  isFeatured        Boolean         @default(false) @map("is_featured")
+  // Times the article was opened on the site.
+  views             Int             @default(0) @db.UnsignedInt
+  publishedAt       DateTime?       @map("published_at") @db.Timestamp(0)
+  createdAt         DateTime        @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt         DateTime        @updatedAt @map("updated_at") @db.Timestamp(0)
+  category          ArticleCategory @relation(fields: [articleCategoryId], references: [id], onDelete: Restrict, map: "articles_article_category_id_foreign")
+  admin             Admin?          @relation(fields: [adminId], references: [id], onDelete: SetNull, map: "articles_admin_id_foreign")
+  tags              ArticleTag[]
+
+  @@unique([slug], map: "articles_slug_unique")
+  @@index([articleCategoryId], map: "articles_article_category_id_foreign")
+  @@index([adminId], map: "articles_admin_id_foreign")
+  @@index([status, publishedAt], map: "articles_status_published_at_index")
+  @@map("articles")
+}
+
+model ArticleTag {
+  id        BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  articleId BigInt   @map("article_id") @db.UnsignedBigInt
+  tagId     BigInt   @map("tag_id") @db.UnsignedBigInt
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamp(0)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamp(0)
+  article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade, map: "article_tag_article_id_foreign")
+  tag       Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade, map: "article_tag_tag_id_foreign")
+
+  @@unique([articleId, tagId], map: "article_tag_article_id_tag_id_unique")
+  @@index([tagId], map: "article_tag_tag_id_foreign")
+  @@map("article_tag")
 }
 
 // ---- Company ------------------------------------------------------------------------

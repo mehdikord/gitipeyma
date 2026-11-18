@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { getCurrentAdmin } from '../../../lib/auth/currentAdmin';
 import { param } from '../../../lib/pagination';
 import { LoginForm } from './LoginForm';
+import { BrandEmblem } from '../../../components/layout/BrandEmblem';
 
 export const metadata: Metadata = { title: 'ورود' };
 
@@ -14,9 +15,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
     <main className="flex min-h-screen items-center justify-center bg-[#07191F] px-4 py-10">
       <div className="w-full max-w-sm">
         <div className="mb-6 flex flex-col items-center text-center">
-          <span className="flex h-14 w-14 items-center justify-center rounded-2xl border border-[#E2C98C]/50 bg-[#0C252B] font-['Plus_Jakarta_Sans',sans-serif] text-2xl font-black text-[#E2C98C]">
-            RT
-          </span>
+          <BrandEmblem variant="gold" priority className="h-24" />
           <h1 className="mt-4 text-xl font-black text-white">ورود به پنل مدیریت</h1>
           <p className="mt-1 text-sm text-[#A2B6BC]">رویال تراول</p>
         </div>

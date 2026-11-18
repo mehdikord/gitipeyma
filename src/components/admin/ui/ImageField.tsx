@@ -4,6 +4,7 @@ import React, { useRef, useState } from 'react';
 import { ImageIcon, Loader2, Trash2, Upload } from 'lucide-react';
 import { Button } from './Button';
 import { INPUT, inputBorder } from './styles';
+import { IMAGE_ACCEPT, uploadImage } from './upload';
 
 type ImageFieldProps = {
   label: string;
@@ -25,13 +26,7 @@ export const ImageField: React.FC<ImageFieldProps> = ({ label, value, onChange, 
     setUploading(true);
     setUploadError(null);
     try {
-      const body = new FormData();
-      body.append('file', file);
-      body.append('folder', folder);
-      const response = await fetch('/admins/upload', { method: 'POST', body });
-      const result = (await response.json().catch(() => null)) as { url?: string; message?: string } | null;
-      if (!response.ok || !result?.url) throw new Error(result?.message ?? 'بارگذاری تصویر انجام نشد.');
-      onChange(result.url);
+      onChange(await uploadImage(file, folder));
     } catch (problem) {
       setUploadError(problem instanceof Error ? problem.message : 'بارگذاری تصویر انجام نشد.');
     } finally {
@@ -78,7 +73,7 @@ export const ImageField: React.FC<ImageFieldProps> = ({ label, value, onChange, 
           <input
             ref={inputRef}
             type="file"
-            accept="image/jpeg,image/png,image/webp,image/avif,image/gif"
+            accept={IMAGE_ACCEPT}
             className="sr-only"
             tabIndex={-1}
             onChange={(event) => {

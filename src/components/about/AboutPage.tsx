@@ -17,6 +17,14 @@ export const AboutPage: React.FC = () => {
         <div className="absolute top-0 right-1/4 w-96 h-96 bg-brand/10 rounded-full blur-[140px] pointer-events-none"></div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-4">
+          {/* The full logo with its wordmark: gold on the dark theme, the main colors on the light one */}
+          <div className="flex justify-center pb-2">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/brand/logo-gold.webp" alt="Royal Travel" width={492} height={600} className="logo-on-dark h-36 sm:h-44 w-auto" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/brand/logo-main.webp" alt="Royal Travel" width={492} height={600} className="logo-on-light h-36 sm:h-44 w-auto" />
+          </div>
+
           <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-gold-deep/15 border border-gold-deep-line/30 text-gold text-xs font-bold">
             <Compass className="w-3.5 h-3.5" />
             <span>{t.eyebrow}</span>

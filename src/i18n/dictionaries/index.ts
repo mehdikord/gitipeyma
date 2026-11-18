@@ -9,9 +9,10 @@ import { about } from './about';
 import { contact } from './contact';
 import { consultation } from './consultation';
 import { services } from './services';
+import { blog } from './blog';
 
 // Each namespace is one file with fa, en and tr side by side.
-const NAMESPACES = { common, layout, forms, home, stories, about, contact, consultation, services };
+const NAMESPACES = { common, layout, forms, home, stories, about, contact, consultation, services, blog };
 
 type Namespaces = typeof NAMESPACES;
 export type Dictionary = { [K in keyof Namespaces]: Namespaces[K]['fa'] };

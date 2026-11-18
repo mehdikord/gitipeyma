@@ -21,7 +21,7 @@ const SIGNATURES: { type: string; ext: string; matches: (bytes: Buffer) => boole
 export const CONTENT_TYPES: Record<string, string> = Object.fromEntries(SIGNATURES.map((signature) => [signature.ext, signature.type]));
 
 // The folders a form may upload into.
-const FOLDERS = new Set(['services', 'team', 'general']);
+const FOLDERS = new Set(['services', 'team', 'articles', 'general']);
 
 /** Stores an image after checking what the bytes actually are, not what the browser claimed. */
 export async function storeImage(file: File, folder: string): Promise<{ url: string } | { error: string }> {

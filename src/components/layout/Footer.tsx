@@ -9,6 +9,7 @@ import { CITIES, LonLat, ROAD_PATH, STAGE, project } from '../home/hero/geo';
 import { telHref } from '../../utils/contact';
 import { useI18n } from '../../i18n/I18nProvider';
 import { LanguageSwitcher } from './LanguageSwitcher';
+import { BrandEmblem } from './BrandEmblem';
 
 const FOCUS = 'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-line';
 const LINK = `inline-block py-1 text-[15px] text-ink-soft hover:text-ink-strong transition-colors rounded ${FOCUS}`;
@@ -16,6 +17,7 @@ const LINK = `inline-block py-1 text-[15px] text-ink-soft hover:text-ink-strong 
 const PAGES = [
   { href: '/', key: 'home' },
   { href: '/services', key: 'services' },
+  { href: '/blog', key: 'blog' },
   { href: '/about', key: 'about' },
   { href: '/contact', key: 'contact' },
   { href: '/consultation', key: 'consultation' },
@@ -72,9 +74,7 @@ export const Footer: React.FC = () => {
           {/* Who we are */}
           <div className="col-span-2 lg:col-span-4">
             <Link href={path('/')} className={`inline-flex items-center gap-3 rounded ${FOCUS}`} aria-label={t.homeAria}>
-              <span className="w-11 h-11 rounded-xl bg-canvas border border-gold-line/50 flex items-center justify-center font-['Plus_Jakarta_Sans',sans-serif] font-black text-lg text-gold">
-                RT
-              </span>
+              <BrandEmblem variant="adaptive" className="h-16 shrink-0" />
               <span>
                 <span className="block text-xl font-black text-ink">{brand}</span>
                 <span className="block text-xs text-ink-muted">{t.tagline}</span>

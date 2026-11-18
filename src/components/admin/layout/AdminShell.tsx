@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ExternalLink, LogOut, Menu, UserCog, X } from 'lucide-react';
 import { logout } from '../../../modules/auth/actions';
+import { BrandEmblem } from '../../layout/BrandEmblem';
 import { navigationFor, NavBadges } from './navigation';
 import { FOCUS } from '../ui/styles';
 
@@ -53,7 +54,7 @@ const Sidebar: React.FC<{ badges: NavBadges; isRoot: boolean; onNavigate?: () =>
 
 const Brand = ({ href }: { href: string }) => (
   <Link href={href} className="flex items-center gap-3 rounded-lg px-5 py-5 focus-visible:outline-2 focus-visible:outline-[#E2C98C]">
-    <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#E2C98C]/50 bg-[#0C252B] font-['Plus_Jakarta_Sans',sans-serif] text-lg font-black text-[#E2C98C]">RT</span>
+    <BrandEmblem variant="gold" priority className="h-12 shrink-0" />
     <span>
       <span className="block text-base font-black text-white">رویال تراول</span>
       <span className="block text-[11px] text-[#A2B6BC]">پنل مدیریت</span>

@@ -12,6 +12,18 @@ export const AboutStorySection: React.FC = () => {
       {/* Decorative background glow */}
       <div className="absolute top-1/2 left-0 w-80 h-80 bg-brand/10 rounded-full blur-[140px] pointer-events-none"></div>
 
+      {/* The brand's lamassu, faint behind the story */}
+      <img
+        src="/brand/emblem-gold-lg.webp"
+        alt=""
+        aria-hidden="true"
+        width={526}
+        height={720}
+        loading="lazy"
+        decoding="async"
+        className="hidden md:block absolute -bottom-20 -end-16 h-[560px] w-auto opacity-[0.07] pointer-events-none select-none"
+      />
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           {/* Images Layout (5 cols) */}

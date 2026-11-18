@@ -9,6 +9,7 @@ import { useI18n } from '../../i18n/I18nProvider';
 import { stripLocale } from '../../i18n/config';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { ThemeToggle } from './ThemeToggle';
+import { BrandEmblem } from './BrandEmblem';
 
 export const Header: React.FC = () => {
   // Without the language, so it compares with the nav paths
@@ -30,6 +31,7 @@ export const Header: React.FC = () => {
   const navLinks = [
     { label: t.nav.home, path: '/' },
     { label: t.nav.services, path: '/services' },
+    { label: t.nav.blog, path: '/blog' },
     { label: t.nav.about, path: '/about' },
     { label: t.nav.contact, path: '/contact' },
   ];
@@ -92,13 +94,13 @@ export const Header: React.FC = () => {
             aria-label={t.homeAria}
           >
             {/* Visual Logo Emblem */}
-            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-gradient-to-br from-brand-fill via-[#087F7B] to-[#052B29] p-0.5 shadow-lg shadow-brand/20 flex items-center justify-center transform group-hover:scale-105 transition-transform">
-              <div className="w-full h-full rounded-[10px] bg-canvas flex items-center justify-center border border-gold-line/40">
-                <span className="font-['Plus_Jakarta_Sans',sans-serif] font-black text-lg tracking-wider text-gold group-hover:text-ink-strong transition-colors">
-                  RT
-                </span>
-              </div>
-            </div>
+            <BrandEmblem
+              variant="plate"
+              priority
+              className={`shrink-0 transition-all duration-300 group-hover:scale-105 ${
+                isScrolled ? 'w-11 h-11 sm:w-12 sm:h-12' : 'w-12 h-12 sm:w-14 sm:h-14'
+              }`}
+            />
 
             <div>
               <div className="flex items-center gap-2">

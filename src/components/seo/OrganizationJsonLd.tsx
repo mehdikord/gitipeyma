@@ -20,7 +20,7 @@ export async function OrganizationJsonLd() {
         name: t.common.brand,
         alternateName: ['Royal Travel', 'رویال تراول'],
         url: home,
-        logo: absoluteUrl(base, '/apple-icon.png'),
+        logo: absoluteUrl(base, '/brand/logo-main.png'),
         image: absoluteUrl(base, '/images/about/istanbul-galata.webp'),
         description: t.common.meta.description,
         telephone: phone,

@@ -28,6 +28,8 @@
   --gold-deep-fill: #C6A15B;
   --on-accent: #07191F;
   --danger: #F58B8B;
+  /* The light plate the full-color logo sits on, so its black lamassu reads on the dark theme */
+  --logo-plate: #F4EFE3;
 }
 
 [data-theme='light'] {
@@ -48,9 +50,11 @@
   --gold-line: #C6A15B;
   --gold-deep-line: #A8862F;
   --danger: #B91C1C;
+  --logo-plate: #FFFFFF;
 }
 
 @theme inline {
+  --color-logo-plate: var(--logo-plate);
   --color-canvas: var(--canvas);
   --color-canvas-deep: var(--canvas-deep);
   --color-surface: var(--surface);
@@ -159,6 +163,17 @@ html.theme-switching *:not(.theme-toggle, .theme-toggle *) {
 .theme-toggle-sun {
   opacity: 0;
   transform: rotate(-120deg) scale(0.4);
+}
+
+/* Logos drawn in two colors, one per theme (see BrandEmblem) */
+.logo-on-light {
+  display: none;
+}
+[data-theme='light'] .logo-on-dark {
+  display: none;
+}
+[data-theme='light'] .logo-on-light {
+  display: block;
 }
 
 [data-theme='light'] .theme-toggle {
@@ -1116,3 +1131,200 @@ html.theme-switching *:not(.theme-toggle, .theme-toggle *) {
   animation-play-state: paused;
 }
 
+
+/* ---- Article bodies -------------------------------------------------------------------------
+ * The HTML written in the panel's editor, on the article page and inside the editor itself (which
+ * sets data-theme="light" on its frame, so it shows the light site's colors). Built on the theme
+ * tokens, so it reads well in both themes. Alignment and colors the writer chose come inline.
+ */
+.article-prose {
+  color: var(--ink-soft);
+  font-size: 1.0625rem;
+  line-height: 2.05;
+  overflow-wrap: anywhere;
+}
+.article-prose > :first-child {
+  margin-top: 0;
+}
+.article-prose > :last-child {
+  margin-bottom: 0;
+}
+.article-prose p {
+  margin: 1.15em 0;
+}
+.article-prose h2,
+.article-prose h3,
+.article-prose h4 {
+  color: var(--ink);
+  font-weight: 900;
+  line-height: 1.55;
+  /* Clears the sticky site header when jumped to from the contents */
+  scroll-margin-top: 7rem;
+}
+.article-prose h2 {
+  font-size: 1.6rem;
+  margin: 2.2em 0 0.7em;
+  padding-bottom: 0.4em;
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+}
+.article-prose h3 {
+  font-size: 1.3rem;
+  margin: 1.9em 0 0.6em;
+}
+.article-prose h4 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin: 1.6em 0 0.5em;
+}
+.article-prose strong {
+  color: var(--ink-strong);
+  font-weight: 800;
+}
+.article-prose a {
+  color: var(--brand);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--brand) 40%, transparent);
+  text-underline-offset: 0.3em;
+  transition: color 0.2s, text-decoration-color 0.2s;
+}
+.article-prose a:hover {
+  color: var(--gold);
+  text-decoration-color: currentColor;
+}
+.article-prose ul,
+.article-prose ol {
+  margin: 1.1em 0;
+  padding-inline-start: 1.6em;
+}
+.article-prose ul {
+  list-style: disc;
+}
+.article-prose ol {
+  list-style: decimal;
+}
+.article-prose:lang(fa) ol {
+  list-style-type: persian;
+}
+.article-prose li {
+  margin: 0.4em 0;
+  padding-inline-start: 0.3em;
+}
+.article-prose li > p {
+  margin: 0.2em 0;
+}
+.article-prose li::marker {
+  color: var(--gold);
+  font-weight: 800;
+}
+.article-prose blockquote {
+  margin: 1.8em 0;
+  padding: 1.1em 1.4em;
+  border-inline-start: 4px solid var(--gold-line);
+  border-radius: 0.9rem;
+  background: color-mix(in srgb, var(--gold-deep) 9%, var(--surface));
+  color: var(--ink);
+  font-size: 1.08em;
+  font-weight: 500;
+}
+.article-prose blockquote p {
+  margin: 0.4em 0;
+}
+.article-prose code {
+  direction: ltr;
+  unicode-bidi: isolate;
+  padding: 0.15em 0.45em;
+  border-radius: 0.4rem;
+  background: var(--surface-2);
+  color: var(--ink-strong);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.88em;
+}
+.article-prose pre {
+  direction: ltr;
+  text-align: left;
+  margin: 1.6em 0;
+  padding: 1.1em 1.3em;
+  overflow-x: auto;
+  border-radius: 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+  background: var(--canvas-deep);
+  line-height: 1.7;
+}
+.article-prose pre code {
+  padding: 0;
+  background: none;
+  font-size: 0.875rem;
+}
+.article-prose hr {
+  margin: 2.6em 0;
+  border: 0;
+  border-top: 1px solid color-mix(in srgb, var(--ink) 12%, transparent);
+}
+.article-prose img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 2em auto;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--ink) 8%, transparent);
+}
+.article-prose mark {
+  padding: 0.05em 0.25em;
+  border-radius: 0.3em;
+  background: color-mix(in srgb, var(--gold-fill) 45%, transparent);
+  color: inherit;
+}
+/* A highlight color picked in the editor is a light pastel; the text on it stays dark in both themes */
+.article-prose mark[style*='background-color'] {
+  color: #14282d;
+}
+.article-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95em;
+  line-height: 1.8;
+}
+.article-prose th,
+.article-prose td {
+  padding: 0.7em 1em;
+  border: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+  text-align: start;
+  vertical-align: top;
+}
+.article-prose th {
+  background: var(--surface-2);
+  color: var(--ink);
+  font-weight: 800;
+}
+.article-prose td p,
+.article-prose th p {
+  margin: 0;
+}
+.article-prose tbody tr:nth-child(even) td {
+  background: color-mix(in srgb, var(--surface) 55%, transparent);
+}
+/* Tables scroll sideways on a phone rather than squeezing the text */
+.article-prose .article-table,
+.article-prose .tableWrapper {
+  margin: 1.8em 0;
+  overflow-x: auto;
+  border-radius: 0.9rem;
+}
+.article-prose .article-table table,
+.article-prose .tableWrapper table {
+  margin: 0;
+  min-width: 32rem;
+}
+@media (max-width: 640px) {
+  .article-prose {
+    font-size: 1rem;
+    line-height: 2;
+  }
+  .article-prose h2 {
+    font-size: 1.35rem;
+  }
+  .article-prose h3 {
+    font-size: 1.15rem;
+  }
+}

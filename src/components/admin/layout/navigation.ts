@@ -3,17 +3,20 @@ import {
   Building2,
   ClipboardList,
   Coins,
+  FolderOpen,
   FolderTree,
   Inbox,
   LayoutDashboard,
   Layers,
   Mail,
+  Newspaper,
   MessageSquareQuote,
   PhoneCall,
   Quote,
   Settings,
   Share2,
   ShieldCheck,
+  Tags,
   Users,
 } from 'lucide-react';
 import type React from 'react';
@@ -41,6 +44,14 @@ export const NAVIGATION: { title?: string; items: NavItem[] }[] = [
       { href: '/admins/services', label: 'خدمات', icon: Inbox },
       { href: '/admins/service-categories', label: 'دسته‌بندی خدمات', icon: FolderTree },
       { href: '/admins/service-groups', label: 'گروه‌های صفحه اصلی', icon: Layers },
+    ],
+  },
+  {
+    title: 'مقالات و بلاگ',
+    items: [
+      { href: '/admins/articles', label: 'مقالات', icon: Newspaper },
+      { href: '/admins/article-categories', label: 'دسته‌بندی مقالات', icon: FolderOpen },
+      { href: '/admins/tags', label: 'برچسب‌ها', icon: Tags },
     ],
   },
   {
