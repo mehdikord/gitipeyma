@@ -30,11 +30,11 @@ export const TeamMembersManager: React.FC<{ rows: TeamMemberRow[] }> = ({ rows }
               // eslint-disable-next-line @next/next/no-img-element
               <img src={row.image} alt="" className="h-10 w-10 shrink-0 rounded-full object-cover object-top" />
             ) : (
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#E6F4F3] font-black text-[#0B5F5B]">{fa(row.name).charAt(0)}</span>
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#E7EEFA] font-black text-[#073C8C]">{fa(row.name).charAt(0)}</span>
             )}
             <span>
               <span className="block font-bold">{fa(row.name)}</span>
-              <span className="block text-xs text-[#5F7177]">{fa(row.role)}</span>
+              <span className="block text-xs text-[#5D6B82]">{fa(row.role)}</span>
             </span>
           </span>
         ),

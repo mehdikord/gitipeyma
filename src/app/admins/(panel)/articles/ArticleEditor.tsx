@@ -69,7 +69,7 @@ const valuesOf = (article: ArticleForEdit | null): Values => ({
 const Card: React.FC<{ title: string; icon: React.ElementType; children: React.ReactNode; actions?: React.ReactNode }> = ({ title, icon: Icon, children, actions }) => (
   <section className={`${CARD} p-4 sm:p-5`}>
     <div className="mb-4 flex items-center justify-between gap-2">
-      <h2 className="flex items-center gap-2 text-sm font-black text-[#0B5F5B]">
+      <h2 className="flex items-center gap-2 text-sm font-black text-[#073C8C]">
         <Icon className="h-4 w-4" />
         {title}
       </h2>
@@ -87,9 +87,9 @@ const TransRichText: React.FC<{ value: TranslatedInput; onChange: (value: Transl
   return (
     <div>
       <div className="mb-1.5 flex flex-wrap items-center justify-between gap-2">
-        <span className="flex items-center gap-1.5 text-[13px] font-bold text-[#14282D]">
+        <span className="flex items-center gap-1.5 text-[13px] font-bold text-[#0E1B30]">
           متن مقاله
-          <span dir="ltr" className="rounded bg-[#E6F4F3] px-1.5 py-px text-[10px] font-black text-[#0B5F5B]">
+          <span dir="ltr" className="rounded bg-[#E7EEFA] px-1.5 py-px text-[10px] font-black text-[#073C8C]">
             {LOCALE_INFO[locale].short}
           </span>
         </span>
@@ -124,16 +124,16 @@ const SnippetPreview: React.FC<{ values: Values; siteName: string }> = ({ values
   const fullTitle = title ? `${title} | ${siteName}` : '';
   const dir = LOCALE_INFO[locale].dir;
   return (
-    <div className="rounded-lg border border-[#E3E8EA] bg-[#FAFBFB] p-4">
-      <p className="mb-2 text-[11px] font-bold text-[#94A3A8]">پیش‌نمایش در نتایج گوگل ({LOCALE_INFO[locale].adminName})</p>
+    <div className="rounded-lg border border-[#E2E8F1] bg-[#FAFBFD] p-4">
+      <p className="mb-2 text-[11px] font-bold text-[#94A1B5]">پیش‌نمایش در نتایج گوگل ({LOCALE_INFO[locale].adminName})</p>
       <div dir={dir} lang={locale} className="font-[Arial,sans-serif]">
-        <p dir="ltr" className={`truncate text-xs text-[#3F5257] ${dir === 'rtl' ? 'text-right' : ''}`}>
+        <p dir="ltr" className={`truncate text-xs text-[#3E4C63] ${dir === 'rtl' ? 'text-right' : ''}`}>
           …/{locale}/blog/{values.slug || '…'}
         </p>
         <p className="mt-0.5 truncate text-lg leading-snug text-[#1A0DAB]">{fullTitle || 'عنوان مقاله'}</p>
         <p className="mt-0.5 line-clamp-2 text-[13px] leading-relaxed text-[#4D5156]">{description || 'خلاصه یا توضیح سئو اینجا نمایش داده می‌شود.'}</p>
       </div>
-      <p className="mt-3 text-[11px] text-[#5F7177]">
+      <p className="mt-3 text-[11px] text-[#5D6B82]">
         عنوان: {fa(fullTitle.length)} کاراکتر (بهتر است زیر ۶۰) · توضیح: {fa(description.length)} کاراکتر (بهتر است ۷۰ تا ۱۶۰)
       </p>
     </div>
@@ -203,15 +203,15 @@ export const ArticleEditor: React.FC<{ article: ArticleForEdit | null; categorie
         }}
       >
         {/* Header: where we are and the save buttons, always in reach */}
-        <div className="sticky top-16 z-10 -mx-4 mb-5 border-b border-[#E3E8EA] bg-[#F4F6F7]/95 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+        <div className="sticky top-16 z-10 -mx-4 mb-5 border-b border-[#E2E8F1] bg-[#F4F6FA]/95 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="min-w-0">
-              <Link href="/admins/articles" className="mb-1 inline-flex items-center gap-1 text-xs font-bold text-[#5F7177] hover:text-[#0B7A75]">
+              <Link href="/admins/articles" className="mb-1 inline-flex items-center gap-1 text-xs font-bold text-[#5D6B82] hover:text-[#094BAF]">
                 <ArrowRight className="h-3.5 w-3.5" />
                 همه مقالات
               </Link>
               <div className="flex flex-wrap items-center gap-2">
-                <h1 className="truncate text-xl font-black text-[#14282D]">{article ? 'ویرایش مقاله' : 'افزودن مقاله'}</h1>
+                <h1 className="truncate text-xl font-black text-[#0E1B30]">{article ? 'ویرایش مقاله' : 'افزودن مقاله'}</h1>
                 {state && <Badge tone={state.tone}>{state.label}</Badge>}
                 {dirty && <Badge tone="amber">تغییرات ذخیره‌نشده</Badge>}
               </div>
@@ -266,8 +266,8 @@ export const ArticleEditor: React.FC<{ article: ArticleForEdit | null; categorie
                   placeholder="istanbul-residency-guide"
                   hint={
                     <span dir="ltr" className="inline-block">
-                      /fa/blog/{values.slug || <span className="text-[#94A3A8]">auto</span>}
-                      <span dir="rtl" className="mr-2 text-[#94A3A8]">
+                      /fa/blog/{values.slug || <span className="text-[#94A1B5]">auto</span>}
+                      <span dir="rtl" className="mr-2 text-[#94A1B5]">
                         — برای همه زبان‌ها یکی است. خالی بماند، از عنوان انگلیسی ساخته می‌شود (بدون عنوان انگلیسی: article-شماره).
                       </span>
                     </span>
@@ -322,18 +322,18 @@ export const ArticleEditor: React.FC<{ article: ArticleForEdit | null; categorie
                 />
                 <Switch label="مقاله ویژه" hint="در بالای صفحه مقالات، بزرگ‌تر نمایش داده می‌شود." checked={values.isFeatured} onChange={(v) => set('isFeatured', v)} />
                 {article && (
-                  <dl className="grid grid-cols-2 gap-x-3 gap-y-2 rounded-lg bg-[#F4F6F7] p-3 text-xs">
-                    <dt className="text-[#5F7177]">بازدید</dt>
+                  <dl className="grid grid-cols-2 gap-x-3 gap-y-2 rounded-lg bg-[#F4F6FA] p-3 text-xs">
+                    <dt className="text-[#5D6B82]">بازدید</dt>
                     <dd className="font-bold">{fa(article.views)}</dd>
-                    <dt className="text-[#5F7177]">نویسنده</dt>
+                    <dt className="text-[#5D6B82]">نویسنده</dt>
                     <dd className="font-bold">{article.authorName ?? '—'}</dd>
-                    <dt className="text-[#5F7177]">ایجاد</dt>
+                    <dt className="text-[#5D6B82]">ایجاد</dt>
                     <dd className="font-bold">{persianDate(article.createdAt)}</dd>
-                    <dt className="text-[#5F7177]">آخرین ویرایش</dt>
+                    <dt className="text-[#5D6B82]">آخرین ویرایش</dt>
                     <dd className="font-bold">{persianDate(article.updatedAt)}</dd>
                   </dl>
                 )}
-                <p className="text-[11px] leading-relaxed text-[#94A3A8]">میان‌بر ذخیره: Ctrl + S</p>
+                <p className="text-[11px] leading-relaxed text-[#94A1B5]">میان‌بر ذخیره: Ctrl + S</p>
               </div>
             </Card>
 
@@ -341,7 +341,7 @@ export const ArticleEditor: React.FC<{ article: ArticleForEdit | null; categorie
               title="دسته‌بندی"
               icon={FolderOpen}
               actions={
-                <Link href="/admins/article-categories" className="text-xs font-bold text-[#0B7A75] hover:underline">
+                <Link href="/admins/article-categories" className="text-xs font-bold text-[#094BAF] hover:underline">
                   مدیریت دسته‌ها
                 </Link>
               }

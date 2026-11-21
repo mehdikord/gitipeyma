@@ -41,7 +41,7 @@ export const SettingsForm: React.FC<{ settings: SettingValues }> = ({ settings }
         <div className="space-y-4">
           {SETTING_GROUPS.map((group) => (
             <section key={group.title} className={`${CARD} p-5`}>
-              <h2 className="mb-4 text-sm font-black text-[#0B5F5B]">{group.title}</h2>
+              <h2 className="mb-4 text-sm font-black text-[#073C8C]">{group.title}</h2>
               <FormGrid>
                 {group.fields.map((field) =>
                   'translatable' in field && field.translatable ? (

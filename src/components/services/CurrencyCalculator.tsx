@@ -67,7 +67,7 @@ export const CurrencyCalculator: React.FC<{ rates: CurrencyRate[]; feePercent: n
           <button
             type="button"
             onClick={handleSwap}
-            className="w-10 h-10 rounded-full bg-canvas border border-brand/40 text-brand hover:bg-brand-fill hover:text-on-accent transition-all flex items-center justify-center shadow-md"
+            className="w-10 h-10 rounded-full bg-canvas border border-brand/40 text-brand hover:bg-brand-fill hover:text-on-brand transition-all flex items-center justify-center shadow-md"
             aria-label={t.swap}
           >
             <ArrowLeftRight className="w-4 h-4" />

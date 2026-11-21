@@ -27,9 +27,9 @@ export const TagsManager: React.FC<{ rows: TagRow[] }> = ({ rows }) => (
         header: 'مقالات',
         cell: (row) =>
           row.articleCount > 0 ? (
-            <span className="font-bold text-[#0B5F5B]">{row.articleCount.toLocaleString('fa-IR')} مقاله</span>
+            <span className="font-bold text-[#073C8C]">{row.articleCount.toLocaleString('fa-IR')} مقاله</span>
           ) : (
-            <span className="text-[#94A3A8]">بدون مقاله</span>
+            <span className="text-[#94A1B5]">بدون مقاله</span>
           ),
       },
     ]}
@@ -45,8 +45,8 @@ export const TagsManager: React.FC<{ rows: TagRow[] }> = ({ rows }) => (
     renderForm={({ values, set, errors }) => (
       <div className="space-y-3">
         <TransTextInput label="نام برچسب" required name="name" value={values.name} onChange={(v) => set('name', v)} errors={errors} />
-        <p className="text-xs leading-relaxed text-[#5F7177]">
-          برچسب‌ها را می‌توانید هنگام نوشتن مقاله هم <Link href="/admins/articles/new" className="font-bold text-[#0B7A75] hover:underline">در خود فرم مقاله</Link> بسازید.
+        <p className="text-xs leading-relaxed text-[#5D6B82]">
+          برچسب‌ها را می‌توانید هنگام نوشتن مقاله هم <Link href="/admins/articles/new" className="font-bold text-[#094BAF] hover:underline">در خود فرم مقاله</Link> بسازید.
         </p>
       </div>
     )}

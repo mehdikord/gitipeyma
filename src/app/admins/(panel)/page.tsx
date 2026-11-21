@@ -11,22 +11,22 @@ import { faNumber, formatDateTime } from '../../../lib/format';
 export const metadata: Metadata = { title: 'داشبورد' };
 
 const Stat = ({ href, label, value, icon: Icon, accent }: { href: string; label: string; value: number; icon: React.ElementType; accent?: boolean }) => (
-  <Link href={href} className={`${CARD} group flex items-center gap-4 p-4 transition-colors hover:border-[#0B7A75]/40`}>
-    <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${accent && value > 0 ? 'bg-[#FEF3C7] text-[#92400E]' : 'bg-[#E6F4F3] text-[#0B5F5B]'}`}>
+  <Link href={href} className={`${CARD} group flex items-center gap-4 p-4 transition-colors hover:border-[#094BAF]/40`}>
+    <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${accent && value > 0 ? 'bg-[#FEF3C7] text-[#92400E]' : 'bg-[#E7EEFA] text-[#073C8C]'}`}>
       <Icon className="h-5 w-5" />
     </span>
     <span className="min-w-0">
-      <span className="block text-2xl font-black text-[#14282D]">{faNumber(value)}</span>
-      <span className="block text-[13px] text-[#5F7177]">{label}</span>
+      <span className="block text-2xl font-black text-[#0E1B30]">{faNumber(value)}</span>
+      <span className="block text-[13px] text-[#5D6B82]">{label}</span>
     </span>
   </Link>
 );
 
 const Panel = ({ title, href, children }: { title: string; href: string; children: React.ReactNode }) => (
   <section className={`${CARD} overflow-hidden`}>
-    <div className="flex items-center justify-between border-b border-[#E3E8EA] px-4 py-3">
+    <div className="flex items-center justify-between border-b border-[#E2E8F1] px-4 py-3">
       <h2 className="text-sm font-black">{title}</h2>
-      <Link href={href} className="inline-flex items-center gap-1 text-[13px] font-bold text-[#0B7A75] hover:underline">
+      <Link href={href} className="inline-flex items-center gap-1 text-[13px] font-bold text-[#094BAF] hover:underline">
         همه
         <ArrowLeft className="h-3.5 w-3.5" />
       </Link>
@@ -35,7 +35,7 @@ const Panel = ({ title, href, children }: { title: string; href: string; childre
   </section>
 );
 
-const Empty = ({ text }: { text: string }) => <p className="px-4 py-8 text-center text-sm text-[#5F7177]">{text}</p>;
+const Empty = ({ text }: { text: string }) => <p className="px-4 py-8 text-center text-sm text-[#5D6B82]">{text}</p>;
 
 export default async function DashboardPage() {
   const { badges, stats, latestRequests, latestConsultations, latestMessages, topServices } = await getDashboard();
@@ -63,21 +63,21 @@ export default async function DashboardPage() {
             {latestRequests.length === 0 ? (
               <Empty text="هنوز درخواستی ثبت نشده است." />
             ) : (
-              <ul className="divide-y divide-[#EEF2F3]">
+              <ul className="divide-y divide-[#EEF2F8]">
                 {latestRequests.map((request) => {
                   const status = requestStatus(request.status);
                   return (
                     <li key={request.id}>
-                      <Link href={`/admins/service-requests?open=${request.id}`} className="flex flex-wrap items-center gap-x-4 gap-y-1 px-4 py-3 hover:bg-[#F7FAFA]">
+                      <Link href={`/admins/service-requests?open=${request.id}`} className="flex flex-wrap items-center gap-x-4 gap-y-1 px-4 py-3 hover:bg-[#F7F9FC]">
                         <span className="min-w-0 flex-1">
                           <span className="block text-sm font-bold">{request.name}</span>
-                          <span className="block text-xs text-[#5F7177]">{request.service}</span>
+                          <span className="block text-xs text-[#5D6B82]">{request.service}</span>
                         </span>
-                        <span dir="ltr" className="text-[13px] text-[#3F5257]">
+                        <span dir="ltr" className="text-[13px] text-[#3E4C63]">
                           {request.phone}
                         </span>
                         <Badge tone={status.tone}>{status.label}</Badge>
-                        <span className="w-32 text-left text-xs text-[#5F7177]">{formatDateTime(request.createdAt)}</span>
+                        <span className="w-32 text-left text-xs text-[#5D6B82]">{formatDateTime(request.createdAt)}</span>
                       </Link>
                     </li>
                   );
@@ -94,13 +94,13 @@ export default async function DashboardPage() {
             <ul className="space-y-3 p-4">
               {topServices.map((service) => (
                 <li key={service.id}>
-                  <Link href={`/admins/service-requests?service=${service.id}`} className="block hover:text-[#0B7A75]">
+                  <Link href={`/admins/service-requests?service=${service.id}`} className="block hover:text-[#094BAF]">
                     <span className="flex items-center justify-between text-[13px] font-bold">
                       <span>{service.title}</span>
                       <span>{faNumber(service.count)}</span>
                     </span>
-                    <span className="mt-1.5 block h-1.5 rounded-full bg-[#EEF2F3]">
-                      <span className="block h-full rounded-full bg-[#0B7A75]" style={{ width: `${(service.count / topServices[0].count) * 100}%` }} />
+                    <span className="mt-1.5 block h-1.5 rounded-full bg-[#EEF2F8]">
+                      <span className="block h-full rounded-full bg-[#094BAF]" style={{ width: `${(service.count / topServices[0].count) * 100}%` }} />
                     </span>
                   </Link>
                 </li>
@@ -113,15 +113,15 @@ export default async function DashboardPage() {
           {latestConsultations.length === 0 ? (
             <Empty text="هنوز درخواست مشاوره‌ای ثبت نشده است." />
           ) : (
-            <ul className="divide-y divide-[#EEF2F3]">
+            <ul className="divide-y divide-[#EEF2F8]">
               {latestConsultations.map((request) => {
                 const status = requestStatus(request.status);
                 return (
                   <li key={request.id}>
-                    <Link href={`/admins/consultation-requests?open=${request.id}`} className="flex items-center gap-3 px-4 py-3 hover:bg-[#F7FAFA]">
+                    <Link href={`/admins/consultation-requests?open=${request.id}`} className="flex items-center gap-3 px-4 py-3 hover:bg-[#F7F9FC]">
                       <span className="min-w-0 flex-1">
                         <span className="block text-sm font-bold">{request.name}</span>
-                        <span className="block truncate text-xs text-[#5F7177]">{request.service}</span>
+                        <span className="block truncate text-xs text-[#5D6B82]">{request.service}</span>
                       </span>
                       <Badge tone={status.tone}>{status.label}</Badge>
                     </Link>
@@ -137,16 +137,16 @@ export default async function DashboardPage() {
             {latestMessages.length === 0 ? (
               <Empty text="هنوز پیامی نرسیده است." />
             ) : (
-              <ul className="divide-y divide-[#EEF2F3]">
+              <ul className="divide-y divide-[#EEF2F8]">
                 {latestMessages.map((message) => (
                   <li key={message.id}>
-                    <Link href={`/admins/contact-messages?open=${message.id}`} className="flex flex-wrap items-center gap-x-4 gap-y-1 px-4 py-3 hover:bg-[#F7FAFA]">
+                    <Link href={`/admins/contact-messages?open=${message.id}`} className="flex flex-wrap items-center gap-x-4 gap-y-1 px-4 py-3 hover:bg-[#F7F9FC]">
                       <span className="min-w-0 flex-1">
                         <span className={`block text-sm ${message.read ? '' : 'font-black'}`}>{message.name}</span>
-                        <span className="block text-xs text-[#5F7177]">{message.topic ?? 'بدون موضوع'}</span>
+                        <span className="block text-xs text-[#5D6B82]">{message.topic ?? 'بدون موضوع'}</span>
                       </span>
                       {!message.read && <Badge tone="amber">خوانده‌نشده</Badge>}
-                      <span className="w-32 text-left text-xs text-[#5F7177]">{formatDateTime(message.createdAt)}</span>
+                      <span className="w-32 text-left text-xs text-[#5D6B82]">{formatDateTime(message.createdAt)}</span>
                     </Link>
                   </li>
                 ))}

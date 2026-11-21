@@ -36,7 +36,7 @@ export async function BlogIndex({ listing, featured, categories, tags, filters, 
 
   const chip = (active: boolean) =>
     `inline-flex shrink-0 items-center gap-2 rounded-full px-4 py-2 text-xs font-bold whitespace-nowrap transition-colors ${FOCUS} ${
-      active ? 'bg-brand-fill text-on-accent shadow-lg shadow-brand/20' : 'border border-ink/10 bg-surface text-ink-muted hover:bg-surface-2 hover:text-ink-strong'
+      active ? 'bg-brand-fill text-on-brand shadow-lg shadow-brand/20' : 'border border-ink/10 bg-surface text-ink-muted hover:bg-surface-2 hover:text-ink-strong'
     }`;
   const count = (value: number, active: boolean) => <span className={`rounded-full px-1.5 text-[10px] ${active ? 'bg-black/15' : 'bg-ink/10'}`}>{num(value)}</span>;
 
@@ -71,7 +71,7 @@ export async function BlogIndex({ listing, featured, categories, tags, filters, 
               aria-label={t.list.searchPlaceholder}
               className="min-w-0 flex-1 bg-transparent py-2 text-sm text-ink-strong placeholder:text-ink-dim focus:outline-none"
             />
-            <button type="submit" className={`shrink-0 rounded-full bg-brand-fill px-5 py-2 text-xs font-bold text-on-accent hover:bg-brand-bright-fill ${FOCUS}`}>
+            <button type="submit" className={`shrink-0 rounded-full bg-brand-fill px-5 py-2 text-xs font-bold text-on-brand hover:bg-brand-bright-fill ${FOCUS}`}>
               {t.list.search}
             </button>
           </form>
@@ -133,7 +133,7 @@ export async function BlogIndex({ listing, featured, categories, tags, filters, 
               <img src="/brand/emblem-gold.webp" alt="" aria-hidden="true" className="h-16 w-auto opacity-60" />
               <p className="max-w-md text-base leading-8 text-ink-muted">{filtered ? t.list.noResults : t.list.empty}</p>
               {filtered && (
-                <Link href={path('/blog')} className={`rounded-full bg-brand-fill px-5 py-2 text-xs font-bold text-on-accent ${FOCUS}`}>
+                <Link href={path('/blog')} className={`rounded-full bg-brand-fill px-5 py-2 text-xs font-bold text-on-brand ${FOCUS}`}>
                   {t.list.all}
                 </Link>
               )}
@@ -158,7 +158,7 @@ export async function BlogIndex({ listing, featured, categories, tags, filters, 
                   aria-current={n === listing.page ? 'page' : undefined}
                   aria-label={fill(t.list.pageTitle, { page: num(n) })}
                   className={`inline-flex h-10 min-w-10 items-center justify-center rounded-full px-3 text-sm font-bold ${FOCUS} ${
-                    n === listing.page ? 'bg-brand-fill text-on-accent' : 'border border-ink/10 bg-surface text-ink-muted hover:text-ink-strong'
+                    n === listing.page ? 'bg-brand-fill text-on-brand' : 'border border-ink/10 bg-surface text-ink-muted hover:text-ink-strong'
                   }`}
                 >
                   {num(n)}

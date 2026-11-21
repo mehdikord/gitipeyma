@@ -161,7 +161,7 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
       <div className="absolute inset-0 opacity-10 pointer-events-none">
         <svg className="w-full h-full" viewBox="0 0 1000 600" fill="none">
           <pattern id="grid-dots-testi" width="40" height="40" patternUnits="userSpaceOnUse">
-            <circle cx="20" cy="20" r="1.5" fill="#12B8B0" />
+            <circle cx="20" cy="20" r="1.5" fill="#094BAF" />
           </pattern>
           <rect width="100%" height="100%" fill="url(#grid-dots-testi)" />
         </svg>
@@ -235,14 +235,14 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
                   onClick={() => setActiveCategory(tab.id as CategoryFilter)}
                   className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 ${
                     activeCategory === tab.id
-                      ? 'bg-brand-fill text-on-accent shadow-lg shadow-brand/25 scale-105'
+                      ? 'bg-brand-fill text-on-brand shadow-lg shadow-brand/25 scale-105'
                       : 'bg-surface text-ink-muted hover:text-ink-strong border border-ink/5 hover:border-ink/20'
                   }`}
                 >
                   <span>{tab.label}</span>
                   <span
                     className={`text-[10px] px-1.5 py-0.2 rounded-full ${
-                      activeCategory === tab.id ? 'bg-canvas/30 text-on-accent' : 'bg-ink/10 text-ink-strong/70'
+                      activeCategory === tab.id ? 'bg-canvas/30 text-on-brand' : 'bg-ink/10 text-ink-strong/70'
                     }`}
                   >
                     {tab.count}
@@ -426,7 +426,7 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
 
                   <button
                     onClick={handleNext}
-                    className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-brand-fill to-[#087F7B] hover:brightness-110 text-on-accent text-xs font-black flex items-center justify-center gap-1.5 transition-all active:scale-95 shadow-md shadow-brand/20"
+                    className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-brand-fill to-[#073C8C] hover:brightness-110 text-on-brand text-xs font-black flex items-center justify-center gap-1.5 transition-all active:scale-95 shadow-md shadow-brand/20"
                     aria-label={t.nextAria}
                   >
                     <span>{t.next}</span>
@@ -649,7 +649,7 @@ export const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({ testim
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-brand-fill to-[#087F7B] hover:brightness-110 disabled:opacity-70 disabled:cursor-wait text-on-accent text-xs font-black transition-all flex items-center gap-2 shadow-lg shadow-brand/20"
+                    className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-brand-fill to-[#073C8C] hover:brightness-110 disabled:opacity-70 disabled:cursor-wait text-on-brand text-xs font-black transition-all flex items-center gap-2 shadow-lg shadow-brand/20"
                   >
                     <Send className="w-4 h-4" />
                     <span>{isSubmitting ? t.form.sending : t.form.submit}</span>

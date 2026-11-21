@@ -127,7 +127,7 @@ export const AboutPage: React.FC = () => {
             href={path('/consultation')}
             scroll={false}
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="inline-block px-8 py-3.5 rounded-full bg-brand-fill hover:bg-[#087F7B] text-on-accent font-bold text-sm shadow-xl transition-all hover:scale-105"
+            className="inline-block px-8 py-3.5 rounded-full bg-brand-fill hover:bg-brand-bright-fill text-on-brand font-bold text-sm shadow-xl transition-all hover:scale-105"
           >
             {t.ctaButton}
           </Link>

@@ -20,7 +20,7 @@ export default function AdminsLayout({ children }: { children: React.ReactNode }
         <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
       </head>
       <body className="font-['Vazirmatn',sans-serif] antialiased">
-        <div data-admin className="min-h-screen bg-[#F4F6F7] text-[#14282D]">
+        <div data-admin className="min-h-screen bg-[#F4F6FA] text-[#0E1B30]">
           <ToastProvider>
             <ConfirmProvider>{children}</ConfirmProvider>
           </ToastProvider>

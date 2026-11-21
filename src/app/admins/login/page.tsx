@@ -12,7 +12,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
   const next = param(await searchParams, 'next');
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#07191F] px-4 py-10">
+    <main className="flex min-h-screen items-center justify-center bg-[#050D1C] px-4 py-10">
       <div className="w-full max-w-sm">
         <div className="mb-6 flex flex-col items-center text-center">
           <BrandEmblem variant="gold" priority className="h-24" />

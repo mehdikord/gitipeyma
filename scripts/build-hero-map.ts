@@ -115,14 +115,14 @@ const paths = [...buckets.entries()]
   .map(([key, d]) => {
     const [kind, bandText] = key.split(':');
     const band = Number(bandText);
-    const stroke = kind === 'corridor' ? '#2FD2C9' : '#5C8E99';
+    const stroke = kind === 'corridor' ? '#3D82EE' : '#6A84AD';
     const opacity = (kind === 'corridor' ? 0.42 : 0.34) + band * (kind === 'corridor' ? 0.07 : 0.045);
     const width = 3 + band * 0.5;
     return `<path stroke="${stroke}" stroke-opacity="${opacity.toFixed(2)}" stroke-width="${width.toFixed(2)}" d="${d.join('')}"/>`;
   })
   .join('');
 
-const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${STAGE.width} ${STAGE.height}" fill="none"><path stroke="#6E98A1" stroke-opacity=".16" stroke-width="1" d="${toPath(allBorders.coordinates)}"/><g stroke-linecap="round">${paths}</g></svg>`;
+const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${STAGE.width} ${STAGE.height}" fill="none"><path stroke="#7B90B3" stroke-opacity=".16" stroke-width="1" d="${toPath(allBorders.coordinates)}"/><g stroke-linecap="round">${paths}</g></svg>`;
 writeFileSync(new URL('../public/hero/map.svg', import.meta.url), svg);
 
 const round = (lines: number[][][]) => lines.map((l) => l.map((c) => [+c[0].toFixed(2), +c[1].toFixed(2)]));

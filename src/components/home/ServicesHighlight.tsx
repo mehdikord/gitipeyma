@@ -91,7 +91,7 @@ const ServicePanel: React.FC<{ service: ServiceItem }> = ({ service }) => {
         <div className="mt-5 flex flex-wrap items-center gap-3">
           <Link
             href={path(`/services/${service.slug}`)}
-            className={`group inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-brand-fill hover:bg-brand-bright-fill text-on-accent font-extrabold text-sm transition-colors ${FOCUS}`}
+            className={`group inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-brand-fill hover:bg-brand-bright-fill text-on-brand font-extrabold text-sm transition-colors ${FOCUS}`}
           >
             <span>{t.details}</span>
             <ArrowLeft className={`w-4 h-4 transition-transform rtl:group-hover:-translate-x-1 ltr:group-hover:translate-x-1 ${FORWARD}`} />
@@ -299,7 +299,7 @@ const MobileMap: React.FC<MapProps> = (props) => {
                             </ul>
                             <Link
                               href={path(`/services/${slug}`)}
-                              className={`mt-4 w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-brand-fill text-on-accent font-extrabold text-sm ${FOCUS}`}
+                              className={`mt-4 w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-brand-fill text-on-brand font-extrabold text-sm ${FOCUS}`}
                             >
                               <span>{t.details}</span>
                               <ArrowLeft className={`w-4 h-4 ${FORWARD}`} />

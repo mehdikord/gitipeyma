@@ -20,7 +20,7 @@ export const CurrenciesManager: React.FC<{ rows: CurrencyRow[]; feePercent: stri
     description={
       <>
         نرخ‌های محاسبه‌گر حواله در صفحه خدمات ارزی. کارمزد فعلی {Number(feePercent).toLocaleString('fa-IR')}٪ است و از{' '}
-        <Link href="/admins/settings" className="font-bold text-[#0B7A75] hover:underline">
+        <Link href="/admins/settings" className="font-bold text-[#094BAF] hover:underline">
           تنظیمات سایت
         </Link>{' '}
         تغییر می‌کند.
@@ -37,7 +37,7 @@ export const CurrenciesManager: React.FC<{ rows: CurrencyRow[]; feePercent: stri
             <span className="text-lg">{row.flag}</span>
             <span>
               <span className="block font-bold">{fa(row.name)}</span>
-              <span dir="ltr" className="block text-right text-xs text-[#5F7177]">
+              <span dir="ltr" className="block text-right text-xs text-[#5D6B82]">
                 {row.code} · {row.symbol}
               </span>
             </span>
@@ -45,7 +45,7 @@ export const CurrenciesManager: React.FC<{ rows: CurrencyRow[]; feePercent: stri
         ),
       },
       { key: 'rate', header: 'هر واحد به تومان', cell: (row) => <span className="font-black">{row.rateToToman.toLocaleString('fa-IR')}</span> },
-      { key: 'updated', header: 'آخرین به‌روزرسانی', hideOnMobile: true, className: 'whitespace-nowrap text-xs text-[#5F7177]', cell: (row) => formatDateTime(row.updatedAt) },
+      { key: 'updated', header: 'آخرین به‌روزرسانی', hideOnMobile: true, className: 'whitespace-nowrap text-xs text-[#5D6B82]', cell: (row) => formatDateTime(row.updatedAt) },
       { key: 'state', header: 'وضعیت', cell: (row) => <ActiveBadge active={row.isActive} /> },
     ]}
     emptyValues={() => ({ code: '', name: emptyTranslated(), symbol: '', flag: '', rateToToman: '', isActive: true, sortOrder: String(rows.length + 1) })}

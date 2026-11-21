@@ -28,14 +28,14 @@ export const SocialLinksManager: React.FC<{ rows: SocialLinkRow[] }> = ({ rows }
           const Icon = socialIcon(row.icon);
           return (
             <span className="flex items-center gap-2.5 font-bold">
-              <Icon className="h-4 w-4 text-[#0B7A75]" />
+              <Icon className="h-4 w-4 text-[#094BAF]" />
               {row.platform}
             </span>
           );
         },
       },
       { key: 'label', header: 'توضیح', hideOnMobile: true, cell: (row) => <span className="font-normal">{fa(row.label)}</span> },
-      { key: 'url', header: 'آدرس', cell: (row) => <span dir="ltr" className="block max-w-56 truncate text-[13px] text-[#5F7177]">{row.url}</span> },
+      { key: 'url', header: 'آدرس', cell: (row) => <span dir="ltr" className="block max-w-56 truncate text-[13px] text-[#5D6B82]">{row.url}</span> },
       { key: 'state', header: 'وضعیت', cell: (row) => <ActiveBadge active={row.isActive} /> },
     ]}
     emptyValues={() => ({ platform: '', label: emptyTranslated(), url: 'https://', icon: 'Globe', isActive: true, sortOrder: String(rows.length + 1) })}

@@ -31,8 +31,8 @@ export const ProfileForm: React.FC<{ admin: { name: string; phone: string } }> =
         </FormGrid>
       </section>
       <section className={`${CARD} mt-4 space-y-4 p-5`}>
-        <h2 className="text-sm font-black text-[#0B5F5B]">تغییر رمز عبور</h2>
-        <p className="text-[13px] text-[#5F7177]">اگر نمی‌خواهید رمز را عوض کنید، این بخش را خالی بگذارید.</p>
+        <h2 className="text-sm font-black text-[#073C8C]">تغییر رمز عبور</h2>
+        <p className="text-[13px] text-[#5D6B82]">اگر نمی‌خواهید رمز را عوض کنید، این بخش را خالی بگذارید.</p>
         <TextInput label="رمز عبور فعلی" type="password" autoComplete="current-password" ltr value={values.currentPassword} onChange={(v) => set('currentPassword', v)} error={errors.currentPassword} />
         <FormGrid>
           <TextInput label="رمز عبور جدید" type="password" autoComplete="new-password" ltr value={values.password} onChange={(v) => set('password', v)} error={errors.password} />

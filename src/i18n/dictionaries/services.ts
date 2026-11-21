@@ -4,17 +4,7 @@ import { defineMessages } from './define';
 export const services = defineMessages({
   fa: {
     directory: {
-      eyebrow: 'فهرست جامع خدمات نمایندگی رویال تراول',
-      title: 'خدمات یکپارچه بین‌المللی',
-      intro: 'از سفر VIP جاده‌ای تهران به استانبول و کارگو گمرکی تا خدمات ارزی، حقوقی، اقامتی و تشریفات فرامرزی در ترکیه.',
-      searchPlaceholder: 'جستجو در عناوین و موضوعات خدمات...',
-      clear: 'پاک کردن',
-      all: 'همه خدمات ({count})',
-      showing: 'نمایش {count} خدمت فعال',
-      filteredBy: 'نتایج فیلتر شده بر اساس: «{query}»',
       details: 'مشاهده جزئیات کامل و مدارک',
-      empty: 'هیچ خدمتی منطبق بر جستجوی شما یافت نشد.',
-      showAll: 'مشاهده تمامی خدمات',
     },
     detail: {
       sections: { about: 'معرفی', benefits: 'مزایا', steps: 'مراحل', faq: 'پرسش‌ها', request: 'ثبت درخواست' },
@@ -84,17 +74,7 @@ export const services = defineMessages({
   },
   en: {
     directory: {
-      eyebrow: 'The full range of Royal Travel services',
-      title: 'Integrated international services',
-      intro: 'From VIP road travel between Tehran and Istanbul and customs cargo to currency, legal, residency and cross-border event services in Turkey.',
-      searchPlaceholder: 'Search services by name or topic...',
-      clear: 'Clear',
-      all: 'All services ({count})',
-      showing: 'Showing {count} active services',
-      filteredBy: 'Filtered by: “{query}”',
       details: 'View full details and documents',
-      empty: 'No service matches your search.',
-      showAll: 'Show all services',
     },
     detail: {
       sections: { about: 'Overview', benefits: 'Benefits', steps: 'Process', faq: 'FAQ', request: 'Request' },
@@ -164,17 +144,7 @@ export const services = defineMessages({
   },
   tr: {
     directory: {
-      eyebrow: 'Royal Travel hizmetlerinin tamamı',
-      title: 'Bütünleşik uluslararası hizmetler',
-      intro: "Tahran–İstanbul VIP kara yolculuğu ve gümrüklü kargodan Türkiye'de döviz, hukuk, oturum ve sınır ötesi organizasyon hizmetlerine kadar.",
-      searchPlaceholder: 'Hizmet adı veya konusuna göre arayın...',
-      clear: 'Temizle',
-      all: 'Tüm hizmetler ({count})',
-      showing: '{count} aktif hizmet gösteriliyor',
-      filteredBy: 'Filtre: “{query}”',
       details: 'Tüm ayrıntıları ve belgeleri görün',
-      empty: 'Aramanızla eşleşen bir hizmet bulunamadı.',
-      showAll: 'Tüm hizmetleri göster',
     },
     detail: {
       sections: { about: 'Genel bakış', benefits: 'Avantajlar', steps: 'Süreç', faq: 'SSS', request: 'Talep' },

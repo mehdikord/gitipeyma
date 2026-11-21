@@ -61,7 +61,7 @@ type Props = {
   id?: string;
 };
 
-const TEXT_COLORS = ['#0B7A75', '#C6A15B', '#1D4ED8', '#B91C1C', '#15803D', '#7C3AED', '#14282D', '#64748B'];
+const TEXT_COLORS = ['#094BAF', '#C6A15B', '#1D4ED8', '#B91C1C', '#15803D', '#7C3AED', '#0E1B30', '#64748B'];
 const HIGHLIGHTS = ['#FEF08A', '#BBF7D0', '#BFDBFE', '#FBCFE8', '#FED7AA', '#E2C98C'];
 
 const fa = (n: number) => n.toLocaleString('fa-IR');
@@ -86,14 +86,14 @@ const ToolButton: React.FC<{ label: string; icon: React.ElementType; onClick: ()
     onMouseDown={(event) => event.preventDefault()}
     onClick={onClick}
     className={`inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md transition-colors disabled:opacity-35 ${FOCUS} ${
-      active ? 'bg-[#0B7A75] text-white' : tone === 'danger' ? 'text-[#B91C1C] hover:bg-[#FEE2E2]' : 'text-[#3F5257] hover:bg-[#E6ECEE]'
+      active ? 'bg-[#094BAF] text-white' : tone === 'danger' ? 'text-[#B91C1C] hover:bg-[#FEE2E2]' : 'text-[#3E4C63] hover:bg-[#E6ECEE]'
     }`}
   >
     <Icon className="h-4 w-4" />
   </button>
 );
 
-const Divider = () => <span aria-hidden="true" className="mx-0.5 h-5 w-px shrink-0 bg-[#D5DDE0]" />;
+const Divider = () => <span aria-hidden="true" className="mx-0.5 h-5 w-px shrink-0 bg-[#D4DCE8]" />;
 
 /** A toolbar button that opens a small panel under it, closed by clicking anywhere else. */
 const Popover: React.FC<{ label: string; icon: React.ElementType; active?: boolean; children: (close: () => void) => React.ReactNode }> = ({ label, icon, active, children }) => {
@@ -108,7 +108,7 @@ const Popover: React.FC<{ label: string; icon: React.ElementType; active?: boole
   return (
     <div ref={ref} className="relative">
       <ToolButton label={label} icon={icon} active={active || open} onClick={() => setOpen((value) => !value)} />
-      {open && <div className="absolute right-0 top-full z-30 mt-1.5 rounded-lg border border-[#D5DDE0] bg-white p-2.5 shadow-xl">{children(() => setOpen(false))}</div>}
+      {open && <div className="absolute right-0 top-full z-30 mt-1.5 rounded-lg border border-[#D4DCE8] bg-white p-2.5 shadow-xl">{children(() => setOpen(false))}</div>}
     </div>
   );
 };
@@ -129,7 +129,7 @@ const Swatches: React.FC<{ colors: string[]; onPick: (color: string | null) => v
         />
       ))}
     </div>
-    <button type="button" onMouseDown={(event) => event.preventDefault()} onClick={() => onPick(null)} className="mt-2 w-full rounded-md py-1.5 text-xs font-bold text-[#3F5257] hover:bg-[#F4F6F7]">
+    <button type="button" onMouseDown={(event) => event.preventDefault()} onClick={() => onPick(null)} className="mt-2 w-full rounded-md py-1.5 text-xs font-bold text-[#3E4C63] hover:bg-[#F4F6FA]">
       {clearLabel}
     </button>
   </div>
@@ -164,9 +164,9 @@ const InlineForm: React.FC<{ label: string; initial: string; placeholder?: strin
             onSubmit(value.trim());
           }
         }}
-        className="h-8 w-56 rounded-md border border-[#D5DDE0] bg-white px-2.5 text-[13px] outline-none focus:border-[#0B7A75]"
+        className="h-8 w-56 rounded-md border border-[#D4DCE8] bg-white px-2.5 text-[13px] outline-none focus:border-[#094BAF]"
       />
-      <button type="button" onClick={() => onSubmit(value.trim())} className="h-8 shrink-0 rounded-md bg-[#0B7A75] px-3 text-xs font-bold text-white hover:bg-[#096762]">
+      <button type="button" onClick={() => onSubmit(value.trim())} className="h-8 shrink-0 rounded-md bg-[#094BAF] px-3 text-xs font-bold text-white hover:bg-[#08419A]">
         {submitLabel}
       </button>
     </div>
@@ -188,7 +188,7 @@ const Toolbar: React.FC<{ editor: Editor; onPickImage: () => void; uploading: bo
   const block = editor.isActive('heading', { level: 2 }) ? 'h2' : editor.isActive('heading', { level: 3 }) ? 'h3' : editor.isActive('heading', { level: 4 }) ? 'h4' : 'p';
 
   return (
-    <div role="toolbar" aria-label="ابزار ویرایش متن" className="flex flex-wrap items-center gap-0.5 border-b border-[#E3E8EA] bg-[#F7FAFA] px-2 py-1.5">
+    <div role="toolbar" aria-label="ابزار ویرایش متن" className="flex flex-wrap items-center gap-0.5 border-b border-[#E2E8F1] bg-[#F7F9FC] px-2 py-1.5">
       <ToolButton label="بازگشت" icon={Undo2} disabled={!editor.can().undo()} onClick={() => chain().undo().run()} />
       <ToolButton label="انجام دوباره" icon={Redo2} disabled={!editor.can().redo()} onClick={() => chain().redo().run()} />
       <Divider />
@@ -200,7 +200,7 @@ const Toolbar: React.FC<{ editor: Editor; onPickImage: () => void; uploading: bo
           if (next === 'p') chain().setParagraph().run();
           else chain().setHeading({ level: Number(next.slice(1)) as 2 | 3 | 4 }).run();
         }}
-        className="h-8 rounded-md border border-[#D5DDE0] bg-white px-2 text-[13px] font-bold text-[#14282D] outline-none focus:border-[#0B7A75]"
+        className="h-8 rounded-md border border-[#D4DCE8] bg-white px-2 text-[13px] font-bold text-[#0E1B30] outline-none focus:border-[#094BAF]"
       >
         <option value="p">متن عادی</option>
         <option value="h2">تیتر اصلی (H2)</option>
@@ -285,7 +285,7 @@ const Toolbar: React.FC<{ editor: Editor; onPickImage: () => void; uploading: bo
 /** Extra controls for what the cursor is on: a table, a picture or a link. */
 const ContextBar: React.FC<{ editor: Editor }> = ({ editor }) => {
   const chain = () => editor.chain().focus();
-  const bar = 'flex flex-wrap items-center gap-1 border-b border-[#E3E8EA] bg-[#FFFBEB] px-2 py-1.5 text-xs font-bold text-[#92400E]';
+  const bar = 'flex flex-wrap items-center gap-1 border-b border-[#E2E8F1] bg-[#FFFBEB] px-2 py-1.5 text-xs font-bold text-[#92400E]';
 
   if (editor.isActive('image')) {
     const { alt = '', src = '' } = editor.getAttributes('image');
@@ -437,7 +437,7 @@ export const RichTextEditor: React.FC<Props> = ({ value, onChange, dir, lang, pl
     <div
       // The light site theme's colors, so the text looks as it will on the site
       data-theme="light"
-      className={`rich-editor overflow-hidden border bg-white ${invalid ? 'border-[#DC2626]' : 'border-[#D5DDE0]'} ${
+      className={`rich-editor overflow-hidden border bg-white ${invalid ? 'border-[#DC2626]' : 'border-[#D4DCE8]'} ${
         fullscreen ? 'fixed inset-0 z-[60] flex flex-col rounded-none' : 'rounded-lg'
       }`}
     >
@@ -452,7 +452,7 @@ export const RichTextEditor: React.FC<Props> = ({ value, onChange, dir, lang, pl
               <EditorContent editor={editor} />
             </div>
           </div>
-          <div className="flex flex-wrap items-center justify-between gap-2 border-t border-[#E3E8EA] bg-[#F7FAFA] px-3 py-1.5 text-[11px] text-[#5F7177]">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-t border-[#E2E8F1] bg-[#F7F9FC] px-3 py-1.5 text-[11px] text-[#5D6B82]">
             <span>
               {fa(words)} کلمه · {fa(characters)} کاراکتر · حدود {fa(Math.max(1, Math.round(words / 200)))} دقیقه مطالعه
             </span>
@@ -465,7 +465,7 @@ export const RichTextEditor: React.FC<Props> = ({ value, onChange, dir, lang, pl
         </>
       ) : (
         <div className="flex h-72 items-center justify-center">
-          <Loader2 className="h-6 w-6 animate-spin text-[#0B7A75]" />
+          <Loader2 className="h-6 w-6 animate-spin text-[#094BAF]" />
         </div>
       )}
       <input

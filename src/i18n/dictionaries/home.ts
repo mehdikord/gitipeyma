@@ -37,6 +37,25 @@ export const home = defineMessages({
       consultation: 'درخواست مشاوره',
       browse: 'جستجو در فهرست خدمات',
     },
+    cargoInsurance: {
+      eyebrow: 'CARGO INSURANCE',
+      title: 'ارسال بار به ایران با بیمه بی‌قیدوشرط',
+      lead: 'هزینه ارسال بر اساس وزن، ابعاد و نوع کالا محاسبه می‌شود. در صورت تمایل، مشتری می‌تواند هر مبلغی از ارزش کالا را بیمه کند و یک‌سوم مبلغ پوشش درخواستی را بپردازد.',
+      inquiry: 'دریافت استعلام کارگو',
+      costLabel: 'هزینه ارسال',
+      insured: {
+        title: 'ارسال با بیمه بی‌قیدوشرط',
+        text: 'مبلغ پوشش بیمه را خودتان انتخاب می‌کنید. هزینه بیمه برابر یک‌سوم همان مبلغ است؛ لازم نیست کل ارزش کالا را بیمه کنید.',
+        cost: 'یک‌سوم مبلغ پوشش درخواستی',
+      },
+      uninsured: {
+        title: 'ارسال بدون بیمه',
+        text: 'اگر بیمه نخواهید، هزینه ارسال فقط پس از بررسی وزن، ابعاد و نوع کالا محاسبه و اعلام می‌شود.',
+        cost: 'محاسبه براساس وزن، ابعاد و نوع کالا',
+      },
+      example: 'مثال: اگر برای کالای خود ۳۰۰٬۰۰۰ لیر پوشش بیمه بخواهید، هزینه بیمه بی‌قیدوشرط ۱۰۰٬۰۰۰ لیر خواهد بود. می‌توانید مبلغ پوشش کمتر یا بیشتری انتخاب کنید.',
+      lira: '{amount} لیر',
+    },
     support: {
       title: 'مرکز پاسخگویی و همراهی شبانه‌روزی',
       lead: 'در تمام مسیر، تنها نخواهید بود. از رزرو بلیت و ترخیص کارگو تا تشریفات قانونی، از پایانه‌های ایران تا استانبول همراه شما هستیم.',
@@ -134,6 +153,25 @@ export const home = defineMessages({
       consultation: 'Request a consultation',
       browse: 'Browse all services',
     },
+    cargoInsurance: {
+      eyebrow: 'CARGO INSURANCE',
+      title: 'Ship cargo to Iran with unconditional insurance',
+      lead: 'Shipping is priced by the weight, dimensions and type of the goods. If you wish, you can insure any amount of the goods’ value and pay one third of the coverage you ask for.',
+      inquiry: 'Get a cargo quote',
+      costLabel: 'Shipping cost',
+      insured: {
+        title: 'Ship with unconditional insurance',
+        text: 'You choose the coverage amount yourself. The insurance costs one third of that amount; you don’t have to insure the full value of the goods.',
+        cost: 'One third of the coverage you ask for',
+      },
+      uninsured: {
+        title: 'Ship without insurance',
+        text: 'If you don’t want insurance, the shipping cost is worked out and quoted only after the weight, dimensions and type of the goods are checked.',
+        cost: 'Based on weight, dimensions and type of goods',
+      },
+      example: 'Example: if you want 300,000 lira of coverage for your goods, the unconditional insurance costs 100,000 lira. You can choose a lower or higher coverage amount.',
+      lira: '{amount} lira',
+    },
     support: {
       title: 'Support and assistance, around the clock',
       lead: 'You are never on your own along the way. From booking tickets and clearing cargo to legal formalities, we are with you from Iran’s terminals to Istanbul.',
@@ -230,6 +268,25 @@ export const home = defineMessages({
       unsureText: 'Durumunuzu anlatın; İstanbul ve Tahran ofislerimizdeki uzmanlar size doğru yolu önersin.',
       consultation: 'Danışmanlık talebi',
       browse: 'Tüm hizmetlere göz atın',
+    },
+    cargoInsurance: {
+      eyebrow: 'CARGO INSURANCE',
+      title: 'İran’a koşulsuz sigortalı kargo gönderimi',
+      lead: 'Gönderim ücreti, eşyanın ağırlığı, boyutları ve türüne göre hesaplanır. Dilerseniz eşya değerinin istediğiniz kadarını sigortalatabilir ve talep ettiğiniz teminat tutarının üçte birini ödersiniz.',
+      inquiry: 'Kargo fiyat teklifi alın',
+      costLabel: 'Gönderim ücreti',
+      insured: {
+        title: 'Koşulsuz sigortalı gönderim',
+        text: 'Sigorta teminat tutarını siz seçersiniz. Sigorta ücreti bu tutarın üçte biridir; eşyanın tüm değerini sigortalatmanız gerekmez.',
+        cost: 'Talep edilen teminat tutarının üçte biri',
+      },
+      uninsured: {
+        title: 'Sigortasız gönderim',
+        text: 'Sigorta istemezseniz, gönderim ücreti yalnızca eşyanın ağırlığı, boyutları ve türü incelendikten sonra hesaplanıp bildirilir.',
+        cost: 'Ağırlık, boyut ve eşya türüne göre hesaplanır',
+      },
+      example: 'Örnek: Eşyanız için 300.000 lira sigorta teminatı isterseniz, koşulsuz sigorta ücreti 100.000 lira olur. Daha düşük veya daha yüksek bir teminat tutarı seçebilirsiniz.',
+      lira: '{amount} lira',
     },
     support: {
       title: '7/24 destek ve yol arkadaşlığı',

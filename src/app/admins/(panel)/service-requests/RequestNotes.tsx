@@ -45,10 +45,10 @@ const Note: React.FC<{ note: ServiceRequestNoteRow }> = ({ note }) => {
   };
 
   return (
-    <li className="rounded-lg border border-[#E3E8EA] bg-white p-3">
+    <li className="rounded-lg border border-[#E2E8F1] bg-white p-3">
       <div className="mb-1.5 flex items-start justify-between gap-2">
-        <p className="text-xs leading-relaxed text-[#5F7177]">
-          <span className="font-bold text-[#14282D]">{note.author ?? 'نویسنده نامشخص'}</span>
+        <p className="text-xs leading-relaxed text-[#5D6B82]">
+          <span className="font-bold text-[#0E1B30]">{note.author ?? 'نویسنده نامشخص'}</span>
           {' · '}
           {formatDateTime(note.createdAt)}
           {note.editedAt && (
@@ -82,7 +82,7 @@ const Note: React.FC<{ note: ServiceRequestNoteRow }> = ({ note }) => {
           </div>
         </div>
       ) : (
-        <p className="whitespace-pre-line break-words text-sm leading-7 text-[#14282D]">{note.body}</p>
+        <p className="whitespace-pre-line break-words text-sm leading-7 text-[#0E1B30]">{note.body}</p>
       )}
     </li>
   );
@@ -94,13 +94,13 @@ export const RequestNotes: React.FC<{ requestId: number; notes: ServiceRequestNo
 
   return (
     <section aria-labelledby={`notes-${requestId}`}>
-      <h3 id={`notes-${requestId}`} className="mb-2 text-[13px] font-bold text-[#14282D]">
-        یادداشت‌ها و گزارش‌ها <span className="font-normal text-[#5F7177]">({notes.length.toLocaleString('fa-IR')})</span>
+      <h3 id={`notes-${requestId}`} className="mb-2 text-[13px] font-bold text-[#0E1B30]">
+        یادداشت‌ها و گزارش‌ها <span className="font-normal text-[#5D6B82]">({notes.length.toLocaleString('fa-IR')})</span>
       </h3>
-      <p className="mb-3 text-xs leading-relaxed text-[#5F7177]">فقط مدیرانی که به این درخواست دسترسی دارند می‌بینند؛ مثلاً نتیجه تماس، مدارک دریافتی یا قدم بعدی.</p>
+      <p className="mb-3 text-xs leading-relaxed text-[#5D6B82]">فقط مدیرانی که به این درخواست دسترسی دارند می‌بینند؛ مثلاً نتیجه تماس، مدارک دریافتی یا قدم بعدی.</p>
 
       {notes.length === 0 ? (
-        <p className="mb-3 rounded-lg border border-dashed border-[#D5DDE0] px-3 py-4 text-center text-[13px] text-[#5F7177]">هنوز یادداشتی ثبت نشده است.</p>
+        <p className="mb-3 rounded-lg border border-dashed border-[#D4DCE8] px-3 py-4 text-center text-[13px] text-[#5D6B82]">هنوز یادداشتی ثبت نشده است.</p>
       ) : (
         <ol className="mb-3 max-h-[22rem] space-y-2 overflow-y-auto">
           {notes.map((note) => (
@@ -110,7 +110,7 @@ export const RequestNotes: React.FC<{ requestId: number; notes: ServiceRequestNo
         </ol>
       )}
 
-      <div className="space-y-2 rounded-lg bg-[#F4F6F7] p-3">
+      <div className="space-y-2 rounded-lg bg-[#F4F6FA] p-3">
         <TextArea label="یادداشت جدید" rows={3} maxLength={NOTE_MAX} placeholder="گزارش خود را بنویسید..." value={body} onChange={setBody} error={action.error ?? undefined} />
         <div className="flex justify-end">
           <Button size="sm" icon={MessageSquarePlus} loading={action.pending} disabled={!body.trim()} onClick={() => action.run(addServiceRequestNote, { id: requestId, body }, () => setBody(''))}>

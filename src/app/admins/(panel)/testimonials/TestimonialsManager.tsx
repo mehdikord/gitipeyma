@@ -46,7 +46,7 @@ const RATINGS = [5, 4, 3, 2, 1].map((n) => ({ value: String(n), label: `${n.toLo
 const Stars = ({ rating }: { rating: number }) => (
   <span className="inline-flex" aria-label={`${rating} از ۵`}>
     {Array.from({ length: 5 }, (_, i) => (
-      <Star key={i} className={`h-3.5 w-3.5 ${i < rating ? 'fill-[#E2A93B] text-[#E2A93B]' : 'text-[#CBD5D8]'}`} />
+      <Star key={i} className={`h-3.5 w-3.5 ${i < rating ? 'fill-[#E2A93B] text-[#E2A93B]' : 'text-[#CAD3E1]'}`} />
     ))}
   </span>
 );
@@ -91,18 +91,18 @@ export const TestimonialsManager: React.FC<{ list: Paginated<TestimonialRow>; ca
           cell: (row) => (
             <>
               <span className="block">{fa(row.clientName)}</span>
-              <span className="block text-xs font-normal text-[#5F7177]">{fa(row.serviceTitle)}</span>
+              <span className="block text-xs font-normal text-[#5D6B82]">{fa(row.serviceTitle)}</span>
             </>
           ),
         },
-        { key: 'comment', header: 'متن نظر', hideOnMobile: true, cell: (row) => <span className="line-clamp-2 max-w-md text-[13px] font-normal text-[#3F5257]">{fa(row.comment)}</span> },
+        { key: 'comment', header: 'متن نظر', hideOnMobile: true, cell: (row) => <span className="line-clamp-2 max-w-md text-[13px] font-normal text-[#3E4C63]">{fa(row.comment)}</span> },
         { key: 'rating', header: 'امتیاز', cell: (row) => <Stars rating={row.rating} /> },
         {
           key: 'state',
           header: 'وضعیت',
           cell: (row) => (row.isPublished ? <Badge tone="green">منتشرشده</Badge> : row.source === 'visitor' ? <Badge tone="amber">در انتظار تأیید</Badge> : <Badge>پیش‌نویس</Badge>),
         },
-        { key: 'date', header: 'تاریخ ثبت', hideOnMobile: true, className: 'whitespace-nowrap text-xs font-normal text-[#5F7177]', cell: (row) => formatDate(row.createdAt) },
+        { key: 'date', header: 'تاریخ ثبت', hideOnMobile: true, className: 'whitespace-nowrap text-xs font-normal text-[#5D6B82]', cell: (row) => formatDate(row.createdAt) },
       ]}
       rowActions={(row) => <IconButton label={row.isPublished ? 'برداشتن از سایت' : 'تأیید و انتشار'} icon={row.isPublished ? EyeOff : Check} onClick={() => togglePublished(row)} />}
       emptyValues={() => ({

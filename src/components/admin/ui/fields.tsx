@@ -19,7 +19,7 @@ export const Field: React.FC<FieldProps> = ({ label, error, hint, required, clas
   const describedBy = error ? `${id}-error` : hint ? `${id}-hint` : undefined;
   return (
     <div className={className}>
-      <label htmlFor={id} className="mb-1.5 block text-[13px] font-bold text-[#14282D]">
+      <label htmlFor={id} className="mb-1.5 block text-[13px] font-bold text-[#0E1B30]">
         {label}
         {required && <span className="mr-0.5 text-[#DC2626]">*</span>}
       </label>
@@ -30,7 +30,7 @@ export const Field: React.FC<FieldProps> = ({ label, error, hint, required, clas
         </p>
       ) : (
         hint && (
-          <p id={`${id}-hint`} className="mt-1.5 text-xs leading-relaxed text-[#5F7177]">
+          <p id={`${id}-hint`} className="mt-1.5 text-xs leading-relaxed text-[#5D6B82]">
             {hint}
           </p>
         )
@@ -169,12 +169,12 @@ export const Switch: React.FC<{ label: string; checked: boolean; onChange: (chec
   <label className={`flex items-start gap-3 ${disabled ? 'opacity-60' : 'cursor-pointer'}`}>
     <span className="relative mt-0.5 inline-flex shrink-0">
       <input type="checkbox" role="switch" checked={checked} disabled={disabled} onChange={(event) => onChange(event.target.checked)} className={`peer sr-only`} />
-      <span className={`h-6 w-11 rounded-full bg-[#CBD5D8] transition-colors peer-checked:bg-[#0B7A75] peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[#0B7A75]`} />
+      <span className={`h-6 w-11 rounded-full bg-[#CAD3E1] transition-colors peer-checked:bg-[#094BAF] peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[#094BAF]`} />
       <span className="absolute right-0.5 top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform peer-checked:-translate-x-5" />
     </span>
     <span>
-      <span className="block text-sm font-bold text-[#14282D]">{label}</span>
-      {hint && <span className="block mt-0.5 text-xs text-[#5F7177]">{hint}</span>}
+      <span className="block text-sm font-bold text-[#0E1B30]">{label}</span>
+      {hint && <span className="block mt-0.5 text-xs text-[#5D6B82]">{hint}</span>}
     </span>
   </label>
 );
@@ -182,15 +182,15 @@ export const Switch: React.FC<{ label: string; checked: boolean; onChange: (chec
 /** A row of checkboxes for picking several of a few options. */
 export const CheckboxGroup: React.FC<Common & { values: string[]; onChange: (values: string[]) => void; options: Option[] }> = ({ label, error, hint, values, onChange, options, className }) => (
   <fieldset className={className}>
-    <legend className="mb-1.5 block text-[13px] font-bold text-[#14282D]">{label}</legend>
+    <legend className="mb-1.5 block text-[13px] font-bold text-[#0E1B30]">{label}</legend>
     <div className="flex flex-wrap gap-2">
       {options.map((option) => {
         const checked = values.includes(option.value);
         return (
           <label
             key={option.value}
-            className={`inline-flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-1.5 text-[13px] font-bold transition-colors has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-[#0B7A75] ${
-              checked ? 'border-[#0B7A75] bg-[#E6F4F3] text-[#0B5F5B]' : 'border-[#D5DDE0] text-[#3F5257] hover:bg-[#F4F6F7]'
+            className={`inline-flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-1.5 text-[13px] font-bold transition-colors has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-[#094BAF] ${
+              checked ? 'border-[#094BAF] bg-[#E7EEFA] text-[#073C8C]' : 'border-[#D4DCE8] text-[#3E4C63] hover:bg-[#F4F6FA]'
             }`}
           >
             <input
@@ -204,7 +204,7 @@ export const CheckboxGroup: React.FC<Common & { values: string[]; onChange: (val
         );
       })}
     </div>
-    {error ? <p className="mt-1.5 text-xs text-[#DC2626]">{error}</p> : hint && <p className="mt-1.5 text-xs text-[#5F7177]">{hint}</p>}
+    {error ? <p className="mt-1.5 text-xs text-[#DC2626]">{error}</p> : hint && <p className="mt-1.5 text-xs text-[#5D6B82]">{hint}</p>}
   </fieldset>
 );
 
@@ -221,7 +221,7 @@ export const FormGrid: React.FC<{ children: React.ReactNode; cols?: 1 | 2 | 3 }>
 );
 
 export const SectionTitle: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = '' }) => (
-  <h3 className={`mb-3 text-sm font-black text-[#0B5F5B] ${className}`}>{children}</h3>
+  <h3 className={`mb-3 text-sm font-black text-[#073C8C] ${className}`}>{children}</h3>
 );
 
 export { FOCUS };

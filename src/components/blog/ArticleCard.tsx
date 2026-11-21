@@ -114,7 +114,7 @@ export async function ArticleCard({
           </Heading>
           <p dir="auto" className="mt-4 text-[15px] leading-8 text-ink-muted line-clamp-3">{article.excerpt}</p>
           <ArticleMeta article={article} views className="mt-6" />
-          <span className="mt-7 inline-flex w-fit items-center gap-2 rounded-full bg-brand-fill px-5 py-2.5 text-sm font-bold text-on-accent transition-colors group-hover:bg-brand-bright-fill">
+          <span className="mt-7 inline-flex w-fit items-center gap-2 rounded-full bg-brand-fill px-5 py-2.5 text-sm font-bold text-on-brand transition-colors group-hover:bg-brand-bright-fill">
             {t.blog.card.read}
             <ArrowUpRight aria-hidden="true" className="h-4 w-4 rtl:-scale-x-100" />
           </span>
@@ -145,7 +145,7 @@ export async function ArticleCard({
         <p dir="auto" className="mt-2 text-sm leading-7 text-ink-muted line-clamp-3">{article.excerpt}</p>
         <div className="mt-auto flex items-center justify-between pt-5 text-xs font-bold text-brand">
           <span>{t.blog.card.read}</span>
-          <span aria-hidden="true" className="flex h-8 w-8 items-center justify-center rounded-full bg-brand/10 transition-colors group-hover:bg-brand-fill group-hover:text-on-accent">
+          <span aria-hidden="true" className="flex h-8 w-8 items-center justify-center rounded-full bg-brand/10 transition-colors group-hover:bg-brand-fill group-hover:text-on-brand">
             <ArrowUpRight className="h-4 w-4 rtl:-scale-x-100" />
           </span>
         </div>

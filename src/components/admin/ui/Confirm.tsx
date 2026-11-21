@@ -50,7 +50,7 @@ export const ConfirmProvider: React.FC<{ children: React.ReactNode }> = ({ child
           </>
         }
       >
-        <div className="text-sm leading-7 text-[#3F5257]">{options?.message ?? 'این کار قابل بازگشت نیست.'}</div>
+        <div className="text-sm leading-7 text-[#3E4C63]">{options?.message ?? 'این کار قابل بازگشت نیست.'}</div>
       </Modal>
     </ConfirmContext.Provider>
   );

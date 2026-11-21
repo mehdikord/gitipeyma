@@ -143,7 +143,7 @@ const NeedPicker: React.FC = () => {
             <ActionLink
               href={selected.primary.href}
               kind={selected.primary.kind}
-              className={`inline-flex items-center justify-center gap-2.5 px-5 py-3.5 rounded-lg bg-brand-fill hover:bg-brand-bright-fill text-on-accent font-extrabold text-sm sm:text-[15px] transition-colors ${FOCUS}`}
+              className={`inline-flex items-center justify-center gap-2.5 px-5 py-3.5 rounded-lg bg-brand-fill hover:bg-brand-bright-fill text-on-brand font-extrabold text-sm sm:text-[15px] transition-colors ${FOCUS}`}
             >
               <span>{selected.primary.label}</span>
               {selected.primary.note && (
@@ -170,9 +170,9 @@ const NeedPicker: React.FC = () => {
 
 // The dial has room for three office rings, drawn from the outside in.
 const RINGS = [
-  { color: '#12B8B0', radius: 146 },
-  { color: '#7CF3EC', radius: 128 },
-  { color: '#7FA2AA', radius: 110 },
+  { color: '#2F74E0', radius: 146 },
+  { color: '#9CC0FA', radius: 128 },
+  { color: '#8195B5', radius: 110 },
 ];
 
 type OfficeRow = { office: Office; name: string; color: string; radius: number };
@@ -239,12 +239,12 @@ const CoverageDial: React.FC = () => {
             const major = index % 4 === 0;
             const a = dialPoint(index * 15, major ? 178 : 180);
             const b = dialPoint(index * 15, 186);
-            return <line key={index} x1={a.x} y1={a.y} x2={b.x} y2={b.y} stroke={major ? '#7FA2AA' : '#2C4A52'} strokeWidth={major ? 1.5 : 1} />;
+            return <line key={index} x1={a.x} y1={a.y} x2={b.x} y2={b.y} stroke={major ? '#8195B5' : '#22365A'} strokeWidth={major ? 1.5 : 1} />;
           })}
 
           {/* Unlit tracks */}
           {OFFICE_ROWS.map((row) => (
-            <circle key={row.name} cx={CENTER} cy={CENTER} r={row.radius} fill="none" stroke="#14323A" strokeWidth="7" />
+            <circle key={row.name} cx={CENTER} cy={CENTER} r={row.radius} fill="none" stroke="#13254A" strokeWidth="7" />
           ))}
 
           {/* The support line: a closed gold ring, 24 hours with no gap */}
@@ -282,7 +282,7 @@ const CoverageDial: React.FC = () => {
                 <line x1={CENTER} y1={CENTER - 92} x2={CENTER} y2={CENTER - RING_RADIUS} stroke="#F7F7F3" strokeWidth="2" />
               </g>
               <circle className="sup-pulse" cx={tip.x} cy={tip.y} r="9" fill="#F7F7F3" />
-              <circle cx={tip.x} cy={tip.y} r="6.5" fill="#F7F7F3" stroke="#07191F" strokeWidth="2" />
+              <circle cx={tip.x} cy={tip.y} r="6.5" fill="#F7F7F3" stroke="#050D1C" strokeWidth="2" />
             </>
           )}
         </svg>

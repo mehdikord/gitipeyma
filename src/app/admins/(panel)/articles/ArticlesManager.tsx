@@ -84,12 +84,12 @@ export const ArticlesManager: React.FC<{ articles: Paginated<ArticleAdminRow>; c
             header: 'مقاله',
             cell: (row) => (
               <div className="flex min-w-64 items-center gap-3">
-                <div className="flex h-12 w-16 shrink-0 items-center justify-center overflow-hidden rounded-md bg-[#EEF2F3]">
+                <div className="flex h-12 w-16 shrink-0 items-center justify-center overflow-hidden rounded-md bg-[#EEF2F8]">
                   {row.image ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={row.image} alt="" className="h-full w-full object-cover" loading="lazy" />
                   ) : (
-                    <FileText className="h-5 w-5 text-[#B8C5C9]" />
+                    <FileText className="h-5 w-5 text-[#B8C3D4]" />
                   )}
                 </div>
                 <div className="min-w-0">
@@ -97,7 +97,7 @@ export const ArticlesManager: React.FC<{ articles: Paginated<ArticleAdminRow>; c
                     {row.isFeatured && <Star aria-label="مقاله ویژه" className="h-3.5 w-3.5 shrink-0 fill-[#E2C98C] text-[#C6A15B]" />}
                     <span className="line-clamp-2">{fa(row.title)}</span>
                   </p>
-                  <p dir="ltr" className="mt-0.5 truncate text-right text-xs text-[#94A3A8]">
+                  <p dir="ltr" className="mt-0.5 truncate text-right text-xs text-[#94A1B5]">
                     /blog/{row.slug}
                   </p>
                 </div>
@@ -110,20 +110,20 @@ export const ArticlesManager: React.FC<{ articles: Paginated<ArticleAdminRow>; c
             key: 'date',
             header: 'تاریخ انتشار',
             hideOnMobile: true,
-            cell: (row) => <span className="whitespace-nowrap text-[13px] text-[#3F5257]">{row.publishedAt ? date(row.publishedAt) : '—'}</span>,
+            cell: (row) => <span className="whitespace-nowrap text-[13px] text-[#3E4C63]">{row.publishedAt ? date(row.publishedAt) : '—'}</span>,
           },
           {
             key: 'views',
             header: 'بازدید',
             hideOnMobile: true,
             cell: (row) => (
-              <span className="inline-flex items-center gap-1 text-[13px] font-bold text-[#3F5257]">
-                <Eye className="h-3.5 w-3.5 text-[#94A3A8]" />
+              <span className="inline-flex items-center gap-1 text-[13px] font-bold text-[#3E4C63]">
+                <Eye className="h-3.5 w-3.5 text-[#94A1B5]" />
                 {num(row.views)}
               </span>
             ),
           },
-          { key: 'tags', header: 'برچسب', hideOnMobile: true, cell: (row) => <span className="text-[13px] text-[#5F7177]">{row.tagCount ? num(row.tagCount) : '—'}</span> },
+          { key: 'tags', header: 'برچسب', hideOnMobile: true, cell: (row) => <span className="text-[13px] text-[#5D6B82]">{row.tagCount ? num(row.tagCount) : '—'}</span> },
           {
             key: 'translations',
             header: 'ترجمه',
@@ -142,7 +142,7 @@ export const ArticlesManager: React.FC<{ articles: Paginated<ArticleAdminRow>; c
                 rel="noreferrer"
                 title="مشاهده در سایت"
                 aria-label="مشاهده در سایت"
-                className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[#3F5257] hover:bg-[#EEF2F3]"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[#3E4C63] hover:bg-[#EEF2F8]"
               >
                 <ExternalLink className="h-4 w-4" />
               </a>

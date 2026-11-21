@@ -14,7 +14,7 @@ export async function LatestArticlesSection({ articles }: { articles: ArticleCar
   const viewAll = (
     <Link
       href={path('/blog')}
-      className={`group inline-flex w-fit items-center gap-2 rounded-full border border-brand/30 bg-surface px-6 py-3 text-sm font-bold text-ink transition-colors hover:border-brand hover:bg-brand-fill hover:text-on-accent ${FOCUS}`}
+      className={`group inline-flex w-fit items-center gap-2 rounded-full border border-brand/30 bg-surface px-6 py-3 text-sm font-bold text-ink transition-colors hover:border-brand hover:bg-brand-fill hover:text-on-brand ${FOCUS}`}
     >
       {t.blog.home.viewAll}
       <ArrowLeft aria-hidden="true" className="h-4 w-4 transition-transform ltr:rotate-180 rtl:group-hover:-translate-x-1 ltr:group-hover:translate-x-1" />

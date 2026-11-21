@@ -96,7 +96,7 @@ export const Footer: React.FC = () => {
                       target="_blank"
                       rel="noreferrer"
                       aria-label={social.label}
-                      className={`flex items-center justify-center w-11 h-11 rounded-lg border border-ink/15 text-ink-soft hover:text-on-accent hover:bg-brand-fill hover:border-brand transition-colors ${FOCUS}`}
+                      className={`flex items-center justify-center w-11 h-11 rounded-lg border border-ink/15 text-ink-soft hover:text-on-brand hover:bg-brand-fill hover:border-brand transition-colors ${FOCUS}`}
                     >
                       <Icon className="w-5 h-5" />
                     </a>

@@ -95,7 +95,7 @@ export const AboutStorySection: React.FC = () => {
                 href={path('/about')}
                 scroll={false}
                 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                className="inline-flex w-fit px-6 py-3 rounded-full bg-surface hover:bg-brand-fill hover:text-on-accent text-ink border border-brand/30 font-bold text-sm transition-all duration-300 items-center gap-2 group"
+                className="inline-flex w-fit px-6 py-3 rounded-full bg-surface hover:bg-brand-fill hover:text-on-brand text-ink border border-brand/30 font-bold text-sm transition-all duration-300 items-center gap-2 group"
               >
                 <span>{t.more}</span>
                 <ArrowLeft className="w-4 h-4 transform ltr:-scale-x-100 rtl:group-hover:-translate-x-1 ltr:group-hover:translate-x-1 transition-transform" />

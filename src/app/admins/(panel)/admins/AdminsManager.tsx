@@ -12,14 +12,14 @@ import { CheckboxGroup, Option, TextInput } from '../../../../components/admin/u
 type Values = { name: string; phone: string; password: string; serviceIds: string[] };
 
 const ServicesCell: React.FC<{ row: AdminRow }> = ({ row }) => {
-  if (row.isRoot) return <span className="text-[#5F7177]">همه بخش‌ها</span>;
+  if (row.isRoot) return <span className="text-[#5D6B82]">همه بخش‌ها</span>;
   if (row.services.length === 0) return <span className="text-[#B45309]">هیچ خدمتی؛ درخواستی نمی‌بیند</span>;
   const shown = row.services.slice(0, 3).map((service) => service.title).join('، ');
   const more = row.services.length - 3;
   return (
     <span title={row.services.map((service) => service.title).join('، ')}>
       {shown}
-      {more > 0 && <span className="text-[#5F7177]"> و {more.toLocaleString('fa-IR')} خدمت دیگر</span>}
+      {more > 0 && <span className="text-[#5D6B82]"> و {more.toLocaleString('fa-IR')} خدمت دیگر</span>}
     </span>
   );
 };
@@ -46,7 +46,7 @@ export const AdminsManager: React.FC<{ rows: AdminRow[]; services: Option[] }> =
       { key: 'role', header: 'نقش', cell: (row) => (row.isRoot ? <Badge tone="amber">مدیر کل</Badge> : <Badge tone="blue">مدیر داخلی</Badge>) },
       { key: 'phone', header: 'شماره موبایل', hideOnMobile: true, cell: (row) => <span dir="ltr">{row.phone}</span> },
       { key: 'services', header: 'خدمات قابل دسترسی', className: 'text-[13px] font-normal', cell: (row) => <ServicesCell row={row} /> },
-      { key: 'lastLogin', header: 'آخرین ورود', hideOnMobile: true, className: 'whitespace-nowrap text-xs text-[#5F7177]', cell: (row) => formatDateTime(row.lastLoginAt) },
+      { key: 'lastLogin', header: 'آخرین ورود', hideOnMobile: true, className: 'whitespace-nowrap text-xs text-[#5D6B82]', cell: (row) => formatDateTime(row.lastLoginAt) },
     ]}
     emptyValues={() => ({ name: '', phone: '', password: '', serviceIds: [] })}
     toValues={(row) => ({ name: row.name, phone: row.phone, password: '', serviceIds: row.services.map((service) => String(service.id)) })}
@@ -68,9 +68,9 @@ export const AdminsManager: React.FC<{ rows: AdminRow[]; services: Option[] }> =
           onChange={(v) => set('password', v)}
           error={errors.password}
         />
-        <div className="rounded-lg border border-[#E3E8EA] p-4">
+        <div className="rounded-lg border border-[#E2E8F1] p-4">
           <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-            <p className="text-xs text-[#5F7177]">
+            <p className="text-xs text-[#5D6B82]">
               {values.serviceIds.length.toLocaleString('fa-IR')} از {services.length.toLocaleString('fa-IR')} خدمت انتخاب شده
             </p>
             <div className="flex gap-1.5">

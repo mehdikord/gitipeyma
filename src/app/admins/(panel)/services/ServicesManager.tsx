@@ -58,7 +58,7 @@ const ServiceForm: React.FC<{ form: FormApi<Values>; categories: Option[]; group
   return (
     <>
       {/* Stays at the top of the modal while a long list scrolls */}
-      <div role="tablist" className="sticky -top-5 z-10 -mx-1 -mt-5 mb-5 flex gap-1 overflow-x-auto border-b border-[#E3E8EA] bg-white pt-2">
+      <div role="tablist" className="sticky -top-5 z-10 -mx-1 -mt-5 mb-5 flex gap-1 overflow-x-auto border-b border-[#E2E8F1] bg-white pt-2">
         {TABS.map((item) => (
           <button
             key={item.id}
@@ -66,14 +66,14 @@ const ServiceForm: React.FC<{ form: FormApi<Values>; categories: Option[]; group
             role="tab"
             aria-selected={tab === item.id}
             onClick={() => setTab(item.id)}
-            className={`relative shrink-0 px-3 py-2.5 text-[13px] font-bold transition-colors ${tab === item.id ? 'text-[#0B7A75]' : 'text-[#5F7177] hover:text-[#14282D]'}`}
+            className={`relative shrink-0 px-3 py-2.5 text-[13px] font-bold transition-colors ${tab === item.id ? 'text-[#094BAF]' : 'text-[#5D6B82] hover:text-[#0E1B30]'}`}
           >
             {item.label}
             {item.id === 'features' && ` (${values.features.length.toLocaleString('fa-IR')})`}
             {item.id === 'steps' && ` (${values.steps.length.toLocaleString('fa-IR')})`}
             {item.id === 'faqs' && ` (${values.faqs.length.toLocaleString('fa-IR')})`}
             {tabHasError(item.fields) && <span aria-label="دارای خطا" className="mr-1.5 inline-block h-2 w-2 rounded-full bg-[#DC2626]" />}
-            {tab === item.id && <span aria-hidden="true" className="absolute inset-x-2 -bottom-px h-0.5 bg-[#0B7A75]" />}
+            {tab === item.id && <span aria-hidden="true" className="absolute inset-x-2 -bottom-px h-0.5 bg-[#094BAF]" />}
           </button>
         ))}
       </div>
@@ -100,7 +100,7 @@ const ServiceForm: React.FC<{ form: FormApi<Values>; categories: Option[]; group
             <NumberInput label="ترتیب نمایش" min={0} hint="عدد کمتر، جلوتر." value={values.sortOrder} onChange={(v) => set('sortOrder', v)} error={errors.sortOrder} />
           </FormGrid>
           <ImageField label="تصویر خدمت" folder="services" value={values.image} onChange={(v) => set('image', v)} error={errors.image} />
-          <div className="flex flex-col gap-3 rounded-lg bg-[#F4F6F7] p-4 sm:flex-row sm:gap-8">
+          <div className="flex flex-col gap-3 rounded-lg bg-[#F4F6FA] p-4 sm:flex-row sm:gap-8">
             <Switch label="فعال" hint="غیرفعال‌ها در سایت دیده نمی‌شوند." checked={values.isActive} onChange={(v) => set('isActive', v)} />
             <Switch label="خدمت ویژه" checked={values.isHighlighted} onChange={(v) => set('isHighlighted', v)} />
           </div>
@@ -199,12 +199,12 @@ export const ServicesManager: React.FC<{ services: ServiceAdminRow[]; categories
             const Icon = serviceIcon(row.icon);
             return (
               <span className="flex items-center gap-3">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#E6F4F3] text-[#0B5F5B]">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#E7EEFA] text-[#073C8C]">
                   <Icon className="h-4 w-4" />
                 </span>
                 <span className="min-w-0">
                   <span className="block font-bold">{fa(row.shortTitle)}</span>
-                  <span dir="ltr" className="block text-right text-xs text-[#5F7177]">
+                  <span dir="ltr" className="block text-right text-xs text-[#5D6B82]">
                     /{row.slug}
                   </span>
                 </span>
@@ -213,12 +213,12 @@ export const ServicesManager: React.FC<{ services: ServiceAdminRow[]; categories
           },
         },
         { key: 'category', header: 'دسته', hideOnMobile: true, cell: (row) => row.categoryTitle },
-        { key: 'group', header: 'گروه صفحه اصلی', hideOnMobile: true, cell: (row) => row.groupTitle ?? <span className="text-[#94A3A8]">—</span> },
+        { key: 'group', header: 'گروه صفحه اصلی', hideOnMobile: true, cell: (row) => row.groupTitle ?? <span className="text-[#94A1B5]">—</span> },
         {
           key: 'requests',
           header: 'درخواست‌ها',
           cell: (row) => (
-            <Link href={`/admins/service-requests?service=${row.id}`} onClick={(event) => event.stopPropagation()} className="inline-flex items-center gap-1.5 hover:text-[#0B7A75]">
+            <Link href={`/admins/service-requests?service=${row.id}`} onClick={(event) => event.stopPropagation()} className="inline-flex items-center gap-1.5 hover:text-[#094BAF]">
               {row.requestCount.toLocaleString('fa-IR')}
               {row.pendingCount > 0 && <Badge tone="amber">{row.pendingCount.toLocaleString('fa-IR')} جدید</Badge>}
             </Link>
@@ -229,14 +229,14 @@ export const ServicesManager: React.FC<{ services: ServiceAdminRow[]; categories
           header: 'فرم درخواست',
           hideOnMobile: true,
           cell: (row) => (
-            <Link href={`/admins/services/${row.id}/form`} onClick={(event) => event.stopPropagation()} className="inline-flex items-center gap-1.5 text-[#3F5257] hover:text-[#0B7A75]">
+            <Link href={`/admins/services/${row.id}/form`} onClick={(event) => event.stopPropagation()} className="inline-flex items-center gap-1.5 text-[#3E4C63] hover:text-[#094BAF]">
               <ListChecks className="h-4 w-4" />
-              {row.formFieldCount > 0 ? `${row.formFieldCount.toLocaleString('fa-IR')} فیلد` : <span className="text-[#94A3A8]">فقط نام و تماس</span>}
+              {row.formFieldCount > 0 ? `${row.formFieldCount.toLocaleString('fa-IR')} فیلد` : <span className="text-[#94A1B5]">فقط نام و تماس</span>}
             </Link>
           ),
         },
         { key: 'state', header: 'وضعیت', cell: (row) => <ActiveBadge active={row.isActive} /> },
-        { key: 'sortOrder', header: 'ترتیب', hideOnMobile: true, className: 'text-[#5F7177]', cell: (row) => row.sortOrder.toLocaleString('fa-IR') },
+        { key: 'sortOrder', header: 'ترتیب', hideOnMobile: true, className: 'text-[#5D6B82]', cell: (row) => row.sortOrder.toLocaleString('fa-IR') },
       ]}
       rowActions={(row) => (
         <>
@@ -246,7 +246,7 @@ export const ServicesManager: React.FC<{ services: ServiceAdminRow[]; categories
             rel="noreferrer"
             title="مشاهده در سایت"
             aria-label="مشاهده در سایت"
-            className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[#3F5257] hover:bg-[#EEF2F3]"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[#3E4C63] hover:bg-[#EEF2F8]"
           >
             <ExternalLink className="h-4 w-4" />
           </a>
@@ -254,11 +254,11 @@ export const ServicesManager: React.FC<{ services: ServiceAdminRow[]; categories
             href={`/admins/services/${row.id}/form`}
             title="مدیریت فرم خدمت"
             aria-label="مدیریت فرم خدمت"
-            className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[#3F5257] hover:bg-[#EEF2F3]"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[#3E4C63] hover:bg-[#EEF2F8]"
           >
             <ListChecks className="h-4 w-4" />
           </Link>
-          <Link href={`/admins/service-requests?service=${row.id}`} title="درخواست‌های این خدمت" aria-label="درخواست‌های این خدمت" className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[#3F5257] hover:bg-[#EEF2F3]">
+          <Link href={`/admins/service-requests?service=${row.id}`} title="درخواست‌های این خدمت" aria-label="درخواست‌های این خدمت" className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[#3E4C63] hover:bg-[#EEF2F8]">
             <ClipboardList className="h-4 w-4" />
           </Link>
           <IconButton label={row.isActive ? 'غیرفعال کردن' : 'فعال کردن'} icon={row.isActive ? EyeOff : Eye} onClick={() => toggleActive(row)} />

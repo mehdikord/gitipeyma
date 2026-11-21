@@ -42,17 +42,17 @@ export const FilterBar: React.FC<{ searchPlaceholder?: string; filters?: Filter[
     <div className="mb-4 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:items-center">
       {searchPlaceholder !== undefined && (
         <div className="relative sm:w-72">
-          <Search className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#94A3A8]" />
+          <Search className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#94A1B5]" />
           <input
             type="search"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder={searchPlaceholder}
             aria-label="جستجو"
-            className={`${INPUT} h-10 border-[#D5DDE0] pr-9 pl-8`}
+            className={`${INPUT} h-10 border-[#D4DCE8] pr-9 pl-8`}
           />
           {query && (
-            <button type="button" aria-label="پاک کردن جستجو" onClick={() => setQuery('')} className="absolute left-2 top-1/2 -translate-y-1/2 rounded p-1 text-[#94A3A8] hover:text-[#14282D]">
+            <button type="button" aria-label="پاک کردن جستجو" onClick={() => setQuery('')} className="absolute left-2 top-1/2 -translate-y-1/2 rounded p-1 text-[#94A1B5] hover:text-[#0E1B30]">
               <X className="h-3.5 w-3.5" />
             </button>
           )}
@@ -64,7 +64,7 @@ export const FilterBar: React.FC<{ searchPlaceholder?: string; filters?: Filter[
           aria-label={filter.label}
           value={searchParams.get(filter.name) ?? ''}
           onChange={(event) => apply({ [filter.name]: event.target.value })}
-          className={`${INPUT} h-10 border-[#D5DDE0] pl-8 sm:w-auto sm:min-w-44`}
+          className={`${INPUT} h-10 border-[#D4DCE8] pl-8 sm:w-auto sm:min-w-44`}
         >
           <option value="">{filter.allLabel ?? `${filter.label}: همه`}</option>
           {filter.options.map((option) => (
@@ -74,7 +74,7 @@ export const FilterBar: React.FC<{ searchPlaceholder?: string; filters?: Filter[
           ))}
         </select>
       ))}
-      {isPending && <Loader2 aria-label="در حال بارگذاری" className="h-4 w-4 animate-spin text-[#0B7A75]" />}
+      {isPending && <Loader2 aria-label="در حال بارگذاری" className="h-4 w-4 animate-spin text-[#094BAF]" />}
       {children && <div className="flex items-center gap-2 sm:mr-auto">{children}</div>}
     </div>
   );

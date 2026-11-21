@@ -56,8 +56,8 @@ export const LanguageTabs: React.FC<{ values: unknown; errors?: Record<string, s
   const errorKeys = Object.keys(errors);
 
   return (
-    <div className="flex flex-wrap items-center gap-2 border-b border-[#E3E8EA] bg-[#F7FAFA] px-5 py-2.5 sm:px-6">
-      <span className="flex items-center gap-1.5 text-xs font-bold text-[#5F7177]">
+    <div className="flex flex-wrap items-center gap-2 border-b border-[#E2E8F1] bg-[#F7F9FC] px-5 py-2.5 sm:px-6">
+      <span className="flex items-center gap-1.5 text-xs font-bold text-[#5D6B82]">
         <Languages className="h-4 w-4" />
         زبان محتوا:
       </span>
@@ -75,11 +75,11 @@ export const LanguageTabs: React.FC<{ values: unknown; errors?: Record<string, s
               aria-selected={active}
               onClick={() => setLocale(locale)}
               className={`inline-flex items-center gap-2 rounded-lg border px-3 py-1.5 text-[13px] font-bold transition-colors ${FOCUS} ${
-                active ? 'border-[#0B7A75] bg-white text-[#0B5F5B] shadow-sm' : 'border-transparent text-[#3F5257] hover:bg-white'
+                active ? 'border-[#094BAF] bg-white text-[#073C8C] shadow-sm' : 'border-transparent text-[#3E4C63] hover:bg-white'
               }`}
             >
               <span>{LOCALE_INFO[locale].adminName}</span>
-              <span dir="ltr" className="text-[11px] font-black text-[#94A3A8]">
+              <span dir="ltr" className="text-[11px] font-black text-[#94A1B5]">
                 {LOCALE_INFO[locale].short}
               </span>
               {hasError ? (
@@ -98,7 +98,7 @@ export const LanguageTabs: React.FC<{ values: unknown; errors?: Record<string, s
         })}
       </div>
       {current !== SOURCE_LOCALE && (
-        <span className="text-xs text-[#5F7177]">متن فارسی هر فیلد زیر آن نمایش داده می‌شود. فیلد خالی در سایت با متن زبان دیگر پر می‌شود.</span>
+        <span className="text-xs text-[#5D6B82]">متن فارسی هر فیلد زیر آن نمایش داده می‌شود. فیلد خالی در سایت با متن زبان دیگر پر می‌شود.</span>
       )}
     </div>
   );
@@ -111,7 +111,7 @@ export const TranslationStatus: React.FC<{ values: unknown }> = ({ values }) => 
     <span className="inline-flex gap-1" dir="ltr">
       {LOCALES.map((locale) => {
         const { done, total } = progress[locale];
-        const tone = total === 0 || done === 0 ? 'bg-[#F4F6F7] text-[#B8C5C9]' : done === total ? 'bg-[#DCFCE7] text-[#166534]' : 'bg-[#FEF3C7] text-[#92400E]';
+        const tone = total === 0 || done === 0 ? 'bg-[#F4F6FA] text-[#B8C3D4]' : done === total ? 'bg-[#DCFCE7] text-[#166534]' : 'bg-[#FEF3C7] text-[#92400E]';
         const state = total === 0 || done === 0 ? 'ترجمه نشده' : done === total ? 'کامل' : `${faNum(done)} از ${faNum(total)} فیلد`;
         return (
           <span key={locale} title={`${LOCALE_INFO[locale].adminName}: ${state}`} className={`rounded px-1.5 py-0.5 text-[10px] font-black ${tone}`}>
@@ -154,16 +154,16 @@ function useTransField({ value, onChange, errors = {}, name }: TransProps) {
 
 const TransFrame: React.FC<{ props: TransProps; field: ReturnType<typeof useTransField>; children: React.ReactNode }> = ({ props, field, children }) => (
   <div className={props.className}>
-    <label htmlFor={field.id} className="mb-1.5 flex items-center gap-1.5 text-[13px] font-bold text-[#14282D]">
+    <label htmlFor={field.id} className="mb-1.5 flex items-center gap-1.5 text-[13px] font-bold text-[#0E1B30]">
       {props.label}
       {props.required && <span className="text-[#DC2626]">*</span>}
-      <span dir="ltr" className="rounded bg-[#E6F4F3] px-1.5 py-px text-[10px] font-black text-[#0B5F5B]" title={`در حال ویرایش: ${LOCALE_INFO[field.locale].adminName}`}>
+      <span dir="ltr" className="rounded bg-[#E7EEFA] px-1.5 py-px text-[10px] font-black text-[#073C8C]" title={`در حال ویرایش: ${LOCALE_INFO[field.locale].adminName}`}>
         {LOCALE_INFO[field.locale].short}
       </span>
     </label>
     {children}
     {field.source && (
-      <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-[#5F7177]" title={field.source}>
+      <p className="mt-1.5 line-clamp-2 text-xs leading-relaxed text-[#5D6B82]" title={field.source}>
         <span className="font-bold">فارسی: </span>
         {field.source}
       </p>
@@ -173,7 +173,7 @@ const TransFrame: React.FC<{ props: TransProps; field: ReturnType<typeof useTran
         {field.error}
       </p>
     ) : (
-      props.hint && <p className="mt-1.5 text-xs leading-relaxed text-[#5F7177]">{props.hint}</p>
+      props.hint && <p className="mt-1.5 text-xs leading-relaxed text-[#5D6B82]">{props.hint}</p>
     )}
   </div>
 );

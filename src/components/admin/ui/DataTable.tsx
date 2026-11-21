@@ -28,8 +28,8 @@ export function DataTable<T>({ rows, columns, rowKey, actions, onRowClick, empty
   if (rows.length === 0) {
     return (
       <div className={`${CARD} flex flex-col items-center justify-center gap-2 px-6 py-14 text-center`}>
-        <Inbox className="h-9 w-9 text-[#B8C5C9]" />
-        <p className="text-sm text-[#5F7177]">{emptyText}</p>
+        <Inbox className="h-9 w-9 text-[#B8C3D4]" />
+        <p className="text-sm text-[#5D6B82]">{emptyText}</p>
       </div>
     );
   }
@@ -38,7 +38,7 @@ export function DataTable<T>({ rows, columns, rowKey, actions, onRowClick, empty
     <div className={`${CARD} overflow-hidden`}>
       <div className="overflow-x-auto">
         <table className="w-full text-right text-sm">
-          <thead className="border-b border-[#E3E8EA] bg-[#FAFBFB] text-xs text-[#5F7177]">
+          <thead className="border-b border-[#E2E8F1] bg-[#FAFBFD] text-xs text-[#5D6B82]">
             <tr>
               {columns.map((column) => (
                 <th key={column.key} scope="col" className={`whitespace-nowrap px-4 py-3 font-bold ${column.hideOnMobile ? 'hidden md:table-cell' : ''} ${column.className ?? ''}`}>
@@ -52,15 +52,15 @@ export function DataTable<T>({ rows, columns, rowKey, actions, onRowClick, empty
               )}
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#EEF2F3]">
+          <tbody className="divide-y divide-[#EEF2F8]">
             {rows.map((row) => (
               <tr
                 key={rowKey(row)}
                 onClick={onRowClick ? () => onRowClick(row) : undefined}
-                className={`transition-colors ${onRowClick ? 'cursor-pointer hover:bg-[#F7FAFA]' : ''} ${highlight?.(row) ? 'bg-[#F0FAF9] font-bold' : ''}`}
+                className={`transition-colors ${onRowClick ? 'cursor-pointer hover:bg-[#F7F9FC]' : ''} ${highlight?.(row) ? 'bg-[#F1F5FC] font-bold' : ''}`}
               >
                 {columns.map((column) => (
-                  <td key={column.key} className={`px-4 py-3 align-middle text-[#14282D] ${column.hideOnMobile ? 'hidden md:table-cell' : ''} ${column.className ?? ''}`}>
+                  <td key={column.key} className={`px-4 py-3 align-middle text-[#0E1B30] ${column.hideOnMobile ? 'hidden md:table-cell' : ''} ${column.className ?? ''}`}>
                     {column.cell(row)}
                   </td>
                 ))}

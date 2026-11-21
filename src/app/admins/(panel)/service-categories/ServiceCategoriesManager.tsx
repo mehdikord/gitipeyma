@@ -18,7 +18,7 @@ export const ServiceCategoriesManager: React.FC<{ rows: ServiceCategoryRow[] }> 
     rows={rows}
     columns={[
       { key: 'title', header: 'عنوان', cell: (row) => <span className="font-bold">{fa(row.title)}</span> },
-      { key: 'slug', header: 'نامک', cell: (row) => <span dir="ltr" className="text-[#5F7177]">{row.slug}</span> },
+      { key: 'slug', header: 'نامک', cell: (row) => <span dir="ltr" className="text-[#5D6B82]">{row.slug}</span> },
       { key: 'services', header: 'خدمات', cell: (row) => row.serviceCount.toLocaleString('fa-IR') },
       { key: 'testimonials', header: 'نظرات', hideOnMobile: true, cell: (row) => row.testimonialCount.toLocaleString('fa-IR') },
       { key: 'sortOrder', header: 'ترتیب', hideOnMobile: true, cell: (row) => row.sortOrder.toLocaleString('fa-IR') },

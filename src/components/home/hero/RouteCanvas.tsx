@@ -6,7 +6,7 @@ import { IRAN_TURKEY } from './borders.generated';
 
 export type HeroLayer = 'bus' | 'cargo' | 'currency' | 'offices';
 
-const TEAL = '18, 184, 176';
+const BLUE = '47, 116, 224';
 const GOLD = '226, 201, 140';
 const WHITE = '247, 247, 243';
 
@@ -141,7 +141,7 @@ export const RouteCanvas: React.FC<RouteCanvasProps> = ({ layer, paused, still }
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    const glowTeal = makeGlow(TEAL);
+    const glowBlue = makeGlow(BLUE);
     const glowGold = makeGlow(GOLD);
 
     // The route and its markers take the page's text color, so they show on the light theme too.
@@ -223,10 +223,10 @@ export const RouteCanvas: React.FC<RouteCanvasProps> = ({ layer, paused, still }
       ctx.translate(x, y);
       ctx.rotate(angle);
       ctx.globalAlpha = alpha;
-      ctx.fillStyle = '#07191F';
+      ctx.fillStyle = '#050D1C';
       ctx.fillRect(-9 * u, -4.2 * u, 18 * u, 8.4 * u);
       if (kind === 'bus') {
-        ctx.fillStyle = '#7CF3EC';
+        ctx.fillStyle = '#9CC0FA';
         ctx.fillRect(-7.5 * u, -2.8 * u, 15 * u, 5.6 * u);
       } else {
         ctx.fillStyle = '#E2C98C';
@@ -348,7 +348,7 @@ export const RouteCanvas: React.FC<RouteCanvasProps> = ({ layer, paused, still }
           const at = (eastbound ? 1 - f : f) * busLength;
           const p = pointAt(road, at);
           comet(road, at + (eastbound ? 0.03 : 0), 0.03, '124, 243, 236', 0.8 * current.buses * open, 1.8);
-          glow(p.x, p.y, 34, glowTeal, 0.7 * current.buses * open);
+          glow(p.x, p.y, 34, glowBlue, 0.7 * current.buses * open);
           vehicle(p.x, p.y, p.angle + (eastbound ? Math.PI : 0), 'bus', current.buses * open);
         }
         for (let i = 0; i < 5; i++) {
@@ -393,12 +393,12 @@ export const RouteCanvas: React.FC<RouteCanvasProps> = ({ layer, paused, still }
       // Office pulses.
       if (current.offices > 0.01) {
         OFFICES.forEach((p, i) => {
-          glow(p.x, p.y, 74, glowTeal, 0.9 * current.offices);
-          ring(p, (t * 0.5 + i * 0.3) % 1, TEAL, current.offices, 34);
-          ring(p, (t * 0.5 + i * 0.3 + 0.5) % 1, TEAL, current.offices, 34);
+          glow(p.x, p.y, 74, glowBlue, 0.9 * current.offices);
+          ring(p, (t * 0.5 + i * 0.3) % 1, BLUE, current.offices, 34);
+          ring(p, (t * 0.5 + i * 0.3 + 0.5) % 1, BLUE, current.offices, 34);
           ctx.beginPath();
           ctx.arc(p.x, p.y, 4.4 * unit, 0, Math.PI * 2);
-          ctx.fillStyle = '#7CF3EC';
+          ctx.fillStyle = '#9CC0FA';
           ctx.fill();
         });
       }

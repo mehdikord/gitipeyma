@@ -246,7 +246,7 @@ const MessageForm: React.FC = () => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className={`shrink-0 inline-flex items-center justify-center gap-2.5 min-h-14 px-8 rounded-lg bg-brand-fill hover:bg-brand-bright-fill disabled:opacity-70 disabled:cursor-wait text-on-accent font-black text-base transition-colors ${FOCUS}`}
+          className={`shrink-0 inline-flex items-center justify-center gap-2.5 min-h-14 px-8 rounded-lg bg-brand-fill hover:bg-brand-bright-fill disabled:opacity-70 disabled:cursor-wait text-on-brand font-black text-base transition-colors ${FOCUS}`}
         >
           <Send className="w-5 h-5" />
           <span>{isSubmitting ? t.sending : t.send}</span>
@@ -309,7 +309,7 @@ export const ContactPage: React.FC = () => {
                 href={WHATSAPP_URL}
                 target="_blank"
                 rel="noreferrer"
-                className={`inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-3 rounded-lg bg-brand-fill hover:bg-brand-bright-fill text-on-accent font-extrabold text-sm sm:text-[15px] transition-colors ${FOCUS}`}
+                className={`inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-3 rounded-lg bg-brand-fill hover:bg-brand-bright-fill text-on-brand font-extrabold text-sm sm:text-[15px] transition-colors ${FOCUS}`}
               >
                 <MessageCircle className="w-[18px] h-[18px]" />
                 <span>{t.whatsapp}</span>

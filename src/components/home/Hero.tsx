@@ -136,7 +136,7 @@ export const Hero: React.FC = () => {
           <div className="mt-6 lg:mt-8 flex flex-wrap items-center gap-3">
             <Link
               href={path('/services')}
-              className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3.5 rounded-lg bg-brand-fill hover:bg-brand-bright-fill text-on-accent font-extrabold text-sm sm:text-[15px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-line"
+              className="group w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3.5 rounded-lg bg-brand-fill hover:bg-brand-bright-fill text-on-brand font-extrabold text-sm sm:text-[15px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-line"
             >
               <span>{t.allServices}</span>
               <ArrowLeft className={`w-4 h-4 transition-transform rtl:group-hover:-translate-x-1 ltr:group-hover:translate-x-1 ${FORWARD}`} />

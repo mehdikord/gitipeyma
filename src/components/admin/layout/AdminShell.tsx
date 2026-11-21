@@ -30,14 +30,14 @@ const Sidebar: React.FC<{ badges: NavBadges; isRoot: boolean; onNavigate?: () =>
                     onClick={onNavigate}
                     aria-current={active ? 'page' : undefined}
                     className={`relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-bold transition-colors focus-visible:outline-2 focus-visible:outline-[#E2C98C] ${
-                      active ? 'bg-[#12343C] text-white' : 'text-[#B7C8CD] hover:bg-white/5 hover:text-white'
+                      active ? 'bg-[#12343C] text-white' : 'text-[#B6C3D6] hover:bg-white/5 hover:text-white'
                     }`}
                   >
                     {active && <span aria-hidden="true" className="absolute inset-y-1.5 right-0 w-1 rounded-l bg-[#E2C98C]" />}
                     <Icon className={`h-[18px] w-[18px] shrink-0 ${active ? 'text-[#E2C98C]' : ''}`} />
                     <span className="flex-1">{item.label}</span>
                     {count > 0 && (
-                      <span className="rounded-full bg-[#E2C98C] px-2 py-0.5 text-[11px] font-black text-[#07191F]" aria-label={`${count} مورد جدید`}>
+                      <span className="rounded-full bg-[#E2C98C] px-2 py-0.5 text-[11px] font-black text-[#050D1C]" aria-label={`${count} مورد جدید`}>
                         {count.toLocaleString('fa-IR')}
                       </span>
                     )}
@@ -71,7 +71,7 @@ export const AdminShell: React.FC<{ admin: { name: string; phone: string; isRoot
   return (
     <div className="min-h-screen lg:pr-64">
       {/* Desktop sidebar */}
-      <aside className="fixed inset-y-0 right-0 z-30 hidden w-64 flex-col bg-[#07191F] lg:flex">
+      <aside className="fixed inset-y-0 right-0 z-30 hidden w-64 flex-col bg-[#050D1C] lg:flex">
         <Brand href={home} />
         <Sidebar badges={badges} isRoot={admin.isRoot} />
       </aside>
@@ -80,10 +80,10 @@ export const AdminShell: React.FC<{ admin: { name: string; phone: string; isRoot
       {drawerOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
           <button type="button" aria-label="بستن منو" className="absolute inset-0 bg-black/40" onClick={() => setDrawerOpen(false)} />
-          <aside className="admin-drawer absolute inset-y-0 right-0 flex w-72 max-w-[85vw] flex-col bg-[#07191F]">
+          <aside className="admin-drawer absolute inset-y-0 right-0 flex w-72 max-w-[85vw] flex-col bg-[#050D1C]">
             <div className="flex items-center justify-between pl-3">
               <Brand href={home} />
-              <button type="button" onClick={() => setDrawerOpen(false)} aria-label="بستن منو" className="rounded-lg p-2 text-[#B7C8CD] hover:bg-white/10">
+              <button type="button" onClick={() => setDrawerOpen(false)} aria-label="بستن منو" className="rounded-lg p-2 text-[#B6C3D6] hover:bg-white/10">
                 <X className="h-5 w-5" />
               </button>
             </div>
@@ -92,24 +92,24 @@ export const AdminShell: React.FC<{ admin: { name: string; phone: string; isRoot
         </div>
       )}
 
-      <header className="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-[#E3E8EA] bg-white/95 px-4 backdrop-blur sm:px-6">
-        <button type="button" onClick={() => setDrawerOpen(true)} aria-label="باز کردن منو" className={`-mr-1 rounded-lg p-2 text-[#3F5257] hover:bg-[#EEF2F3] lg:hidden ${FOCUS}`}>
+      <header className="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-[#E2E8F1] bg-white/95 px-4 backdrop-blur sm:px-6">
+        <button type="button" onClick={() => setDrawerOpen(true)} aria-label="باز کردن منو" className={`-mr-1 rounded-lg p-2 text-[#3E4C63] hover:bg-[#EEF2F8] lg:hidden ${FOCUS}`}>
           <Menu className="h-5 w-5" />
         </button>
 
-        <a href="/fa" target="_blank" rel="noreferrer" className={`inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-[13px] font-bold text-[#0B7A75] hover:bg-[#E6F4F3] ${FOCUS}`}>
+        <a href="/fa" target="_blank" rel="noreferrer" className={`inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-[13px] font-bold text-[#094BAF] hover:bg-[#E7EEFA] ${FOCUS}`}>
           <ExternalLink className="h-4 w-4" />
           <span>مشاهده سایت</span>
         </a>
 
         <div className="mr-auto flex items-center gap-1">
-          <Link href="/admins/profile" className={`flex items-center gap-2.5 rounded-lg px-2 py-1.5 hover:bg-[#EEF2F3] ${FOCUS}`}>
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#E6F4F3] text-sm font-black text-[#0B5F5B]">{admin.name.trim().charAt(0) || 'م'}</span>
+          <Link href="/admins/profile" className={`flex items-center gap-2.5 rounded-lg px-2 py-1.5 hover:bg-[#EEF2F8] ${FOCUS}`}>
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#E7EEFA] text-sm font-black text-[#073C8C]">{admin.name.trim().charAt(0) || 'م'}</span>
             <span className="hidden text-right sm:block">
-              <span className="block text-[13px] font-bold leading-tight text-[#14282D]">{admin.name}</span>
-              <span className="block text-[11px] leading-tight text-[#5F7177]">{admin.isRoot ? 'مدیر کل' : 'مدیر داخلی'}</span>
+              <span className="block text-[13px] font-bold leading-tight text-[#0E1B30]">{admin.name}</span>
+              <span className="block text-[11px] leading-tight text-[#5D6B82]">{admin.isRoot ? 'مدیر کل' : 'مدیر داخلی'}</span>
             </span>
-            <UserCog className="h-4 w-4 text-[#5F7177] sm:hidden" />
+            <UserCog className="h-4 w-4 text-[#5D6B82] sm:hidden" />
           </Link>
           <form action={logout}>
             <button type="submit" title="خروج" aria-label="خروج از پنل" className={`rounded-lg p-2 text-[#B91C1C] hover:bg-[#FEE2E2] ${FOCUS}`}>

@@ -29,18 +29,18 @@ export function ListField<T>({ label, items, onChange, newItem, addLabel, render
   return (
     <fieldset>
       <legend className="mb-2 flex w-full items-center justify-between gap-3">
-        <span className="text-[13px] font-bold text-[#14282D]">
-          {label} <span className="font-normal text-[#5F7177]">({items.length.toLocaleString('fa-IR')})</span>
+        <span className="text-[13px] font-bold text-[#0E1B30]">
+          {label} <span className="font-normal text-[#5D6B82]">({items.length.toLocaleString('fa-IR')})</span>
         </span>
       </legend>
 
       {items.length === 0 ? (
-        <p className="rounded-lg border border-dashed border-[#D5DDE0] px-4 py-5 text-center text-[13px] text-[#5F7177]">{emptyText}</p>
+        <p className="rounded-lg border border-dashed border-[#D4DCE8] px-4 py-5 text-center text-[13px] text-[#5D6B82]">{emptyText}</p>
       ) : (
         <ol className="space-y-2.5">
           {items.map((item, index) => (
-            <li key={index} className="flex items-start gap-2 rounded-lg border border-[#E3E8EA] bg-[#FAFBFB] p-3">
-              <span className="mt-2 w-6 shrink-0 text-center text-xs font-black text-[#5F7177]">{(index + 1).toLocaleString('fa-IR')}</span>
+            <li key={index} className="flex items-start gap-2 rounded-lg border border-[#E2E8F1] bg-[#FAFBFD] p-3">
+              <span className="mt-2 w-6 shrink-0 text-center text-xs font-black text-[#5D6B82]">{(index + 1).toLocaleString('fa-IR')}</span>
               <div className="min-w-0 flex-1">{renderItem(item, (patch) => update(index, patch), index)}</div>
               <div className="flex shrink-0 flex-col gap-0.5 sm:flex-row">
                 <IconButton label="انتقال به بالا" icon={ArrowUp} disabled={index === 0} onClick={() => move(index, -1)} />

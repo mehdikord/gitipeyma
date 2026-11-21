@@ -21,9 +21,10 @@ import type {
   CurrencyRate,
   MetricItem,
   Office,
-  ServiceCategoryItem,
   ServiceGroupItem,
   ServiceItem,
+  ServiceMenuGroup,
+  ServiceMenuItem,
   SiteData,
   SocialLink,
   TeamMember,
@@ -61,12 +62,36 @@ const toNumbers = (value: Prisma.JsonValue): number[] => (Array.isArray(value) ?
 
 export const getSiteData = cache(async (): Promise<SiteData> => {
   const locale = await currentLocale();
-  const [settings, offices, socials, services] = await Promise.all([
+  const [settings, offices, socials, services, groups] = await Promise.all([
     getSettings(),
     db.office.findMany({ where: { isActive: true }, orderBy: ordered }),
     db.socialLink.findMany({ where: { isActive: true }, orderBy: ordered }),
-    db.service.findMany({ where: { isActive: true }, orderBy: ordered, select: { slug: true, shortTitle: true } }),
+    db.service.findMany({ where: { isActive: true }, orderBy: ordered, select: { id: true, slug: true, shortTitle: true, summary: true, icon: true } }),
+    db.serviceGroup.findMany({ orderBy: ordered, include: { services: { where: { isActive: true }, orderBy: ordered, select: { id: true } } } }),
   ]);
+
+  const menuItem = (service: (typeof services)[number]): ServiceMenuItem => ({
+    slug: service.slug,
+    title: pick(service.shortTitle, locale),
+    summary: pick(service.summary, locale),
+    icon: service.icon,
+  });
+  const byId = new Map(services.map((service) => [service.id, service]));
+  const grouped = new Set<bigint>();
+  const serviceMenu: ServiceMenuGroup[] = groups
+    .map((group): ServiceMenuGroup => ({
+      title: pick(group.title, locale),
+      tone: group.tone,
+      services: group.services.flatMap(({ id }) => {
+        const service = byId.get(id);
+        if (!service) return [];
+        grouped.add(id);
+        return [menuItem(service)];
+      }),
+    }))
+    .filter((group) => group.services.length > 0);
+  const ungrouped = services.filter((service) => !grouped.has(service.id));
+  if (ungrouped.length) serviceMenu.push({ title: null, tone: 'teal', services: ungrouped.map(menuItem) });
 
   return {
     settings,
@@ -86,6 +111,7 @@ export const getSiteData = cache(async (): Promise<SiteData> => {
     ),
     socials: socials.map((social): SocialLink => ({ id: Number(social.id), platform: social.platform, label: pick(social.label, locale), url: social.url, iconName: social.icon })),
     serviceLinks: services.map((service) => ({ slug: service.slug, shortTitle: pick(service.shortTitle, locale) })),
+    serviceMenu,
   };
 });
 
@@ -143,14 +169,6 @@ export const getServiceFormFields = cache(async (serviceId: number): Promise<Pub
   const locale = await currentLocale();
   const fields = await db.serviceFormField.findMany({ where: { serviceId }, orderBy: ordered });
   return fields.map((field) => publicFormField(field, locale));
-});
-
-/** Categories that have at least one active service, for the filters on /services. */
-export const getServiceCategories = cache(async (): Promise<ServiceCategoryItem[]> => {
-  await connection();
-  const locale = await currentLocale();
-  const categories = await db.serviceCategory.findMany({ where: { services: { some: { isActive: true } } }, orderBy: ordered });
-  return categories.map((category) => ({ id: Number(category.id), slug: category.slug, title: pick(category.title, locale) }));
 });
 
 /** Groups with their active services, leaving out any group that has none. */

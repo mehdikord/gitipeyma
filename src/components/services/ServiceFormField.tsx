@@ -73,7 +73,7 @@ export const ServiceFormField: React.FC<{
             onChange={(event) => onChange(event.target.checked)}
             className="peer sr-only"
           />
-          <span aria-hidden="true" className="mt-0.5 flex w-5 h-5 shrink-0 items-center justify-center rounded border-2 border-ink/30 text-on-accent transition-colors peer-checked:border-brand-fill peer-checked:bg-brand-fill [&>svg]:opacity-0 peer-checked:[&>svg]:opacity-100">
+          <span aria-hidden="true" className="mt-0.5 flex w-5 h-5 shrink-0 items-center justify-center rounded border-2 border-ink/30 text-on-brand transition-colors peer-checked:border-brand-fill peer-checked:bg-brand-fill [&>svg]:opacity-0 peer-checked:[&>svg]:opacity-100">
             <Check className="w-3.5 h-3.5" strokeWidth={3} />
           </span>
           <span className="text-[15px] font-bold leading-relaxed text-ink">{label}</span>
@@ -112,7 +112,7 @@ export const ServiceFormField: React.FC<{
                   checked={checked}
                   onChange={() => onChange(checked ? chosen.filter((item) => item !== option.value) : [...chosen, option.value])}
                 />
-                <span aria-hidden="true" className={`flex w-4 h-4 shrink-0 items-center justify-center rounded border-2 ${checked ? 'border-brand-fill bg-brand-fill text-on-accent' : 'border-ink/30'}`}>
+                <span aria-hidden="true" className={`flex w-4 h-4 shrink-0 items-center justify-center rounded border-2 ${checked ? 'border-brand-fill bg-brand-fill text-on-brand' : 'border-ink/30'}`}>
                   {checked && <Check className="w-3 h-3" strokeWidth={3} />}
                 </span>
                 {option.label}

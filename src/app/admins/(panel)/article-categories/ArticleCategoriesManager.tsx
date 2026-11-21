@@ -25,11 +25,11 @@ export const ArticleCategoriesManager: React.FC<{ rows: ArticleCategoryRow[] }> 
         header: 'مقالات',
         cell: (row) =>
           row.articleCount > 0 ? (
-            <Link href={`/admins/articles?category=${row.id}`} onClick={(event) => event.stopPropagation()} className="font-bold text-[#0B7A75] hover:underline">
+            <Link href={`/admins/articles?category=${row.id}`} onClick={(event) => event.stopPropagation()} className="font-bold text-[#094BAF] hover:underline">
               {row.articleCount.toLocaleString('fa-IR')} مقاله
             </Link>
           ) : (
-            <span className="text-[#94A3A8]">—</span>
+            <span className="text-[#94A1B5]">—</span>
           ),
       },
     ]}

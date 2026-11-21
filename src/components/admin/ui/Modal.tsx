@@ -37,7 +37,7 @@ export const Modal: React.FC<ModalProps> = ({ open, onClose, title, description,
   const content = (
     <>
       <div className="flex-1 overflow-y-auto px-5 sm:px-6 py-5">{children}</div>
-      {footer && <div className="flex flex-wrap items-center justify-end gap-2 border-t border-[#E3E8EA] bg-[#FAFBFB] px-5 sm:px-6 py-3.5">{footer}</div>}
+      {footer && <div className="flex flex-wrap items-center justify-end gap-2 border-t border-[#E2E8F1] bg-[#FAFBFD] px-5 sm:px-6 py-3.5">{footer}</div>}
     </>
   );
 
@@ -52,16 +52,16 @@ export const Modal: React.FC<ModalProps> = ({ open, onClose, title, description,
       onMouseDown={(event) => {
         if (event.target === ref.current) onClose();
       }}
-      className={`admin-dialog m-auto w-[calc(100%-2rem)] ${SIZES[size]} max-h-[calc(100dvh-2rem)] rounded-2xl bg-white p-0 text-[#14282D] shadow-2xl`}
+      className={`admin-dialog m-auto w-[calc(100%-2rem)] ${SIZES[size]} max-h-[calc(100dvh-2rem)] rounded-2xl bg-white p-0 text-[#0E1B30] shadow-2xl`}
     >
       {open && (
         <div className="flex max-h-[calc(100dvh-2rem)] flex-col text-right">
-          <div className="flex items-start justify-between gap-4 border-b border-[#E3E8EA] px-5 sm:px-6 py-4">
+          <div className="flex items-start justify-between gap-4 border-b border-[#E2E8F1] px-5 sm:px-6 py-4">
             <div>
               <h2 className="text-base sm:text-lg font-black">{title}</h2>
-              {description && <p className="mt-1 text-[13px] text-[#5F7177]">{description}</p>}
+              {description && <p className="mt-1 text-[13px] text-[#5D6B82]">{description}</p>}
             </div>
-            <button type="button" onClick={onClose} aria-label="بستن" className={`-m-1 rounded-lg p-1.5 text-[#5F7177] hover:bg-[#EEF2F3] ${FOCUS}`}>
+            <button type="button" onClick={onClose} aria-label="بستن" className={`-m-1 rounded-lg p-1.5 text-[#5D6B82] hover:bg-[#EEF2F8] ${FOCUS}`}>
               <X className="w-5 h-5" />
             </button>
           </div>

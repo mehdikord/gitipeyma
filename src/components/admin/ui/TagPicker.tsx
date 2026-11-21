@@ -55,9 +55,9 @@ export const TagPicker: React.FC<Props> = ({ label, options: initialOptions, val
 
   return (
     <div>
-      <span className="mb-1.5 flex items-center justify-between text-[13px] font-bold text-[#14282D]">
+      <span className="mb-1.5 flex items-center justify-between text-[13px] font-bold text-[#0E1B30]">
         {label}
-        <span className="text-[11px] font-normal text-[#94A3A8]">
+        <span className="text-[11px] font-normal text-[#94A1B5]">
           {fa(values.length)} از {fa(max)}
         </span>
       </span>
@@ -65,10 +65,10 @@ export const TagPicker: React.FC<Props> = ({ label, options: initialOptions, val
       {values.length > 0 && (
         <ul className="mb-2 flex flex-wrap gap-1.5">
           {values.map((value) => (
-            <li key={value} className="inline-flex items-center gap-1 rounded-full bg-[#E6F4F3] py-1 pl-1 pr-2.5 text-xs font-bold text-[#0B5F5B]">
+            <li key={value} className="inline-flex items-center gap-1 rounded-full bg-[#E7EEFA] py-1 pl-1 pr-2.5 text-xs font-bold text-[#073C8C]">
               <Tag className="h-3 w-3" />
               {byValue.get(value)?.label ?? value}
-              <button type="button" aria-label={`برداشتن ${byValue.get(value)?.label ?? ''}`} onClick={() => onChange(values.filter((item) => item !== value))} className={`rounded-full p-0.5 hover:bg-[#CCE8E6] ${FOCUS}`}>
+              <button type="button" aria-label={`برداشتن ${byValue.get(value)?.label ?? ''}`} onClick={() => onChange(values.filter((item) => item !== value))} className={`rounded-full p-0.5 hover:bg-[#C9D9F3] ${FOCUS}`}>
                 <X className="h-3 w-3" />
               </button>
             </li>
@@ -77,7 +77,7 @@ export const TagPicker: React.FC<Props> = ({ label, options: initialOptions, val
       )}
 
       <div className="relative">
-        <Search className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#94A3A8]" />
+        <Search className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#94A1B5]" />
         <input
           type="search"
           value={query}
@@ -91,7 +91,7 @@ export const TagPicker: React.FC<Props> = ({ label, options: initialOptions, val
             if (matches[0] && (exact || !onCreate)) add(options.find((option) => option.label === term)?.value ?? matches[0].value);
             else if (term) create();
           }}
-          className={`${INPUT} h-10 border-[#D5DDE0] pr-9`}
+          className={`${INPUT} h-10 border-[#D4DCE8] pr-9`}
         />
       </div>
 
@@ -102,7 +102,7 @@ export const TagPicker: React.FC<Props> = ({ label, options: initialOptions, val
               key={option.value}
               type="button"
               onClick={() => add(option.value)}
-              className={`rounded-full border border-[#D5DDE0] px-2.5 py-1 text-xs font-bold text-[#3F5257] hover:border-[#0B7A75] hover:text-[#0B5F5B] ${FOCUS}`}
+              className={`rounded-full border border-[#D4DCE8] px-2.5 py-1 text-xs font-bold text-[#3E4C63] hover:border-[#094BAF] hover:text-[#073C8C] ${FOCUS}`}
             >
               {option.label}
             </button>
@@ -112,7 +112,7 @@ export const TagPicker: React.FC<Props> = ({ label, options: initialOptions, val
               type="button"
               onClick={create}
               disabled={creating}
-              className={`inline-flex items-center gap-1 rounded-full border border-dashed border-[#0B7A75] px-2.5 py-1 text-xs font-bold text-[#0B5F5B] hover:bg-[#E6F4F3] ${FOCUS}`}
+              className={`inline-flex items-center gap-1 rounded-full border border-dashed border-[#094BAF] px-2.5 py-1 text-xs font-bold text-[#073C8C] hover:bg-[#E7EEFA] ${FOCUS}`}
             >
               {creating ? <Loader2 className="h-3 w-3 animate-spin" /> : <Plus className="h-3 w-3" />}
               ساخت برچسب «{term}»
@@ -124,7 +124,7 @@ export const TagPicker: React.FC<Props> = ({ label, options: initialOptions, val
       {createError || error ? (
         <p className="mt-1.5 text-xs text-[#DC2626]">{createError ?? error}</p>
       ) : (
-        <p className="mt-1.5 text-xs text-[#5F7177]">برچسب تازه با نام فارسی ساخته می‌شود؛ ترجمه‌اش را در صفحه «برچسب‌ها» بنویسید.</p>
+        <p className="mt-1.5 text-xs text-[#5D6B82]">برچسب تازه با نام فارسی ساخته می‌شود؛ ترجمه‌اش را در صفحه «برچسب‌ها» بنویسید.</p>
       )}
     </div>
   );

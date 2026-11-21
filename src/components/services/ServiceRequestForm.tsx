@@ -79,11 +79,11 @@ const Waybill: React.FC<{
         <div className="flex-1 pe-24">
           <p className="text-xs font-bold text-on-accent/75 mb-2">{ready ? t.ready : fill(t.left, { count: num(remaining) })}</p>
           <div className="relative h-1 rounded-full bg-canvas/20">
-            <span className="waybill-progress absolute inset-y-0 start-0 rounded-full bg-[#087F7B]" style={{ width: `${(required.done / required.total) * 100}%` }} />
+            <span className="waybill-progress absolute inset-y-0 start-0 rounded-full bg-[#094BAF]" style={{ width: `${(required.done / required.total) * 100}%` }} />
           </div>
         </div>
         {ready && (
-          <span className="waybill-stamp absolute end-4 top-1/2 flex items-center justify-center w-[84px] h-[84px] rounded-full border-[3px] border-[#087F7B] text-[#07655F] text-[13px] font-black text-center leading-tight">
+          <span className="waybill-stamp absolute end-4 top-1/2 flex items-center justify-center w-[84px] h-[84px] rounded-full border-[3px] border-[#094BAF] text-[#073C8C] text-[13px] font-black text-center leading-tight">
             {t.stampTop}
             <br />
             {t.stampBottom}
@@ -239,7 +239,7 @@ export const ServiceRequestForm: React.FC<ServiceRequestFormProps> = ({ serviceI
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`mt-4 w-full inline-flex items-center justify-center gap-2.5 min-h-14 px-6 rounded-lg bg-brand-fill hover:bg-brand-bright-fill disabled:opacity-70 disabled:cursor-wait text-on-accent font-black text-base transition-colors ${FOCUS}`}
+              className={`mt-4 w-full inline-flex items-center justify-center gap-2.5 min-h-14 px-6 rounded-lg bg-brand-fill hover:bg-brand-bright-fill disabled:opacity-70 disabled:cursor-wait text-on-brand font-black text-base transition-colors ${FOCUS}`}
             >
               <Send className="w-5 h-5" />
               <span>{isSubmitting ? t.submitting : t.submit}</span>

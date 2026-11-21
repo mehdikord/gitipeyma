@@ -9,10 +9,10 @@ type Variant = 'primary' | 'secondary' | 'danger' | 'ghost';
 type Size = 'sm' | 'md';
 
 const VARIANTS: Record<Variant, string> = {
-  primary: 'bg-[#0B7A75] text-white hover:bg-[#096762] border border-transparent',
-  secondary: 'bg-white text-[#14282D] border border-[#D5DDE0] hover:bg-[#F4F6F7]',
+  primary: 'bg-[#094BAF] text-white hover:bg-[#08419A] border border-transparent',
+  secondary: 'bg-white text-[#0E1B30] border border-[#D4DCE8] hover:bg-[#F4F6FA]',
   danger: 'bg-[#DC2626] text-white hover:bg-[#B91C1C] border border-transparent',
-  ghost: 'text-[#3F5257] hover:bg-[#EEF2F3] border border-transparent',
+  ghost: 'text-[#3E4C63] hover:bg-[#EEF2F8] border border-transparent',
 };
 
 const SIZES: Record<Size, string> = {
@@ -66,7 +66,7 @@ export const IconButton: React.FC<{ label: string; icon: React.ElementType; onCl
     disabled={disabled}
     onClick={onClick}
     className={`inline-flex items-center justify-center w-8 h-8 rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${
-      tone === 'danger' ? 'text-[#B91C1C] hover:bg-[#FEE2E2]' : 'text-[#3F5257] hover:bg-[#EEF2F3]'
+      tone === 'danger' ? 'text-[#B91C1C] hover:bg-[#FEE2E2]' : 'text-[#3E4C63] hover:bg-[#EEF2F8]'
     } ${FOCUS}`}
   >
     <Icon className="w-4 h-4" />

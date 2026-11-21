@@ -2,31 +2,35 @@
 
 /*
  * The site's palette as theme tokens. The dark theme is the brand's own; the light theme keeps the
- * turquoise and gold but darkens them where they're used as text, so everything stays readable on white.
- * `-fill` tokens are the solid accent fills: they keep their color in both themes and always carry on-accent text.
+ * brand blue (#094BAF) and gold but darkens them where they're used as text, so everything stays readable on white.
+ * `-fill` tokens are the solid accent fills: they keep their color in both themes and always carry on-accent (gold) or on-brand (blue) text.
  */
 :root {
   color-scheme: dark;
-  --canvas: #07191F;
-  --canvas-deep: #051115;
-  --surface: #0C252B;
-  --surface-2: #14282D;
-  --ink: #F7F7F3;
+  --canvas: #050D1C;
+  --canvas-deep: #030812;
+  --surface: #0A1629;
+  --surface-2: #101F38;
+  --ink: #F5F7FB;
   --ink-strong: #FFFFFF;
-  --ink-soft: #D5E0E3;
-  --ink-muted: #A2B6BC;
-  --ink-dim: #718085;
-  --brand: #12B8B0;
-  --brand-bright: #3ED0C8;
-  --brand-fill: #12B8B0;
-  --brand-bright-fill: #3ED0C8;
+  --ink-soft: #D3DCEA;
+  --ink-muted: #9DAEC7;
+  --ink-dim: #6C7C96;
+  /* #094BAF is the brand blue. As a fill it's used as-is; as text on the dark canvas it needs a lighter tint to stay readable. */
+  --brand: #5C95F2;
+  --brand-bright: #86B1F7;
+  --brand-fill: #094BAF;
+  --brand-bright-fill: #0D5CD1;
   --gold: #E2C98C;
   --gold-deep: #C6A15B;
   --gold-line: #E2C98C;
   --gold-deep-line: #C6A15B;
   --gold-fill: #E2C98C;
   --gold-deep-fill: #C6A15B;
-  --on-accent: #07191F;
+  /* Text on the gold fills */
+  --on-accent: #050D1C;
+  /* Text on the blue fills */
+  --on-brand: #FFFFFF;
   --danger: #F58B8B;
   /* The light plate the full-color logo sits on, so its black lamassu reads on the dark theme */
   --logo-plate: #F4EFE3;
@@ -34,17 +38,17 @@
 
 [data-theme='light'] {
   color-scheme: light;
-  --canvas: #F3F6F7;
-  --canvas-deep: #E6ECEE;
+  --canvas: #F3F6FB;
+  --canvas-deep: #E4EAF4;
   --surface: #FFFFFF;
-  --surface-2: #E9EFF1;
-  --ink: #0C1F25;
-  --ink-strong: #07191F;
-  --ink-soft: #243940;
-  --ink-muted: #46595F;
-  --ink-dim: #66777C;
-  --brand: #0B7F79;
-  --brand-bright: #0A6E69;
+  --surface-2: #E8EEF7;
+  --ink: #0A1830;
+  --ink-strong: #050D1C;
+  --ink-soft: #1E3150;
+  --ink-muted: #43536C;
+  --ink-dim: #627089;
+  --brand: #094BAF;
+  --brand-bright: #073C8C;
   --gold: #93701E;
   --gold-deep: #7A5B12;
   --gold-line: #C6A15B;
@@ -75,6 +79,7 @@
   --color-gold-fill: var(--gold-fill);
   --color-gold-deep-fill: var(--gold-deep-fill);
   --color-on-accent: var(--on-accent);
+  --color-on-brand: var(--on-brand);
   --color-danger: var(--danger);
 }
 
@@ -91,7 +96,7 @@ html.theme-switching *:not(.theme-toggle, .theme-toggle *) {
   height: 30px;
   border-radius: 9999px;
   border: 1px solid color-mix(in srgb, #E2C98C 40%, transparent);
-  background: linear-gradient(135deg, #0B2E37 0%, #07191F 60%, #0A2229 100%);
+  background: linear-gradient(135deg, #0B2350 0%, #050D1C 60%, #081A3A 100%);
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.55);
   cursor: pointer;
   transition: background 0.45s ease, border-color 0.45s ease, box-shadow 0.45s ease;
@@ -125,7 +130,7 @@ html.theme-switching *:not(.theme-toggle, .theme-toggle *) {
 }
 
 .theme-toggle:hover {
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.55), 0 0 0 3px color-mix(in srgb, #12B8B0 18%, transparent), 0 0 18px -2px color-mix(in srgb, #12B8B0 60%, transparent);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.55), 0 0 0 3px color-mix(in srgb, #094BAF 30%, transparent), 0 0 18px -2px color-mix(in srgb, #2F74E0 60%, transparent);
 }
 
 .theme-toggle:focus-visible {
@@ -143,7 +148,7 @@ html.theme-switching *:not(.theme-toggle, .theme-toggle *) {
   width: 22px;
   height: 22px;
   border-radius: 9999px;
-  color: #07191F;
+  color: #050D1C;
   background: linear-gradient(145deg, #F5E3B8 0%, #E2C98C 45%, #C6A15B 100%);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.45), 0 0 12px color-mix(in srgb, #E2C98C 55%, transparent);
   transition: inset-inline-start 0.5s cubic-bezier(0.34, 1.4, 0.64, 1), background 0.45s ease, color 0.45s ease, box-shadow 0.45s ease, transform 0.2s ease;
@@ -177,13 +182,13 @@ html.theme-switching *:not(.theme-toggle, .theme-toggle *) {
 }
 
 [data-theme='light'] .theme-toggle {
-  border-color: color-mix(in srgb, #0B7F79 45%, transparent);
-  background: linear-gradient(135deg, #BDEDEA 0%, #E5F6F5 55%, #FFF4D6 100%);
-  box-shadow: inset 0 1px 3px rgba(7, 25, 31, 0.15);
+  border-color: color-mix(in srgb, #094BAF 45%, transparent);
+  background: linear-gradient(135deg, #C3D7F7 0%, #E8EFFB 55%, #FFF4D6 100%);
+  box-shadow: inset 0 1px 3px rgba(5, 13, 28, 0.15);
 }
 
 [data-theme='light'] .theme-toggle:hover {
-  box-shadow: inset 0 1px 3px rgba(7, 25, 31, 0.15), 0 0 0 3px color-mix(in srgb, #0B7F79 15%, transparent), 0 0 18px -2px color-mix(in srgb, #F5B73B 70%, transparent);
+  box-shadow: inset 0 1px 3px rgba(5, 13, 28, 0.15), 0 0 0 3px color-mix(in srgb, #094BAF 15%, transparent), 0 0 18px -2px color-mix(in srgb, #F5B73B 70%, transparent);
 }
 
 [data-theme='light'] .theme-toggle::before {
@@ -198,7 +203,7 @@ html.theme-switching *:not(.theme-toggle, .theme-toggle *) {
   inset-inline-start: calc(100% - 25px);
   color: #5A3E00;
   background: linear-gradient(145deg, #FFF1BF 0%, #FFD76A 45%, #F2A93B 100%);
-  box-shadow: 0 2px 8px rgba(7, 25, 31, 0.25), 0 0 16px rgba(245, 183, 59, 0.7);
+  box-shadow: 0 2px 8px rgba(5, 13, 28, 0.25), 0 0 16px rgba(245, 183, 59, 0.7);
 }
 
 [data-theme='light'] .theme-toggle-moon {
@@ -224,16 +229,16 @@ html.theme-switching *:not(.theme-toggle, .theme-toggle *) {
 
 @layer base {
   :root {
-    --primary: #12B8B0;
-    --primary-dark: #087F7B;
+    --primary: #094BAF;
+    --primary-dark: #073C8C;
     --gold: #C6A15B;
     --gold-light: #E2C98C;
-    --background-dark: #07191F;
-    --background-dark-secondary: #0C252B;
+    --background-dark: #050D1C;
+    --background-dark-secondary: #0A1629;
     --background-light: #F7F7F3;
     --surface: #FFFFFF;
-    --text-primary: #14282D;
-    --text-secondary: #718085;
+    --text-primary: #0A1830;
+    --text-secondary: #6C7C96;
   }
 
   html {
@@ -279,7 +284,7 @@ html.theme-switching *:not(.theme-toggle, .theme-toggle *) {
 }
 
 .turquoise-gradient-text {
-  background: linear-gradient(135deg, #A8FFF8 0%, #12B8B0 50%, #087F7B 100%);
+  background: linear-gradient(135deg, #B9D2FB 0%, #5C95F2 50%, #094BAF 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -290,7 +295,7 @@ html.theme-switching *:not(.theme-toggle, .theme-toggle *) {
 }
 
 [data-theme='light'] .turquoise-gradient-text {
-  background: linear-gradient(135deg, #12A8A0 0%, #0B7F79 50%, #075C57 100%);
+  background: linear-gradient(135deg, #1663D6 0%, #094BAF 50%, #062F70 100%);
   -webkit-background-clip: text;
 }
 
@@ -558,6 +563,50 @@ html.theme-switching *:not(.theme-toggle, .theme-toggle *) {
 [data-reveal='play'] .svc-rail {
   animation: svcRailDraw 0.4s ease-out both;
   animation-delay: calc(var(--i, 0) * 70ms);
+}
+
+/* Cargo insurance section (home): content rises in, the gold third of the bar fills from the start */
+.ins-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(50% 60% at 85% 10%, color-mix(in srgb, var(--brand-fill) 22%, transparent), transparent 70%),
+    radial-gradient(35% 45% at 10% 95%, color-mix(in srgb, var(--gold-fill) 9%, transparent), transparent 70%),
+    linear-gradient(color-mix(in srgb, var(--ink) 4%, transparent) 1px, transparent 1px) 0 0 / 56px 56px,
+    linear-gradient(90deg, color-mix(in srgb, var(--ink) 4%, transparent) 1px, transparent 1px) 0 0 / 56px 56px;
+  mask-image: radial-gradient(80% 70% at 50% 40%, #000 30%, transparent 100%);
+}
+
+.ins-fill {
+  transform-origin: left;
+}
+[dir='rtl'] .ins-fill {
+  transform-origin: right;
+}
+
+[data-reveal='armed'] .ins-in {
+  opacity: 0;
+}
+[data-reveal='armed'] .ins-fill {
+  transform: scaleX(0);
+}
+[data-reveal='play'] .ins-in {
+  animation: insRise 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: calc(var(--i, 0) * 90ms);
+}
+[data-reveal='play'] .ins-fill {
+  animation: insFill 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) 0.55s both;
+}
+
+@keyframes insRise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes insFill {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
 }
 
 @keyframes svcRailDraw {
@@ -1048,7 +1097,7 @@ html.theme-switching *:not(.theme-toggle, .theme-toggle *) {
 }
 
 [data-theme='light'] .consult-card {
-  box-shadow: 0 30px 70px -35px rgb(7 25 31 / 0.35);
+  box-shadow: 0 30px 70px -35px rgb(5 13 28 / 0.35);
 }
 
 /* Turquoise at Tehran, gold where the visitor has got to */
@@ -1277,7 +1326,7 @@ html.theme-switching *:not(.theme-toggle, .theme-toggle *) {
 }
 /* A highlight color picked in the editor is a light pastel; the text on it stays dark in both themes */
 .article-prose mark[style*='background-color'] {
-  color: #14282d;
+  color: #0A1830;
 }
 .article-prose table {
   width: 100%;

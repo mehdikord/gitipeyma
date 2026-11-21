@@ -115,7 +115,7 @@ const FieldEditor: React.FC<{ field: FieldValues; update: (patch: Partial<FieldV
       )}
 
       {field.type === 'select' && (
-        <div className="space-y-3 rounded-lg border border-[#E3E8EA] bg-white p-3">
+        <div className="space-y-3 rounded-lg border border-[#E2E8F1] bg-white p-3">
           <Switch
             label="انتخاب چندتایی"
             hint={field.isMultiple ? 'بازدیدکننده می‌تواند چند گزینه را با هم انتخاب کند.' : 'بازدیدکننده فقط یک گزینه را از لیست کشویی انتخاب می‌کند.'}
@@ -157,10 +157,10 @@ const FieldEditor: React.FC<{ field: FieldValues; update: (patch: Partial<FieldV
 
 /** A fixed field every form starts with, shown so the admin sees the whole form in order. */
 const FixedField: React.FC<{ label: string; note: string }> = ({ label, note }) => (
-  <li className="flex items-center gap-3 rounded-lg border border-dashed border-[#D5DDE0] bg-[#FAFBFB] px-3 py-2.5">
-    <Lock className="h-4 w-4 shrink-0 text-[#94A3A8]" />
-    <span className="text-sm font-bold text-[#14282D]">{label}</span>
-    <span className="text-xs text-[#5F7177]">{note}</span>
+  <li className="flex items-center gap-3 rounded-lg border border-dashed border-[#D4DCE8] bg-[#FAFBFD] px-3 py-2.5">
+    <Lock className="h-4 w-4 shrink-0 text-[#94A1B5]" />
+    <span className="text-sm font-bold text-[#0E1B30]">{label}</span>
+    <span className="text-xs text-[#5D6B82]">{note}</span>
   </li>
 );
 
@@ -215,7 +215,7 @@ export const ServiceFormBuilder: React.FC<{ form: ServiceFormAdmin }> = ({ form:
 
         <FormAlert message={form.formError} />
 
-        <div className="mb-4 flex flex-wrap items-center gap-2 text-xs text-[#5F7177]">
+        <div className="mb-4 flex flex-wrap items-center gap-2 text-xs text-[#5D6B82]">
           {!service.isActive && <Badge tone="gray">خدمت غیرفعال است</Badge>}
           {dirty ? <Badge tone="amber">تغییرات ذخیره نشده</Badge> : <Badge tone="green">ذخیره‌شده</Badge>}
           {service.requestCount > 0 && <span>تغییر فرم روی {service.requestCount.toLocaleString('fa-IR')} درخواست قبلی اثری ندارد؛ هر درخواست پرسش‌ها و پاسخ‌هایش را همان‌طور که ثبت شده نگه می‌دارد.</span>}
@@ -225,7 +225,7 @@ export const ServiceFormBuilder: React.FC<{ form: ServiceFormAdmin }> = ({ form:
           <LanguageTabs values={form.values} errors={form.errors} />
           <div className="space-y-4 p-5">
             <div>
-              <p className="mb-2 text-[13px] font-bold text-[#14282D]">فیلدهای ثابت</p>
+              <p className="mb-2 text-[13px] font-bold text-[#0E1B30]">فیلدهای ثابت</p>
               <ul className="space-y-2">
                 <FixedField label="نام و نام خانوادگی" note="همیشه در ابتدای فرم؛ الزامی" />
                 <FixedField label="شماره موبایل یا واتس‌اپ" note="همیشه در ابتدای فرم؛ الزامی" />

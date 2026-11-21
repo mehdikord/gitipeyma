@@ -18,9 +18,9 @@ export const MetricsManager: React.FC<{ rows: MetricRow[] }> = ({ rows }) => (
     noun="آمار"
     rows={rows}
     columns={[
-      { key: 'value', header: 'عدد', cell: (row) => <span className="text-base font-black text-[#0B7A75]">{fa(row.value)}</span> },
+      { key: 'value', header: 'عدد', cell: (row) => <span className="text-base font-black text-[#094BAF]">{fa(row.value)}</span> },
       { key: 'label', header: 'عنوان', cell: (row) => fa(row.label) },
-      { key: 'trend', header: 'روند', hideOnMobile: true, cell: (row) => <span className="font-normal text-[#5F7177]">{fa(row.trend) || '—'}</span> },
+      { key: 'trend', header: 'روند', hideOnMobile: true, cell: (row) => <span className="font-normal text-[#5D6B82]">{fa(row.trend) || '—'}</span> },
       { key: 'state', header: 'وضعیت', cell: (row) => <ActiveBadge active={row.isActive} /> },
     ]}
     emptyValues={() => ({ value: emptyTranslated(), label: emptyTranslated(), subtext: emptyTranslated(), trend: emptyTranslated(), isActive: true, sortOrder: String(rows.length + 1) })}

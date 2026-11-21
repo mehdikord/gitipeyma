@@ -79,16 +79,16 @@ export const ContactMessagesView: React.FC<{ list: Paginated<ContactMessageRow> 
             cell: (row) => (
               <>
                 <span className="block">{row.name}</span>
-                <span dir="ltr" className="block text-xs font-normal text-[#5F7177]">
+                <span dir="ltr" className="block text-xs font-normal text-[#5D6B82]">
                   {row.phone}
                 </span>
               </>
             ),
           },
           { key: 'topic', header: 'موضوع', hideOnMobile: true, cell: (row) => <span className="font-normal">{row.topic ?? '—'}</span> },
-          { key: 'message', header: 'پیام', cell: (row) => <span className="line-clamp-1 max-w-sm font-normal text-[#3F5257]">{row.message}</span> },
+          { key: 'message', header: 'پیام', cell: (row) => <span className="line-clamp-1 max-w-sm font-normal text-[#3E4C63]">{row.message}</span> },
           { key: 'state', header: 'وضعیت', cell: (row) => (row.readAt ? <Badge>خوانده‌شده</Badge> : <Badge tone="amber">جدید</Badge>) },
-          { key: 'createdAt', header: 'تاریخ', hideOnMobile: true, className: 'whitespace-nowrap text-xs font-normal text-[#5F7177]', cell: (row) => formatDateTime(row.createdAt) },
+          { key: 'createdAt', header: 'تاریخ', hideOnMobile: true, className: 'whitespace-nowrap text-xs font-normal text-[#5D6B82]', cell: (row) => formatDateTime(row.createdAt) },
         ]}
         actions={(row) => (
           <>
@@ -112,7 +112,7 @@ export const ContactMessagesView: React.FC<{ list: Paginated<ContactMessageRow> 
               <Button variant="ghost" icon={Trash2} className="ml-auto text-[#B91C1C]" onClick={() => handleDelete(selected)}>
                 حذف
               </Button>
-              <a href={telHref(selected.phone)} className="inline-flex h-10 items-center gap-2 rounded-lg bg-[#0B7A75] px-4 text-sm font-bold text-white hover:bg-[#096762]">
+              <a href={telHref(selected.phone)} className="inline-flex h-10 items-center gap-2 rounded-lg bg-[#094BAF] px-4 text-sm font-bold text-white hover:bg-[#08419A]">
                 <PhoneCall className="h-4 w-4" />
                 تماس
               </a>
@@ -127,17 +127,17 @@ export const ContactMessagesView: React.FC<{ list: Paginated<ContactMessageRow> 
           <div className="space-y-4 text-sm">
             <div className="flex flex-wrap gap-x-8 gap-y-2">
               <p>
-                <span className="text-[#5F7177]">شماره تماس: </span>
-                <a dir="ltr" href={telHref(selected.phone)} className="font-bold text-[#0B7A75] hover:underline">
+                <span className="text-[#5D6B82]">شماره تماس: </span>
+                <a dir="ltr" href={telHref(selected.phone)} className="font-bold text-[#094BAF] hover:underline">
                   {selected.phone}
                 </a>
               </p>
               <p>
-                <span className="text-[#5F7177]">موضوع: </span>
+                <span className="text-[#5D6B82]">موضوع: </span>
                 <span className="font-bold">{selected.topic ?? 'بدون موضوع'}</span>
               </p>
             </div>
-            <p className="whitespace-pre-line rounded-lg bg-[#F4F6F7] px-4 py-3 leading-7">{selected.message}</p>
+            <p className="whitespace-pre-line rounded-lg bg-[#F4F6FA] px-4 py-3 leading-7">{selected.message}</p>
           </div>
         )}
       </Modal>

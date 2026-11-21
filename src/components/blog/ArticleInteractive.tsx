@@ -137,7 +137,7 @@ export const ShareButtons: React.FC<{ url: string; title: string; labels: { shar
     { name: 'X', icon: Twitter, href: `https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}` },
     { name: 'LinkedIn', icon: Linkedin, href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}` },
   ];
-  const button = `flex h-10 w-10 items-center justify-center rounded-full border border-ink/15 text-ink-soft transition-colors hover:border-brand hover:bg-brand-fill hover:text-on-accent ${FOCUS}`;
+  const button = `flex h-10 w-10 items-center justify-center rounded-full border border-ink/15 text-ink-soft transition-colors hover:border-brand hover:bg-brand-fill hover:text-on-brand ${FOCUS}`;
 
   return (
     <div className="flex flex-wrap items-center gap-2">

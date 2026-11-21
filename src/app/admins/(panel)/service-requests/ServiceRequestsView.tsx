@@ -16,15 +16,15 @@ import { RequestNotes } from './RequestNotes';
 // The visitor's answers to the service's form, one line each: "label : value".
 const Answers: React.FC<{ row: ServiceRequestRow }> = ({ row }) => (
   <div className="mt-4">
-    <p className="mb-1.5 text-[13px] text-[#5F7177]">اطلاعات فرم خدمت</p>
+    <p className="mb-1.5 text-[13px] text-[#5D6B82]">اطلاعات فرم خدمت</p>
     {row.answers.length === 0 ? (
-      <p className="rounded-lg bg-[#F4F6F7] px-4 py-3 text-sm text-[#5F7177]">این درخواست اطلاعات دیگری جز نام و شماره تماس ندارد.</p>
+      <p className="rounded-lg bg-[#F4F6FA] px-4 py-3 text-sm text-[#5D6B82]">این درخواست اطلاعات دیگری جز نام و شماره تماس ندارد.</p>
     ) : (
-      <dl className="divide-y divide-[#E3E8EA] rounded-lg bg-[#F4F6F7] px-4">
+      <dl className="divide-y divide-[#E2E8F1] rounded-lg bg-[#F4F6FA] px-4">
         {row.answers.map((answer, index) => (
           <div key={index} className="flex flex-col gap-1 py-2.5 text-sm sm:flex-row sm:gap-2">
-            <dt className="shrink-0 text-[#5F7177] sm:max-w-[45%]">{answer.label} :</dt>
-            <dd className={`min-w-0 whitespace-pre-line break-words font-bold leading-7 ${answer.value === '—' ? 'text-[#94A3A8]' : 'text-[#14282D]'}`}>{answer.value}</dd>
+            <dt className="shrink-0 text-[#5D6B82] sm:max-w-[45%]">{answer.label} :</dt>
+            <dd className={`min-w-0 whitespace-pre-line break-words font-bold leading-7 ${answer.value === '—' ? 'text-[#94A1B5]' : 'text-[#0E1B30]'}`}>{answer.value}</dd>
           </div>
         ))}
       </dl>
@@ -72,7 +72,7 @@ export const ServiceRequestsView: React.FC<{ list: Paginated<ServiceRequestRow> 
         {
           label: 'خدمت',
           value: (
-            <Link href={`/fa/services/${row.service.slug}`} target="_blank" className="inline-flex items-center gap-1 text-[#0B7A75] hover:underline">
+            <Link href={`/fa/services/${row.service.slug}`} target="_blank" className="inline-flex items-center gap-1 text-[#094BAF] hover:underline">
               {row.service.title}
               <ExternalLink className="h-3.5 w-3.5" />
             </Link>

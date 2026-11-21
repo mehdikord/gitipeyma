@@ -31,30 +31,30 @@ export const Pagination: React.FC<{ page: number; pages: number; total: number; 
 
   return (
     <nav aria-label="صفحه‌بندی" className="mt-4 flex flex-col items-center justify-between gap-3 sm:flex-row">
-      <p className="text-[13px] text-[#5F7177]">
+      <p className="text-[13px] text-[#5D6B82]">
         نمایش {fa(from)} تا {fa(to)} از {fa(total)} مورد
       </p>
       {pages > 1 && (
         <div className="flex items-center gap-1">
           {page > 1 ? (
-            <Link href={href(page - 1)} aria-label="صفحه قبل" className={`${cell} text-[#3F5257] hover:bg-[#EEF2F3]`}>
+            <Link href={href(page - 1)} aria-label="صفحه قبل" className={`${cell} text-[#3E4C63] hover:bg-[#EEF2F8]`}>
               <ChevronRight className="h-4 w-4" />
             </Link>
           ) : null}
           {shown.map((n, index) => (
             <React.Fragment key={n}>
-              {index > 0 && n - shown[index - 1] > 1 && <span className="px-1 text-[#94A3A8]">…</span>}
+              {index > 0 && n - shown[index - 1] > 1 && <span className="px-1 text-[#94A1B5]">…</span>}
               <Link
                 href={href(n)}
                 aria-current={n === page ? 'page' : undefined}
-                className={`${cell} ${n === page ? 'bg-[#0B7A75] text-white' : 'text-[#3F5257] hover:bg-[#EEF2F3]'}`}
+                className={`${cell} ${n === page ? 'bg-[#094BAF] text-white' : 'text-[#3E4C63] hover:bg-[#EEF2F8]'}`}
               >
                 {fa(n)}
               </Link>
             </React.Fragment>
           ))}
           {page < pages ? (
-            <Link href={href(page + 1)} aria-label="صفحه بعد" className={`${cell} text-[#3F5257] hover:bg-[#EEF2F3]`}>
+            <Link href={href(page + 1)} aria-label="صفحه بعد" className={`${cell} text-[#3E4C63] hover:bg-[#EEF2F8]`}>
               <ChevronLeft className="h-4 w-4" />
             </Link>
           ) : null}

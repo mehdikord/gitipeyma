@@ -11,7 +11,7 @@ import { emptyTranslated, fa, toInputs } from '../../../../i18n/translated';
 type Values = { title: TranslatedInput; tone: 'teal' | 'gold'; sortOrder: string };
 
 const TONES = [
-  { value: 'teal', label: 'فیروزه‌ای' },
+  { value: 'teal', label: 'آبی' },
   { value: 'gold', label: 'طلایی' },
 ];
 
@@ -27,12 +27,12 @@ export const ServiceGroupsManager: React.FC<{ rows: ServiceGroupRow[] }> = ({ ro
         header: 'عنوان',
         cell: (row) => (
           <span className="flex items-center gap-2.5 font-bold">
-            <span aria-hidden="true" className={`h-3 w-3 rounded-full ${row.tone === 'teal' ? 'bg-[#12B8B0]' : 'bg-[#C6A15B]'}`} />
+            <span aria-hidden="true" className={`h-3 w-3 rounded-full ${row.tone === 'teal' ? 'bg-[#094BAF]' : 'bg-[#C6A15B]'}`} />
             {fa(row.title)}
           </span>
         ),
       },
-      { key: 'services', header: 'خدمات این گروه', cell: (row) => <span className="font-normal text-[#3F5257]">{row.services.join('، ') || '—'}</span> },
+      { key: 'services', header: 'خدمات این گروه', cell: (row) => <span className="font-normal text-[#3E4C63]">{row.services.join('، ') || '—'}</span> },
       { key: 'sortOrder', header: 'ترتیب', hideOnMobile: true, cell: (row) => row.sortOrder.toLocaleString('fa-IR') },
     ]}
     emptyValues={() => ({ title: emptyTranslated(), tone: 'teal', sortOrder: String(rows.length + 1) })}

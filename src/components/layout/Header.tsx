@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { PhoneCall, Menu, X, ArrowUpRight, ShieldCheck, ChevronDown, Compass } from 'lucide-react';
 import { useSite } from '../site/SiteProvider';
@@ -10,15 +10,47 @@ import { stripLocale } from '../../i18n/config';
 import { LanguageSwitcher } from './LanguageSwitcher';
 import { ThemeToggle } from './ThemeToggle';
 import { BrandEmblem } from './BrandEmblem';
+import { MobileServicesList, ServicesMegaMenu } from './ServicesMegaMenu';
+
+const MEGA_MENU_ID = 'services-mega-menu';
+const MOBILE_SERVICES_ID = 'mobile-services-list';
 
 export const Header: React.FC = () => {
   // Without the language, so it compares with the nav paths
   const currentPath = stripLocale(usePathname());
   const router = useRouter();
   const { t: { layout: { header: t }, common: { brand } }, path, locale } = useI18n();
-  const supportPhone = useSite().settings.support_phone;
+  const { settings: { support_phone: supportPhone }, serviceMenu } = useSite();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isServicesOpen, setIsServicesOpen] = useState(false);
+  const [isMobileServicesOpen, setIsMobileServicesOpen] = useState(false);
+  const servicesRef = useRef<HTMLDivElement>(null);
+
+  // The mega menu closes on a click outside it, on Escape and when the page changes
+  useEffect(() => {
+    if (!isServicesOpen) return;
+    const close = (event: MouseEvent | KeyboardEvent) => {
+      if (event instanceof KeyboardEvent) {
+        if (event.key !== 'Escape') return;
+        setIsServicesOpen(false);
+        servicesRef.current?.querySelector<HTMLButtonElement>('button[aria-controls]')?.focus();
+      } else if (!servicesRef.current?.contains(event.target as Node)) {
+        setIsServicesOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', close);
+    document.addEventListener('keydown', close);
+    return () => {
+      document.removeEventListener('mousedown', close);
+      document.removeEventListener('keydown', close);
+    };
+  }, [isServicesOpen]);
+
+  useEffect(() => {
+    setIsServicesOpen(false);
+    setIsMobileServicesOpen(false);
+  }, [currentPath]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -45,6 +77,7 @@ export const Header: React.FC = () => {
   // Real links, so crawlers can follow the menu; the scroll to the top stays smooth as before
   const handleNavClick = () => {
     setIsMobileMenuOpen(false);
+    setIsServicesOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -84,6 +117,7 @@ export const Header: React.FC = () => {
             : 'bg-canvas/70 backdrop-blur-md border-b border-ink/5 py-4'
         }`}
       >
+        <div ref={servicesRef}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           {/* Logo & Brand Identity */}
           <Link
@@ -124,6 +158,27 @@ export const Header: React.FC = () => {
           <nav className="hidden lg:flex items-center gap-1 bg-surface/60 p-1 rounded-full border border-brand/15 backdrop-blur-sm">
             {navLinks.map((link) => {
               const isActive = currentPath === link.path || (link.path !== '/' && currentPath.startsWith(link.path));
+              if (link.path === '/services') {
+                return (
+                  <button
+                    key={link.path}
+                    type="button"
+                    aria-expanded={isServicesOpen}
+                    aria-controls={MEGA_MENU_ID}
+                    onClick={() => setIsServicesOpen((open) => !open)}
+                    className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-line ${
+                      isActive
+                        ? 'bg-brand-fill text-on-brand font-bold shadow-md shadow-brand/25'
+                        : isServicesOpen
+                          ? 'bg-ink/10 text-ink-strong'
+                          : 'text-ink/80 hover:text-ink-strong hover:bg-ink/5'
+                    }`}
+                  >
+                    {link.label}
+                    <ChevronDown aria-hidden="true" className={`w-3.5 h-3.5 transition-transform duration-200 ${isServicesOpen ? 'rotate-180' : ''}`} />
+                  </button>
+                );
+              }
               return (
                 <Link
                   key={link.path}
@@ -132,7 +187,7 @@ export const Header: React.FC = () => {
                   onClick={handleNavClick}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                     isActive
-                      ? 'bg-brand-fill text-on-accent font-bold shadow-md shadow-brand/25'
+                      ? 'bg-brand-fill text-on-brand font-bold shadow-md shadow-brand/25'
                       : 'text-ink/80 hover:text-ink-strong hover:bg-ink/5'
                   }`}
                 >
@@ -178,11 +233,33 @@ export const Header: React.FC = () => {
           </div>
         </div>
 
+        <ServicesMegaMenu id={MEGA_MENU_ID} open={isServicesOpen} groups={serviceMenu} onNavigate={handleNavClick} />
+        </div>
+
         {/* Mobile menu dropdown */}
         {isMobileMenuOpen && (
-          <div className="lg:hidden bg-canvas/98 border-b border-brand/20 px-4 pt-3 pb-6 mt-3 space-y-2 backdrop-blur-2xl">
+          <div className="lg:hidden max-h-[calc(100dvh-5rem)] overflow-y-auto overscroll-contain bg-canvas/98 border-b border-brand/20 px-4 pt-3 pb-6 mt-3 space-y-2 backdrop-blur-2xl">
             {navLinks.map((link) => {
               const isActive = currentPath === link.path || (link.path !== '/' && currentPath.startsWith(link.path));
+              if (link.path === '/services') {
+                return (
+                  <div key={link.path}>
+                    <button
+                      type="button"
+                      aria-expanded={isMobileServicesOpen}
+                      aria-controls={MOBILE_SERVICES_ID}
+                      onClick={() => setIsMobileServicesOpen((open) => !open)}
+                      className={`flex w-full items-center justify-between px-4 py-3 rounded-xl text-base font-medium transition-colors ${
+                        isActive ? 'bg-brand-fill text-on-brand font-bold' : 'text-ink hover:bg-surface'
+                      }`}
+                    >
+                      {link.label}
+                      <ChevronDown aria-hidden="true" className={`w-4 h-4 transition-transform duration-200 ${isMobileServicesOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                    {isMobileServicesOpen && <MobileServicesList id={MOBILE_SERVICES_ID} groups={serviceMenu} onNavigate={handleNavClick} />}
+                  </div>
+                );
+              }
               return (
                 <Link
                   key={link.path}
@@ -191,7 +268,7 @@ export const Header: React.FC = () => {
                   onClick={handleNavClick}
                   className={`block w-full text-start px-4 py-3 rounded-xl text-base font-medium transition-colors ${
                     isActive
-                      ? 'bg-brand-fill text-on-accent font-bold'
+                      ? 'bg-brand-fill text-on-brand font-bold'
                       : 'text-ink hover:bg-surface'
                   }`}
                 >

@@ -46,7 +46,7 @@ export const OfficesManager: React.FC<{ rows: OfficeRow[] }> = ({ rows }) => (
         cell: (row) => (
           <>
             <span className="block font-bold">{fa(row.name)}</span>
-            <span className="block text-xs text-[#5F7177]">{fa(row.role)}</span>
+            <span className="block text-xs text-[#5D6B82]">{fa(row.role)}</span>
           </>
         ),
       },

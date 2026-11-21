@@ -53,8 +53,8 @@ type RequestInboxProps<R extends InboxRow> = {
 
 const Detail: React.FC<{ label: string; children: React.ReactNode }> = ({ label, children }) => (
   <div className="grid grid-cols-[7.5rem_1fr] gap-3 py-2.5 text-sm">
-    <dt className="text-[#5F7177]">{label}</dt>
-    <dd className="min-w-0 font-bold text-[#14282D]">{children}</dd>
+    <dt className="text-[#5D6B82]">{label}</dt>
+    <dd className="min-w-0 font-bold text-[#0E1B30]">{children}</dd>
   </div>
 );
 
@@ -102,14 +102,14 @@ export function RequestInbox<R extends InboxRow>({ rows, pagination, columns, de
   };
 
   const allColumns: Column<R>[] = [
-    { key: 'id', header: '#', className: 'w-14 text-[#5F7177]', cell: (row) => row.id.toLocaleString('fa-IR', { useGrouping: false }) },
+    { key: 'id', header: '#', className: 'w-14 text-[#5D6B82]', cell: (row) => row.id.toLocaleString('fa-IR', { useGrouping: false }) },
     {
       key: 'person',
       header: 'متقاضی',
       cell: (row) => (
         <>
           <span className="block">{row.name}</span>
-          <span dir="ltr" className="block text-xs font-normal text-[#5F7177]">
+          <span dir="ltr" className="block text-xs font-normal text-[#5D6B82]">
             {row.phone}
           </span>
         </>
@@ -124,7 +124,7 @@ export function RequestInbox<R extends InboxRow>({ rows, pagination, columns, de
         return <Badge tone={status.tone}>{status.label}</Badge>;
       },
     },
-    { key: 'createdAt', header: 'تاریخ ثبت', hideOnMobile: true, className: 'whitespace-nowrap text-xs font-normal text-[#5F7177]', cell: (row) => formatDateTime(row.createdAt) },
+    { key: 'createdAt', header: 'تاریخ ثبت', hideOnMobile: true, className: 'whitespace-nowrap text-xs font-normal text-[#5D6B82]', cell: (row) => formatDateTime(row.createdAt) },
   ];
 
   return (
@@ -173,11 +173,11 @@ export function RequestInbox<R extends InboxRow>({ rows, pagination, columns, de
         {selected && (
           <div className="grid grid-cols-1 gap-6 md:grid-cols-5">
             <div className="md:col-span-3">
-              <dl className="divide-y divide-[#EEF2F3]">
+              <dl className="divide-y divide-[#EEF2F8]">
                 <Detail label="نام">{selected.name}</Detail>
                 <Detail label="شماره تماس">
                   <span className="flex flex-wrap items-center gap-2">
-                    <a dir="ltr" href={telHref(selected.phone)} className="text-[#0B7A75] hover:underline">
+                    <a dir="ltr" href={telHref(selected.phone)} className="text-[#094BAF] hover:underline">
                       {selected.phone}
                     </a>
                     <IconButton
@@ -188,7 +188,7 @@ export function RequestInbox<R extends InboxRow>({ rows, pagination, columns, de
                         toast.success('شماره کپی شد.');
                       }}
                     />
-                    <a href={telHref(selected.phone)} title="تماس" aria-label="تماس" className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[#3F5257] hover:bg-[#EEF2F3]">
+                    <a href={telHref(selected.phone)} title="تماس" aria-label="تماس" className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-[#3E4C63] hover:bg-[#EEF2F8]">
                       <PhoneCall className="h-4 w-4" />
                     </a>
                   </span>
@@ -204,13 +204,13 @@ export function RequestInbox<R extends InboxRow>({ rows, pagination, columns, de
                 body(selected)
               ) : (
                 <div className="mt-4">
-                  <p className="mb-1.5 text-[13px] text-[#5F7177]">توضیحات متقاضی</p>
-                  <p className="whitespace-pre-line rounded-lg bg-[#F4F6F7] px-4 py-3 text-sm leading-7 text-[#14282D]">{selected.description || 'توضیحی نوشته نشده است.'}</p>
+                  <p className="mb-1.5 text-[13px] text-[#5D6B82]">توضیحات متقاضی</p>
+                  <p className="whitespace-pre-line rounded-lg bg-[#F4F6FA] px-4 py-3 text-sm leading-7 text-[#0E1B30]">{selected.description || 'توضیحی نوشته نشده است.'}</p>
                 </div>
               )}
             </div>
 
-            <div className="space-y-4 md:col-span-2 md:border-r md:border-[#EEF2F3] md:pr-6">
+            <div className="space-y-4 md:col-span-2 md:border-r md:border-[#EEF2F8] md:pr-6">
               <FormAlert message={form.formError} />
               <Select
                 label="وضعیت رسیدگی"

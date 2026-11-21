@@ -2,6 +2,7 @@ import React from 'react';
 import { Hero } from './Hero';
 import { TrustSection } from './TrustSection';
 import { ServicesHighlight } from './ServicesHighlight';
+import { CargoInsuranceSection } from './CargoInsuranceSection';
 import { AboutStorySection } from './AboutStorySection';
 import { AdvantagesSection } from './AdvantagesSection';
 import { Support24Section } from './Support24Section';
@@ -28,6 +29,7 @@ export async function HomePage() {
       <Hero />
       <TrustSection />
       <ServicesHighlight services={services} lines={groups} />
+      <CargoInsuranceSection />
       <AboutStorySection />
       <AdvantagesSection />
       <Support24Section />

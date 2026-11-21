@@ -113,4 +113,20 @@ export interface SiteData {
   offices: Office[];
   socials: SocialLink[];
   serviceLinks: { slug: string; shortTitle: string }[];
+  /** The services in the header's mega menu, under the groups set in the admin panel. */
+  serviceMenu: ServiceMenuGroup[];
+}
+
+export interface ServiceMenuItem {
+  slug: string;
+  title: string;
+  summary: string;
+  icon: string | null;
+}
+
+export interface ServiceMenuGroup {
+  /** null for the services that aren't in any group */
+  title: string | null;
+  tone: Tone;
+  services: ServiceMenuItem[];
 }

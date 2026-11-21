@@ -31,7 +31,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             <div
               key={toast.id}
               role={toast.tone === 'error' ? 'alert' : 'status'}
-              className="admin-toast pointer-events-auto flex items-start gap-3 rounded-xl bg-[#14282D] px-4 py-3 text-sm text-white shadow-lg"
+              className="admin-toast pointer-events-auto flex items-start gap-3 rounded-xl bg-[#0E1B30] px-4 py-3 text-sm text-white shadow-lg"
             >
               <Icon className={`w-5 h-5 shrink-0 ${toast.tone === 'success' ? 'text-[#5EEAD4]' : 'text-[#FCA5A5]'}`} />
               <span className="flex-1 leading-relaxed">{toast.message}</span>

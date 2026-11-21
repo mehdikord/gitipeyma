@@ -93,7 +93,7 @@ export const ServiceDetailView: React.FC<ServiceDetailViewProps> = ({ service, r
             <div className="mt-7 flex flex-col sm:flex-row gap-3">
               <a
                 href="#request"
-                className={`group inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-lg bg-brand-fill hover:bg-brand-bright-fill text-on-accent font-extrabold text-[15px] transition-colors ${FOCUS}`}
+                className={`group inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-lg bg-brand-fill hover:bg-brand-bright-fill text-on-brand font-extrabold text-[15px] transition-colors ${FOCUS}`}
               >
                 <span>{t.requestThis}</span>
                 <ArrowLeft className="w-4 h-4 transition-transform ltr:rotate-180 group-hover:-translate-x-1 ltr:group-hover:translate-x-1" />
@@ -285,7 +285,7 @@ export const ServiceDetailView: React.FC<ServiceDetailViewProps> = ({ service, r
         data-hidden={requestReached}
         className="service-request-bar lg:hidden fixed inset-x-0 bottom-0 z-30 flex gap-2 px-4 pt-3 bg-canvas border-t border-ink/15"
       >
-        <a href="#request" className={`flex-1 inline-flex items-center justify-center min-h-12 rounded-lg bg-brand-fill text-on-accent font-extrabold text-[15px] ${FOCUS}`}>
+        <a href="#request" className={`flex-1 inline-flex items-center justify-center min-h-12 rounded-lg bg-brand-fill text-on-brand font-extrabold text-[15px] ${FOCUS}`}>
           {t.request}
         </a>
         <a

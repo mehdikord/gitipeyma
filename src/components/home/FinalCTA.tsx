@@ -40,8 +40,8 @@ export const FinalCTA: React.FC = () => {
             <stop offset="1" stopColor="#E2C98C" stopOpacity="0.1" />
           </linearGradient>
           <radialGradient id="cta-horizon">
-            <stop offset="0" stopColor="#12B8B0" stopOpacity="0.35" />
-            <stop offset="1" stopColor="#12B8B0" stopOpacity="0" />
+            <stop offset="0" stopColor="#094BAF" stopOpacity="0.35" />
+            <stop offset="1" stopColor="#094BAF" stopOpacity="0" />
           </radialGradient>
           <radialGradient id="cta-comet">
             <stop offset="0" stopColor="#FFF7E0" stopOpacity="1" />
@@ -66,7 +66,7 @@ export const FinalCTA: React.FC = () => {
 
         {/* The start: here, now */}
         <circle cx={START.x} cy={START.y} r="22" fill="#E2C98C" fillOpacity="0.25" className="cta-start-pulse" />
-        <circle cx={START.x} cy={START.y} r="7" fill="#E2C98C" stroke="#07191F" strokeWidth="3" />
+        <circle cx={START.x} cy={START.y} r="7" fill="#E2C98C" stroke="#050D1C" strokeWidth="3" />
       </svg>
 
       <div className="relative max-w-3xl mx-auto px-4 sm:px-6 text-center">
@@ -89,7 +89,7 @@ export const FinalCTA: React.FC = () => {
             href={WHATSAPP_URL}
             target="_blank"
             rel="noreferrer"
-            className={`inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-lg bg-brand-fill hover:bg-brand-bright-fill text-on-accent font-black text-base transition-colors ${FOCUS}`}
+            className={`inline-flex items-center justify-center gap-2.5 px-7 py-4 rounded-lg bg-brand-fill hover:bg-brand-bright-fill text-on-brand font-black text-base transition-colors ${FOCUS}`}
           >
             <MessageCircle className="w-5 h-5" />
             <span>{t.whatsapp}</span>
