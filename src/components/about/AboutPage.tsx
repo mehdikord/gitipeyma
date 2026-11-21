@@ -4,6 +4,7 @@ import React from 'react';
 import { Compass, ShieldCheck, Award, Users, Globe2, Building2, CheckCircle2, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { useI18n } from '../../i18n/I18nProvider';
+import { LocationSection } from '../site/LocationSection';
 
 // Title colour of each core value card, in the order of the about dictionary's values.
 const VALUE_COLORS = ['text-brand', 'text-gold', 'text-brand-bright'];
@@ -114,6 +115,8 @@ export const AboutPage: React.FC = () => {
             ))}
           </div>
         </div>
+
+        <LocationSection />
 
         {/* Call to action */}
         <div className="p-8 sm:p-12 rounded-3xl bg-gradient-to-r from-surface via-canvas to-surface border border-brand/30 text-center space-y-5">

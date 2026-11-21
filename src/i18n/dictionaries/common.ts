@@ -4,6 +4,20 @@ import { defineMessages } from './define';
 export const common = defineMessages({
   fa: {
     brand: 'رویال تراول',
+    location: {
+      eyebrow: 'موقعیت ما روی نقشه',
+      title: 'دفتر مرکزی رویال تراول در استانبول',
+      lead: 'در قلب منطقه فاتیح استانبول، در آکسارای؛ برای مراجعه حضوری، مسیر را مستقیم از گوگل مپ بگیرید.',
+      address: 'نشانی',
+      hours: 'ساعات کاری',
+      phone: 'تلفن',
+      directions: 'مسیریابی',
+      openMap: 'مشاهده در گوگل مپ',
+      mapTitle: 'نقشه موقعیت دفتر رویال تراول در استانبول',
+      button: 'لوکیشن',
+      buttonAria: 'لوکیشن دفتر رویال تراول در گوگل مپ (زبانه جدید)',
+      menuTitle: 'لوکیشن دفتر استانبول',
+    },
     meta: {
       title: 'رویال تراول | Royal Travel',
       titleTemplate: '%s | رویال تراول',
@@ -20,6 +34,20 @@ export const common = defineMessages({
   },
   en: {
     brand: 'Royal Travel',
+    location: {
+      eyebrow: 'Find us on the map',
+      title: 'Royal Travel head office in Istanbul',
+      lead: 'In the heart of Fatih, Istanbul, in Aksaray. Visiting in person? Get directions straight from Google Maps.',
+      address: 'Address',
+      hours: 'Opening hours',
+      phone: 'Phone',
+      directions: 'Get directions',
+      openMap: 'Open in Google Maps',
+      mapTitle: 'Map of the Royal Travel office in Istanbul',
+      button: 'Location',
+      buttonAria: 'Royal Travel office on Google Maps (opens in a new tab)',
+      menuTitle: 'Istanbul office location',
+    },
     meta: {
       title: 'Royal Travel',
       titleTemplate: '%s | Royal Travel',
@@ -36,6 +64,20 @@ export const common = defineMessages({
   },
   tr: {
     brand: 'Royal Travel',
+    location: {
+      eyebrow: 'Haritada biz',
+      title: 'Royal Travel İstanbul merkez ofisi',
+      lead: 'İstanbul Fatih’in kalbinde, Aksaray’da. Ofisimize gelmek için yol tarifini doğrudan Google Haritalar’dan alın.',
+      address: 'Adres',
+      hours: 'Çalışma saatleri',
+      phone: 'Telefon',
+      directions: 'Yol tarifi al',
+      openMap: 'Google Haritalar’da aç',
+      mapTitle: 'Royal Travel İstanbul ofisinin haritası',
+      button: 'Konum',
+      buttonAria: 'Royal Travel ofisi Google Haritalar’da (yeni sekmede açılır)',
+      menuTitle: 'İstanbul ofisi konumu',
+    },
     meta: {
       title: 'Royal Travel',
       titleTemplate: '%s | Royal Travel',

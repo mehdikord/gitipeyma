@@ -2,6 +2,7 @@
 
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState, useTransition } from 'react';
 import Link from 'next/link';
+import { LocationSection } from '../site/LocationSection';
 import { AlertCircle, Clock, Mail, MapPin, MessageCircle, Navigation, PhoneCall, Send, ShieldCheck } from 'lucide-react';
 import { CITIES, LonLat, STAGE, project, roadPathTo } from '../home/hero/geo';
 import { Office, hourText, officeStatus, telHref } from '../../utils/contact';
@@ -422,6 +423,8 @@ export const ContactPage: React.FC = () => {
           </div>
         </section>
         )}
+
+        <LocationSection className="pt-14 sm:pt-20" />
 
         <section className="py-14 sm:py-20 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14">
           <div className="lg:col-span-4 text-start">

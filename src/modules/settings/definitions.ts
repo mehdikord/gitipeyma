@@ -49,6 +49,22 @@ export const SETTING_GROUPS = [
     ],
   },
   {
+    title: 'موقعیت دفتر روی نقشه',
+    fields: [
+      {
+        key: 'map_url',
+        label: 'لینک گوگل مپ',
+        hint: 'لینک صفحه شرکت در گوگل مپ. دکمه لوکیشن سربرگ و دکمه «مشاهده در گوگل مپ» این لینک را باز می‌کنند.',
+        type: 'text',
+        ltr: true,
+        default:
+          'https://www.google.com/maps/place/Royal+Travel+%2F+Gitypeyma+ir/@41.0124164,28.9536135,17z/data=!3m1!4b1!4m6!3m5!1s0x14cab98831e2edf3:0xd10767ea9d5169d!8m2!3d41.0124164!4d28.9536135!16s%2Fg%2F11cs39h1f5',
+      },
+      { key: 'map_latitude', label: 'عرض جغرافیایی (Latitude)', hint: 'برای نمایش نقشه و مسیریابی. عدد بعد از @ در لینک گوگل مپ.', type: 'text', ltr: true, default: '41.0124164' },
+      { key: 'map_longitude', label: 'طول جغرافیایی (Longitude)', hint: 'عدد دوم بعد از @ در لینک گوگل مپ.', type: 'text', ltr: true, default: '28.9536135' },
+    ],
+  },
+  {
     title: 'محاسبه‌گر ارز',
     fields: [{ key: 'currency_fee_percent', label: 'کارمزد حواله (درصد)', type: 'number', ltr: true, default: '1' }],
   },

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { PhoneCall, Menu, X, ArrowUpRight, ShieldCheck, ChevronDown, Compass } from 'lucide-react';
+import { PhoneCall, Menu, X, ArrowUpRight, ChevronDown, MapPin, Navigation } from 'lucide-react';
 import { useSite } from '../site/SiteProvider';
 import { usePathname, useRouter } from 'next/navigation';
 import { useI18n } from '../../i18n/I18nProvider';
@@ -11,6 +11,7 @@ import { LanguageSwitcher } from './LanguageSwitcher';
 import { ThemeToggle } from './ThemeToggle';
 import { BrandEmblem } from './BrandEmblem';
 import { MobileServicesList, ServicesMegaMenu } from './ServicesMegaMenu';
+import { officeMap } from '../../lib/maps';
 
 const MEGA_MENU_ID = 'services-mega-menu';
 const MOBILE_SERVICES_ID = 'mobile-services-list';
@@ -19,8 +20,10 @@ export const Header: React.FC = () => {
   // Without the language, so it compares with the nav paths
   const currentPath = stripLocale(usePathname());
   const router = useRouter();
-  const { t: { layout: { header: t }, common: { brand } }, path, locale } = useI18n();
-  const { settings: { support_phone: supportPhone }, serviceMenu } = useSite();
+  const { t: { layout: { header: t }, common: { brand, location } }, path, locale } = useI18n();
+  const { settings, serviceMenu, offices } = useSite();
+  const supportPhone = settings.support_phone;
+  const map = officeMap(settings, locale);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isServicesOpen, setIsServicesOpen] = useState(false);
@@ -138,12 +141,12 @@ export const Header: React.FC = () => {
 
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xl sm:text-2xl font-black text-ink tracking-tight">
+                <span className="whitespace-nowrap text-xl sm:text-2xl font-black text-ink tracking-tight">
                   {brand}
                 </span>
                 {/* The Latin name only adds anything next to the Persian one */}
                 {locale === 'fa' && (
-                  <span className="hidden sm:inline font-['Plus_Jakarta_Sans',sans-serif] text-xs font-extrabold tracking-widest text-brand bg-brand/10 px-1.5 py-0.5 rounded border border-brand/30">
+                  <span className="hidden xl:inline whitespace-nowrap font-['Plus_Jakarta_Sans',sans-serif] text-xs font-extrabold tracking-widest text-brand bg-brand/10 px-1.5 py-0.5 rounded border border-brand/30">
                     ROYAL TRAVEL
                   </span>
                 )}
@@ -166,7 +169,7 @@ export const Header: React.FC = () => {
                     aria-expanded={isServicesOpen}
                     aria-controls={MEGA_MENU_ID}
                     onClick={() => setIsServicesOpen((open) => !open)}
-                    className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-line ${
+                    className={`flex items-center gap-1.5 whitespace-nowrap px-2.5 xl:px-4 py-2 rounded-full text-sm font-medium transition-all focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-line ${
                       isActive
                         ? 'bg-brand-fill text-on-brand font-bold shadow-md shadow-brand/25'
                         : isServicesOpen
@@ -185,7 +188,7 @@ export const Header: React.FC = () => {
                   href={path(link.path)}
                   scroll={false}
                   onClick={handleNavClick}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                  className={`whitespace-nowrap px-2.5 xl:px-4 py-2 rounded-full text-sm font-medium transition-all ${
                     isActive
                       ? 'bg-brand-fill text-on-brand font-bold shadow-md shadow-brand/25'
                       : 'text-ink/80 hover:text-ink-strong hover:bg-ink/5'
@@ -198,16 +201,31 @@ export const Header: React.FC = () => {
           </nav>
 
           {/* Actions & Primary Consultation Button */}
-          <div className="hidden sm:flex items-center gap-3">
+          <div className="hidden sm:flex items-center gap-1.5 xl:gap-3">
             <ThemeToggle />
+            {map.placeUrl && (
+              <a
+                href={map.placeUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={location.buttonAria}
+                title={location.buttonAria}
+                className="header-location group relative grid place-items-center h-[34px] w-[34px] shrink-0 rounded-full border border-gold-line/40 bg-surface/70 text-sm font-bold text-ink transition-colors hover:border-gold-line hover:bg-surface hover:text-ink-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-line"
+              >
+                <span className="header-location-pin relative grid h-7 w-7 place-items-center rounded-full bg-gradient-to-br from-gold-fill to-gold-deep-fill text-on-accent shadow-md shadow-gold-deep-fill/30">
+                  <MapPin aria-hidden="true" className="header-location-icon h-4 w-4" />
+                </span>
+              </a>
+            )}
             <LanguageSwitcher />
             <Link
               href={path('/consultation')}
               scroll={false}
               onClick={handleNavClick}
-              className="relative group overflow-hidden px-5 py-2.5 rounded-full bg-gradient-to-r from-gold-deep-fill via-gold-fill to-gold-deep-fill text-on-accent font-bold text-sm shadow-lg shadow-gold-deep-fill/20 hover:shadow-gold-deep-fill/40 transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center gap-2"
+              className="relative group overflow-hidden whitespace-nowrap px-4 xl:px-5 py-2.5 rounded-full bg-gradient-to-r from-gold-deep-fill via-gold-fill to-gold-deep-fill text-on-accent font-bold text-sm shadow-lg shadow-gold-deep-fill/20 hover:shadow-gold-deep-fill/40 transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center gap-2"
             >
-              <span>{t.consultation}</span>
+              <span className="hidden xl:inline">{t.consultation}</span>
+              <span className="xl:hidden">{t.consultationShort}</span>
               <ArrowUpRight className="w-4 h-4 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
             </Link>
           </div>
@@ -276,6 +294,35 @@ export const Header: React.FC = () => {
                 </Link>
               );
             })}
+
+            {map.placeUrl && (
+              <div className="flex items-stretch gap-2 pt-2">
+                <a
+                  href={map.placeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={location.buttonAria}
+                  className="flex min-w-0 flex-1 items-center gap-3 rounded-xl border border-gold-line/30 bg-surface px-3 py-2.5"
+                >
+                  <span className="header-location-pin relative grid h-9 w-9 shrink-0 place-items-center rounded-full bg-gradient-to-br from-gold-fill to-gold-deep-fill text-on-accent">
+                    <MapPin aria-hidden="true" className="h-[18px] w-[18px]" />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-sm font-extrabold text-ink-strong">{location.menuTitle}</span>
+                    {offices[0] && <span className="block truncate text-xs text-ink-muted">{offices[0].address}</span>}
+                  </span>
+                </a>
+                <a
+                  href={map.directionsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={location.directions}
+                  className="grid w-12 shrink-0 place-items-center rounded-xl bg-brand-fill text-on-brand"
+                >
+                  <Navigation aria-hidden="true" className="h-5 w-5" />
+                </a>
+              </div>
+            )}
 
             <div className="pt-3 border-t border-ink/10 space-y-3">
               <LanguageSwitcher variant="list" />
