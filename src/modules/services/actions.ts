@@ -47,3 +47,29 @@ export async function deleteService(id: number) {
     return { ok: true, message: 'خدمت حذف شد.' };
   });
 }
+
+/**
+ * Moves a service one place up or down in the display order (the order of the site's lists, the
+ * header menu and the services page), swapping it with its neighbour. Every service is renumbered
+ * 1, 2, 3... on the way, so equal or skipped numbers set by hand are straightened out too.
+ */
+export async function moveService(id: number, direction: 'up' | 'down') {
+  return adminAction(z.object({ id: z.number().int().positive(), direction: z.enum(['up', 'down']) }), { id, direction }, async (data) => {
+    await db.$transaction(async (tx) => {
+      const services = await tx.service.findMany({ orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }], select: { id: true, sortOrder: true } });
+      const index = services.findIndex((service) => Number(service.id) === data.id);
+      if (index === -1) throw new FormError('خدمت پیدا نشد.');
+      const target = data.direction === 'up' ? index - 1 : index + 1;
+      if (target < 0 || target >= services.length) {
+        throw new FormError(data.direction === 'up' ? 'این خدمت همین حالا اولین خدمت است.' : 'این خدمت همین حالا آخرین خدمت است.');
+      }
+      [services[index], services[target]] = [services[target], services[index]];
+      await Promise.all(
+        services.map((service, position) =>
+          service.sortOrder === position + 1 ? null : tx.service.update({ where: { id: service.id }, data: { sortOrder: position + 1 } }),
+        ),
+      );
+    });
+    return { ok: true, message: 'ترتیب نمایش خدمت تغییر کرد.' };
+  });
+}

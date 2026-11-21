@@ -21,7 +21,7 @@ export const Header: React.FC = () => {
   const currentPath = stripLocale(usePathname());
   const router = useRouter();
   const { t: { layout: { header: t }, common: { brand, location } }, path, locale } = useI18n();
-  const { settings, serviceMenu, offices } = useSite();
+  const { settings, serviceMenu, serviceCount, offices } = useSite();
   const supportPhone = settings.support_phone;
   const map = officeMap(settings, locale);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -251,7 +251,7 @@ export const Header: React.FC = () => {
           </div>
         </div>
 
-        <ServicesMegaMenu id={MEGA_MENU_ID} open={isServicesOpen} groups={serviceMenu} onNavigate={handleNavClick} />
+        <ServicesMegaMenu id={MEGA_MENU_ID} open={isServicesOpen} services={serviceMenu} total={serviceCount} onNavigate={handleNavClick} />
         </div>
 
         {/* Mobile menu dropdown */}
@@ -274,7 +274,7 @@ export const Header: React.FC = () => {
                       {link.label}
                       <ChevronDown aria-hidden="true" className={`w-4 h-4 transition-transform duration-200 ${isMobileServicesOpen ? 'rotate-180' : ''}`} />
                     </button>
-                    {isMobileServicesOpen && <MobileServicesList id={MOBILE_SERVICES_ID} groups={serviceMenu} onNavigate={handleNavClick} />}
+                    {isMobileServicesOpen && <MobileServicesList id={MOBILE_SERVICES_ID} services={serviceMenu} total={serviceCount} onNavigate={handleNavClick} />}
                   </div>
                 );
               }

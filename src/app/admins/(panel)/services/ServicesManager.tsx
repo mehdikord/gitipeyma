@@ -2,9 +2,9 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { ClipboardList, Eye, EyeOff, ExternalLink, ListChecks } from 'lucide-react';
+import { ArrowDown, ArrowUp, ClipboardList, Eye, EyeOff, ExternalLink, ListChecks } from 'lucide-react';
 import type { ServiceAdminRow } from '../../../../modules/services/queries';
-import { deleteService, saveService, setServiceActive } from '../../../../modules/services/actions';
+import { deleteService, moveService, saveService, setServiceActive } from '../../../../modules/services/actions';
 import { SERVICE_ICONS, serviceIcon } from '../../../../modules/services/icons';
 import { CrudManager } from '../../../../components/admin/CrudManager';
 import { ActiveBadge, Badge } from '../../../../components/admin/ui/Badge';
@@ -97,7 +97,7 @@ const ServiceForm: React.FC<{ form: FormApi<Values>; categories: Option[]; group
             <TransTextInput label="نشان" name="badge" hint="مثل «سرویس ویژه روزانه»" value={values.badge} onChange={(v) => set('badge', v)} errors={errors} />
             <TransTextInput label="متن بالای عنوان" name="eyebrow" value={values.eyebrow} onChange={(v) => set('eyebrow', v)} errors={errors} />
             <Select label="آیکن" placeholder="پیش‌فرض" value={values.icon} onChange={(v) => set('icon', v)} options={ICON_OPTIONS} error={errors.icon} />
-            <NumberInput label="ترتیب نمایش" min={0} hint="عدد کمتر، جلوتر." value={values.sortOrder} onChange={(v) => set('sortOrder', v)} error={errors.sortOrder} />
+            <NumberInput label="ترتیب نمایش" min={0} hint="عدد کمتر، جلوتر. همان ترتیبی که در همه فهرست‌های سایت و منوی سربرگ (سه خدمت اول) رعایت می‌شود." value={values.sortOrder} onChange={(v) => set('sortOrder', v)} error={errors.sortOrder} />
           </FormGrid>
           <ImageField label="تصویر خدمت" folder="services" value={values.image} onChange={(v) => set('image', v)} error={errors.image} />
           <div className="flex flex-col gap-3 rounded-lg bg-[#F4F6FA] p-4 sm:flex-row sm:gap-8">
@@ -175,10 +175,18 @@ export const ServicesManager: React.FC<{ services: ServiceAdminRow[]; categories
     else toast.error(result.message ?? 'انجام نشد.');
   };
 
+  const [moving, setMoving] = useState<number | null>(null);
+  const move = async (row: ServiceAdminRow, direction: 'up' | 'down') => {
+    setMoving(row.id);
+    const result = await moveService(row.id, direction);
+    setMoving(null);
+    if (!result.ok) toast.error(result.message ?? 'انجام نشد.');
+  };
+
   return (
     <CrudManager<ServiceAdminRow, Values>
       title="خدمات"
-      description="هر خدمت یک صفحه در سایت و فرم درخواست مخصوص خودش را دارد. فرم هر خدمت را از دکمه «مدیریت فرم خدمت» طراحی کنید."
+      description="هر خدمت یک صفحه در سایت و فرم درخواست مخصوص خودش را دارد. فرم هر خدمت را از دکمه «مدیریت فرم خدمت» طراحی کنید. با فلش‌های ستون «ترتیب نمایش» جای خدمت را در همه فهرست‌های سایت تغییر دهید؛ سه خدمت اول در منوی خدمات سربرگ سایت نمایش داده می‌شوند."
       noun="خدمت"
       rows={services}
       modalSize="xl"
@@ -192,6 +200,22 @@ export const ServicesManager: React.FC<{ services: ServiceAdminRow[]; categories
         />
       }
       columns={[
+        {
+          key: 'sortOrder',
+          header: 'ترتیب نمایش',
+          cell: (row) => {
+            const index = services.indexOf(row);
+            return (
+              <span className="flex items-center gap-1" onClick={(event) => event.stopPropagation()}>
+                <span className="inline-flex h-7 min-w-7 items-center justify-center rounded-md bg-[#EEF2F8] px-1.5 text-xs font-bold text-[#0E1B30]">
+                  {row.sortOrder.toLocaleString('fa-IR')}
+                </span>
+                <IconButton label="انتقال به بالا (جلوتر)" icon={ArrowUp} disabled={moving !== null || index === 0} onClick={() => move(row, 'up')} />
+                <IconButton label="انتقال به پایین (عقب‌تر)" icon={ArrowDown} disabled={moving !== null || index === services.length - 1} onClick={() => move(row, 'down')} />
+              </span>
+            );
+          },
+        },
         {
           key: 'title',
           header: 'خدمت',
@@ -236,7 +260,6 @@ export const ServicesManager: React.FC<{ services: ServiceAdminRow[]; categories
           ),
         },
         { key: 'state', header: 'وضعیت', cell: (row) => <ActiveBadge active={row.isActive} /> },
-        { key: 'sortOrder', header: 'ترتیب', hideOnMobile: true, className: 'text-[#5D6B82]', cell: (row) => row.sortOrder.toLocaleString('fa-IR') },
       ]}
       rowActions={(row) => (
         <>

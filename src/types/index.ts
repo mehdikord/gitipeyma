@@ -113,8 +113,10 @@ export interface SiteData {
   offices: Office[];
   socials: SocialLink[];
   serviceLinks: { slug: string; shortTitle: string }[];
-  /** The services in the header's mega menu, under the groups set in the admin panel. */
-  serviceMenu: ServiceMenuGroup[];
+  /** The first services in display order, for the header's services menu. */
+  serviceMenu: ServiceMenuItem[];
+  /** How many active services there are in all. */
+  serviceCount: number;
 }
 
 export interface ServiceMenuItem {
@@ -122,11 +124,4 @@ export interface ServiceMenuItem {
   title: string;
   summary: string;
   icon: string | null;
-}
-
-export interface ServiceMenuGroup {
-  /** null for the services that aren't in any group */
-  title: string | null;
-  tone: Tone;
-  services: ServiceMenuItem[];
 }
